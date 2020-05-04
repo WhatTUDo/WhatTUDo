@@ -1,4 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+@import "./var.scss";
+
+*, ::before, ::after {
+  background-color: $background;
+  color: $text;
+
+  font-family: $font-stack;
+  font-weight: $f-regular;
+}
+
 body {
-  background-color: whitesmoke;
+  background-color: inherit !important;
+  color: inherit !important;
+
+  font-family: inherit !important;
+  font-weight: inherit !important;
 }

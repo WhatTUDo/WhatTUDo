@@ -13,6 +13,8 @@ import {MessageComponent} from './components/message/message.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +30,8 @@ import {httpInterceptorProviders} from './interceptors';
     ReactiveFormsModule,
     HttpClientModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    FontAwesomeModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
