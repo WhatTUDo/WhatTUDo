@@ -1,0 +1,39 @@
+@import "../../../var.scss";
+
+#weekly-cal-month:after {
+  content: " ";
+}
+
+#weekly-cal-date {
+  font-weight: $f-regular !important;
+}
+
+.grid-one-sixth {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.week-day-label {
+  font-size: 16pt;
+  font-weight: $f-bold;
+
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.calendar-date {
+  font-size: 36pt;
+  font-weight: $f-bold;
+
+  text-align: center;
+
+  &.today {
+    // text-decoration: underline;
+    //    This doesn't look as good as in mockup...
+  }
+
+  sub, sup {
+    font-weight: $f-bold !important;
+  }
+}
+

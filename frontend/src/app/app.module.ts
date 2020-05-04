@@ -14,6 +14,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { WeeklyCalendarComponent } from './components/weekly-calendar/weekly-calendar.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
     HomeComponent,
     LoginComponent,
     MessageComponent,
+    WeeklyCalendarComponent,
   ],
   imports: [
     BrowserModule,

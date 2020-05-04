@@ -1,2 +1,13 @@
 @import "../../../var.scss";
 
+nav {
+  height: 100%;
+
+  a {
+    font-size: 2rem;
+  }
+
+  #user-avatar a {
+    font-size: 4rem;
+  }
+}
