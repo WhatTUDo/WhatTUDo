@@ -18,4 +18,17 @@ export class EventCommentComponent implements OnInit {
     this.author = "Testguy";
   }
 
+  public vote(isUpvote: boolean) {
+    if (isUpvote) {
+      alert("You upvoted this comment!");
+    }
+    else {
+      alert("You downvoted this comment!");
+    }
+  }
+
+  public respondButtonClicked() {
+    alert("You clicked the respond button!");
+  }
+
 }
