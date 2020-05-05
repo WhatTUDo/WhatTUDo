@@ -1,42 +1,30 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
-//TODO: replace this class with a correct ApplicationUser Entity implementation
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "USER")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApplicationUser {
+    @Id
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer id;
 
+    @Column(name = "NAME")
+    private String name;
+
+    @Column(name = "EMAIL")
     private String email;
+
+    @Column(name = "PASSWORD")
     private String password;
-    private Boolean admin;
-
-    public ApplicationUser() {
-    }
-
-    public ApplicationUser(String email, String password, Boolean admin) {
-        this.email = email;
-        this.password = password;
-        this.admin = admin;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getAdmin() {
-        return admin;
-    }
-
-    public void setAdmin(Boolean admin) {
-        this.admin = admin;
-    }
 }
