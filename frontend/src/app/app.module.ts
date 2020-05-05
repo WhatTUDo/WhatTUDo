@@ -15,6 +15,7 @@ import {httpInterceptorProviders} from './interceptors';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { WeeklyCalendarComponent } from './components/weekly-calendar/weekly-calendar.component';
+import { EventComponent } from './components/event/event.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { WeeklyCalendarComponent } from './components/weekly-calendar/weekly-cal
     LoginComponent,
     MessageComponent,
     WeeklyCalendarComponent,
+    EventComponent,
   ],
   imports: [
     BrowserModule,

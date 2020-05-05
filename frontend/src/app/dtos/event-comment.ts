@@ -1,4 +1,4 @@
-export class Comment {
+export class EventComment {
   constructor(
     id: number,
     public authorID: number,

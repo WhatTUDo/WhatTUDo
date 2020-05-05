@@ -1,6 +1,6 @@
 import {Label} from "./label";
 import {Location} from "./location";
-import {Comment} from "./comment";
+import {EventComment} from "./event-comment";
 
 export class CalendarEvent {
   constructor(
@@ -9,8 +9,8 @@ export class CalendarEvent {
     public startDate: Date,
     public endDate: Date,
     public location: Location,
-    public labels: [Label],
-    public comments: [Comment]
+    public labels: Array<Label>,
+    public comments: Array<EventComment>
   ) {
   }
 }
