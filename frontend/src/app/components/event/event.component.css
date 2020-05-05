@@ -8,3 +8,17 @@
   border-radius: 5px;
   margin: 10px;
 }
+
+.button-container {
+  display: inline-flex;
+  text-align: center;
+  width: 100%;
+}
+
+.button-container button {
+  margin: auto;
+}
+
+#comment-area {
+  width: 100%;
+}

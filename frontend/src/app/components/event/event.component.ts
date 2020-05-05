@@ -4,6 +4,7 @@ import {CalendarEvent} from "../../dtos/calendar-event";
 import {Location} from "../../dtos/location";
 import {Label} from "../../dtos/label";
 
+
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
@@ -14,6 +15,7 @@ export class EventComponent implements OnInit {
   constructor() { }
 
   public calendarEvent: CalendarEvent
+  public participants: any;
 
   ngOnInit(): void {
     let startDate = new Date(2020, 5, 5, 18, 0, 0, 0);
@@ -28,6 +30,50 @@ export class EventComponent implements OnInit {
 
     this.calendarEvent.comments = this.getComments();
     this.calendarEvent.labels = this.getLabels();
+    this.participants = this.getParticipants();
+  }
+
+  public participate(status: number) {
+    switch (status) {
+      case 0:
+        alert("You declined!");
+        break;
+      case 1:
+        alert("You are attending!");
+        break;
+      case 2:
+        alert("You are interested!");
+        break;
+      default:
+        alert("No idea what you want!");
+        break;
+    }
+  }
+
+  public addComment() {
+    let textArea: any = document.getElementById('comment-area');
+    if (textArea) {
+      let comment = textArea.value;
+      if (comment || comment.length > 0 ) {
+        alert("Comments aren't live yet, but here's what you wrote: " + comment);
+      }
+      else {
+        alert("Could not read comment!");
+      }
+    }
+  }
+
+  private getParticipants() {
+    let participants: any = {
+      "attending": [],
+      "interested": [],
+      "declined": []
+    }
+    participants.attending.push("George Ford", "Claudia Straka", "Steve McIntosh");
+    participants.interested.push("Martin Eyre", "Carla Angular", "Marcus Cable");
+    participants.declined.push("Ken Scotland");
+
+    return participants;
   }
 
   private getComments() {
