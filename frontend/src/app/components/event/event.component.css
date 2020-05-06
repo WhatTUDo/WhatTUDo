@@ -1,3 +1,5 @@
+/*@import "/frontend/src/styles.scss";*/
+
 #label-container {
   display: inline-flex;
 }
