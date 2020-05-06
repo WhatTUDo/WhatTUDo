@@ -1,6 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EventComment} from "../../dtos/event-comment";
 
+import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
+import {faThumbsDown} from "@fortawesome/free-solid-svg-icons";
+
 @Component({
   selector: 'app-event-comment',
   templateUrl: './event-comment.component.html',
@@ -13,6 +16,9 @@ export class EventCommentComponent implements OnInit {
   public author: string
   public rating: number
   constructor() { }
+
+  faThumbsUp = faThumbsUp;
+  faThumbsDown = faThumbsDown;
 
   ngOnInit(): void {
     this.author = "Testguy";
