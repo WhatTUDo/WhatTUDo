@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.*;
+import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -28,10 +29,17 @@ public class Event {
     @Column(nullable = false)
     private LocalDateTime endDateTime;
 
-    @NonNull
+
+
+   /* @NonNull
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "calendar_id", nullable = false)
     private Calendar calendar;
+    */
+
+
+
+
 }
 
