@@ -1,0 +1,52 @@
+<div id="weekly-cal-heading" class="heading">
+  <span id="weekly-cal-month">
+    {{this.offset ? week[3].toLocaleString('en-US', {month: 'long'}) : currentMonth}}
+  </span>
+  <span id="weekly-cal-date" *ngIf="!this.offset">{{currentDate}}, </span>
+  <span id="weekly-cal-year">
+    {{this.offset ? week[3].getFullYear() : currentYear}}
+  </span>
+</div>
+
+<div class="calendar-navigation" (click)="minusOneWeek()">
+  <fa-icon [icon]="faChevronUp">Last week</fa-icon>
+</div>
+
+<div class="grid-one-sixth">
+  <div class="week-day-label">Mon</div>
+  <div class="week-day-label">Tue</div>
+  <div class="week-day-label">Wed</div>
+  <div class="week-day-label">Thu</div>
+  <div class="week-day-label">Fri</div>
+  <div class="week-day-label">Sat/Sun</div>
+
+  <div *ngFor="let date of this.week.slice(0,5)" class="calendar-date-label">{{date.getDate()}}</div>
+  <div class="calendar-date-label">
+    <sup>{{this.week[5].getDate()}}</sup>
+    ⁄
+    <sub>{{this.week[6].getDate()}}</sub>
+  </div>
+
+  <div class="calendar-day-swim-lane">
+    <div class="calendar-event" style="grid-row: 45/54">
+      <div class="calendar-event-time">7PM - 9:30PM
+      </div>
+      <div class="calendar-event-name">Lorem ipsum</div>
+    </div>
+  </div>
+  <div class="calendar-day-swim-lane"></div>
+  <div class="calendar-day-swim-lane"></div>
+  <div class="calendar-day-swim-lane">
+  </div>
+  <div class="calendar-day-swim-lane"></div>
+  <div class="calendar-day-swim-lane weekend-lane">
+    <div class="calendar-event weekend-sun" style="grid-row: 33/48">
+      <div class="calendar-event-time">4PM - 8PM</div>
+      <div class="calendar-event-name">Lorem ipsum</div>
+    </div>
+  </div>
+</div>
+
+<div class="calendar-navigation" (click)="addOneWeek()">
+  <fa-icon [icon]="faChevronDown">Next week</fa-icon>
+</div>

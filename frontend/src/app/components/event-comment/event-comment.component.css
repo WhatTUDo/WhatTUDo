@@ -1,0 +1,26 @@
+* p b {
+  font-weight: 900;
+}
+.comment-item {
+  border: 2px solid grey;
+  border-radius: 5px;
+
+  margin: 2vh auto;
+  padding: 10px;
+}
+
+.comment-header {
+  display: inline-flex;
+}
+
+.comment-header p {
+  margin: 1vw;
+}
+
+.comment-content p {
+  margin: 1vw;
+}
+
+.comment-buttons button {
+  margin: 10px;
+}

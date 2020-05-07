@@ -1,0 +1,26 @@
+
+<div class="comment-item">
+  <div class="comment-header">
+    <p>
+      <b>Author: </b> {{this.author}}
+    </p>
+    <p>
+      <b>Rating: </b> {{this.comment.rating}}
+    </p>
+  </div>
+  <div class="conmment-content">
+    <p>{{this.comment.content}}</p>
+  </div>
+  <div class="comment-buttons">
+    <button class="button-clickable button-green btn-sm" (click)="vote(true)">
+      <fa-icon [icon]="faThumbsUp"></fa-icon>
+    </button>
+    <button class="button-clickable button-red btn-sm" (click)="vote(false)">
+      <fa-icon [icon]="faThumbsDown"></fa-icon>
+    </button>
+    <button class="button-clickable button-blue btn-sm" (click)="respondButtonClicked()">
+      Respond
+    </button>
+  </div>
+
+</div>
