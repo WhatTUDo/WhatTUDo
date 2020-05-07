@@ -6,4 +6,7 @@ public interface EventService {
 
     void delete(Event event);
 
+    Event save(Event event);
+
+    Event findById(int id);
 }

@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -16,10 +17,13 @@ import java.lang.invoke.MethodHandles;
 
 
 @RestController
+@RequestMapping(value = "/api/v1/events")
 public class EventEndpoint {
+    static final String BASE_URL = "/events";
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private EventService eventService;
     private EventMapper eventMapper;
+
 
     @Autowired
     public EventEndpoint(EventService eventService, EventMapper eventMapper) {
@@ -33,6 +37,24 @@ public class EventEndpoint {
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
     public void deleteEvent(@RequestBody EventDto eventDto){
         LOGGER.info("POST /api/v1/messages body: {}", eventDto);
-        eventService.delete(eventMapper.eventDtoToEvent(eventDto));
+        eventService.delete(eventMapper.dtoToEntity(eventDto));
     }
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto post(@RequestBody EventDto event){
+
+        //TODO: try catch, Logger
+        Event eventEntity = eventMapper.dtoToEntity(event);
+        return eventMapper.entityToDto(eventService.save(eventEntity));
+
+    }
+
+    @GetMapping(value = "/{id}")
+    public EventDto getById(@PathVariable("id") int id) {
+        //TODO: looger, try catch
+        return eventMapper.entityToDto(eventService.findById(id));
+    }
+
+
 }
