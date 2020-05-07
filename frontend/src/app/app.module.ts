@@ -17,6 +17,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { WeeklyCalendarComponent } from './components/weekly-calendar/weekly-calendar.component';
 import { EventComponent } from './components/event/event.component';
 import { EventCommentComponent } from './components/event-comment/event-comment.component';
+import { EventFormComponent } from './components/event-form/event-form.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { EventCommentComponent } from './components/event-comment/event-comment.
     WeeklyCalendarComponent,
     EventComponent,
     EventCommentComponent,
+    EventFormComponent,
   ],
   imports: [
     BrowserModule,
