@@ -1,0 +1,79 @@
+package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
+
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
+import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+@ActiveProfiles("test")
+public class EventServiceTest {
+
+    @Autowired
+    EventService service;
+    @Autowired
+    CalendarRepository calendarRepository;
+    @Autowired
+    OrganisationRepository organisationRepository;
+
+
+    @Test
+    public void save_shouldReturn_sameEvent() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation1"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar1", Collections.singletonList(orga)));
+        Event eventEntity = new Event("Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        Event gottenEvent = service.save(new Event("Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar));
+
+        assertEquals(eventEntity.getName(),gottenEvent.getName());
+        assertEquals(eventEntity.getEndDateTime(),gottenEvent.getEndDateTime());
+        assertEquals(eventEntity.getStartDateTime(),gottenEvent.getStartDateTime());
+        assertEquals(eventEntity.getCalendar(),gottenEvent.getCalendar());
+    }
+
+    @Test
+    public void save_thenRead_shouldReturn_sameEvent() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation2"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar2", Collections.singletonList(orga)));
+        Event eventEntity = new Event("Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        Event returnedEvent = service.save(eventEntity);
+        Event gottenEvent = service.findById(returnedEvent.getId());
+        Calendar returnedCal = returnedEvent.getCalendar();
+        Calendar gottenCal = gottenEvent.getCalendar();
+        assertEquals(returnedEvent.getId(),gottenEvent.getId());
+        assertEquals(returnedEvent.getName(),gottenEvent.getName());
+        assertEquals(returnedEvent.getEndDateTime(),gottenEvent.getEndDateTime());
+        assertEquals(returnedEvent.getStartDateTime(),gottenEvent.getStartDateTime());
+        assertEquals(returnedCal.getName(),gottenCal.getName());
+        assertEquals(returnedCal.getId(),gottenCal.getId());
+    }
+
+    @Test
+    public void save_withoutCorrectParam_shouldReturn_ValidationException() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation3"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar3", Collections.singletonList(orga)));
+        Event event1 = new Event("", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        Event event2 = new Event("Test Event", LocalDateTime.of(2020,01,02,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        assertThrows(ValidationException.class, () -> service.save(event1));
+        assertThrows(ValidationException.class, () -> service.save(event2));
+    }
+
+
+}

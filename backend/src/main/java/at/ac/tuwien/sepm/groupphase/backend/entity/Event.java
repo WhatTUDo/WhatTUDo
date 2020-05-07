@@ -29,14 +29,12 @@ public class Event {
     @Column(nullable = false)
     private LocalDateTime endDateTime;
 
-
-
-   /* @NonNull
+    @NonNull
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "calendar_id", nullable = false)
     private Calendar calendar;
-    */
+
 
 
 

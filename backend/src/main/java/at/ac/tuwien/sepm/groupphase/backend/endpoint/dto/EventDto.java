@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+
 import java.time.LocalDateTime;
 
 
@@ -11,12 +13,21 @@ public class EventDto {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private int id;
+    private Calendar calendar;
 
-    public EventDto(String name, LocalDateTime startDate, LocalDateTime endDate, int id) {
+    public EventDto(String name, LocalDateTime startDate, LocalDateTime endDate, Calendar calendar, int id) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.calendar = calendar;
         this.id = id;
+    }
+
+    public EventDto(String name, LocalDateTime startDate, LocalDateTime endDate, Calendar calendar) {
+        this.name = name;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.calendar = calendar;
     }
 
     public String getName() {
@@ -31,9 +42,9 @@ public class EventDto {
         return endDate;
     }
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+
+    public Calendar getCalendar() { return calendar; }
 
     public void setName(String name) {
         this.name = name;
@@ -51,4 +62,5 @@ public class EventDto {
         this.id = id;
     }
 
+    public void setCalendar(Calendar calendar) { this.calendar = calendar; }
 }
