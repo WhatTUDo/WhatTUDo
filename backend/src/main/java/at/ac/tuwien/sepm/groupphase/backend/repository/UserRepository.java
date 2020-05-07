@@ -14,8 +14,8 @@ public class UserRepository {
 
     @Autowired
     public UserRepository(PasswordEncoder passwordEncoder) {
-        user = new ApplicationUser("user@email.com", passwordEncoder.encode("password"), false);
-        admin = new ApplicationUser("admin@email.com", passwordEncoder.encode("password"), true);
+        user = new ApplicationUser(0, "user", "user@email.com", passwordEncoder.encode("password"));
+        admin = new ApplicationUser(1, "admin", "admin@email.com", passwordEncoder.encode("password"));
     }
 
     public ApplicationUser findUserByEmail(String email) {
@@ -23,6 +23,4 @@ public class UserRepository {
         if (email.equals(admin.getEmail())) return admin;
         return null; // In this case null is returned to fake Repository behavior
     }
-
-
 }
