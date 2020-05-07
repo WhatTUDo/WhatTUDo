@@ -3,7 +3,7 @@
   <div class="col-md-8">
     <h3>Event Details</h3>
     <p>Note: Fields with * are <b>Required Fields</b>. </p>
-    <form>
+    <form [formGroup]="reactiveEventForm">
       <input type="hidden" formControlName="id" name="id">
       <div class="form-group">
         <label for="event.name">Name: </label>
@@ -19,11 +19,13 @@
       </div>
       <div class="form-group">
         <label for="location-picker">Location: </label>
+        <input type="hidden" id="location" name="location" value="123">
         <div id="location-picker"style="background-color: lightpink; height: 200px"> I am a location picker </div>
       </div>
       <div>
         <div class="form-group">
-          <label for="label-picker"></label>
+          <label for="label-picker">Labels: </label>
+          <input type="hidden" id="labels" name="labels" value="123">
           <div id="label-picker" style="background-color: lightgreen; height: 150px" >
             I am a label picker.
           </div>
@@ -31,7 +33,7 @@
       </div>
 
       <div class="btn-group-lg">
-        <button class="button-clickable button-green btn-lg">
+        <button class="button-clickable button-green btn-lg" (click)="onSubmit()">
           Submit
         </button>
         <button class="button-clickable button-red btn-lg">
