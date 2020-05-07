@@ -22,19 +22,39 @@ export class EventService {
    */
   getEvent(id: number): Observable<CalendarEvent> {
     console.log("Load Event with ID", id);
-    return this.httpClient.get<CalendarEvent>(this.eventBaseUri + '/' + id);
+    // return this.httpClient.get<CalendarEvent>(this.eventBaseUri + '/' + id);
+    return null;
   }
 
+  /**
+   * Posts event to Server --> New Event
+   * @param event
+   */
   postEvent(event: CalendarEvent) {
-    console.log("Post Event to backend", CalendarEvent);
+    console.log("Post Event to Server", CalendarEvent);
     //TODO: Implement POST call
   }
 
+  /**
+   * Posts comment with Event ID to Server (Comment contains Author ID)
+   * @param comment
+   * @param eventID
+   */
   postComment(comment: EventComment, eventID: number) {
+    console.log("Posting comment: ", comment)
+  }
+
+  postVote(isUpvote: boolean, commentID: number, userID: number) {
 
   }
 
-  postAttendance(attendanceStatus: number, eventID: number) {
-
+  /**
+   * Posts Attendance to a specific event to Server
+   * @param userID
+   * @param attendanceStatus
+   * @param eventID
+   */
+  postAttendance(userID: number, attendanceStatus: number, eventID: number) {
+    console.log("Post Attendance for User: ", userID);
   }
 }

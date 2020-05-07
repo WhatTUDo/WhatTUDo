@@ -18,6 +18,7 @@ export class EventComponent implements OnInit {
   public calendarEvent: CalendarEvent
   public participants: any;
 
+
   ngOnInit(): void {
     let startDate = new Date(2020, 5, 5, 18, 0, 0, 0);
     let endDate = new Date(2020, 5, 5, 22, 30, 0, 0);
