@@ -29,11 +29,11 @@ export class WeeklyCalendarComponent implements OnInit {
     } // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 
     for (let i = 1; i <= 4; i++) {
-      const dateOffset = getRandomInt(-3, +4);
-      const startHours = 18 + getRandomInt(-3, +4);
+      const dateOffset = getRandomInt(0, +3);
+      const startHours = 18 + getRandomInt(-3, +3);
       const endHours = startHours + getRandomInt(2, 4);
-      let startDate = new Date(2020, 4, 7 + dateOffset, startHours, 0, 0, 0);
-      let endDate = new Date(2020, 4, 7 + dateOffset, endHours, 30, 0, 0);
+      let startDate = new Date(2020, 4, 8 + dateOffset, startHours, 0, 0, 0);
+      let endDate = new Date(2020, 4, 8 + dateOffset, endHours, 30, 0, 0);
 
       let keyISOString = this.getMidnight(startDate).toISOString()
       let events = this.eventsOfTheWeek.get(keyISOString)
@@ -55,6 +55,19 @@ export class WeeklyCalendarComponent implements OnInit {
     setInterval(_ => {
       this.updateDatetime();
     }, 1000);
+
+    setInterval(_ => {    Array.from(document.getElementsByClassName('calendar-event'))
+      .forEach(event => {
+        const time = event.getElementsByClassName('calendar-event-time')[0];
+        const name = event.getElementsByClassName('calendar-event-name')[0];
+        // @ts-ignore
+        if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
+          // @ts-ignore
+          time.innerText = '...'
+          // @ts-ignore
+          name.innerText = '...';
+        }
+      })}, 500)
   }
 
   updateDatetime() {
@@ -119,6 +132,19 @@ export class WeeklyCalendarComponent implements OnInit {
     let midnight = new Date(date);
     midnight.setHours(0, 0, 0, 0);
     return midnight
+  }
+
+  getDisplayTimeString(event: CalendarEvent) {
+    let string = event.startDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    string += ' - '
+    string += event.endDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    return string
   }
 
   faChevronUp = faChevronUp;

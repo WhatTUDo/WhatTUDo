@@ -31,39 +31,22 @@
   <div *ngFor="let date of this.week.slice(0,5)" class="calendar-day-swim-lane">
     <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())" class="calendar-event"
          [style.grid-row]="getDisplayRows(event)">
-      <div class="calendar-event-time">{{event.startDate.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric'
-      })}} - {{event.endDate.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric'
-      })}}
-      </div>
+      <div class="calendar-event-time">{{getDisplayTimeString(event)}}</div>
       <div class="calendar-event-name">{{event.name}}</div>
     </div>
   </div>
-  <div class="calendar-day-swim-lane weekend-lane">
-    <div *ngFor="let event of this.eventsOfTheWeek.get(week[5].toISOString())" class="calendar-event weekend-sat"
-         [style.grid-row]="getDisplayRows(event)">
-      <div class="calendar-event-time">{{event.startDate.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric'
-      })}} - {{event.endDate.toLocaleTimeString('en-US', {
-        hour: 'numeric',
-        minute: 'numeric'
-      })}}
+  <div class="calendar-day-swim-lane weekend-lane-container">
+    <div class="weekend-sat">
+      <div *ngFor="let event of this.eventsOfTheWeek.get(week[5].toISOString())" class="calendar-event "
+           [style.grid-row]="getDisplayRows(event)">
+        <div class="calendar-event-time">{{getDisplayTimeString(event)}}</div>
+        <div class="calendar-event-name">{{event.name}}</div>
       </div>
-      <div class="calendar-event-name">{{event.name}}</div>
+    </div>
+    <div class="weekend-sun">
       <div *ngFor="let event of this.eventsOfTheWeek.get(week[6].toISOString())" class="calendar-event weekend-sun"
            [style.grid-row]="getDisplayRows(event)">
-        <div class="calendar-event-time">{{event.startDate.toLocaleTimeString('en-US', {
-          hour: 'numeric',
-          minute: 'numeric'
-        })}} - {{event.endDate.toLocaleTimeString('en-US', {
-          hour: 'numeric',
-          minute: 'numeric'
-        })}}
-        </div>
+        <div class="calendar-event-time">{{getDisplayTimeString(event)}}</div>
         <div class="calendar-event-name">{{event.name}}</div>
       </div>
     </div>
@@ -73,3 +56,21 @@
 <div class="calendar-navigation" (click)="addOneWeek()">
   <fa-icon [icon]="faChevronDown">Next week</fa-icon>
 </div>
+
+<script>
+  function isOverflowing(element) {
+    return element.offsetWidth < element.scrollWidth;
+  }
+
+  Array.from(document.getElementsByClassName('calendar-event'))
+    .forEach(event => {
+      const time = event.childMatchedQueries('.calendar-event-time');
+      const name = event.childMatchedQueries('.calendar-event-name');
+
+      if (isOverflowing(time) || isOverflowing(name)) {
+        time.style.display = 'none';
+        time.name.display = 'none';
+      }
+
+    })
+</script>
