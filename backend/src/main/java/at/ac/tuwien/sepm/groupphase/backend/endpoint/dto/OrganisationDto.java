@@ -16,5 +16,4 @@ public class OrganisationDto {
     private Integer id;
     private String name;
     private List<Calendar> calendars = Collections.emptyList();
-
 }

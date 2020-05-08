@@ -14,7 +14,12 @@ import java.util.List;
 public class CalendarDto {
     private Integer id;
     private String name;
-   // private List<OrganisationDto> organisationsDto;
+    private List<Organisation> organisations;
     private List<EventDto> events;
 
+    public CalendarDto(Integer id, String name, List<Organisation> organisations) {
+        this.id = id;
+        this.name = name;
+        this.organisations = organisations;
+    }
 }
