@@ -22,11 +22,11 @@ public class Calendar {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @NonNull
-    @ToString.Exclude
-    @ManyToMany(mappedBy = "calendars", cascade = {CascadeType.MERGE})
-    @Size(min = 1)
-    private List<Organisation> organisations;
+//    @NonNull
+//    @ToString.Exclude
+//    @ManyToMany(mappedBy = "calendars", cascade = {CascadeType.MERGE})
+//    @Size(min = 1)
+//    private List<Organisation> organisations;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "calendar")

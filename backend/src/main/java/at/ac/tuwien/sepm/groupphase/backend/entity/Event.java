@@ -35,9 +35,5 @@ public class Event {
     @JoinColumn(name = "calendar_id", nullable = false)
     private Calendar calendar;
 
-
-
-
-
 }
 

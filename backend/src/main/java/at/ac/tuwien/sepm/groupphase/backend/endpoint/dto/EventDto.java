@@ -1,66 +1,25 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 
-//TODO: annotations
-
+@AllArgsConstructor
+@RequiredArgsConstructor
+@Getter
+@Setter
 public class EventDto {
-
+    private Integer id;
     private String name;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private int id;
-    private Calendar calendar;
+    private LocalDateTime startDateTime;
+    private LocalDateTime endDateTime;
+    private CalendarDto calendar;
 
-    public EventDto(String name, LocalDateTime startDate, LocalDateTime endDate, Calendar calendar, int id) {
+    public EventDto(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, CalendarDto calendar) {
         this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.calendar = calendar;
-        this.id = id;
-    }
-
-    public EventDto(String name, LocalDateTime startDate, LocalDateTime endDate, Calendar calendar) {
-        this.name = name;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
         this.calendar = calendar;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public int getId() { return id; }
-
-    public Calendar getCalendar() { return calendar; }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setCalendar(Calendar calendar) { this.calendar = calendar; }
 }
