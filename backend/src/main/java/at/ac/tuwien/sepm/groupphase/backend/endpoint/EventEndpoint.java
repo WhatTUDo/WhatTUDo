@@ -13,7 +13,6 @@ import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,7 +21,7 @@ import java.lang.invoke.MethodHandles;
 
 
 @RestController
-@RequestMapping(value = "/api/v1/events")
+@RequestMapping(value = EventEndpoint.BASE_URL)
 public class EventEndpoint {
     static final String BASE_URL = "/events";
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -48,8 +47,7 @@ public class EventEndpoint {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create event", authorizations = {@Authorization(value = "apiKey")})
     public EventDto post(@RequestBody EventDto event){
-
-        //TODO: Logger
+        LOGGER.info("POST " + BASE_URL + "/{}", event);
         try {
             Event eventEntity = eventMapper.dtoToEntity(event);
             return eventMapper.entityToDto(eventService.save(eventEntity));
@@ -62,7 +60,7 @@ public class EventEndpoint {
 
     @GetMapping(value = "/{id}")
     public EventDto getById(@PathVariable("id") int id) {
-        //TODO: logger
+        LOGGER.info("GET " + BASE_URL + "/{}", id);
         try {
             return eventMapper.entityToDto(eventService.findById(id));
         } catch (NotFoundException e) {

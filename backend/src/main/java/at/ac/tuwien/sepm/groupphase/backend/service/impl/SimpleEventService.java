@@ -28,15 +28,16 @@ public class SimpleEventService implements EventService {
         this.validator = validator;
     }
 
-    //TODO: Logging
 
     @Override
     public void delete(Event event) {
+        //TODO: Logging
         eventRepository.delete(event);
     }
 
     @Override
     public Event save(Event event) {
+        LOGGER.trace("save({})", event.getName());
         validator.validateNewEvent(event);
         try {
             return eventRepository.save(event);
@@ -47,12 +48,9 @@ public class SimpleEventService implements EventService {
 
     @Override
     public Event findById(int id) {
-        //TODO: logger
+        LOGGER.trace("searching for event with id: " + id);
         Optional<Event> returned = eventRepository.findById(id);
-        if(returned.isPresent()){
-            return returned.get();
-        }
-       return null;
+        return returned.orElse(null);
     }
 
 }
