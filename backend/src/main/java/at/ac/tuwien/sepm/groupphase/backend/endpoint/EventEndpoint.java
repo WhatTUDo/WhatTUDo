@@ -36,14 +36,14 @@ public class EventEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
     public void deleteEvent(@RequestBody EventDto eventDto){
-        LOGGER.info("POST /api/v1/messages body: {}", eventDto);
+        LOGGER.info("DELETE /api/v1/events body: {}", eventDto);
         eventService.delete(eventMapper.dtoToEntity(eventDto));
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create event", authorizations = {@Authorization(value = "apiKey")})
     public EventDto post(@RequestBody EventDto event){
-
+        LOGGER.info("POST /api/v1/events body: {}", event);
         //TODO: try catch, Logger
         Event eventEntity = eventMapper.dtoToEntity(event);
         return eventMapper.entityToDto(eventService.save(eventEntity));
@@ -52,7 +52,7 @@ public class EventEndpoint {
 
     @GetMapping(value = "/{id}")
     public EventDto getById(@PathVariable("id") int id) {
-        //TODO: looger, try catch
+        LOGGER.info("GET /api/v1/events body: {}", id);
         return eventMapper.entityToDto(eventService.findById(id));
     }
 

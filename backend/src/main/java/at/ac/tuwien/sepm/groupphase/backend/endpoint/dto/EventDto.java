@@ -14,12 +14,12 @@ public class EventDto {
     private String name;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
-    private CalendarDto calendar;
+    private Integer calendarId;
 
-    public EventDto(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, CalendarDto calendar) {
+    public EventDto(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer calendarId) {
         this.name = name;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
-        this.calendar = calendar;
+        this.calendarId = calendarId;
     }
 }

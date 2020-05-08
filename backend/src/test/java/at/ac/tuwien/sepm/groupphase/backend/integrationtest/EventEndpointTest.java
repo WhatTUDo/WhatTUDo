@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -34,21 +34,23 @@ public class EventEndpointTest {
     CalendarRepository calendarRepository;
     @Autowired
     OrganisationRepository organisationRepository;
-   @Autowired
-    CalendarMapper calendarMapper;
+
+    @Autowired
+    EventMapper eventMapper;
+
     @Test
     public void save_shouldReturn_sameEvent() {
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation1"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar1", Collections.singletonList(orga)));
-        Integer id = calendar.getId();
-        CalendarDto calendarDto = new CalendarDto(id, "Test Calendar1", Collections.singletonList(orga));
-        EventDto eventDto = new EventDto("Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00), calendarDto);
+        EventDto eventDto = new EventDto("Test Name", LocalDateTime.of(2020, 01, 01, 15, 30), LocalDateTime.of(2020, 01, 01, 16, 00), calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
 
-        assertEquals(eventDto.getName(),returnedEvent.getName());
-        assertEquals(eventDto.getEndDateTime(),returnedEvent.getEndDateTime());
-        assertEquals(eventDto.getStartDateTime(),returnedEvent.getStartDateTime());
-        assertEquals(eventDto.getCalendar(),returnedEvent.getCalendar());
+        assertEquals(eventDto.getName(), returnedEvent.getName());
+        assertEquals(eventDto.getEndDateTime(), returnedEvent.getEndDateTime());
+        assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
+        assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
     }
+
+
 
 }
