@@ -17,8 +17,36 @@ export class WeeklyCalendarComponent implements OnInit {
   week: Date[]; // Starts at a monday.
   offset = 0; // Currently in WEEKS. Probably should be in days for mobile compatibility.
 
+  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
 
   constructor() {
+
+    //Mock data eventsOfTheWeek
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min)) + min;
+    } // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+
+    for (let i = 1; i <= 4; i++) {
+      const dateOffset = getRandomInt(-3, +4);
+      const startHours = 18 + getRandomInt(-3, +4);
+      const endHours = startHours + getRandomInt(2, 4);
+      let startDate = new Date(2020, 4, 7 + dateOffset, startHours, 0, 0, 0);
+      let endDate = new Date(2020, 4, 7 + dateOffset, endHours, 30, 0, 0);
+
+      let keyISOString = this.getMidnight(startDate).toISOString()
+      let events = this.eventsOfTheWeek.get(keyISOString)
+      if (!events) {
+        events = []
+      }
+      events.push(
+        new CalendarEvent(i, "Test Event " + i, "", startDate, endDate, null, null, null)
+      );
+      this.eventsOfTheWeek.set(keyISOString, events);
+    }
+
+    console.log(this.eventsOfTheWeek);
   }
 
   ngOnInit(): void {
@@ -70,6 +98,27 @@ export class WeeklyCalendarComponent implements OnInit {
 
   isToday(date: Date) {
     return this.getToday().toDateString() == date.toDateString();
+  }
+
+  getDisplayRows(event: CalendarEvent) {
+    const startSecond = this.getSecondOffsetFromMidnight(event.startDate);
+    const endSecond = this.getSecondOffsetFromMidnight(event.endDate);
+
+    // Calendar View should starts at a time like 8 AM and ends at 23:59PM or even later.
+    const startRow = Math.max(Math.floor((startSecond - 28800) / 57600 * 64), 0) // Proof of concept with magic numbers. TODO: Fix this.
+    const endRow = Math.min(Math.floor((endSecond - 28800) / 57600 * 64), 64) // Proof of concept with magic numbers. TODO: Fix this.
+
+    return `${startRow}/${endRow}`
+  }
+
+  getSecondOffsetFromMidnight(date: Date) {
+    return date.getSeconds() + (60 * date.getMinutes()) + (60 * 60 * date.getHours());
+  }
+
+  getMidnight(date: Date) {
+    let midnight = new Date(date);
+    midnight.setHours(0, 0, 0, 0);
+    return midnight
   }
 
   faChevronUp = faChevronUp;
