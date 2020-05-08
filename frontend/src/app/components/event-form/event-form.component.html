@@ -10,18 +10,18 @@
         <input type="text" class="form-control" formControlName="name" id="event.name">
       </div>
       <div class="form-group">
-        <label for="event.startTime">Start: </label>
-        <input type="datetime-local" class="form-control" formControlName="startTime" id="event.startTime">
+        <label for="event.startDate">Start: </label>
+        <input type="datetime-local" class="form-control" formControlName="startDate" id="event.startDate">
       </div>
       <div class="form-group">
-        <label for="event.name">End: </label>
-        <input type="datetime-local" class="form-control" formControlName="endTime" id="event.endTime">
+        <label for="event.endDate">End: </label>
+        <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate">
       </div>
       <div class="form-group">
         <label for="location-picker">Location: </label>
         <input type="hidden" id="location" name="location" value="123">
-        <div id="location-picker"style="background-color: lightpink; height: 200px">
-          <app-event-location></app-event-location>
+        <div id="location-picker">
+          <app-event-location (locationSaved)="saveLocationToEvent($event)"></app-event-location>
         </div>
       </div>
       <div>
