@@ -20,11 +20,12 @@
   <div class="week-day-label">Fri</div>
   <div class="week-day-label">Sat/Sun</div>
 
-  <div *ngFor="let date of this.week.slice(0,5)" class="calendar-date-label">{{date.getDate()}}</div>
+  <div *ngFor="let date of this.week.slice(0,5)" class="calendar-date-label"
+       [ngClass]="{'today': isToday(date)}">{{date.getDate()}}</div>
   <div class="calendar-date-label">
-    <sup>{{this.week[5].getDate()}}</sup>
+    <sup [ngClass]="{'today': isToday(this.week[5])}">{{this.week[5].getDate()}}</sup>
     ⁄
-    <sub>{{this.week[6].getDate()}}</sub>
+    <sub [ngClass]="{'today': isToday(this.week[6])}">{{this.week[6].getDate()}}</sub>
   </div>
 
   <div class="calendar-day-swim-lane">

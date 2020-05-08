@@ -5,7 +5,7 @@
 }
 
 #weekly-cal-date {
-  font-weight: $f-regular !important;
+  font-weight: $f-regular;
 }
 
 .grid-one-sixth {
@@ -28,12 +28,15 @@
   text-align: center;
 
   &.today {
-    // text-decoration: underline;
-    //    This doesn't look as good as in mockup...
+    color: $accent;
   }
 
   sub, sup {
-    font-weight: $f-bold !important;
+    font-weight: $f-bold;
+
+    &.today {
+      color: $accent;
+    }
   }
 }
 
@@ -41,7 +44,7 @@ $swim-land-border: 2pt dotted transparentize($grey, 0.5);
 
 .calendar-day-swim-lane {
   display: grid;
-  grid-template-rows: repeat(calc(16 * 4), 1fr);
+  grid-template-rows: repeat(64, 1fr);
 
   width: 100%;
   height: 360pt;
@@ -66,10 +69,6 @@ $swim-land-border: 2pt dotted transparentize($grey, 0.5);
   }
 
   .calendar-event {
-
-    //height: 128pt;
-    //width: calc(100% - 8pt);
-
     border-left: 4pt solid $blue;
     background-color: transparentize($blue, 0.75);
 

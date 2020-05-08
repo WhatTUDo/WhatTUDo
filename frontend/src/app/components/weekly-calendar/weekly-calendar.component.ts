@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {CalendarEvent} from '../../dtos/calendar-event';
 
 import {faChevronCircleLeft, faChevronCircleRight, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 
@@ -14,7 +15,8 @@ export class WeeklyCalendarComponent implements OnInit {
   currentYear: number;
 
   week: Date[]; // Starts at a monday.
-  offset = 0;
+  offset = 0; // Currently in WEEKS. Probably should be in days for mobile compatibility.
+
 
   constructor() {
   }
@@ -28,16 +30,15 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   updateDatetime() {
-    const now = new Date(Date.now());
-    this.currentMonth = now.toLocaleString('en-US', {month: 'long'});
-    this.currentDate = now.getDate();
-    this.currentYear = now.getFullYear();
+    const today = this.getToday();
+    this.currentMonth = today.toLocaleString('en-US', {month: 'long'});
+    this.currentDate = today.getDate();
+    this.currentYear = today.getFullYear();
   }
 
   getWeek(offset = 0) {
     let currentWeekDates = [];
-    let today = new Date(Date.now());
-    today.setHours(0, 0, 0, 0);
+    let today = this.getToday();
 
     let beginOfWeek = new Date(today);
     beginOfWeek.setDate(beginOfWeek.getDate() - (today.getDay() - 1));
@@ -59,6 +60,16 @@ export class WeeklyCalendarComponent implements OnInit {
   minusOneWeek() {
     this.offset--;
     this.week = this.getWeek(this.offset);
+  }
+
+  getToday() {
+    let today = new Date(Date.now());
+    today.setHours(0, 0, 0, 0);
+    return today;
+  }
+
+  isToday(date: Date) {
+    return this.getToday().toDateString() == date.toDateString();
   }
 
   faChevronUp = faChevronUp;
