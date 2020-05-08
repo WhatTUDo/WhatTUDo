@@ -33,6 +33,8 @@ export class EventComponent implements OnInit {
     this.calendarEvent.comments = this.getComments();
     this.calendarEvent.labels = this.getLabels();
     this.participants = this.getParticipants();
+
+
   }
 
   public participate(status: number) {

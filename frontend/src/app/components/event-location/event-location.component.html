@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-sm-8">
+    <h4>Location Search</h4>
+    <form>
+      <input type="text" name="addressSearch" id="addressSearch">
+      <button (click)="performSearch()"> search </button>
+    </form>
+    <div>
+      <div *ngIf="this.searchComplete" id="location-search-results-container">
+        <div class="clickable" *ngFor="let result of this.searchResults" (click)="addressClicked(result)"> {{result.display_name}}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4" *ngIf="this.addressSelected">
+    <h4>Preview</h4>
+  </div>
+</div>
+

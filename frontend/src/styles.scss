@@ -52,6 +52,12 @@ h2, .heading, .heading * {
 
 //SECTION: Buttons
 
+.clickable:hover {
+  cursor: pointer;
+  box-shadow: 0 0 11px rgba(33,33,33,.2);
+
+}
+
 .button-clickable:hover {
   box-shadow: 0 0 11px rgba(33,33,33,.2);
 }
