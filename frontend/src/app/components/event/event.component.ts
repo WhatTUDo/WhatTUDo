@@ -39,6 +39,15 @@ export class EventComponent implements OnInit {
 
   }
 
+  private loadCalendarEvent(id: number) {
+    this.eventService.getEvent(id).subscribe( (event: CalendarEvent) =>{
+      this.calendarEvent = event;
+    }, err => {
+      //display Error
+    })
+  }
+
+
   public participate(status: number) {
     switch (status) {
       case 0:
