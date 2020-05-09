@@ -9,27 +9,34 @@
 }
 
 body {
-  background-color: $background !important;
-  color: inherit !important;
+  background-color: $background;
+  color: inherit;
 
-  font-family: inherit !important;
-  font-weight: inherit !important;
+  font-family: inherit;
+  font-weight: inherit;
 }
 
 h1, h2, h3, h4, h5, h6, .heading, .heading * {
-  font-weight: $f-bold !important;
+  font-weight: $f-bold;
 
   text-transform: uppercase;
 }
 
 h2, .heading, .heading * {
-  font-size: 36pt !important;
+  font-size: 36pt;
 
 }
 
 .contextual-control {
+  display: flex;
   font-size: 16pt;
   margin-bottom: -8pt;
+
+  align-items: center;
+
+  fa-icon {
+    font-size: 0.75em;
+  }
 }
 
 .grid-one-third {
@@ -52,26 +59,40 @@ h2, .heading, .heading * {
 
 //SECTION: Buttons
 
-.button-clickable:hover {
-  box-shadow: 0 0 11px rgba(33,33,33,.2);
+.clickable {
+  cursor: pointer;
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+  box-shadow: 1px 1px 2px transparentize($text, 0.75);
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 4px 4px 8px transparentize($text, 0.75);
+  }
 }
 
-.button-green {
-  background-color: $green;
-  border-color: $green
-}
+.button-clickable {
+  transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+  border: none;
+  box-shadow: 1px 1px 2px transparentize($text, 0.75);
 
-.button-red {
-  background-color: $red;
-  border-color: $red;
-}
 
-.button-blue {
-  background-color: $blue;
-  border-color: $blue;
-}
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 4px 4px 8px transparentize($text, 0.75);
+  }
 
-.button-yellow {
-  background-color: $yellow;
-  border-color: $yellow;
+  &.button-green {
+    background-color: $green;
+  }
+
+  &.button-red {
+    background-color: $red;
+  }
+
+  &.button-blue {
+    background-color: $blue;
+  }
+
+  &.button-yellow {
+    background-color: $yellow;
+  }
 }

@@ -1,15 +1,21 @@
-
 <div class="comment-item">
   <div class="comment-header">
     <p>
-      <b>Author: </b> {{this.author}}
+      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;{{this.author}}
     </p>
-    <p>
-      <b>Rating: </b> {{this.comment.rating}}
-    </p>
+<!--    <p>-->
+<!--      <b>Rating: </b> {{this.comment.rating}}-->
+<!--    </p>-->
   </div>
   <div class="conmment-content">
     <p>{{this.comment.content}}</p>
+  </div>
+  <div class="comment-rating">
+    <div class="progress">
+      <div class="progress-bar" [style.width]="this.comment.rating * 100+'%'"
+           aria-valuenow="{{this.comment.rating * 100}}" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="rating-percentage">{{this.comment.rating * 100+'%'}}</div>
   </div>
   <div class="comment-buttons">
     <button class="button-clickable button-green btn-sm" (click)="vote(true)">
@@ -18,7 +24,7 @@
     <button class="button-clickable button-red btn-sm" (click)="vote(false)">
       <fa-icon [icon]="faThumbsDown"></fa-icon>
     </button>
-    <button class="button-clickable button-blue btn-sm" (click)="respondButtonClicked()">
+    <button class="button-clickable button-blue btn-sm response-button" (click)="respondButtonClicked()">
       Respond
     </button>
   </div>
