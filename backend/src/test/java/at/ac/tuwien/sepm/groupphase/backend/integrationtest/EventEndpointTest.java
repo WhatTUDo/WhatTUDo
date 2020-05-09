@@ -1,13 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.EventEndpoint;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganisationDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
@@ -21,7 +17,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
-import static org.junit.Assert.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -35,8 +36,6 @@ public class EventEndpointTest {
     @Autowired
     OrganisationRepository organisationRepository;
 
-    @Autowired
-    EventMapper eventMapper;
 
     @Test
     public void save_shouldReturn_sameEvent() {
@@ -51,6 +50,37 @@ public class EventEndpointTest {
         assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
     }
 
+    @Test
+    public void save_thenRead_shouldReturn_sameEvent() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation2"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar2", Collections.singletonList(orga)));
+        EventDto eventDto = new EventDto("Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        EventDto returnedEvent = endpoint.post(eventDto);
+        EventDto gottenEvent = endpoint.getById(returnedEvent.getId());
+        Optional<Calendar> fetchCalendar = calendarRepository.findById(returnedEvent.getCalendarId());
+        Calendar returnedCalendar = fetchCalendar.get();
+        fetchCalendar = calendarRepository.findById(gottenEvent.getCalendarId());
+        Calendar gottenCalendar = fetchCalendar.get();
 
+        assertEquals(gottenEvent.getName(),returnedEvent.getName());
+        assertEquals(gottenEvent.getEndDateTime(),returnedEvent.getEndDateTime());
+        assertEquals(gottenEvent.getStartDateTime(),returnedEvent.getStartDateTime());
+        assertEquals(gottenEvent.getId(),returnedEvent.getId());
+        assertEquals(returnedCalendar.getName(),gottenCalendar.getName());
+        assertEquals(returnedCalendar.getId(),gottenCalendar.getId());
+
+    }
+
+    @Test
+    public void save_withoutName_shouldReturn_ResponseStatusException() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation3"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar3", Collections.singletonList(orga)));
+        EventDto eventDto1 = new EventDto("", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        EventDto eventDto2 = new EventDto("Test Event", LocalDateTime.of(2020,01,02,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto1));
+        assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto2));
 
 }
+
+}
+

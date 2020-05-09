@@ -10,6 +10,9 @@
       <li class="nav-item">
         <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/message" routerLinkActive="active">Message</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/event" routerLinkActive="active">Events</a>
+      </li>
     </ul>
     <ul class="navbar-nav mr-5" id="user-avatar">
       <a class="nav-link" *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active"><fa-icon [icon]="faUserCircle">Login</fa-icon></a>

@@ -3,6 +3,7 @@ import {EventComment} from "../../dtos/event-comment";
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {Location} from "../../dtos/location";
 import {Label} from "../../dtos/label";
+import {EventService} from "../../services/event.service";
 
 
 @Component({
@@ -12,10 +13,11 @@ import {Label} from "../../dtos/label";
 })
 export class EventComponent implements OnInit {
 
-  constructor() { }
+  constructor(private eventService: EventService) { }
 
   public calendarEvent: CalendarEvent
   public participants: any;
+
 
   ngOnInit(): void {
     let startDate = new Date(2020, 5, 5, 18, 0, 0, 0);
@@ -58,7 +60,7 @@ export class EventComponent implements OnInit {
         alert("Comments aren't live yet, but here's what you wrote: " + comment);
       }
       else {
-        alert("Could not read comment!");
+        alert('Could not read comment!');
       }
     }
   }

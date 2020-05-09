@@ -6,7 +6,23 @@ public interface EventService {
 
     void delete(Event event);
 
+    /**
+     * @param event to be saved into database .
+     * @return the new event.
+     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException will be thrown if.
+     *         - name of event is empty;
+     *         - startDateTime is after endDateTime;
+     */
     Event save(Event event);
 
+    /**
+     * @param id of event to be found.
+     * @return the event with the specified id.
+     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException will be thrown if
+     *         - name of event is empty;
+     *         - startDateTime is after endDateTime;
+     */
     Event findById(int id);
 }

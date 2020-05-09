@@ -1,8 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 
-//TODO: annotations
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
@@ -18,8 +19,7 @@ public class EventMapper {
 
     @Autowired
     public EventMapper(CalendarService calendarService) {
-        this.calendarService = calendarService;
-    }
+        this.calendarService = calendarService;}
 
    public Event dtoToEntity(EventDto eventDto){
        Calendar calendar = calendarService.findById(eventDto.getCalendarId());

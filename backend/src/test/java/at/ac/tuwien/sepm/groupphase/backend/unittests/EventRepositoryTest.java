@@ -29,15 +29,29 @@ public class EventRepositoryTest {
     CalendarRepository calendarRepository;
     @Autowired
     OrganisationRepository organisationRepository;
-    //TODO: test stuff
 
     @Test
     public void repoBasics() {
-        //noinspection ConstantConditions
-//        assertThrows(InvalidDataAccessApiUsageException.class, () -> eventRepository.save(null));
-//        assertThrows(NullPointerException.class, () -> eventRepository.save(new Event(null,null,null,null,null,null)));
-//        eventRepository.save(new Event("Test Name", LocalDateTime.now(),LocalDateTime.now().plusHours(2),new Location("FSINF","Gußhausstraße 1","1220","48.1997","16.3675"),new Label[1], new Comment[1]));
-//        eventRepository.save(new Event("Test Name", LocalDateTime.now(),LocalDateTime.now().plusHours(2),new Location("FSINF","Gußhausstraße 1","1220","48.1997","16.3675"),new Label[1], new Comment[1]));
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar", Collections.singletonList(orga)));
+
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> eventRepository.save(null));
+        assertThrows(NullPointerException.class, () -> eventRepository.save(new Event(null,null,null,null)));
+        eventRepository.save(new Event("Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar));
+        eventRepository.save(new Event("Test Name", LocalDateTime.of(2020,01,01,17,30),LocalDateTime.of(2020,01,01,18,00),calendar));
+    }
+
+    @Test
+    public void eventBasics() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar", Collections.singletonList(orga)));
+        Event event = eventRepository.save(new Event("Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar));
+
+        assertEquals("Test Name", event.getName());
+        assertEquals(LocalDateTime.of(2020,01,01,15,30), event.getStartDateTime());
+        assertEquals(LocalDateTime.of(2020,01,01,16,00), event.getEndDateTime());
+        assertEquals(calendar, event.getCalendar());
+
     }
 
 
