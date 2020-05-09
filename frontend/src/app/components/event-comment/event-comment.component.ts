@@ -1,14 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EventComment} from "../../dtos/event-comment";
 
-import {faThumbsUp} from "@fortawesome/free-solid-svg-icons";
-import {faThumbsDown} from "@fortawesome/free-solid-svg-icons";
+import {faThumbsUp, faThumbsDown, faUserCircle} from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
 
 @Component({
   selector: 'app-event-comment',
   templateUrl: './event-comment.component.html',
-  styleUrls: ['./event-comment.component.css']
+  styleUrls: ['./event-comment.component.scss']
 })
 export class EventCommentComponent implements OnInit {
 
@@ -20,6 +19,7 @@ export class EventCommentComponent implements OnInit {
 
   faThumbsUp = faThumbsUp;
   faThumbsDown = faThumbsDown;
+  faUserCircle = faUserCircle;
 
   ngOnInit(): void {
     this.author = "Testguy";

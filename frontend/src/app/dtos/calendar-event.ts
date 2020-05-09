@@ -39,4 +39,17 @@ export class CalendarEvent {
   isTheSameDate(date1: Date, date2: Date) {
     return date1.toDateString() == date2.toDateString();
   }
+
+  getDisplayTimeString() {
+    let string = this.startDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    string += ' - '
+    string += this.endDate.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    return string
+  }
 }

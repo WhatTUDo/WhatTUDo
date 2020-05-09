@@ -63,9 +63,9 @@ export class WeeklyCalendarComponent implements OnInit {
         // @ts-ignore
         if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
           // @ts-ignore
-          time.innerText = '...'
+          time.innerText = '…'
           // @ts-ignore
-          name.innerText = '...';
+          name.innerText = '…';
         }
       })}, 500)
   }
@@ -134,18 +134,6 @@ export class WeeklyCalendarComponent implements OnInit {
     return midnight
   }
 
-  getDisplayTimeString(event: CalendarEvent) {
-    let string = event.startDate.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(":00", "")
-    string += ' - '
-    string += event.endDate.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(":00", "")
-    return string
-  }
 
   faChevronUp = faChevronUp;
   faChevronDown = faChevronDown;
