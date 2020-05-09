@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import org.slf4j.Logger;
@@ -50,7 +51,10 @@ public class SimpleEventService implements EventService {
     public Event findById(int id) {
         LOGGER.trace("searching for event with id: " + id);
         Optional<Event> returned = eventRepository.findById(id);
-        return returned.orElse(null);
+        if(returned.isPresent()) {
+            return returned.get();
+        } else {
+            throw new NotFoundException("No event found with id " +id);
+        }
     }
-
 }
