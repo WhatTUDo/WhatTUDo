@@ -21,7 +21,7 @@
   text-transform: uppercase;
 }
 
-.calendar-date {
+.calendar-date-label {
   font-size: 36pt;
   font-weight: $f-bold;
 
@@ -36,4 +36,73 @@
     font-weight: $f-bold !important;
   }
 }
+
+$swim-land-border: 2pt dotted transparentize($grey, 0.5);
+
+.calendar-day-swim-lane {
+  display: grid;
+  grid-template-rows: repeat(calc(16 * 4), 1fr);
+
+  width: 100%;
+  height: 360pt;
+
+  border-left: $swim-land-border;
+
+  &:last-of-type {
+    border-right: $swim-land-border;
+  }
+
+  &.weekend-lane {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    .weekend-sat {
+      grid-column: 1/2;
+    }
+
+    .weekend-sun {
+      grid-column: 2/3;
+    }
+  }
+
+  .calendar-event {
+
+    //height: 128pt;
+    //width: calc(100% - 8pt);
+
+    border-left: 4pt solid $blue;
+    background-color: transparentize($blue, 0.75);
+
+    position: relative;
+
+    margin-left: -2pt;
+    padding: 4pt;
+    box-sizing: content-box;
+
+    .calendar-event-time {
+      color: $grey;
+      font-size: 8pt;
+      margin-bottom: -2pt;
+    }
+
+    .calendar-event-name {
+      line-height: 1;
+      word-break: break-all;
+      text-overflow: ellipsis;
+      hyphens: auto;
+    }
+  }
+}
+
+.calendar-navigation {
+  display: flex;
+
+  justify-content: center;
+
+  user-select: none;
+
+  font-size: 16pt;
+}
+
+
 
