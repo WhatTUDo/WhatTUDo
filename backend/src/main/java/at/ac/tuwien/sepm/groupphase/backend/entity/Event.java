@@ -32,7 +32,7 @@ public class Event {
 
     @NonNull
     @ToString.Exclude
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "calendar_id", nullable = false)
     private Calendar calendar;
 }

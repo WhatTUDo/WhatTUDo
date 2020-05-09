@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
@@ -22,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,6 +97,21 @@ public class EventServiceTest {
         service.delete(event);
         assertThrows(NotFoundException.class, () -> service.findById(event.getId()));
     }
+
+//    @Test
+//    public void calendarList_afterDeleteEvent(){
+//        Organisation orga = organisationRepository.save(new Organisation("Test Organisation6"));
+//        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar6", Collections.singletonList(orga)));
+//        Event eventEntity = new Event("Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+//        Event returnedEvent = service.save(eventEntity);
+//        calendar.setEvents(Collections.singletonList(returnedEvent));
+//        calendar = calendarRepository.save(calendar);
+//
+//        service.delete(returnedEvent);
+//        Optional<Calendar> getCalendar = calendarRepository.findById(calendar.getId());
+//        Calendar calendar1=getCalendar.get();
+//        assert(calendar.getEvents().isEmpty());
+//    }
 
 
 
