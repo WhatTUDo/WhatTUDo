@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {EventLocationComponent} from "../event-location/event-location.component";
+import {Location} from "../../dtos/location";
 
 @Component({
   selector: 'app-event-form',
@@ -14,8 +15,8 @@ export class EventFormComponent implements OnInit {
   reactiveEventForm = new FormGroup( {
     id: new FormControl(''),
     name: new FormControl(''),
-    startTime: new FormControl(''),
-    endTime: new FormControl(''),
+    startDate: new FormControl(''),
+    endDate: new FormControl(''),
     location: new FormControl(''),
     labels: new FormControl('')
   });
@@ -28,7 +29,8 @@ export class EventFormComponent implements OnInit {
 
   onSubmit() {
     let formValue = this.reactiveEventForm.value;
-    if (this.validateFormInput(formValue)) {
+    let validationIsPassed = this.validateFormInput(formValue);
+    if (validationIsPassed) {
       this.event.name = formValue.name;
       this.event.startDate = new Date(formValue.startDate);
       this.event.endDate = new Date(formValue.endDate);
@@ -43,12 +45,6 @@ export class EventFormComponent implements OnInit {
    * returns true/false depending on whether validation succeeds.
    */
   validateFormInput(formValue: any) {
-
-    let elements = document.getElementsByClassName('form-control')
-    for (let elementsKey in elements) {
-
-    }
-
     let errors: Array<Error> = new Array<Error>();
     if (!formValue.name || formValue.name == "") {
       errors.push(new Error("Name cannot be null or empty!"));
@@ -59,9 +55,12 @@ export class EventFormComponent implements OnInit {
     if (!formValue.endDate || formValue.endDate == "") {
       errors.push(new Error("An end date and time must be specified!"));
     }
+    if (!this.event.location) {
+      errors.push(new Error("A location must be specified!"));
+    }
 
     if (errors.length > 0) {
-      console.error(errors);
+      console.warn(errors);
       let errorMessage = "";
       for (let error of errors) {
         errorMessage += error.message + " ";
@@ -72,14 +71,14 @@ export class EventFormComponent implements OnInit {
     return true;
   }
 
-  displayValidationMessage(id, message) {
-    let element: any = document.getElementById(id);
-
-    if (element) {
-      element.addClass('form-incorrect');
-      element.append("<p [class='validation-feedback']> " + message + " </p>")
-
+  saveLocationToEvent(location: Location) {
+    this.event.location = location;
+    if (this.event.location) {
+      console.log("Saved location with name: ", this.event.location.name);
     }
+
   }
+
+
 
 }

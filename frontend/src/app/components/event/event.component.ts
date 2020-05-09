@@ -1,19 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {EventComment} from "../../dtos/event-comment";
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {Location} from "../../dtos/location";
 import {Label} from "../../dtos/label";
 import {EventService} from "../../services/event.service";
 
+import {faChevronLeft, faTag, faExternalLinkSquareAlt} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-event',
   templateUrl: './event.component.html',
-  styleUrls: ['./event.component.css']
+  styleUrls: ['./event.component.scss']
 })
 export class EventComponent implements OnInit {
 
-  constructor(private eventService: EventService) { }
+  constructor(private eventService: EventService) {
+  }
 
   public calendarEvent: CalendarEvent
   public participants: any;
@@ -37,6 +39,15 @@ export class EventComponent implements OnInit {
 
   }
 
+  private loadCalendarEvent(id: number) {
+    this.eventService.getEvent(id).subscribe( (event: CalendarEvent) =>{
+      this.calendarEvent = event;
+    }, err => {
+      //display Error
+    })
+  }
+
+
   public participate(status: number) {
     switch (status) {
       case 0:
@@ -58,10 +69,9 @@ export class EventComponent implements OnInit {
     let textArea: any = document.getElementById('comment-area');
     if (textArea) {
       let comment = textArea.value;
-      if (comment || comment.length > 0 ) {
+      if (comment || comment.length > 0) {
         alert("Comments aren't live yet, but here's what you wrote: " + comment);
-      }
-      else {
+      } else {
         alert('Could not read comment!');
       }
     }
@@ -102,4 +112,7 @@ export class EventComponent implements OnInit {
     return array;
   }
 
+  faChevronLeft = faChevronLeft;
+  faTag = faTag
+  faExternalLinkSquareAlt = faExternalLinkSquareAlt;
 }
