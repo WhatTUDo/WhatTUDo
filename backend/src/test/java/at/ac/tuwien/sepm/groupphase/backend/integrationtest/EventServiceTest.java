@@ -3,16 +3,19 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import org.hibernate.service.spi.ServiceException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -74,6 +77,26 @@ public class EventServiceTest {
         assertThrows(ValidationException.class, () -> service.save(event1));
         assertThrows(ValidationException.class, () -> service.save(event2));
     }
+
+    @Test
+    public void delete_nonSavedEvent_IdNotGenerated_throwsValidationException(){
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation4"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar4", Collections.singletonList(orga)));
+        Event notSavedEvent = new Event("Non Existent", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        assertThrows(ValidationException.class, () -> service.delete(notSavedEvent));
+    }
+
+    @Test
+    public void delete_savedEvent_findBYIdReturnsNotFound(){
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation5"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar5", Collections.singletonList(orga)));
+        Event eventEntity = new Event("Delete Event Test", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        Event event = service.save(eventEntity);
+        service.delete(event);
+        assertThrows(NotFoundException.class, () -> service.findById(event.getId()));
+    }
+
+
 
 
 }

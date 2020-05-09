@@ -4,9 +4,12 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.EventEndpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
+import org.hibernate.service.spi.ServiceException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +84,26 @@ public class EventEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto2));
 
 }
+
+    @Test
+    public void delete_nonSavedEvent_IdNotGenerated_throwsResponseStatusException(){
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation4"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar4", Collections.singletonList(orga)));
+        EventDto notSavedEvent = new EventDto("Non Existent", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        assertThrows(ResponseStatusException.class, () -> endpoint.deleteEvent(notSavedEvent));
+    }
+
+
+    @Test
+    public void delete_savedEvent_findBYIdReturnsResponseException(){
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation5"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar5", Collections.singletonList(orga)));
+        EventDto eventDto = new EventDto("Delete Event", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        EventDto returnedEvent = endpoint.post(eventDto);
+        endpoint.deleteEvent(returnedEvent);
+        assertThrows(ResponseStatusException.class, () -> endpoint.getById(returnedEvent.getId()));
+    }
+
 
 }
 

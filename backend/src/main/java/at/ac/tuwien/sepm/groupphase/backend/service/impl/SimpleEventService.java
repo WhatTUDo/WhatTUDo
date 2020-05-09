@@ -4,16 +4,20 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
+import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import org.aspectj.weaver.ast.Not;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import javax.sql.rowset.serial.SerialException;
 import javax.swing.text.html.parser.Entity;
 import java.lang.invoke.MethodHandles;
 import javax.persistence.PersistenceException;
@@ -38,10 +42,13 @@ public class SimpleEventService implements EventService {
     public void delete(Event event) {
         LOGGER.info("Service delete {}", event);
         try{
-        //(event.getCalendar()).getEvents().remove(event); not allowed ?
+          eventRepository.findById(event.getId());
+        // update calendar by removing Event from List of Events.
         eventRepository.delete(event);
-        } catch (IllegalArgumentException e){
-            //handle exception.
+        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e){
+           throw new ValidationException(e.getMessage());
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
         }
     }
 
@@ -59,7 +66,6 @@ public class SimpleEventService implements EventService {
 
     @Override
     public Event findById(int id) {
-
         LOGGER.trace("searching for event with id: " + id);
         Optional<Event> returned = eventRepository.findById(id);
         if(returned.isPresent()) {

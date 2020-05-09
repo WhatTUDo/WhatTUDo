@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
+import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
 
 
@@ -41,7 +42,14 @@ public class EventEndpoint {
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
     public void deleteEvent(@RequestBody EventDto eventDto){
         LOGGER.info("DELETE /api/v1/events body: {}", eventDto);
-        eventService.delete(eventMapper.dtoToEntity(eventDto));
+        try {
+            eventService.delete(eventMapper.dtoToEntity(eventDto));
+        }catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }catch (ValidationException e){
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
+
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
