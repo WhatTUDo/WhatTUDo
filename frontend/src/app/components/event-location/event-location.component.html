@@ -1,0 +1,25 @@
+<div class="row">
+  <div class="col-sm-6">
+    <h4>Location Search</h4>
+    <form>
+      <input type="text" name="addressSearch" id="addressSearch">
+      <button (click)="performSearch()"> search</button>
+    </form>
+    <div>
+      <div *ngIf="this.searchComplete" id="location-search-results-container">
+        <div class="clickable" *ngFor="let result of this.searchResults"
+             (click)="addressClicked(result)"> {{result.display_name}}</div>
+      </div>
+    </div>
+    <div *ngIf="this.addressSelected">
+      <button *ngIf="!this.selectionComplete" class="button-clickable button-green btn-sm" (click)="saveButtonClicked()">Save Location</button>
+    </div>
+  </div>
+  <div class="col-sm-6" *ngIf="this.addressSelected">
+    <h4>Preview</h4>
+    <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
+            [src]="previewURL"
+            style="border: 1px solid black"></iframe>
+  </div>
+</div>
+
