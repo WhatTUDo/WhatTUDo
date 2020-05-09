@@ -14,7 +14,25 @@ $orange: #E8986D;
 $red: #F2857C;
 $violet: #AD6FBD;
 
-$background: $white;
-$text: $black;
-$secondary: $grey;
-$accent: $violet;
+:root {
+  --background: $white;
+  --text: $black;
+  --secondary: $grey;
+  --accent: saturate(mix($blue, $black, 75), 50);
+
+  --clickable-box-shadow-color: transparentize($black, 0.75);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: $black;
+    --text: $white;
+    --secondary: $grey;
+    --accent: desaturate(mix($blue, $white, 75), 50);
+
+    --clickable-box-shadow-color: transparentize($white, 0.75);
+
+    color-scheme: light dark;
+  }
+}
+

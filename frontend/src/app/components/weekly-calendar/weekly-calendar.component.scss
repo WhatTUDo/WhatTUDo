@@ -28,14 +28,14 @@
   text-align: center;
 
   &.today {
-    color: $accent;
+    color: var(--accent);
   }
 
   sub, sup {
     font-weight: $f-bold;
 
     &.today {
-      color: $accent;
+      color: var(--accent);
     }
   }
 }
