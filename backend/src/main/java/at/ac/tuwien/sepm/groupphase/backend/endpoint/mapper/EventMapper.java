@@ -35,7 +35,7 @@ public interface EventMapper {
         return source
             .stream()
             .map(this::dtoToEntity)
-            .peek(dto -> dto.setCalendar(null))
+            .peek(dto -> dto.setCalendar(null)) 
             .collect(Collectors.toList());
     }
 
