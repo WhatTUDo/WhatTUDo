@@ -30,5 +30,4 @@ public class EventMapper {
         return new EventDto(event.getId(), event.getName(),event.getStartDateTime(), event.getEndDateTime(), (event.getCalendar()).getId());
     }
 
-
 }
