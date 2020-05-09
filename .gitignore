@@ -329,6 +329,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-.mp4
-
 # End of https://www.gitignore.io/api/node,java,linux,macos,maven,angular,windows,intellij
