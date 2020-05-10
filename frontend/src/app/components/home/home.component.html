@@ -3,7 +3,13 @@
   <app-weekly-calendar class="grid-item-1-2"></app-weekly-calendar>
   <div>
     <h2>Lorem ipsum</h2>
-    <a href="/event" style="font-size: 24pt">Test Event 🎉</a>
+
+    <div *ngIf="authService.isLoggedIn()">
+      <a href="/form/event/0">
+        <button class="button-clickable button-blue btn-lg">Add New Event</button>
+      </a>
+    </div>
+    <a href="/event/1" style="font-size: 24pt">Test Event 🎉</a>
     <p style="font-size: 24pt;color:#807C7C">Implement me! 😀</p>
   </div>
 </div>

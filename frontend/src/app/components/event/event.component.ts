@@ -4,6 +4,7 @@ import {CalendarEvent} from "../../dtos/calendar-event";
 import {Location} from "../../dtos/location";
 import {Label} from "../../dtos/label";
 import {EventService} from "../../services/event.service";
+import {ActivatedRoute} from "@angular/router";
 
 import {faChevronLeft, faTag, faExternalLinkSquareAlt} from "@fortawesome/free-solid-svg-icons";
 
@@ -14,37 +15,53 @@ import {faChevronLeft, faTag, faExternalLinkSquareAlt} from "@fortawesome/free-s
 })
 export class EventComponent implements OnInit {
 
-  constructor(private eventService: EventService) {
+  constructor(private eventService: EventService,
+              private route: ActivatedRoute) {
+    let id: number = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadCalendarEvent(id);
   }
 
   public calendarEvent: CalendarEvent
+  public eventTimeString: string = "Event Time"
   public participants: any;
 
 
   ngOnInit(): void {
-    let startDate = new Date(2020, 5, 5, 18, 0, 0, 0);
-    let endDate = new Date(2020, 5, 5, 22, 30, 0, 0);
-    let location = new Location(null, "Fachschaft Informatik", "Treitlstraße 3", "1050", 12.1234, 13.9876);
-
-    this.calendarEvent = new CalendarEvent(null, "Test Event", "Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.\n" +
-      "\n" +
-      "Podcasting operational change management inside of workflows to establish a framework. Taking seamless key performance indicators offline to maximise the long tail. Keeping your eye on the ball while performing a deep dive on the start-up mentality to derive convergence on cross-platform integration.\n" +
-      "\n" +
-      "Collaboratively administrate empowered markets via plug-and-play networks. Dynamically procrastinate B2C users after installed base benefits. Dramatically visualize customer directed convergence without revolutionary ROI.", startDate, endDate, location, null, null);
-
-    this.calendarEvent.comments = this.getComments();
-    this.calendarEvent.labels = this.getLabels();
-    this.participants = this.getParticipants();
-
 
   }
 
+  /**
+   * Loads Event with ID from Service.
+   * @param id
+   */
   private loadCalendarEvent(id: number) {
     this.eventService.getEvent(id).subscribe( (event: CalendarEvent) =>{
       this.calendarEvent = event;
+      let location = new Location(null, "Fachschaft Informatik", "Treitlstraße 3", "1050", 12.1234, 13.9876);
+      this.calendarEvent.comments = this.getComments();
+      this.calendarEvent.labels = this.getLabels();
+      this.calendarEvent.location = location;
+      this.calendarEvent.description = "yololo";
+      this.participants = this.getParticipants();
+      this.eventTimeString = this.getEventTimeString();
     }, err => {
-      //display Error
-    })
+      alert(err.message);
+    });
+  }
+
+  public getEventTimeString() {
+    let startDateTime: Date = new Date(this.calendarEvent.startDateTime);
+    let endDateTime: Date = new Date(this.calendarEvent.endDateTime);
+    let string = startDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    string += ' - '
+    string +=endDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    return string
   }
 
   private deleteEvent(){

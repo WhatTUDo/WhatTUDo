@@ -1,10 +1,11 @@
+@import "../../../var.scss";
+
 * p b {
-  font-weight: 900;
+  font-weight: $f-bold;
 }
 
 .comment-item {
-  margin: 2vh auto;
-  padding: 10px;
+  margin-bottom: 2em;
 }
 
 .comment-header {
@@ -28,6 +29,13 @@
     height: 1ch;
     width: calc(100% - 4em);
     margin-right: 1em;
+    border-radius: 0;
+
+    background-color: transparentize($gray, 0.75);
+
+    .progress-bar {
+      color: $blue;
+    }
   }
 
   .rating-percentage {

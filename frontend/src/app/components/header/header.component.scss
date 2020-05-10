@@ -1,4 +1,7 @@
 @import "../../../var.scss";
+* {
+  color: var(--text) !important;
+}
 
 nav {
   height: 100%;

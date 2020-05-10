@@ -6,7 +6,7 @@ $f-bold: 600;
 
 $white: #F7FAF8;
 $black: #141111;
-$grey: #807C7C;
+$gray: #807C7C;
 $blue: #7CC9F2;
 $green: #7EDEA3;
 $yellow: #FACD6B;
@@ -14,7 +14,25 @@ $orange: #E8986D;
 $red: #F2857C;
 $violet: #AD6FBD;
 
-$background: $white;
-$text: $black;
-$secondary: $grey;
-$accent: $violet;
+:root {
+  --background: $white;
+  --text: $black;
+  --secondary: $gray;
+  --accent: saturate(mix($blue, $black, 75), 50);
+
+  --clickable-box-shadow-color: transparentize($black, 0.75);
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: $black;
+    --text: $white;
+    --secondary: $gray;
+    --accent: desaturate(mix($blue, $white, 75), 50);
+
+    --clickable-box-shadow-color: transparentize($white, 0.75);
+  }
+}
+
