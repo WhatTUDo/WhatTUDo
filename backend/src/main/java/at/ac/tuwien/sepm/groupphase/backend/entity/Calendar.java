@@ -29,7 +29,7 @@ public class Calendar {
     private List<Organisation> organisations;
 
     @ToString.Exclude
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "calendar")
+    @OneToMany(mappedBy = "calendar")
     private List<Event> events = Collections.emptyList();
 }
 

@@ -7,6 +7,8 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
@@ -17,47 +19,38 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
-import javax.validation.Valid;
 import java.lang.invoke.MethodHandles;
 
-
+@Slf4j
 @RestController
 @RequestMapping(value = EventEndpoint.BASE_URL)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EventEndpoint {
     static final String BASE_URL = "/events";
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final EventService eventService;
     private final EventMapper eventMapper;
 
-
-    @Autowired
-    public EventEndpoint(EventService eventService, EventMapper eventMapper) {
-        this.eventService = eventService;
-        this.eventMapper = eventMapper;
-    }
-
-  //  @PreAuthorize("hasRole('Member')")
+    //  @PreAuthorize("hasRole('Member')")
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
-    public void deleteEvent(@RequestBody EventDto eventDto){
-        LOGGER.info("DELETE /api/v1/events body: {}", eventDto);
+    public void deleteEvent(@RequestBody EventDto eventDto) {
+        log.info("DELETE /api/v1/events body: {}", eventDto);
         try {
             eventService.delete(eventMapper.dtoToEntity(eventDto));
-        }catch (ServiceException e){
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
-        }catch (ValidationException e){
+        } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
-
     }
 
     @CrossOrigin
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto post(@RequestBody EventDto event){
-        LOGGER.info("POST " + BASE_URL + "/{}", event);
+    public EventDto post(@RequestBody EventDto event) {
+        log.info("POST " + BASE_URL + "/{}", event);
         try {
             Event eventEntity = eventMapper.dtoToEntity(event);
             return eventMapper.entityToDto(eventService.save(eventEntity));
@@ -71,13 +64,11 @@ public class EventEndpoint {
     @CrossOrigin
     @GetMapping(value = "/{id}")
     public EventDto getById(@PathVariable("id") int id) {
-        LOGGER.info("GET " + BASE_URL + "/{}", id);
+        log.info("GET " + BASE_URL + "/{}", id);
         try {
             return eventMapper.entityToDto(eventService.findById(id));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
-
-
 }
