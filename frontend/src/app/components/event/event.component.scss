@@ -37,6 +37,11 @@ h3 {
 }
 
 #comment-area {
+  appearance: none;
   width: 100%;
+  resize: none;
+  border: 1pt solid var(--secondary);
+  background-color: transparent;
+  color: var(--text); // WHY YOU DONT WORK??? TODO: FIX THIS
 }
 

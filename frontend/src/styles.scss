@@ -20,6 +20,15 @@ h2, .heading, .heading * {
 
 }
 
+a {
+  color: $blue;
+
+  &:hover, &:focus {
+    color: transparentize($blue, 0.75);
+    text-decoration: none;
+  }
+}
+
 .contextual-control {
   display: flex;
   font-size: 16pt;
