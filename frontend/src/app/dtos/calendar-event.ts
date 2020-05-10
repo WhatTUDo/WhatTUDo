@@ -36,11 +36,11 @@ export class CalendarEvent {
     return this.isTheSameDate(this.endDateTime, date);
   }
 
-  isTheSameDate(date1: Date, date2: Date) {
+  public isTheSameDate(date1: Date, date2: Date) {
     return date1.toDateString() == date2.toDateString();
   }
 
-  getDisplayTimeString() {
+  public getDisplayTimeString() {
     let string = this.startDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric'

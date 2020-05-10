@@ -22,6 +22,7 @@ export class EventComponent implements OnInit {
   }
 
   public calendarEvent: CalendarEvent
+  public eventTimeString: string = "Event Time"
   public participants: any;
 
 
@@ -38,9 +39,25 @@ export class EventComponent implements OnInit {
       this.calendarEvent.location = location;
       this.calendarEvent.description = "yololo";
       this.participants = this.getParticipants();
+      this.eventTimeString = this.getEventTimeString();
     }, err => {
       alert(err.message);
     })
+  }
+
+  public getEventTimeString() {
+    let startDateTime: Date = new Date(this.calendarEvent.startDateTime);
+    let endDateTime: Date = new Date(this.calendarEvent.endDateTime);
+    let string = startDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    string += ' - '
+    string +=endDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    return string
   }
 
 
