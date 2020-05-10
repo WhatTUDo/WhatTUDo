@@ -89,7 +89,9 @@ public class SimpleEventService implements EventService {
             Event tochange = eventRepository.findById(event.getId()).get();
             //TODO check with isPresent first
 
-            if (!(event.getName().isBlank()) && !(event.getName().isEmpty())) {
+            tochange.setName(event.getName());
+
+         /**   if (!(event.getName().isBlank()) && !(event.getName().isEmpty())) {
 
                 tochange.setName(event.getName());
             }
@@ -100,6 +102,7 @@ public class SimpleEventService implements EventService {
             }
 
             //TODO: check dates and calendar - validate StartDate - EndDate - Calendar null currently possible
+          **/
 
             tochange.setStartDateTime(event.getStartDateTime());
             tochange.setEndDateTime(event.getEndDateTime());

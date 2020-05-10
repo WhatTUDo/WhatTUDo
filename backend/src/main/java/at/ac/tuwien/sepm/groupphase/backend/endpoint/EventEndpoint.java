@@ -66,7 +66,8 @@ public class EventEndpoint {
         }
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping
+    @ApiOperation(value = "/{id}", authorizations = {@Authorization(value = "apiKey")})
     public EventDto getById(@PathVariable("id") int id) {
         LOGGER.info("GET " + BASE_URL + "/{}", id);
         try {
@@ -82,6 +83,7 @@ public class EventEndpoint {
     public EventDto editEvent(@RequestBody EventDto eventDto){
         LOGGER.info("PUT " + BASE_URL + "/{}", eventDto);
         try {
+            System.out.println(eventDto.toString());
             Event eventEntity = eventMapper.dtoToEntity(eventDto);
             return eventMapper.entityToDto(eventService.update(eventEntity));
         } catch (ValidationException e) {
