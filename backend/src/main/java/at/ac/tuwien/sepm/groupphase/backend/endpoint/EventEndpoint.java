@@ -51,6 +51,8 @@ public class EventEndpoint {
         }
 
     }
+
+    @CrossOrigin
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create event", authorizations = {@Authorization(value = "apiKey")})

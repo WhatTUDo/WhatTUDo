@@ -11,7 +11,7 @@ import {EventComment} from "../dtos/event-comment";
 })
 
 export class EventService {
-  private eventBaseUri: string = this.globals.backendUri + 'events'
+  private eventBaseUri: string = this.globals.backendUri + 'events/'
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
@@ -30,9 +30,17 @@ export class EventService {
    * Posts event to Server --> New Event
    * @param event
    */
-  postEvent(event: CalendarEvent) {
+  postEvent(event: CalendarEvent): Observable<any> {
     console.log("Post Event to Server", CalendarEvent);
     //TODO: Implement POST call
+    let reducedElement = {
+      "calendarId": event.calendarId,
+      "endDateTime": event.endDateTime,
+      "name": event.name,
+      "startDateTime": event.startDateTime
+    }
+
+    return this.httpClient.post(this.eventBaseUri, reducedElement);
   }
 
   /**

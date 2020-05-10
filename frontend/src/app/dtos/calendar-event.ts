@@ -11,7 +11,9 @@ export class CalendarEvent {
     public endDateTime: Date,
     public location: Location,
     public labels: Array<Label>,
-    public comments: Array<EventComment>
+    public comments: Array<EventComment>,
+    public calendarId?: number,
+
   ) {
   }
 

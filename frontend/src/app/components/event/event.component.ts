@@ -30,6 +30,10 @@ export class EventComponent implements OnInit {
 
   }
 
+  /**
+   * Loads Event with ID from Service.
+   * @param id
+   */
   private loadCalendarEvent(id: number) {
     this.eventService.getEvent(id).subscribe( (event: CalendarEvent) =>{
       this.calendarEvent = event;
@@ -42,7 +46,7 @@ export class EventComponent implements OnInit {
       this.eventTimeString = this.getEventTimeString();
     }, err => {
       alert(err.message);
-    })
+    });
   }
 
   public getEventTimeString() {
