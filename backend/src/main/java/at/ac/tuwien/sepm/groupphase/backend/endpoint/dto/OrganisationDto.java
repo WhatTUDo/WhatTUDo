@@ -15,5 +15,5 @@ import java.util.List;
 public class OrganisationDto {
     private Integer id;
     private String name;
-    private List<Integer> calendarIds = Collections.emptyList();
+    private List<Integer> calendarIds;
 }

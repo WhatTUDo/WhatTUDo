@@ -14,7 +14,6 @@ import java.util.List;
 public class CalendarDto {
     private Integer id;
     private String name;
-    private List<Integer> organisationIds =  Collections.emptyList();
-    private List<Integer> eventIds= Collections.emptyList();
-
+    private List<Integer> organisationIds = Collections.emptyList();
+    private List<Integer> eventIds = Collections.emptyList();
 }

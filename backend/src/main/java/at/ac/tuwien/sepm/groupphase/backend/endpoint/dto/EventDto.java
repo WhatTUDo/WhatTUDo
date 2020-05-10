@@ -15,11 +15,4 @@ public class EventDto {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private Integer calendarId;
-
-    public EventDto(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer calendarId) {
-        this.name = name;
-        this.startDateTime = startDateTime;
-        this.endDateTime = endDateTime;
-        this.calendarId = calendarId;
-    }
 }
