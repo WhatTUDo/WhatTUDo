@@ -46,7 +46,7 @@ export class EventService {
    * @param eventID
    */
   postComment(comment: EventComment, eventID: number) {
-    console.log("Posting comment: ", comment)
+    console.log("Posting comment: ", comment);
   }
 
   postVote(isUpvote: boolean, commentID: number, userID: number) {
@@ -61,5 +61,12 @@ export class EventService {
    */
   postAttendance(userID: number, attendanceStatus: number, eventID: number) {
     console.log("Post Attendance for User: ", userID);
+  }
+
+  searchLocationInAPI(searchTerm: string): Observable<any> {
+    console.log("Searching Location with string: ", searchTerm);
+    let searchURI = this.globals.openStreetMapsUri + '?q=' + encodeURI(searchTerm) + '&format=json&addressdetails=1';
+
+    return this.httpClient.get<any>(searchURI);
   }
 }

@@ -1,0 +1,54 @@
+* p b {
+  font-weight: 900;
+}
+
+.comment-item {
+  margin: 2vh auto;
+  padding: 10px;
+}
+
+.comment-header {
+  display: flex;
+}
+
+.comment-header p {
+  margin: 1vw 1em 1vw 0;
+}
+
+.comment-content p {
+  margin: 1vw;
+}
+
+.comment-rating {
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  .progress {
+    height: 1ch;
+    width: calc(100% - 4em);
+    margin-right: 1em;
+  }
+
+  .rating-percentage {
+    text-align: right;
+    justify-self: end; // Why the f**k is this not working. TODO: Fix this.
+  }
+}
+
+.comment-buttons {
+  display: flex;
+  justify-content: flex-start;
+
+  button {
+    margin-right: 10px;
+  }
+
+  .response-button {
+    justify-self: end; // Why the f**k is this not working. TODO: Fix this.
+  }
+}
+
+
+
+

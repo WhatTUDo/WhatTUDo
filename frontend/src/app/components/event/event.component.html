@@ -1,15 +1,16 @@
-<div class="contextual-control"> < Back </div>
-<h1>{{this.calendarEvent.name}}</h1>
+<div class="contextual-control"><fa-icon [icon]="faChevronLeft"></fa-icon>&ensp;Back</div>
+<h2>{{this.calendarEvent.name}}</h2>
+<div>{{calendarEvent.getDisplayTimeString()}}</div>
 <div class="row" style="margin-bottom: 10vh">
   <div class="col-md-8">
     <h3>Labels</h3>
     <div id="label-container">
       <div class="label-item" *ngFor="let label of this.calendarEvent.labels">
-        {{label.name}}
+        <fa-icon [icon]="faTag"></fa-icon>&ensp;{{label.name}}
       </div>
     </div>
     <div class="event-location-container">
-      <iframe width="100%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=16.366230547428135%2C48.198897015063686%2C16.367858648300174%2C48.200629381310236&amp;layer=mapnik&amp;marker=48.19976320550972%2C16.36704459786415" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/?mlat=48.19976&amp;mlon=16.36704#map=19/48.19976/16.36704">View Larger Map</a></small>    </div>
+      <iframe width="100%" height="350" src="https://www.openstreetmap.org/export/embed.html?bbox=16.366230547428135%2C48.198897015063686%2C16.367858648300174%2C48.200629381310236&amp;layer=mapnik&amp;marker=48.19976320550972%2C16.36704459786415" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/?mlat=48.19976&amp;mlon=16.36704#map=19/48.19976/16.36704">View Larger Map</a></small>    </div>
     <h3>Description</h3>
     <p>{{this.calendarEvent.description}}</p>
 
@@ -45,7 +46,7 @@
   <div class="col-md-4">
     <h3>Comments</h3>
     <div id="comment-container">
-      <div *ngFor="let comment of calendarEvent.comments">
+      <div *ngFor="let comment of calendarEvent.comments" class="comment-div">
         <app-event-comment [comment]="comment"></app-event-comment>
       </div>
 
