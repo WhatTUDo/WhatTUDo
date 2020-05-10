@@ -16,6 +16,11 @@ export class EventService {
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
 
+  deleteEvent(event: CalendarEvent) {
+    console.log("Delete Event", CalendarEvent);
+    //TODO: Implement Delete Call
+  }
+
   /**
    * Loads specific event with ID, returns Observable.
    * @param id: ID of the Event
