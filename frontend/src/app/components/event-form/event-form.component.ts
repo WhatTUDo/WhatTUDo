@@ -32,8 +32,8 @@ export class EventFormComponent implements OnInit {
     let validationIsPassed = this.validateFormInput(formValue);
     if (validationIsPassed) {
       this.event.name = formValue.name;
-      this.event.startDate = new Date(formValue.startDate);
-      this.event.endDate = new Date(formValue.endDate);
+      this.event.startDateTime = new Date(formValue.startDate);
+      this.event.endDateTime = new Date(formValue.endDate);
 
       // submit to service
     }

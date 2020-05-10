@@ -5,8 +5,8 @@ import {Injectable} from '@angular/core';
 const getDates = (it: CalendarEvent) => {
   const dates: number[] = [];
 
-  let currentDate = it.startDate.setHours(0, 0, 0, 0);
-  while (currentDate < it.endDate.getTime()) {
+  let currentDate = it.startDateTime.setHours(0, 0, 0, 0);
+  while (currentDate < it.endDateTime.getTime()) {
     dates.push(currentDate);
     currentDate += 24 * 60 * 60 * 1000;
   }
@@ -35,7 +35,7 @@ export class EventGrouper {
     const dateMap = new Map<number, CalendarEvent[]>();
     uniqueDatesSorted.forEach(date => {
       events.forEach(event => {
-        if (event.startDate.getTime() <= new Date(date).setHours(23, 59, 59, 999) && date <= event.endDate.getTime()) {
+        if (event.startDateTime.getTime() <= new Date(date).setHours(23, 59, 59, 999) && date <= event.endDateTime.getTime()) {
           if (dateMap[date]) {
             dateMap[date] = [...dateMap[date], event];
           } else {

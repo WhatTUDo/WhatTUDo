@@ -26,8 +26,8 @@ import java.lang.invoke.MethodHandles;
 public class EventEndpoint {
     static final String BASE_URL = "/events";
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private EventService eventService;
-    private EventMapper eventMapper;
+    private final EventService eventService;
+    private final EventMapper eventMapper;
 
 
     @Autowired
@@ -66,6 +66,7 @@ public class EventEndpoint {
         }
     }
 
+    @CrossOrigin
     @GetMapping(value = "/{id}")
     public EventDto getById(@PathVariable("id") int id) {
         LOGGER.info("GET " + BASE_URL + "/{}", id);

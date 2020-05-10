@@ -11,7 +11,7 @@ const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
-  {path: 'event', component: EventComponent},
+  {path: 'event/:id', component: EventComponent},
   {path: 'event/new', component: EventFormComponent}
 
 ];

@@ -117,8 +117,8 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   getDisplayRows(event: CalendarEvent) {
-    const startSecond = this.getSecondOffsetFromMidnight(event.startDate);
-    const endSecond = this.getSecondOffsetFromMidnight(event.endDate);
+    const startSecond = this.getSecondOffsetFromMidnight(event.startDateTime);
+    const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
 
     // Calendar View should starts at a time like 8 AM and ends at 23:59PM or even later.
     const startRow = Math.max(Math.floor((startSecond - 28800) / 57600 * 64), 0) // Proof of concept with magic numbers. TODO: Fix this.
