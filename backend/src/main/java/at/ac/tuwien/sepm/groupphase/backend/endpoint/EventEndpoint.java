@@ -41,7 +41,7 @@ public class EventEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
     public void deleteEvent(@RequestBody EventDto eventDto){
-        LOGGER.info("DELETE /api/v1/events body: {}", eventDto);
+        LOGGER.info("DELETE " + BASE_URL + "/{}", eventDto);
         try {
             eventService.delete(eventMapper.dtoToEntity(eventDto));
         }catch (ServiceException e){
