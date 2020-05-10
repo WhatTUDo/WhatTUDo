@@ -28,19 +28,19 @@
   text-align: center;
 
   &.today {
-    color: $accent;
+    color: var(--accent);
   }
 
   sub, sup {
     font-weight: $f-bold;
 
     &.today {
-      color: $accent;
+      color: var(--accent);
     }
   }
 }
 
-$swim-land-border: 2pt dotted transparentize($grey, 0.5);
+$swim-land-border: 2pt dotted transparentize($gray, 0.5);
 
 .calendar-day-swim-lane {
   display: grid;
@@ -87,7 +87,7 @@ $swim-land-border: 2pt dotted transparentize($grey, 0.5);
     box-sizing: content-box;
 
     .calendar-event-time {
-      color: $grey;
+      color: $gray;
       font-size: 8pt;
       margin-bottom: -2pt;
     }
