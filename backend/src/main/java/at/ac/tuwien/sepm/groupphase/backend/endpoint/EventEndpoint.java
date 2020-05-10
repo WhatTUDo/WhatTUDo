@@ -36,27 +36,28 @@ public class EventEndpoint {
         this.eventMapper = eventMapper;
     }
 
-  //  @PreAuthorize("hasRole('Member')")
-    @DeleteMapping
+    //  @PreAuthorize("hasRole('Member')")
     @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
-    public void deleteEvent(@RequestBody EventDto eventDto){
+    public void deleteEvent(@Valid @RequestBody EventDto eventDto) {
         LOGGER.info("DELETE " + BASE_URL + "/{}", eventDto);
         try {
             eventService.delete(eventMapper.dtoToEntity(eventDto));
-        }catch (ServiceException e){
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
-        }catch (ValidationException e){
+        } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
-        }catch (NotFoundException e){
+        } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
 
     }
-    @PostMapping
+
     @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
     @ApiOperation(value = "Create event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto post(@RequestBody EventDto event){
+    public EventDto post(@Valid @RequestBody EventDto event) {
         LOGGER.info("POST " + BASE_URL + "/{}", event);
         try {
             Event eventEntity = eventMapper.dtoToEntity(event);

@@ -103,7 +103,7 @@ public class EventServiceTest {
     public void deleteEvent_withIdDoesNotExist_throwsNotFoundException(){
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar", Collections.singletonList(orga)));
-        Event eventEntity = new Event(99,"Delete Event Test", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        Event eventEntity = new Event(1,"Delete Event Test", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
         assertThrows(NotFoundException.class, () -> service.delete(eventEntity));
     }
 

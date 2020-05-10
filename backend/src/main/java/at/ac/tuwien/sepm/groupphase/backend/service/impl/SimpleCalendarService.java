@@ -1,6 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import org.slf4j.Logger;
@@ -24,11 +26,12 @@ public class SimpleCalendarService implements CalendarService {
 
     @Override
     public Calendar findById(Integer id) {
-        //TODO: logger
+        LOGGER.trace("searching for event with id: " + id);
         Optional<Calendar> returned = calendarRepository.findById(id);
-        if(returned.isPresent()){
+        if(returned.isPresent()) {
             return returned.get();
+        } else {
+            throw new NotFoundException("No calendar found with id " +id);
         }
-        return null;
     }
 }
