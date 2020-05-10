@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import lombok.*;
+import org.hibernate.annotations.SelectBeforeUpdate;
 
 import java.time.LocalDateTime;
 

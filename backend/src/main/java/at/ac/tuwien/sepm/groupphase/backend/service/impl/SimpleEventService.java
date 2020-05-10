@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.invoke.MethodHandles;
 import javax.persistence.PersistenceException;
+import javax.validation.constraints.Null;
 import java.util.*;
 
 //TODO: annotations
@@ -78,4 +79,40 @@ public class SimpleEventService implements EventService {
             throw new NotFoundException("No event found with id " +id);
         }
     }
+
+    @Override
+    public Event update(Event event) {
+        LOGGER.info("Service update {}", event);
+        try {
+
+
+            Event tochange = eventRepository.findById(event.getId()).get();
+            //TODO check with isPresent first
+
+            if (!(event.getName().isBlank()) && !(event.getName().isEmpty())) {
+
+                tochange.setName(event.getName());
+            }
+
+            if (event.getEndDateTime().compareTo(event.getStartDateTime()) < 0) {
+
+                throw new ValidationException("end-date must be after start-date");
+            }
+
+            //TODO: check dates and calendar - validate StartDate - EndDate - Calendar null currently possible
+
+            tochange.setStartDateTime(event.getStartDateTime());
+            tochange.setEndDateTime(event.getEndDateTime());
+            tochange.setCalendar(event.getCalendar());
+
+           return eventRepository.save(tochange);
+
+        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e){
+            throw new ValidationException(e.getMessage());
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+
 }
