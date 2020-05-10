@@ -82,7 +82,10 @@ export class WeeklyCalendarComponent implements OnInit {
     let today = this.getToday();
 
     let beginOfWeek = new Date(today);
-    beginOfWeek.setDate(beginOfWeek.getDate() - (today.getDay() - 1));
+    // % is remainder and not mod in js. Therefore -1%7=-1. This is a workaround.
+    const weekOffset = (today.getDay() - 1 +7)%7;
+    console.log(weekOffset)
+    beginOfWeek.setDate(beginOfWeek.getDate() - weekOffset);
 
     let date = new Date(beginOfWeek);
     date.setDate(date.getDate() + offset * 7);
