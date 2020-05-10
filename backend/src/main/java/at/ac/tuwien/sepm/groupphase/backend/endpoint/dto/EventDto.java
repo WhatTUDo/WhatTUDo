@@ -1,18 +1,16 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Value;
 
 import java.time.LocalDateTime;
 
 
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Getter
-@Setter
+@Value
 public class EventDto {
-    private Integer id;
-    private String name;
-    private LocalDateTime startDateTime;
-    private LocalDateTime endDateTime;
-    private Integer calendarId;
+    Integer id;
+    String name;
+    LocalDateTime startDateTime;
+    LocalDateTime endDateTime;
+    Integer calendarId;
 }
