@@ -98,20 +98,14 @@ public class EventServiceTest {
         assertThrows(NotFoundException.class, () -> service.findById(event.getId()));
     }
 
-//    @Test
-//    public void calendarList_afterDeleteEvent(){
-//        Organisation orga = organisationRepository.save(new Organisation("Test Organisation6"));
-//        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar6", Collections.singletonList(orga)));
-//        Event eventEntity = new Event("Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
-//        Event returnedEvent = service.save(eventEntity);
-//        calendar.setEvents(Collections.singletonList(returnedEvent));
-//        calendar = calendarRepository.save(calendar);
-//
-//        service.delete(returnedEvent);
-//        Optional<Calendar> getCalendar = calendarRepository.findById(calendar.getId());
-//        Calendar calendar1=getCalendar.get();
-//        assert(calendar.getEvents().isEmpty());
-//    }
+
+    @Test
+    public void deleteEvent_withIdDoesNotExist_throwsNotFoundException(){
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar", Collections.singletonList(orga)));
+        Event eventEntity = new Event(99,"Delete Event Test", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        assertThrows(NotFoundException.class, () -> service.delete(eventEntity));
+    }
 
 
 

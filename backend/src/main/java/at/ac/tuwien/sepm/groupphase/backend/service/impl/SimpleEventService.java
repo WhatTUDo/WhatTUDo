@@ -40,13 +40,11 @@ public class SimpleEventService implements EventService {
     public void delete(Event event) {
         LOGGER.info("Service delete {}", event);
         try{
-          eventRepository.findById(event.getId());
-        // update calendar by removing Event from List of Events
-//            List<Event> newList = new ArrayList(Arrays.asList((event.getCalendar()).getEvents()));
-//            newList.remove(event);
-//
-//            (event.getCalendar()).setEvents(newList);
-//            calendarRepository.update(event.getCalendar());
+            if(event.getId() != null){
+          this.findById(event.getId());}
+            else{
+                throw new ValidationException("Id is not defined");
+            }
 
         eventRepository.delete(event);
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e){
