@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
-import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { faUserCircle, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-header',
@@ -15,5 +15,6 @@ export class HeaderComponent implements OnInit {
   }
 
   faUserCircle = faUserCircle;
+  faChevronDown = faChevronDown;
 
 }

@@ -14,25 +14,5 @@ $orange: #E8986D;
 $red: #F2857C;
 $violet: #AD6FBD;
 
-:root {
-  --background: $white;
-  --text: $black;
-  --secondary: $gray;
-  --accent: saturate(mix($blue, $black, 75), 50);
-
-  --clickable-box-shadow-color: transparentize($black, 0.75);
-
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: $black;
-    --text: $white;
-    --secondary: $gray;
-    --accent: desaturate(mix($blue, $white, 75), 50);
-
-    --clickable-box-shadow-color: transparentize($white, 0.75);
-  }
-}
+$mobile-breakpoint: 768pt;
 
