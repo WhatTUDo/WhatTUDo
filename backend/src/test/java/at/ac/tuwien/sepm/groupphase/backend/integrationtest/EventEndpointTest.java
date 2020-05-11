@@ -106,7 +106,7 @@ public class EventEndpointTest {
 
 
     @Test
-    public void updateAllEntitiesValues_shouldReturn_correctChanges() {
+    public void updateEntityValues_shouldReturn_correctChanges() {
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation6"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar6", Collections.singletonList(orga)));
         EventDto eventDto = new EventDto("Test Name", LocalDateTime.of(2020, 01, 01, 15, 30), LocalDateTime.of(2020, 01, 01, 16, 00), calendar.getId());
@@ -118,7 +118,7 @@ public class EventEndpointTest {
         assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
 
         EventDto eventDtoChanges = new EventDto("Test2", LocalDateTime.of(2021, 01, 01, 15, 30), LocalDateTime.of(2021, 01, 01, 16, 00),calendar.getId());
-        
+
         eventDtoChanges.setId(returnedEvent.getId());
 
         EventDto finalEvent = endpoint.editEvent(eventDtoChanges);
@@ -128,8 +128,6 @@ public class EventEndpointTest {
         assertEquals(finalEvent.getStartDateTime(), eventDtoChanges.getStartDateTime());
         assertEquals(finalEvent.getCalendarId(), eventDtoChanges.getCalendarId());
     }
-
-
 
 }
 

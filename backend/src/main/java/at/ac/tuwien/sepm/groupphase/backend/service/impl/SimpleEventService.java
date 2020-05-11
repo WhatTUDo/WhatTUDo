@@ -82,14 +82,15 @@ public class SimpleEventService implements EventService {
 
     @Override
     public Event update(Event event) {
-        LOGGER.info("Service update {}", event);
+        LOGGER.info("Service update event {}", event);
         try {
 
 
             Event tochange = eventRepository.findById(event.getId()).get();
             //TODO check with isPresent first
-
-            tochange.setName(event.getName());
+            if(!(event.getName().isBlank())) {
+                tochange.setName(event.getName());
+            }
 
          /**   if (!(event.getName().isBlank()) && !(event.getName().isEmpty())) {
 
@@ -101,11 +102,16 @@ public class SimpleEventService implements EventService {
                 throw new ValidationException("end-date must be after start-date");
             }
 
-            //TODO: check dates and calendar - validate StartDate - EndDate - Calendar null currently possible
+            //TODO: better validation
           **/
 
-            tochange.setStartDateTime(event.getStartDateTime());
-            tochange.setEndDateTime(event.getEndDateTime());
+            if((event.getStartDateTime() != null) && (event.getStartDateTime().isBefore(event.getEndDateTime()))){
+                tochange.setStartDateTime(event.getStartDateTime());
+            }
+            if((event.getEndDateTime() != null)&& (event.getStartDateTime().isBefore(event.getEndDateTime()))){
+                tochange.setEndDateTime(event.getEndDateTime());
+            }
+
             tochange.setCalendar(event.getCalendar());
 
            return eventRepository.save(tochange);
