@@ -1,10 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Value;
 
-import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
 
 @Value
 public class EventDto {

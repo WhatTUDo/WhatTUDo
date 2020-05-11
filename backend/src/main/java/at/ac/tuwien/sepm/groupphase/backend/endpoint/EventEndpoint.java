@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 
-import java.lang.invoke.MethodHandles;
-
 @Slf4j
 @RestController
 @RequestMapping(value = EventEndpoint.BASE_URL)
@@ -39,7 +37,7 @@ public class EventEndpoint {
         try {
             eventService.delete(eventMapper.dtoToEntity(eventDto));
         } catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {
@@ -59,9 +57,10 @@ public class EventEndpoint {
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
+
 
     @CrossOrigin
     @GetMapping(value = "/{id}")
@@ -73,4 +72,21 @@ public class EventEndpoint {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto editEvent(@RequestBody EventDto eventDto){
+        log.info("PUT " + BASE_URL + "/{}", eventDto);
+        try {
+            System.out.println(eventDto.toString());
+            Event eventEntity = eventMapper.dtoToEntity(eventDto);
+            return eventMapper.entityToDto(eventService.update(eventEntity));
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
 }
