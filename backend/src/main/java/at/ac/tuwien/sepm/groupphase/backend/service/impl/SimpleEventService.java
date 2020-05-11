@@ -112,6 +112,14 @@ public class SimpleEventService implements EventService {
                 tochange.setEndDateTime(event.getEndDateTime());
             }
 
+            if((event.getStartDateTime().getYear() < 2020)){
+                throw new ValidationException("start date not valid");
+            }
+
+            if(!(event.getStartDateTime().isBefore(event.getEndDateTime()))){
+                throw new ValidationException("start date can't be before end date!");
+            }
+
             tochange.setCalendar(event.getCalendar());
 
            return eventRepository.save(tochange);

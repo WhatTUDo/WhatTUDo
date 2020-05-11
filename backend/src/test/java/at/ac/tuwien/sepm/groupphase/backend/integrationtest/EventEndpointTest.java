@@ -129,5 +129,45 @@ public class EventEndpointTest {
         assertEquals(finalEvent.getCalendarId(), eventDtoChanges.getCalendarId());
     }
 
+    @Test
+    public void updateEntityStartDateBefore2020_throwsResponseException() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation7"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar7", Collections.singletonList(orga)));
+        EventDto eventDto = new EventDto("Test Name", LocalDateTime.of(2020, 01, 01, 15, 30), LocalDateTime.of(2020, 01, 01, 16, 00), calendar.getId());
+        EventDto returnedEvent = endpoint.post(eventDto);
+
+        assertEquals(eventDto.getName(), returnedEvent.getName());
+        assertEquals(eventDto.getEndDateTime(), returnedEvent.getEndDateTime());
+        assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
+        assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
+
+        EventDto eventDtoChanges = new EventDto("Test2", LocalDateTime.of(2000, 01, 01, 15, 30), LocalDateTime.of(2021, 01, 01, 16, 00),calendar.getId());
+
+        eventDtoChanges.setId(returnedEvent.getId());
+
+        assertThrows(ResponseStatusException.class, () -> endpoint.editEvent(eventDtoChanges));
+
+    }
+
+    @Test
+    public void updateEntityStartDateBeforeEndDate_throwsResponseException() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation8"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar8", Collections.singletonList(orga)));
+        EventDto eventDto = new EventDto("Test Name", LocalDateTime.of(2020, 01, 01, 15, 30), LocalDateTime.of(2020, 01, 01, 16, 00), calendar.getId());
+        EventDto returnedEvent = endpoint.post(eventDto);
+
+        assertEquals(eventDto.getName(), returnedEvent.getName());
+        assertEquals(eventDto.getEndDateTime(), returnedEvent.getEndDateTime());
+        assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
+        assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
+
+        EventDto eventDtoChanges = new EventDto("Test2", LocalDateTime.of(2022, 01, 01, 15, 30), LocalDateTime.of(2021, 01, 01, 16, 00),calendar.getId());
+
+        eventDtoChanges.setId(returnedEvent.getId());
+
+        assertThrows(ResponseStatusException.class, () -> endpoint.editEvent(eventDtoChanges));
+
+    }
+
 }
 
