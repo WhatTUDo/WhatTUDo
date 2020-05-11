@@ -4,7 +4,6 @@ import lombok.*;
 import org.hibernate.annotations.SelectBeforeUpdate;
 import java.time.LocalDateTime;
 
-
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
