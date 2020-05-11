@@ -18,6 +18,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
+import javax.validation.constraints.Null;
 import java.util.*;
 
 @Slf4j
@@ -31,14 +32,18 @@ public class SimpleEventService implements EventService {
 
     @Override
     public void delete(Event event) {
-        try {
-            eventRepository.findById(event.getId());
-            eventRepository.delete(event);
-            publisher.publishEvent(new EventDeleteEvent(event.getName()));
-        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
-            throw new ValidationException(e.getMessage());
-        } catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage(), e);
+        try{
+            if(event.getId() != null){
+          this.findById(event.getId());}
+            else{
+                throw new ValidationException("Id is not defined");
+            }
+
+        eventRepository.delete(event);
+        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e){
+           throw new ValidationException(e.getMessage());
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
         }
     }
 
@@ -64,4 +69,57 @@ public class SimpleEventService implements EventService {
             throw new NotFoundException("No event found with id " + id);
         }
     }
+
+    @Override
+    public Event update(Event event) {
+        log.info("Service update event {}", event);
+        try {
+
+
+            Event tochange = eventRepository.findById(event.getId()).get();
+            //TODO check with isPresent first
+            if((event.getName().isBlank())) {
+                throw new ValidationException("name can't be blank!");
+            }
+
+         /**   if (!(event.getName().isBlank()) && !(event.getName().isEmpty())) {
+
+                tochange.setName(event.getName());
+            }
+
+            if (event.getEndDateTime().compareTo(event.getStartDateTime()) < 0) {
+
+                throw new ValidationException("end-date must be after start-date");
+            }
+
+            //TODO: better validation
+
+
+            if((event.getStartDateTime() != null) && (event.getStartDateTime().isBefore(event.getEndDateTime()))){
+                tochange.setStartDateTime(event.getStartDateTime());
+            }
+            if((event.getEndDateTime() != null)&& (event.getStartDateTime().isBefore(event.getEndDateTime()))){
+                tochange.setEndDateTime(event.getEndDateTime());
+            }
+          **/
+            if((event.getStartDateTime().getYear() < 2020)){
+                throw new ValidationException("start date not valid");
+            }
+
+            if(!(event.getStartDateTime().isBefore(event.getEndDateTime()))){
+                throw new ValidationException("start date can't be before end date!");
+            }
+
+           // tochange.setCalendar(event.getCalendar());
+
+           return eventRepository.save(event);
+
+        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e){
+            throw new ValidationException(e.getMessage());
+        } catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
+
 }

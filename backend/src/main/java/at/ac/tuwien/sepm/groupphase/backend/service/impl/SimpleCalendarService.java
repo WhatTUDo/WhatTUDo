@@ -1,9 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+
 import at.ac.tuwien.sepm.groupphase.backend.events.calendar.CalendarFindEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.event.EventFindEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;

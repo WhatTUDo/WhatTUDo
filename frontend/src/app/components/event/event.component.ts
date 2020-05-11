@@ -64,6 +64,14 @@ export class EventComponent implements OnInit {
     return string
   }
 
+  private deleteEvent(){
+    this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
+      alert("Event deleted");
+    }, error => {
+      // display Error.
+    })
+  }
+
 
   public participate(status: number) {
     switch (status) {

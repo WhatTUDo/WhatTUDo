@@ -11,9 +11,15 @@ import {EventComment} from "../dtos/event-comment";
 })
 
 export class EventService {
-  private eventBaseUri: string = this.globals.backendUri + 'events'
+
+  private eventBaseUri: string = this.globals.backendUri + 'events';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
+  }
+
+  deleteEvent(event: CalendarEvent) {
+    console.log("Delete Event", CalendarEvent);
+    return this.httpClient.delete(this.eventBaseUri + '/' + event);
   }
 
   /**
@@ -69,7 +75,6 @@ export class EventService {
   searchLocationInAPI(searchTerm: string): Observable<any> {
     console.log("Searching Location with string: ", searchTerm);
     let searchURI = this.globals.openStreetMapsUri + '?q=' + encodeURI(searchTerm) + '&format=json&addressdetails=1';
-
     return this.httpClient.get<any>(searchURI);
   }
 }

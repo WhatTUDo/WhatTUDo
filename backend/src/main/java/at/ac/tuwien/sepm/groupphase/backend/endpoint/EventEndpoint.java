@@ -9,8 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +29,10 @@ public class EventEndpoint {
     private final EventService eventService;
     private final EventMapper eventMapper;
 
+
     //  @PreAuthorize("hasRole('Member')")
-    @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
     public void deleteEvent(@RequestBody EventDto eventDto) {
         log.info("DELETE /api/v1/events body: {}", eventDto);
@@ -42,12 +42,14 @@ public class EventEndpoint {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
     @CrossOrigin
-    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
     @ApiOperation(value = "Create event", authorizations = {@Authorization(value = "apiKey")})
     public EventDto post(@RequestBody EventDto event) {
         log.info("POST " + BASE_URL + "/{}", event);
@@ -61,6 +63,7 @@ public class EventEndpoint {
         }
     }
 
+
     @CrossOrigin
     @GetMapping(value = "/{id}")
     public EventDto getById(@PathVariable("id") int id) {
@@ -71,4 +74,21 @@ public class EventEndpoint {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto editEvent(@RequestBody EventDto eventDto){
+        log.info("PUT " + BASE_URL + "/{}", eventDto);
+        try {
+            System.out.println(eventDto.toString());
+            Event eventEntity = eventMapper.dtoToEntity(eventDto);
+            return eventMapper.entityToDto(eventService.update(eventEntity));
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
+        }
+    }
+
 }

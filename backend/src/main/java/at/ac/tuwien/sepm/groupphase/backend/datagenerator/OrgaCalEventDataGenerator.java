@@ -39,5 +39,9 @@ public class OrgaCalEventDataGenerator {
                 ));
             }
         }
+        organisationRepository.findAll().forEach(System.out::println);
+        calendarRepository.findAll().forEach(System.out::println);
+        eventRepository.findAll().forEach(System.out::println);
+
     }
 }
