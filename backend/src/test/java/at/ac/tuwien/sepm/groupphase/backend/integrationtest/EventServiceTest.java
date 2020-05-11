@@ -84,7 +84,7 @@ public class EventServiceTest {
     public void delete_nonSavedEvent_IdNotGenerated_throwsValidationException(){
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation4"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar4", Collections.singletonList(orga)));
-        Event notSavedEvent = new Event("Non Existent", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        Event notSavedEvent = new Event("Non Existent", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
         assertThrows(ValidationException.class, () -> service.delete(notSavedEvent));
     }
 
@@ -92,7 +92,7 @@ public class EventServiceTest {
     public void delete_savedEvent_findBYIdReturnsNotFound(){
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation5"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar5", Collections.singletonList(orga)));
-        Event eventEntity = new Event("Delete Event Test", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        Event eventEntity = new Event("Delete Event Test", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
         Event event = service.save(eventEntity);
         service.delete(event);
         assertThrows(NotFoundException.class, () -> service.findById(event.getId()));
@@ -103,7 +103,7 @@ public class EventServiceTest {
     public void deleteEvent_withIdDoesNotExist_throwsNotFoundException(){
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar", Collections.singletonList(orga)));
-        Event eventEntity = new Event(1,"Delete Event Test", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
+        Event eventEntity = new Event(1,"Delete Event Test", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,01,01,16,00),calendar);
         assertThrows(NotFoundException.class, () -> service.delete(eventEntity));
     }
 

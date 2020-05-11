@@ -57,7 +57,7 @@ public class EventEndpointTest {
     public void save_thenRead_shouldReturn_sameEvent() {
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation2"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar2", Collections.singletonList(orga)));
-        EventDto eventDto = new EventDto(null, "Test Name", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        EventDto eventDto = new EventDto(null, "Test Name", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
         EventDto gottenEvent = endpoint.getById(returnedEvent.getId());
         Optional<Calendar> fetchCalendar = calendarRepository.findById(returnedEvent.getCalendarId());
@@ -78,8 +78,8 @@ public class EventEndpointTest {
     public void save_withoutName_shouldReturn_ResponseStatusException() {
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation3"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar3", Collections.singletonList(orga)));
-        EventDto eventDto1 = new EventDto(null, "", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
-        EventDto eventDto2 = new EventDto(null, "Test Event", LocalDateTime.of(2020,01,02,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        EventDto eventDto1 = new EventDto(null, "", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        EventDto eventDto2 = new EventDto(null, "Test Event", LocalDateTime.of(2020,1,2,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto1));
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto2));
 
@@ -89,7 +89,7 @@ public class EventEndpointTest {
     public void delete_nonSavedEvent_IdNotGenerated_throwsResponseStatusException(){
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation4"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar4", Collections.singletonList(orga)));
-        EventDto notSavedEvent = new EventDto(null, "Non Existent", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        EventDto notSavedEvent = new EventDto(null, "Non Existent", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
         assertThrows(ResponseStatusException.class, () -> endpoint.deleteEvent(notSavedEvent));
     }
 
@@ -98,7 +98,7 @@ public class EventEndpointTest {
     public void delete_savedEvent_findBYIdReturnsResponseException(){
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation5"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar5", Collections.singletonList(orga)));
-        EventDto eventDto = new EventDto(null, "Delete Event", LocalDateTime.of(2020,01,01,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
+        EventDto eventDto = new EventDto(null, "Delete Event", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,01,01,16,00),calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
         endpoint.deleteEvent(returnedEvent);
         assertThrows(ResponseStatusException.class, () -> endpoint.getById(returnedEvent.getId()));
