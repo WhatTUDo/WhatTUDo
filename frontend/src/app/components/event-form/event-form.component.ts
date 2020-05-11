@@ -3,6 +3,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {EventLocationComponent} from "../event-location/event-location.component";
 import {Location} from "../../dtos/location";
+import {EventService} from "../../services/event.service";
 
 @Component({
   selector: 'app-event-form',
@@ -21,7 +22,7 @@ export class EventFormComponent implements OnInit {
     labels: new FormControl('')
   });
 
-  constructor() { }
+  constructor(private service: EventService) { }
 
   ngOnInit(): void {
     this.event = new CalendarEvent(null, null, null, null, null, null, null, null);
@@ -32,10 +33,17 @@ export class EventFormComponent implements OnInit {
     let validationIsPassed = this.validateFormInput(formValue);
     if (validationIsPassed) {
       this.event.name = formValue.name;
-      this.event.startDate = new Date(formValue.startDate);
-      this.event.endDate = new Date(formValue.endDate);
+      this.event.startDateTime = new Date(formValue.startDate);
+      this.event.endDateTime = new Date(formValue.endDate);
+      this.event.calendarId = 1;
 
       // submit to service
+      this.service.postEvent(this.event).subscribe( response => {
+        console.log(response);
+      },
+        err => {
+        console.warn(err);
+        });
     }
   }
 

@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core';
   providedIn: 'root'
 })
 export class Globals {
-  readonly backendUri: string = 'http://localhost:8080/api/v1';
+  readonly backendUri: string = 'http://localhost:8080/';
 
   readonly openStreetMapsUri: string = 'https://nominatim.openstreetmap.org/search';
 }

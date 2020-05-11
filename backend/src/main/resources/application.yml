@@ -33,6 +33,7 @@ security:
       - /
       - /favicon.ico
       - /csrf
+      - /events/**
       # Swagger
       - /v2/api-docs
       - /swagger-resources/**

@@ -7,11 +7,13 @@ export class CalendarEvent {
     id: number,
     public name: string,
     public description: string,
-    public startDate: Date,
-    public endDate: Date,
+    public startDateTime: Date,
+    public endDateTime: Date,
     public location: Location,
     public labels: Array<Label>,
-    public comments: Array<EventComment>
+    public comments: Array<EventComment>,
+    public calendarId?: number,
+
   ) {
   }
 
@@ -20,33 +22,33 @@ export class CalendarEvent {
 
   isDuringDate(date: Date) {
     date.setHours(0, 0, 0, 0);
-    const doesBeginsBeforeDate = this.startDate < date;
+    const doesBeginsBeforeDate = this.startDateTime < date;
 
     date.setHours(24, 0, 0, 0);
-    const doesEndsAfterDate = this.endDate > date;
+    const doesEndsAfterDate = this.endDateTime > date;
 
     return doesBeginsBeforeDate || doesEndsAfterDate;
   }
 
   doesBeginOnDate(date: Date) {
-    return this.isTheSameDate(this.startDate, date);
+    return this.isTheSameDate(this.startDateTime, date);
   }
 
   doesEndOnDate(date: Date) {
-    return this.isTheSameDate(this.endDate, date);
+    return this.isTheSameDate(this.endDateTime, date);
   }
 
-  isTheSameDate(date1: Date, date2: Date) {
+  public isTheSameDate(date1: Date, date2: Date) {
     return date1.toDateString() == date2.toDateString();
   }
 
-  getDisplayTimeString() {
-    let string = this.startDate.toLocaleTimeString('en-US', {
+  public getDisplayTimeString() {
+    let string = this.startDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
     string += ' - '
-    string += this.endDate.toLocaleTimeString('en-US', {
+    string += this.endDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
