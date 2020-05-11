@@ -23,13 +23,37 @@ h3 {
 
 
 .button-container {
-  display: inline-flex;
+  display: flex;
   text-align: center;
   width: 100%;
 
-  button {
-    margin: auto;
+  justify-content: space-around;
+}
+
+.event-attending-status {
+  .event-attending-status-item {
+    text-align: center;
+
+    .event-attending-count {
+      font-size: 36pt;
+      font-weight: $f-bold;
+
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .event-attending-label {
+      font-size: 16pt;
+      font-weight: $f-bold;
+
+      text-align: center;
+      text-transform: uppercase;
+
+      margin-top: -8pt;
+    }
   }
+
+  margin-bottom: 8pt;
 }
 
 #comment-container {
@@ -41,7 +65,10 @@ h3 {
   width: 100%;
   resize: none;
   border: 1pt solid var(--secondary);
+
   background-color: transparent;
-  color: var(--text); // WHY YOU DONT WORK??? TODO: FIX THIS
 }
 
+label[for=comment-area] {
+  display: none;
+}

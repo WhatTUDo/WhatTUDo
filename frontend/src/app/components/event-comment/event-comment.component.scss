@@ -8,52 +8,31 @@
   margin-bottom: 2em;
 }
 
-.comment-header {
+.comment-metadata {
   display: flex;
+
+  .comment-author {
+    font-weight: $f-bold;
+  }
 }
 
-.comment-header p {
-  margin: 1vw 1em 1vw 0;
-}
-
-.comment-content p {
+.comment-content {
   margin: 1vw;
 }
 
-.comment-rating {
-  display: flex;
-  width: 100%;
-  align-items: center;
-
-  .progress {
-    height: 1ch;
-    width: calc(100% - 4em);
-    margin-right: 1em;
-    border-radius: 0;
-
-    background-color: transparentize($gray, 0.75);
-
-    .progress-bar {
-      color: $blue;
-    }
-  }
-
-  .rating-percentage {
-    text-align: right;
-    justify-self: end; // Why the f**k is this not working. TODO: Fix this.
-  }
-}
 
 .comment-buttons {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 
   button {
     margin-right: 10px;
   }
 
-  .response-button {
-    justify-self: end; // Why the f**k is this not working. TODO: Fix this.
+  .rating-percentage {
+    text-align: right;
+    margin-right: 10px;
   }
 }
 
