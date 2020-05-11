@@ -11,7 +11,7 @@ import {EventComment} from "../dtos/event-comment";
 })
 
 export class EventService {
-  private eventBaseUri: string = this.globals.backendUri + 'events/'
+  private eventBaseUri: string = this.globals.backendUri + 'events'
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
