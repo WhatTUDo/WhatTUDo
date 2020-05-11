@@ -102,6 +102,7 @@ public class EventEndpointTest {
         EventDto returnedEvent = endpoint.post(eventDto);
         endpoint.deleteEvent(returnedEvent);
         assertThrows(ResponseStatusException.class, () -> endpoint.getById(returnedEvent.getId()));
+        
     }
 
 
