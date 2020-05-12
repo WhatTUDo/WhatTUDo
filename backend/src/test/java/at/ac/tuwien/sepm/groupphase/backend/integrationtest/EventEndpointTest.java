@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
+import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,19 @@ public class EventEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto2));
 
 }
+
+    @Test
+    public void save_withNoArgs_shouldReturn_ResponseStatusException() {
+//        Organisation organisation = organisationRepository.save(new Organisation("Test Organisation3.1"));
+//        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar3.1", Collections.singletonList(organisation)));
+        EventDto eventDto = new EventDto();
+        assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto));
+    }
+
+    @Test
+    public void save_nullObject_shouldReturn_ResponseStatusException() {
+        assertThrows(ResponseStatusException.class, () -> endpoint.post(null));
+    }
 
     @Test
     public void delete_nonSavedEvent_IdNotGenerated_throwsResponseStatusException(){

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -54,7 +55,7 @@ public class EventEndpoint {
         try {
             Event eventEntity = eventMapper.eventDtoToEvent(event);
             return eventMapper.eventToEventDto(eventService.save(eventEntity));
-        } catch (ValidationException e) {
+        } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
