@@ -1,25 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+@import url("https://use.typekit.net/jzu4fxj.css");
 @import "./var.scss";
 
 :root {
   color-scheme: light dark;
 
-  --background: $white;
-  --text: $black;
-  --secondary: $gray;
-  --accent: saturate(mix($blue, $black, 75), 50);
+  --background: #F7FAF8;
+  --text: #141111;
+  --secondary: #807C7C;
+  --accent: saturate(mix(#7CC9F2, #141111, 75), 50);
 
-  --clickable-box-shadow-color: transparentize($black, 0.75);
+  --overlay: rgba(247, 250, 248, 0.5);
+  --shadow: rgba(20, 17, 17, 0.25);
+
 
   @media (prefers-color-scheme: dark) {
 
-    --background: $black;
-    --text: $white;
-    --secondary: $gray;
-    --accent: desaturate(mix($blue, $white, 75), 50);
+    --background: #141111;
+    --text: #F7FAF8;
+    --secondary: #807c7c;
+    --accent: desaturate(mix(#7CC9F2, #F7FAF8, 75), 50);
 
-    --clickable-box-shadow-color: transparentize($white, 0.75);
-
+    --overlay: rgba(20, 17, 17, 0.5);
+    --shadow: rgba(247, 250, 248, 0.25);
   }
 }
 
@@ -32,6 +34,8 @@ body {
 
   font-family: $font-stack;
   font-weight: $f-regular;
+
+  line-height: 1;
 }
 
 .container {
@@ -68,7 +72,6 @@ a {
 .contextual-control {
   display: flex;
   font-size: 16pt;
-  margin-bottom: -8pt;
 
   align-items: center;
 
@@ -114,11 +117,11 @@ a {
 .clickable {
   cursor: pointer;
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
-  box-shadow: 1px 1px 2px var(--clickable-box-shadow-color);
+  box-shadow: 1px 1px 2px var(--shadow);
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 4px 4px 8px var(--clickable-box-shadow-color);
+    box-shadow: 4px 4px 8px var(--shadow);
   }
 }
 
@@ -131,12 +134,12 @@ a {
   color: $black;
   border: none;
   border-radius: 4pt;
-  box-shadow: 1px 1px 2px var(--clickable-box-shadow-color);
+  box-shadow: 1px 1px 2px var(--shadow);
   background-image: linear-gradient(15deg, transparentize($white, 1), transparentize($white, 0.75));
 
   &:hover {
     transform: scale(1.05);
-    box-shadow: 4px 4px 8px var(--clickable-box-shadow-color);
+    box-shadow: 4px 4px 8px var(--shadow);
   }
 
   &.button-green {
@@ -159,10 +162,30 @@ a {
     border: 2pt solid var(--text);
     background-image: none;
   }
+
+  &.small-button {
+    border-radius: 3.5pt;
+  }
 }
 
-input, textarea, iframe {
+input, textarea {
+  padding: 4pt;
+
   border-radius: 4pt;
-  border: 2pt solid var(--secondary) !important;
-  background: transparent !important;
+  border: none;
+
+  resize: none;
+  background-color: var(--shadow) !important;
+}
+
+textarea {
+  height: 64pt;
+}
+
+iframe {
+  width: 100%;
+}
+
+::placeholder {
+  color: var(--secondary);
 }
