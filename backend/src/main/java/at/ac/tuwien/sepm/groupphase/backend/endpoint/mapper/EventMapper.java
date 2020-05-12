@@ -19,15 +19,15 @@ public class EventMapper {
 
     @Autowired
     public EventMapper(CalendarService calendarService) {
-        this.calendarService = calendarService;}
+        this.calendarService = calendarService;
+    }
 
-    public Event dtoToEntity(EventDto eventDto){
+    public Event dtoToEntity(EventDto eventDto) {
         Calendar calendar = calendarService.findById(eventDto.getCalendarId());
         return new Event(eventDto.getId(), eventDto.getName(), eventDto.getStartDateTime(), eventDto.getEndDateTime(), calendar);
     }
 
-    public EventDto entityToDto(Event event){
-        return new EventDto(event.getId(), event.getName(),event.getStartDateTime(), event.getEndDateTime(), (event.getCalendar()).getId());
+    public EventDto entityToDto(Event event) {
+        return new EventDto(event.getId(), event.getName(), event.getStartDateTime(), event.getEndDateTime(), (event.getCalendar()).getId());
     }
-
 }
