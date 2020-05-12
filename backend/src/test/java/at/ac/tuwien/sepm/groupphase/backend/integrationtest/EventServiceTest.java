@@ -78,6 +78,7 @@ public class EventServiceTest {
         Event event2 = new Event("Test Event", LocalDateTime.of(2020,1,2,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
         assertThrows(ValidationException.class, () -> service.save(event1));
         assertThrows(ValidationException.class, () -> service.save(event2));
+        assertThrows(ValidationException.class, () -> service.save(null));
     }
 
     @Test
