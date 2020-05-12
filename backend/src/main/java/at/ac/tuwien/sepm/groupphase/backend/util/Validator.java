@@ -9,6 +9,9 @@ public class Validator {
 
 
     public void validateNewEvent(Event event) {
+        if (event == null) {
+            throw new ValidationException("Event object must not be null!");
+        }
         if (event.getName().equals("")) throw new ValidationException("Event name must not be empty.");
         if (event.getEndDateTime().compareTo(event.getStartDateTime()) < 0)
             throw new ValidationException("end-date must be after start-date");
