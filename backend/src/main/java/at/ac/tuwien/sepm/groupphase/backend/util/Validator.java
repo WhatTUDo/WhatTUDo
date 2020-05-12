@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class Validator {
 
-
     public void validateNewEvent(Event event) {
         if (event == null) {
             throw new ValidationException("Event object must not be null!");
