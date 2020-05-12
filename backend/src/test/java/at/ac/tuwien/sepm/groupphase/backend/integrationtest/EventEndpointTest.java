@@ -75,7 +75,6 @@ public class EventEndpointTest {
         EventDto eventDto2 = new EventDto(null, "Test Event", LocalDateTime.of(2020, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto1));
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto2));
-
     }
 
     @Test
