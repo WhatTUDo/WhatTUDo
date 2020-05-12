@@ -48,6 +48,14 @@
       color: var(--accent);
     }
   }
+
+  sub {
+    bottom: -0.125em;
+  }
+
+  sup {
+    top: -0.33em;
+  }
 }
 
 $swim-land-border: 2pt dotted transparentize($gray, 0.5);
@@ -125,7 +133,7 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
   &.mobile {
     justify-content: space-between;
     position: relative;
-    top: 64pt
+    top: 32pt
   }
 
   @media screen and (min-width: $mobile-breakpoint) {

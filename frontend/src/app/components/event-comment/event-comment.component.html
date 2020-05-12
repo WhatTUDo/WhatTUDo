@@ -5,19 +5,22 @@
   </div>
   <div class="comment-metadata">
     <div class="comment-author">
-      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;{{this.author}}
+      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;@{{this.author}}
+    </div>
+    <div class="comment-time">
+      <fa-icon [icon]="faClock"></fa-icon>&ensp;an hour ago
     </div>
   </div>
   <div class="comment-buttons">
-    <button class="button-clickable button-green" (click)="vote(true)">
+    <button class="button-clickable button-green small-button icon-button" (click)="vote(true)">
       <fa-icon [icon]="faThumbsUp"></fa-icon>
     </button>
     <div class="rating-percentage">{{this.comment.rating * 100 + '%'}}</div>
-    <button class="button-clickable button-red" (click)="vote(false)">
+    <button class="button-clickable button-red small-button icon-button" (click)="vote(false)">
       <fa-icon [icon]="faThumbsDown"></fa-icon>
     </button>
-    <button class="button-clickable button-blue response-button" (click)="respondButtonClicked()">
-      Respond
+    <button class="button-clickable button-blue small-button icon-button response-button" (click)="respondButtonClicked()">
+      <fa-icon [icon]="faReply"></fa-icon>
     </button>
   </div>
 

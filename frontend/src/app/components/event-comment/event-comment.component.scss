@@ -1,7 +1,7 @@
 @import "../../../var.scss";
 
-* p b {
-  font-weight: $f-bold;
+* {
+  line-height: 1.2;
 }
 
 .comment-item {
@@ -11,13 +11,23 @@
 .comment-metadata {
   display: flex;
 
+  margin: 4pt 0;
+
+  div {
+    margin-right: 8pt;
+  }
+
   .comment-author {
+    display: flex;
+
     font-weight: $f-bold;
+
+    align-items: center;
   }
 }
 
 .comment-content {
-  margin: 1vw;
+  line-height: 1.2 !important;
 }
 
 
@@ -27,7 +37,15 @@
   align-items: center;
 
   button {
-    margin-right: 10px;
+    margin-right: 8pt;
+  }
+
+  .icon-button {
+    width: 24pt;
+  }
+
+  .response-button {
+    margin-left: 12pt;
   }
 
   .rating-percentage {
