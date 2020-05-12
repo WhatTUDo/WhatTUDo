@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.unittests;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
@@ -31,18 +30,6 @@ public class MessageMappingTest implements TestData {
         .build();
     @Autowired
     private MessageMapper messageMapper;
-
-    @Test
-    public void givenNothing_whenMapDetailedMessageDtoToEntity_thenEntityHasAllProperties() {
-        DetailedMessageDto detailedMessageDto = messageMapper.messageToDetailedMessageDto(message);
-        assertAll(
-            () -> assertEquals(ID, detailedMessageDto.getId()),
-            () -> assertEquals(TEST_NEWS_TITLE, detailedMessageDto.getTitle()),
-            () -> assertEquals(TEST_NEWS_SUMMARY, detailedMessageDto.getSummary()),
-            () -> assertEquals(TEST_NEWS_TEXT, detailedMessageDto.getText()),
-            () -> assertEquals(TEST_NEWS_PUBLISHED_AT, detailedMessageDto.getPublishedAt())
-        );
-    }
 
     @Test
     public void givenNothing_whenMapListWithTwoMessageEntitiesToSimpleDto_thenGetListWithSizeTwoAndAllProperties() {

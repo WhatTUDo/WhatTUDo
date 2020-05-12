@@ -1,12 +1,17 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 import java.util.List;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrganisationDto {
-    Integer id;
-    String name;
-    List<Integer> calendarIds;
+    private Integer id;
+    private String name;
+    private List<Integer> calendarIds;
 }

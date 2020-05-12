@@ -35,7 +35,7 @@ public class EventEndpoint {
     public void deleteEvent(@RequestBody EventDto eventDto) {
         log.info("DELETE /api/v1/events body: {}", eventDto);
         try {
-            eventService.delete(eventMapper.dtoToEntity(eventDto));
+            eventService.delete(eventMapper.eventDtoToEvent(eventDto));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (ValidationException e) {
@@ -52,8 +52,8 @@ public class EventEndpoint {
     public EventDto post(@RequestBody EventDto event) {
         log.info("POST " + BASE_URL + "/{}", event);
         try {
-            Event eventEntity = eventMapper.dtoToEntity(event);
-            return eventMapper.entityToDto(eventService.save(eventEntity));
+            Event eventEntity = eventMapper.eventDtoToEvent(event);
+            return eventMapper.eventToEventDto(eventService.save(eventEntity));
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -67,7 +67,7 @@ public class EventEndpoint {
     public EventDto getById(@PathVariable("id") int id) {
         log.info("GET " + BASE_URL + "/{}", id);
         try {
-            return eventMapper.entityToDto(eventService.findById(id));
+            return eventMapper.eventToEventDto(eventService.findById(id));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
@@ -80,8 +80,8 @@ public class EventEndpoint {
         log.info("PUT " + BASE_URL + "/{}", eventDto);
         try {
             System.out.println(eventDto.toString());
-            Event eventEntity = eventMapper.dtoToEntity(eventDto);
-            return eventMapper.entityToDto(eventService.update(eventEntity));
+            Event eventEntity = eventMapper.eventDtoToEvent(eventDto);
+            return eventMapper.eventToEventDto(eventService.update(eventEntity));
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {

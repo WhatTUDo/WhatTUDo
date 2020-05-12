@@ -33,8 +33,8 @@ public class OrganisationEndpoint {
     public OrganisationDto editOrganisation(@RequestBody OrganisationDto organisation) {
         log.info("PUT " + BASE_URL + "/{}", organisation);
         try {
-            Organisation organisationEntity = organisationMapper.dtoToEntity(organisation);
-            return organisationMapper.entityToDto(organisationService.update(organisationEntity));
+            Organisation organisationEntity = organisationMapper.organisationDtoToOrganisation(organisation);
+            return organisationMapper.organisationToOrganisationDto(organisationService.update(organisationEntity));
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {

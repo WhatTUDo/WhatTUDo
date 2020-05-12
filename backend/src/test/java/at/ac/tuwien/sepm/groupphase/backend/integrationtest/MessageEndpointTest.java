@@ -2,8 +2,6 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.DetailedMessageDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.SimpleMessageDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
@@ -120,27 +118,6 @@ public class MessageEndpointTest implements TestData {
     }
 
     @Test
-    public void givenOneMessage_whenFindById_thenMessageWithAllProperties() throws Exception {
-        messageRepository.save(message);
-
-        MvcResult mvcResult = this.mockMvc.perform(get(MESSAGE_BASE_URI + "/{id}", message.getId())
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-
-        assertAll(
-            () -> assertEquals(HttpStatus.OK.value(), response.getStatus()),
-            () -> assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType())
-        );
-
-        DetailedMessageDto detailedMessageDto = objectMapper.readValue(response.getContentAsString(),
-            DetailedMessageDto.class);
-
-        assertEquals(message, messageMapper.detailedMessageDtoToMessage(detailedMessageDto));
-    }
-
-    @Test
     public void givenOneMessage_whenFindByNonExistingId_then404() throws Exception {
         messageRepository.save(message);
 
@@ -150,63 +127,6 @@ public class MessageEndpointTest implements TestData {
             .andReturn();
         MockHttpServletResponse response = mvcResult.getResponse();
         assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatus());
-    }
-
-    @Test
-    public void givenNothing_whenPost_thenMessageWithAllSetPropertiesPlusIdAndPublishedDate() throws Exception {
-        message.setPublishedAt(null);
-        MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-        String body = objectMapper.writeValueAsString(messageInquiryDto);
-
-        MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(body)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-
-        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-        assertEquals(MediaType.APPLICATION_JSON_VALUE, response.getContentType());
-
-        DetailedMessageDto messageResponse = objectMapper.readValue(response.getContentAsString(),
-            DetailedMessageDto.class);
-
-        assertNotNull(messageResponse.getId());
-        assertNotNull(messageResponse.getPublishedAt());
-        assertTrue(isNow(messageResponse.getPublishedAt()));
-        //Set generated properties to null to make the response comparable with the original input
-        messageResponse.setId(null);
-        messageResponse.setPublishedAt(null);
-        assertEquals(message, messageMapper.detailedMessageDtoToMessage(messageResponse));
-    }
-
-    @Test
-    public void givenNothing_whenPostInvalid_then400() throws Exception {
-        message.setTitle(null);
-        message.setSummary(null);
-        message.setText(null);
-        MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-        String body = objectMapper.writeValueAsString(messageInquiryDto);
-
-        MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(body)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-
-        assertAll(
-            () -> assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus()),
-            () -> {
-                //Reads the errors from the body
-                String content = response.getContentAsString();
-                content = content.substring(content.indexOf('[') + 1, content.indexOf(']'));
-                String[] errors = content.split(",");
-                assertEquals(3, errors.length);
-            }
-        );
     }
 
     private boolean isNow(LocalDateTime date) {
