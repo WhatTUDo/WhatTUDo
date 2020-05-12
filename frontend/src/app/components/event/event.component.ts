@@ -6,7 +6,7 @@ import {Label} from "../../dtos/label";
 import {EventService} from "../../services/event.service";
 import {ActivatedRoute} from "@angular/router";
 
-import {faChevronLeft, faTag, faExternalLinkSquareAlt} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faExternalLinkSquareAlt, faTag} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-event',
@@ -27,6 +27,10 @@ export class EventComponent implements OnInit {
 
 
   ngOnInit(): void {
+    // #map, .leaflet-control-container {
+    //   border-radius: 4pt !important;
+    // }
+
 
   }
 
@@ -35,7 +39,7 @@ export class EventComponent implements OnInit {
    * @param id
    */
   private loadCalendarEvent(id: number) {
-    this.eventService.getEvent(id).subscribe( (event: CalendarEvent) =>{
+    this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
       this.calendarEvent = event;
       let location = new Location(null, "Fachschaft Informatik", "Treitlstraße 3", "1050", 12.1234, 13.9876);
       this.calendarEvent.comments = this.getComments();
@@ -57,14 +61,14 @@ export class EventComponent implements OnInit {
       minute: 'numeric'
     }).replace(":00", "")
     string += ' - '
-    string +=endDateTime.toLocaleTimeString('en-US', {
+    string += endDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
     return string
   }
 
-  private deleteEvent(){
+  private deleteEvent() {
     this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
       alert("Event deleted");
     }, error => {

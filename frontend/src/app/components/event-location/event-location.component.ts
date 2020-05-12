@@ -6,7 +6,7 @@ import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 @Component({
   selector: 'app-event-location',
   templateUrl: './event-location.component.html',
-  styleUrls: ['./event-location.component.css']
+  styleUrls: ['./event-location.component.scss']
 })
 export class EventLocationComponent implements OnInit {
 

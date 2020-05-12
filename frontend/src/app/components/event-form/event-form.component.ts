@@ -8,7 +8,7 @@ import {EventService} from "../../services/event.service";
 @Component({
   selector: 'app-event-form',
   templateUrl: './event-form.component.html',
-  styleUrls: ['./event-form.component.css']
+  styleUrls: ['./event-form.component.scss']
 })
 export class EventFormComponent implements OnInit {
 

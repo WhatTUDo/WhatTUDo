@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {EventComment} from "../../dtos/event-comment";
 
-import {faThumbsUp, faThumbsDown, faUserCircle} from "@fortawesome/free-solid-svg-icons";
+import {faThumbsDown, faThumbsUp, faUserCircle, faReply, faClock} from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
 
 @Component({
@@ -15,11 +15,15 @@ export class EventCommentComponent implements OnInit {
 
   public author: string
   public rating: number
-  constructor(eventService: EventService) { }
+
+  constructor(eventService: EventService) {
+  }
 
   faThumbsUp = faThumbsUp;
   faThumbsDown = faThumbsDown;
   faUserCircle = faUserCircle;
+  faReply = faReply;
+  faClock = faClock;
 
   ngOnInit(): void {
     this.author = "Testguy";
@@ -28,8 +32,7 @@ export class EventCommentComponent implements OnInit {
   public vote(isUpvote: boolean) {
     if (isUpvote) {
       alert("You upvoted this comment!");
-    }
-    else {
+    } else {
       alert("You downvoted this comment!");
     }
   }
