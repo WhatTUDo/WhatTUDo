@@ -139,5 +139,10 @@
       }
     }
   },
-  "defaultProject": "sepm-group-phase"
+  "defaultProject": "sepm-group-phase",
+  "schematics": {
+    "@schematics/angular:component": {
+      "styleext": "scss"
+    }
+  }
 }
