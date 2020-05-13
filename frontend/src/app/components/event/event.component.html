@@ -3,7 +3,7 @@
     <span id="back-button"><fa-icon [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
     <span>{{this.calendarEvent.name}}</span>
   </div>
-  <div class="grid-one-third">
+  <div class="grid-one-third scroll">
     <div>
       <h2>Event</h2>
       <div class="event-promo-container" style="background-image: url(https://picsum.photos/800/1200/);">
@@ -14,49 +14,57 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="details-stack">
       <h2>Details</h2>
-      <div class="event-location-map-container">
-        <iframe id="open-street-map-iframe"
-                src="//www.openstreetmap.org/export/embed.html?bbox=16.36812955141068%2C48.19411795494773%2C16.371696889400486%2C48.19578432955719&amp;layer=mapnik"></iframe>
-      </div>
-      <small><a href="https://www.openstreetmap.org/#map=19/48.19495/16.36991">View Larger Map</a></small>
       <div>
-        <!-- TODO: Organisation details -->
+        <div class="participation-status grid-one-third no-gap">
+          <div class="participation-status-item">
+            <div class="participation-count">{{this.participants.attending.length}}</div>
+            <div class="participation-label">Attending</div>
+          </div>
+          <div class="participation-status-item">
+            <div class="participation-count">{{this.participants.interested.length}}</div>
+            <div class="participation-label">Interested</div>
+          </div>
+          <div class="participation-status-item">
+            <div class="participation-count">{{this.participants.declined.length}}</div>
+            <div class="participation-label">Declined</div>
+          </div>
+        </div>
+        <div class="participation-button-container grid-one-third no-gap">
+          <button class="button-clickable button-blue btn-lg" (click)="participate(1)">Attend</button>
+          <button class="button-clickable button-yellow btn-lg" (click)="participate(2)">Interested</button>
+          <button class="button-clickable button-red btn-lg" (click)="participate(0)">Decline</button>
+        </div>
       </div>
-      <div class="event-attending-status grid-one-third no-gap">
-        <div class="event-attending-status-item">
-          <div class="event-attending-count">{{this.participants.attending.length}}</div>
-          <div class="event-attending-label">Attending</div>
-        </div>
-        <div class="event-attending-status-item">
-          <div class="event-attending-count">{{this.participants.interested.length}}</div>
-          <div class="event-attending-label">Interested</div>
-        </div>
-        <div class="event-attending-status-item">
-          <div class="event-attending-count">{{this.participants.declined.length}}</div>
-          <div class="event-attending-label">Declined</div>
+      <div class="organization-info">
+        <img class="avatar avatar-small" src="https://picsum.photos/256/256/">
+        <div class="organization-details">
+          <div class="organization-name">FS Winf</div>
+          <div>Als kooperative und engagierte Interessensvertretung wollen wir eine offene Anlaufstelle sein,
+            Studierende beim Studium unterstützen, untereinander vernetzen und kompetent beraten.
+          </div>
         </div>
       </div>
-      <div class="button-container grid-one-third no-gap">
-        <button class="button-clickable button-blue btn-lg" (click)="participate(1)">Attend</button>
-        <button class="button-clickable button-yellow btn-lg" (click)="participate(2)">Interested</button>
-        <button class="button-clickable button-red btn-lg" (click)="participate(0)">Decline</button>
+      <div class="event-location">
+        <div class="event-location-map-container">
+          <iframe id="open-street-map-iframe"
+                  src="//www.openstreetmap.org/export/embed.html?bbox=16.36812955141068%2C48.19411795494773%2C16.371696889400486%2C48.19578432955719&amp;layer=mapnik"></iframe>
+        </div>
+        <small><a href="https://www.openstreetmap.org/#map=19/48.19495/16.36991">View Larger Map</a></small>
       </div>
     </div>
     <div>
       <h2>Comments</h2>
-      <div id="comment-container">
-        <div *ngFor="let comment of calendarEvent.comments" class="comment-div">
-          <app-event-comment [comment]="comment"></app-event-comment>
-        </div>
+      <div *ngFor="let comment of calendarEvent.comments" class="comment-div">
+        <app-event-comment [comment]="comment"></app-event-comment>
       </div>
       <div>
         <label for="comment-area">
           Leave a comment
         </label>
         <textarea id="comment-area" name="comment" placeholder="Leave a comment…"></textarea>
-        <div class="button-container">
+        <div class="participation-button-container">
           <button class="button-clickable button-blue btn-lg" (click)="addComment()">Send</button>
         </div>
       </div>
