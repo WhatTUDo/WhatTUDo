@@ -1,59 +1,56 @@
 @import "../../../var.scss";
 
-* p b {
-  font-weight: $f-bold;
+* {
+  line-height: 1.2;
 }
 
 .comment-item {
   margin-bottom: 2em;
 }
 
-.comment-header {
+.comment-metadata {
   display: flex;
-}
 
-.comment-header p {
-  margin: 1vw 1em 1vw 0;
-}
+  margin: 4pt 0;
 
-.comment-content p {
-  margin: 1vw;
-}
-
-.comment-rating {
-  display: flex;
-  width: 100%;
-  align-items: center;
-
-  .progress {
-    height: 1ch;
-    width: calc(100% - 4em);
-    margin-right: 1em;
-    border-radius: 0;
-
-    background-color: transparentize($gray, 0.75);
-
-    .progress-bar {
-      color: $blue;
-    }
+  div {
+    margin-right: 8pt;
   }
 
-  .rating-percentage {
-    text-align: right;
-    justify-self: end; // Why the f**k is this not working. TODO: Fix this.
+  .comment-author {
+    display: flex;
+
+    font-weight: $f-bold;
+
+    align-items: center;
   }
 }
+
+.comment-content {
+  line-height: 1.2 !important;
+}
+
 
 .comment-buttons {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 
   button {
-    margin-right: 10px;
+    margin-right: 8pt;
+  }
+
+  .icon-button {
+    width: 24pt;
   }
 
   .response-button {
-    justify-self: end; // Why the f**k is this not working. TODO: Fix this.
+    margin-left: 12pt;
+  }
+
+  .rating-percentage {
+    text-align: right;
+    margin-right: 10px;
   }
 }
 

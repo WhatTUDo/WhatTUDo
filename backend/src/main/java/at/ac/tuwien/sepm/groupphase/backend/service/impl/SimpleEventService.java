@@ -32,18 +32,18 @@ public class SimpleEventService implements EventService {
 
     @Override
     public void delete(Event event) {
-        try{
-            if(event.getId() != null){
-          this.findById(event.getId());}
-            else{
+        try {
+            if (event.getId() != null) {
+                this.findById(event.getId());
+            } else {
                 throw new ValidationException("Id is not defined");
             }
-
-        eventRepository.delete(event);
-        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e){
-           throw new ValidationException(e.getMessage());
-        } catch (PersistenceException e){
-            throw new ServiceException(e.getMessage(),e);
+            publisher.publishEvent(new EventDeleteEvent(event.getName()));
+            eventRepository.delete(event);
+        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
+            throw new ValidationException(e.getMessage());
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
         }
     }
 

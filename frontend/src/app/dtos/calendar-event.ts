@@ -17,9 +17,6 @@ export class CalendarEvent {
   ) {
   }
 
-  // Utility functions are probably for somewhere else.
-  // I'm coding here until such place is built.
-
   isDuringDate(date: Date) {
     date.setHours(0, 0, 0, 0);
     const doesBeginsBeforeDate = this.startDateTime < date;

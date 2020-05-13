@@ -1,31 +1,26 @@
 <div class="comment-item">
-  <div class="comment-header">
-    <p>
-      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;{{this.author}}
-    </p>
-<!--    <p>-->
-<!--      <b>Rating: </b> {{this.comment.rating}}-->
-<!--    </p>-->
-  </div>
+
   <div class="conmment-content">
-    <p>{{this.comment.content}}</p>
+    {{this.comment.content}}
   </div>
-  <div class="comment-rating">
-    <div class="progress">
-      <div class="progress-bar" [style.width]="this.comment.rating * 100+'%'"
-           aria-valuenow="{{this.comment.rating * 100}}" aria-valuemin="0" aria-valuemax="100"></div>
+  <div class="comment-metadata">
+    <div class="comment-author">
+      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;@{{this.author}}
     </div>
-    <div class="rating-percentage">{{this.comment.rating * 100+'%'}}</div>
+    <div class="comment-time">
+      <fa-icon [icon]="faClock"></fa-icon>&ensp;an hour ago
+    </div>
   </div>
   <div class="comment-buttons">
-    <button class="button-clickable button-green btn-sm" (click)="vote(true)">
+    <button class="button-clickable button-green small-button icon-button" (click)="vote(true)">
       <fa-icon [icon]="faThumbsUp"></fa-icon>
     </button>
-    <button class="button-clickable button-red btn-sm" (click)="vote(false)">
+    <div class="rating-percentage">{{this.comment.rating * 100 + '%'}}</div>
+    <button class="button-clickable button-red small-button icon-button" (click)="vote(false)">
       <fa-icon [icon]="faThumbsDown"></fa-icon>
     </button>
-    <button class="button-clickable button-blue btn-sm response-button" (click)="respondButtonClicked()">
-      Respond
+    <button class="button-clickable button-blue small-button icon-button response-button" (click)="respondButtonClicked()">
+      <fa-icon [icon]="faReply"></fa-icon>
     </button>
   </div>
 

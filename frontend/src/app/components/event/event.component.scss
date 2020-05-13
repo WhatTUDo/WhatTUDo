@@ -1,9 +1,5 @@
 @import "../../../var.scss";
 
-h3 {
-  display: none;
-}
-
 #label-container {
   display: flex;
   margin-bottom: 12pt;
@@ -21,15 +17,68 @@ h3 {
   }
 }
 
+.event-promo-container {
+  display: flex;
+  align-items: flex-end;
+
+  height: 100%;
+  width: 100%;
+
+  border-radius: 4pt;
+  overflow: hidden;
+
+  .event-promo-details {
+    border-radius: 0 0 4pt 4pt;
+    width: 100%;
+
+    padding: 16pt;
+    background-color: var(--overlay);
+    backdrop-filter: blur(4pt);
+
+    .event-time {
+    }
+
+    .event-name {
+      font-size: 36pt;
+      font-weight: $f-bold;
+    }
+
+    .event-description {
+
+    }
+  }
+}
 
 .button-container {
-  display: inline-flex;
+  display: flex;
   text-align: center;
   width: 100%;
 
-  button {
-    margin: auto;
+  justify-content: space-around;
+}
+
+.event-attending-status {
+  .event-attending-status-item {
+    text-align: center;
+
+    .event-attending-count {
+      font-size: 36pt;
+      font-weight: $f-bold;
+
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .event-attending-label {
+      font-size: 12pt;
+      font-weight: $f-bold;
+
+      text-align: center;
+      text-transform: uppercase;
+    }
   }
+
+  margin-bottom: 8pt;
 }
 
 #comment-container {
@@ -39,9 +88,21 @@ h3 {
 #comment-area {
   appearance: none;
   width: 100%;
-  resize: none;
-  border: 1pt solid var(--secondary);
-  background-color: transparent;
-  color: var(--text); // WHY YOU DONT WORK??? TODO: FIX THIS
 }
 
+label[for=comment-area] {
+  display: none;
+}
+
+.event-location-map-container {
+  border-radius: 4pt;
+  overflow: hidden;
+  position: relative;
+
+  box-sizing: border-box;
+  height: 20em;
+
+  iframe {
+    height: 20em;
+  }
+}

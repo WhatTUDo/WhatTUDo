@@ -2,7 +2,6 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.basetest.TestData;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.MessageInquiryDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.MessageMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Message;
 import at.ac.tuwien.sepm.groupphase.backend.repository.MessageRepository;
@@ -94,54 +93,5 @@ public class SecurityTest implements TestData {
         MockHttpServletResponse response = mvcResult.getResponse();
 
         assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatus());
-    }
-
-    @Test
-    public void givenAdminLoggedIn_whenPost_then201() throws Exception {
-        MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-        String body = objectMapper.writeValueAsString(messageInquiryDto);
-
-        MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(body)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(ADMIN_USER, ADMIN_ROLES)))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-
-        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
-    }
-
-    @Test
-    public void givenNoOneLoggedIn_whenPost_then401() throws Exception {
-        message.setPublishedAt(null);
-        MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-        String body = objectMapper.writeValueAsString(messageInquiryDto);
-
-        MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(body))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-
-        assertEquals(HttpStatus.UNAUTHORIZED.value(), response.getStatus());
-    }
-
-    @Test
-    public void givenUserLoggedIn_whenPost_then403() throws Exception {
-        message.setPublishedAt(null);
-        MessageInquiryDto messageInquiryDto = messageMapper.messageToMessageInquiryDto(message);
-        String body = objectMapper.writeValueAsString(messageInquiryDto);
-
-        MvcResult mvcResult = this.mockMvc.perform(post(MESSAGE_BASE_URI)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(body)
-            .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(DEFAULT_USER, USER_ROLES)))
-            .andDo(print())
-            .andReturn();
-        MockHttpServletResponse response = mvcResult.getResponse();
-
-        assertEquals(HttpStatus.FORBIDDEN.value(), response.getStatus());
     }
 }

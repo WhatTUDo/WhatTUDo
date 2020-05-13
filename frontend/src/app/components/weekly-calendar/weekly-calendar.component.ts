@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CalendarEvent} from '../../dtos/calendar-event';
 
-import {faChevronCircleLeft, faChevronCircleRight, faChevronDown, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-weekly-calendar',
@@ -14,7 +14,8 @@ export class WeeklyCalendarComponent implements OnInit {
   currentMonth: String;
   currentYear: number;
 
-  week: Date[]; // Starts at a monday.
+  displayingDate: Date;
+  displayingWeek: Date[]; // Starts at a monday.
   offset = 0; // Currently in WEEKS. Probably should be in days for mobile compatibility.
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
@@ -29,11 +30,11 @@ export class WeeklyCalendarComponent implements OnInit {
     } // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 
     for (let i = 1; i <= 4; i++) {
-      const dateOffset = getRandomInt(0, +3);
+      const dateOffset = getRandomInt(0, +1);
       const startHours = 18 + getRandomInt(-3, +3);
       const endHours = startHours + getRandomInt(2, 4);
-      let startDate = new Date(2020, 4, 8 + dateOffset, startHours, 0, 0, 0);
-      let endDate = new Date(2020, 4, 8 + dateOffset, endHours, 30, 0, 0);
+      let startDate = new Date(2020, 4, 11 + dateOffset, startHours, 0, 0, 0);
+      let endDate = new Date(2020, 4, 11 + dateOffset, endHours, 30, 0, 0);
 
       let keyISOString = this.getMidnight(startDate).toISOString()
       let events = this.eventsOfTheWeek.get(keyISOString)
@@ -50,24 +51,27 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.week = this.getWeek(this.offset);
+    this.displayingDate = this.getToday();
+    this.displayingWeek = this.getWeek(this.offset);
     this.updateDatetime();
     setInterval(_ => {
       this.updateDatetime();
     }, 1000);
 
-    setInterval(_ => {    Array.from(document.getElementsByClassName('calendar-event'))
-      .forEach(event => {
-        const time = event.getElementsByClassName('calendar-event-time')[0];
-        const name = event.getElementsByClassName('calendar-event-name')[0];
-        // @ts-ignore
-        if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
+    setInterval(_ => {
+      Array.from(document.getElementsByClassName('calendar-event'))
+        .forEach(event => {
+          const time = event.getElementsByClassName('calendar-event-time')[0];
+          const name = event.getElementsByClassName('calendar-event-name')[0];
           // @ts-ignore
-          time.innerText = '…'
-          // @ts-ignore
-          name.innerText = '…';
-        }
-      })}, 500)
+          if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
+            // @ts-ignore
+            time.innerText = '…'
+            // @ts-ignore
+            name.innerText = '…';
+          }
+        })
+    }, 500)
   }
 
   updateDatetime() {
@@ -78,17 +82,17 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   getWeek(offset = 0) {
+    const offsetWeeks = Math.round(this.offset/7);
     let currentWeekDates = [];
     let today = this.getToday();
 
     let beginOfWeek = new Date(today);
     // % is remainder and not mod in js. Therefore -1%7=-1. This is a workaround.
-    const weekOffset = (today.getDay() - 1 +7)%7;
-    console.log(weekOffset)
+    const weekOffset = (today.getDay() - 1 + 7) % 7;
     beginOfWeek.setDate(beginOfWeek.getDate() - weekOffset);
 
     let date = new Date(beginOfWeek);
-    date.setDate(date.getDate() + offset * 7);
+    date.setDate(date.getDate() + offsetWeeks * 7);
     for (let i = 0; i <= 6; i++) {
       currentWeekDates.push(new Date(date));
       date.setDate(date.getDate() + 1);
@@ -96,14 +100,35 @@ export class WeeklyCalendarComponent implements OnInit {
     return currentWeekDates;
   }
 
+  getDate(offset = 0) {
+    let date = this.getToday();
+    date.setDate(date.getDate() + offset);
+    return date
+  }
+
   addOneWeek() {
-    this.offset++;
-    this.week = this.getWeek(this.offset);
+    this.offset += 7;
+    this.updateOffsettedDates();
   }
 
   minusOneWeek() {
+    this.offset -= 7;
+    this.updateOffsettedDates();
+  }
+
+  addOneDay() {
+    this.offset++;
+    this.updateOffsettedDates();
+  }
+
+  minusOneDay() {
     this.offset--;
-    this.week = this.getWeek(this.offset);
+    this.updateOffsettedDates();
+  }
+
+  private updateOffsettedDates() {
+    this.displayingDate = this.getDate(this.offset);
+    this.displayingWeek = this.getWeek(this.offset);
   }
 
   getToday() {
@@ -140,6 +165,6 @@ export class WeeklyCalendarComponent implements OnInit {
 
   faChevronUp = faChevronUp;
   faChevronDown = faChevronDown;
-  faChevronCircleLeft = faChevronCircleLeft;
-  faChevronCircleRight = faChevronCircleRight;
+  faChevronLeft = faChevronLeft;
+  faChevronRight = faChevronRight;
 }
