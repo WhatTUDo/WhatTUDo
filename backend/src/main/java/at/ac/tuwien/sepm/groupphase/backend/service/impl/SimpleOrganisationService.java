@@ -1,6 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.events.event.EventDeleteEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.organisation.OrganisationEditEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganisationService;
@@ -33,7 +35,7 @@ public class SimpleOrganisationService implements OrganisationService {
         try {
             Optional<Organisation> found = organisationRepository.findById(organisation.getId());
             if (found.isPresent()) {
-                //TODO publisher
+                publisher.publishEvent(new OrganisationEditEvent(organisation.getName()));
                 Organisation orgInDataBase = found.get();
                 orgInDataBase.setName(organisation.getName());
                 orgInDataBase.setCalendars(organisation.getCalendars());
