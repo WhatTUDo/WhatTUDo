@@ -102,6 +102,7 @@ public class SimpleEventService implements EventService {
                 tochange.setEndDateTime(event.getEndDateTime());
             }
           **/
+
             if((event.getStartDateTime().getYear() < 2020)){
                 throw new ValidationException("start date not valid");
             }
