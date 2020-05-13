@@ -147,10 +147,13 @@ a {
   border-radius: 4pt;
   box-shadow: 1px 1px 2px var(--shadow);
   background-image: linear-gradient(15deg, transparentize($white, 1), transparentize($white, 0.75));
+  background-color: var(--background);
 
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 4px 4px 8px var(--shadow);
+  @media (hover: hover) {
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 4px 4px 8px var(--shadow);
+    }
   }
 
   &.button-green {
@@ -183,7 +186,7 @@ input, textarea {
   padding: 4pt;
 
   border-radius: 4pt;
-  border: none;
+  border: none !important;
 
   resize: none;
   background-color: var(--shadow) !important;
