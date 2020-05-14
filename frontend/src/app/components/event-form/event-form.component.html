@@ -3,24 +3,28 @@
     <h2>New Event</h2>
     <div class="event-form-container">
       <div class="event-form">
-        <input type="hidden" formControlName="id" name="id">
+        <div class="event-form-input">
+          <input type="hidden" formControlName="id" name="id">
 
-        <div class="form-row event-time">
-          <label for="event.startDate">Start</label>
-          <input type="datetime-local" class="form-control" formControlName="startDate" id="event.startDate"
-                 placeholder="Start…">
-          <div>&ensp;-&ensp;</div>
-          <label for="event.endDate">End</label>
-          <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
-                 placeholder="End…">
+          <div class="form-row event-time">
+            <label for="event.startDate">Start</label>
+            <input type="datetime-local" class="form-control" formControlName="startDate" id="event.startDate"
+                   placeholder="Start …">
+            <div>&ensp;-&ensp;</div>
+            <label for="event.endDate">End</label>
+            <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
+                   placeholder="End …">
+          </div>
+          <label for="event.name">Name</label>
+          <input type="text" class="form-control event-name form-row" formControlName="name" id="event.name"
+                 placeholder="Event Name …">
+
+          <label for="event.description">Description</label>
+          <input type="text" class="form-control form-row" formControlName="name" id="event.description"
+                 placeholder="Description …">
         </div>
-        <label for="event.name">Name</label>
-        <input type="text" class="form-control event-name form-row" formControlName="name" id="event.name"
-               placeholder="Event Name…">
 
-        <label for="event.description">Description</label>
-        <input type="text" class="form-control form-row" formControlName="name" id="event.description"
-               placeholder="Description…">
+        <button class="submit-button clickable full-width-button no-hover">Submit</button>
       </div>
     </div>
   </div>

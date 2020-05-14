@@ -11,6 +11,7 @@
 
   --overlay: rgba(247, 250, 248, 0.5);
   --shadow: rgba(20, 17, 17, 0.25);
+  --placeholder: rgba(20, 17, 17, 0.75);
 
 
   @media (prefers-color-scheme: dark) {
@@ -22,6 +23,7 @@
 
     --overlay: rgba(20, 17, 17, 0.5);
     --shadow: rgba(247, 250, 248, 0.25);
+    --placeholder: rgba(247, 250, 248, 0.75);
   }
 }
 
@@ -95,6 +97,7 @@ a {
     column-gap: 4rem;
 
     &.scroll > * {
+      height: 500pt;
       overflow-y: scroll;
 
       h2 {
@@ -130,9 +133,11 @@ a {
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
   box-shadow: 1px 1px 2px var(--shadow);
 
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 4px 4px 8px var(--shadow);
+  @media (hover: hover) {
+    &:not(.no-hover):hover {
+      transform: scale(1.05);
+      box-shadow: 4px 4px 8px var(--shadow);
+    }
   }
 }
 
@@ -150,7 +155,7 @@ a {
   background-color: var(--background);
 
   @media (hover: hover) {
-    &:hover {
+    &:not(.no-hover):hover {
       transform: scale(1.05);
       box-shadow: 4px 4px 8px var(--shadow);
     }

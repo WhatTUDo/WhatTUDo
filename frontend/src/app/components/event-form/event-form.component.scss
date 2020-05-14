@@ -19,44 +19,62 @@
     border-radius: 0 0 4pt 4pt;
     width: 100%;
 
-    padding: 16pt;
-    background-color: var(--overlay);
+    .event-form-input {
+      padding: 16pt;
+      background-color: var(--overlay);
 
-    color: var(--text);
+      color: var(--text);
 
-    label {
-      display: none;
-    }
+      label {
+        display: none;
+      }
 
-    ::placeholder {
-      color: var(--text); //TODO: Make a placeholder var0
-    }
+      ::placeholder {
+        color: var(--placeholder); //TODO: Make a placeholder var0
+      }
 
-    .form-row {
-      margin-bottom: 4pt;
-    }
+      .form-row {
+        margin-bottom: 4pt;
+      }
 
-    .event-time {
-      width: 100%;
+      .event-time {
+        width: 100%;
 
-      display: flex;
+        display: flex;
 
-      flex-shrink: 1;
-      justify-content: space-between;
-      align-items: center;
+        flex-shrink: 1;
+        justify-content: space-between;
+        align-items: center;
 
-      input {
-        width: 45%;
+        input {
+          width: 45%;
+        }
+      }
+
+      .event-name {
+        font-size: 36pt;
+        font-weight: $f-bold;
+      }
+
+      .event-description {
+
       }
     }
 
-    .event-name {
-      font-size: 36pt;
+    .full-width-button {
+      appearance: none;
+      border: none;
+      background-color: var(--overlay);
+      box-shadow: none;
+      width: 100%;
+      padding: 16pt;
+      font-size: 16pt;
       font-weight: $f-bold;
-    }
+      border-top: 2pt solid var(--text);
 
-    .event-description {
-
+      &:hover, &:focus {
+        opacity: 0.75;
+      }
     }
   }
 }
