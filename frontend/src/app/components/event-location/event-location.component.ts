@@ -2,6 +2,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {EventService} from "../../services/event.service";
 import {Location} from "../../dtos/location";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+import {faMapMarked} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-event-location',
@@ -16,16 +17,15 @@ export class EventLocationComponent implements OnInit {
               private sanitizer: DomSanitizer) {
   }
 
-  private searchComplete = false
-  private addressSelected = false;
-  private selectionComplete = false;
+  searchComplete = false
+  addressSelected = false;
+  selectionComplete = false;
   public searchResults: Array<any>;
   public selectedLocation: Location;
   public previewURL: SafeResourceUrl;
 
 
   ngOnInit(): void {
-
   }
 
   performSearch() {
@@ -68,4 +68,5 @@ export class EventLocationComponent implements OnInit {
     this.previewURL = this.sanitizer.bypassSecurityTrustResourceUrl(previewString)
   }
 
+  faMapMarked = faMapMarked;
 }

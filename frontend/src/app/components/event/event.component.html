@@ -64,14 +64,12 @@
       <div *ngFor="let comment of calendarEvent.comments" class="comment-div">
         <app-event-comment [comment]="comment"></app-event-comment>
       </div>
-      <div>
+      <div id="comment-area">
         <label for="comment-area">
           Leave a comment
         </label>
-        <textarea id="comment-area" name="comment" placeholder="Leave a comment…"></textarea>
-        <div class="participation-button-container">
-          <button class="button-clickable button-blue btn-lg" (click)="addComment()">Send</button>
-        </div>
+        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"></textarea>
+        <button class="button-clickable full-width-form-button no-hover btn-lg" (click)="addComment()">Send</button>
       </div>
     </div>
 
