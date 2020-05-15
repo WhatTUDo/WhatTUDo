@@ -14,9 +14,16 @@ import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.constraints.Null;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Slf4j
@@ -62,9 +69,32 @@ public class EventEndpoint {
         }
     }
 
-
     @CrossOrigin
-    @GetMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    @ApiOperation(value = "Get Multiple Events")
+    public List<EventDto> getMultiple(@RequestParam("name") @Nullable String name,
+                                      @RequestParam("from") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                                      @RequestParam("to") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+        log.info("GET" + BASE_URL + "?name={}&from={}&to={}", name, start, end);
+        try {
+            List<Event> events = eventService.findForDates(start, end);
+            List<EventDto> eventDtos = new ArrayList<>();
+
+            events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
+            return eventDtos;
+        }
+        catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
+        catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+
+        @CrossOrigin
+        @GetMapping(value = "/{id}")
     public EventDto getById(@PathVariable("id") int id) {
         log.info("GET " + BASE_URL + "/{}", id);
         try {

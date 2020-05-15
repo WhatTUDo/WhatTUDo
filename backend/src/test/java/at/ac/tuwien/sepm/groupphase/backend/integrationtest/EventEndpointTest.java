@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -111,6 +112,21 @@ public class EventEndpointTest {
         } catch (ResponseStatusException e) {
             assertEquals(404, e.getStatus().value());
         }
+    }
+
+    @Test
+    public void get_multipleEvents_WithValidStartEndDates_shouldReturn_listOfEventDtos() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation1"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar1", Collections.singletonList(orga)));
+        EventDto eventDto = new EventDto(1, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+        EventDto returnedEvent = endpoint.post(eventDto);
+
+        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
+        LocalDateTime end = LocalDateTime.of(2020, 1, 8, 0, 0);
+
+        List<EventDto> eventDtos = endpoint.getMultiple(null, start, end);
+
+        assertNotEquals(0, eventDtos.size());
     }
 
     @Test
