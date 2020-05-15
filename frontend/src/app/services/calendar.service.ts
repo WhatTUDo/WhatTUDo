@@ -9,15 +9,20 @@ import {Globals} from '../global/globals';
   providedIn: 'root'
 })
 export class CalendarService {
-  private messageBaseUri: string = this.globals.backendUri + '/calendar'; //supposing it will be smth like this.
+  private calendarBaseUri: string = this.globals.backendUri + 'calendars'; //supposing it will be smth like this.
 
   constructor(private httpClient: HttpClient, private globals: Globals) { }
 
   searchCalendar(name: string, organisation: string): Observable<Calendar[]>{
     let params = new HttpParams().set("name", name)
       .set("organisation", organisation);
-    return this.httpClient.get<any[]>(this.messageBaseUri + '/search', {params: params});
+    return this.httpClient.get<any[]>(this.calendarBaseUri + '/search', {params: params});
     //supposing it will look smth like this.
+  }
+
+  getCalendarById(id: number): Observable<Calendar> {
+    console.log("Load Calendar with ID", id);
+    return this.httpClient.get<Calendar>(this.calendarBaseUri + '/' + id);
   }
 
 

@@ -3,11 +3,13 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {CalendarService} from '../../services/calendar.service';
 import {Calendar} from '../../dtos/calendar';
 import {CalendarRepresentation} from '../../dtos/calendar-representation';
+import { Router} from '@angular/router';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-calendar-list',
   templateUrl: './calendar-list.component.html',
-  styleUrls: ['./calendar-list.component.css']
+  styleUrls: ['./calendar-list.component.scss']
 })
 export class CalendarListComponent implements OnInit {
   list : Calendar[];
@@ -16,16 +18,26 @@ export class CalendarListComponent implements OnInit {
     name: new FormControl(''),
     organisation: new FormControl('')
   });
+  calendar$: Observable<Calendar>;
+  selectedId: number;
 
-
-  constructor(private calendarService: CalendarService) { }
+  constructor(private calendarService: CalendarService, private router: Router) { }
 
   ngOnInit(): void {
     //call method for user specified calendar recommendation.
-    let calendar = new CalendarRepresentation( "Calendar", ["Organisation", "Organisation3"] );
-    let calendar1 = new CalendarRepresentation("Calendar1", ["Organisation1"]);
-    let calendar2 = new CalendarRepresentation( "Calendar2", ["Organisation2"] );
+    let calendar = new CalendarRepresentation( 2,"Calendar 0", ["Organisation", "Organisation3"] );
+    let calendar1 = new CalendarRepresentation(0,"Calendar1", ["Organisation1"]);
+    let calendar2 = new CalendarRepresentation( 0,"Calendar2", ["Organisation2"] );
     this.list2 = [calendar, calendar1, calendar2] ;
+
+  }
+
+  onSelectCalendar(calendarRep: CalendarRepresentation){
+    this.router.navigate(['/calendar', calendarRep.id])
+  }
+
+  onSelectOrganisation(organisation: string){
+    this.router.navigate(['/'])
   }
 
   onSubmit() {
@@ -47,6 +59,8 @@ export class CalendarListComponent implements OnInit {
         });
     }
   }
+
+
 
   /**
    *
