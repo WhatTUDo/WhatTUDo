@@ -8,7 +8,7 @@
   .label-item {
     border: 1px solid var(--text);
     padding: 2pt 8pt;
-    border-radius: 5px;
+    border-radius: $rounded-radius;
     margin-right: 8pt;
 
     fa-icon {
@@ -23,10 +23,11 @@
 
   height: 40em;
 
-  border-radius: 4pt;
+  border-radius: $rounded-radius;
 
   .event-promo-details {
-    border-radius: 0 0 4pt 4pt;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
     width: 100%;
 
     padding: 16pt;
@@ -107,8 +108,19 @@
 }
 
 #comment-area {
-  appearance: none;
-  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  background-color: var(--overlay);
+
+  textarea {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  * {
+    width: 100%;
+  }
 }
 
 label[for=comment-area] {
@@ -116,11 +128,10 @@ label[for=comment-area] {
 }
 
 .event-location-map-container {
-  border-radius: 4pt;
+  border-radius: $rounded-radius;
   overflow: hidden;
   position: relative;
 
-  box-sizing: border-box;
   height: 20em;
 
   iframe {
