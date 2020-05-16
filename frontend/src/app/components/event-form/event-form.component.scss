@@ -1,4 +1,66 @@
+@import "../../../var.scss";
+
 .form-incorrect {
   background-color: #f2847c73;
   border-color: #f2847c
+}
+
+form {
+  label {
+    display: none;
+  }
+}
+
+.event-form-container {
+  display: flex;
+  align-items: flex-end;
+
+  background-color: var(--secondary);
+
+  height: 40em;
+
+  border-radius: $rounded-radius;
+
+  .event-form {
+    border-radius: 0 0 4pt 4pt;
+    width: 100%;
+
+    .event-form-input {
+      padding: 16pt;
+      background-color: var(--overlay);
+
+      color: var(--text);
+
+      ::placeholder {
+        color: var(--placeholder); //TODO: Make a placeholder var0
+      }
+
+      .form-row {
+        margin: 0 0 4pt;
+      }
+
+      .event-time {
+        width: 100%;
+
+        display: flex;
+
+        flex-shrink: 1;
+        justify-content: space-between;
+        align-items: center;
+
+        input {
+          width: 45%;
+        }
+      }
+
+      .event-name {
+        font-size: 36pt;
+        font-weight: $f-bold;
+      }
+
+      .event-description {
+
+      }
+    }
+  }
 }

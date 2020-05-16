@@ -1,0 +1,86 @@
+@import "../../../var.scss";
+
+form > * {
+  width: 100% !important;
+}
+
+.map-container {
+  height: 120pt;
+  border-radius: $rounded-radius;
+  margin-bottom: 8pt;
+
+  overflow: hidden;
+  position: relative;
+
+  .map-preview-placeholder {
+    display: flex;
+
+    height: 100%;
+
+    border-radius: $rounded-radius;
+
+    background-color: var(--shadow);
+
+    justify-content: center;
+    align-items: center;
+
+    fa-icon {
+      font-size: 72pt;
+      opacity: 0.25;
+    }
+  }
+
+  iframe {
+    height: 120pt;
+    border-radius: $rounded-radius;
+  }
+}
+
+.input-button-combo {
+  display: flex;
+  flex-wrap: nowrap;
+
+  input {
+    width: 100%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  button {
+    padding: 0 16pt;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  &.flat-bottom {
+    input {
+      border-bottom-left-radius: 0;
+    }
+
+    button {
+      border-bottom-right-radius: 0;
+    }
+  }
+}
+
+#location-search-results-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  border-radius: 0 0 $rounded-radius $rounded-radius;
+
+  max-height: 120pt;
+  overflow-y: scroll;
+
+  .location-result-entry {
+    background-color: var(--shadow);
+
+    width: 100%;
+
+    padding: 8pt;
+
+    border-top: 1.25pt solid var(--text);
+  }
+}

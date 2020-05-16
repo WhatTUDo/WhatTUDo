@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {CalendarEvent} from "../../dtos/calendar-event";
-import {EventLocationComponent} from "../event-location/event-location.component";
 import {Location} from "../../dtos/location";
 import {EventService} from "../../services/event.service";
 
