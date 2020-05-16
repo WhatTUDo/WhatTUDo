@@ -91,6 +91,7 @@ public class SimpleEventService implements EventService {
         }
     }
 
+    // TODO: Cleanup class and replace log with event publisher
     @Override
     public Event update(Event event) {
         log.info("Service update event {}", event);

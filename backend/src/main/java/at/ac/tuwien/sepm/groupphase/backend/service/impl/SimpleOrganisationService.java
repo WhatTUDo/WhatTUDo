@@ -1,6 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.events.OrganisationCreateEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganisationService;
@@ -45,5 +47,17 @@ public class SimpleOrganisationService implements OrganisationService {
             throw new ServiceException(e.getMessage(), e);
         }
 
+    }
+
+    @Override
+    public Organisation create(Organisation organisation) {
+        validator.validateNewOrganisation(organisation);
+        try {
+            Organisation saved = organisationRepository.save(organisation);
+            publisher.publishEvent(new OrganisationCreateEvent(saved.getName()));
+            return saved;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
     }
 }
