@@ -33,7 +33,13 @@ security:
       - /
       - /favicon.ico
       - /csrf
+      - /events
       - /events/**
+      - /calendars
+      - /calendars/**
+      - /organisations
+      - /organisations/**
+
       # Swagger
       - /v2/api-docs
       - /swagger-resources/**

@@ -5,5 +5,5 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 public interface CalendarService {
 
     Calendar findById(Integer id);
-
+    Calendar save(Calendar calendar);
 }
