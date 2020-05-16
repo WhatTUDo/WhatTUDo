@@ -33,7 +33,7 @@ public class OrganisationEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit organisation", authorizations = {@Authorization(value = "apiKey")})
     public OrganisationDto editOrganisation(@RequestBody OrganisationDto organisation) {
-        log.info("PUT " + BASE_URL + "/{}", organisation);
+        log.info("PUT " + BASE_URL + "/{}", organisation); // FIXME: Macht keinen Sinn, Organisation ist nicht in der URL
         try {
             // Organisation organisationEntity = organisationMapper.organisationDtoToOrganisation(organisation);
             Organisation organisationEntity = organisationService.findById(organisation.getId());
@@ -49,4 +49,18 @@ public class OrganisationEndpoint {
         }
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Create Organisation", authorizations = {@Authorization(value = "apiKey")})
+    public OrganisationDto createOrganisation(@RequestBody OrganisationDto organisationDto) {
+        log.info("POST " + BASE_URL + "/");
+        try {
+            Organisation organisationEntity = organisationMapper.organisationDtoToOrganisation(organisationDto);
+            return organisationMapper.organisationToOrganisationDto(organisationService.create(organisationEntity));
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
 }

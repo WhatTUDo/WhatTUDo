@@ -1,6 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import org.hibernate.criterion.Example;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface EventService {
 
@@ -24,6 +28,7 @@ public interface EventService {
     Event findById(int id);
 
 
+    List<Event> findForDates(LocalDateTime start, LocalDateTime end);
     /**
      * @param event to be updated into database with the new values.
      * @return the new event.
