@@ -1,7 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+
+import java.util.List;
 
 public interface OrganisationService {
 
@@ -20,6 +21,7 @@ public interface OrganisationService {
      * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException will be thrown if name is blank.
      */
     Organisation create(Organisation organisation);
+
     /**
      * @param id of organisation to be found.
      * @return the organisation with the specified id.
@@ -27,4 +29,10 @@ public interface OrganisationService {
      */
     Organisation findById(int id);
 
+
+    /**
+     * @return all organisations
+     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     */
+    List<Organisation> getAll();
 }
