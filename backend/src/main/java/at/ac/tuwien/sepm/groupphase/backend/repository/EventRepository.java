@@ -13,11 +13,12 @@ import java.util.List;
 @Repository
 public interface EventRepository extends JpaRepository<Event, Integer> {
 
-
-   /** @Query("from Event where calendar_id = :id")
-    List<Event>  findByCalendarId(@Param("id") int id); **/
+    /**
+     * Find all events in the db which belong to a certain calendar having its id stored.
+     *
+     * @return list of all event entries in this calendar
+     */
     List<Event>  findByCalendarId(Integer calendar_id);
-
 
 
 }

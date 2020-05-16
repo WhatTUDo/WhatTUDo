@@ -94,7 +94,7 @@ public class CalendarEndpoint {
             Events are only inserted in calendars by creating a new event and setting the right calendar_id.
              It is best to not give the option to set eventIds while creating a calendar in the frontend at all.
             **/
-            return calendarMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
+            return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {

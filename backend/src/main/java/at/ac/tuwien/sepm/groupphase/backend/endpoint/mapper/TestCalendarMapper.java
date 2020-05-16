@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class TestCalendarMapper {
@@ -30,9 +31,12 @@ public abstract class TestCalendarMapper {
     @BeforeMapping
     protected void mapOrganisations(Calendar calendar, @MappingTarget CalendarDto calendarDto) {
 
-        List<Integer> OrgaIds = new ArrayList<Integer>();
-        OrgaIds.add(1);
-        calendarDto.setOrganisationIds(OrgaIds);
+        List<Integer> orgaIds = new ArrayList<Integer>();
+        for(Organisation o : calendar.getOrganisations()){
+            orgaIds.add(o.getId());
+        }
+
+        calendarDto.setOrganisationIds(orgaIds);
 
         List<Integer> EventIds = new ArrayList<Integer>();
         for(Event e : calendar.getEvents())
@@ -45,16 +49,19 @@ public abstract class TestCalendarMapper {
     @BeforeMapping
     protected void mapCalendar(CalendarDto calendarDto, @MappingTarget Calendar calendar) {
         List<Organisation> orgas = new ArrayList<Organisation>();
-        Organisation org = organisationRepository.findById(1).orElseThrow(() -> new NotFoundException("No Organisation with this ID"));
-        orgas.add(org);
-        calendar.setOrganisations(orgas);
 
+        for (Integer o : calendarDto.getOrganisationIds()) {
+            orgas.add(organisationRepository.findById(o).orElseThrow(() -> new NotFoundException("No Organisation with this ID")));
+
+            calendar.setOrganisations(orgas);
+        }
 
         List<Event> eventList = new ArrayList<Event>();
         for(Integer e : calendarDto.getEventIds())
             //if following line is not allowed, then use: eventList.add(eventRepository.findById(e).orElseThrow(() -> new NotFoundException("No Event with this ID"));
             eventList.add(eventService.findById(e));
         calendar.setEvents(eventList);
+
     }
 
     public List<CalendarDto> calendarsToCalendarDtos(List <Calendar> calendars){
@@ -63,6 +70,8 @@ public abstract class TestCalendarMapper {
         for(Calendar c : calendars){
             calendarfinal.add(calendarToCalendarDto(c));
         }
+
+
         return calendarfinal;
     }
    /* CalendarService calendarService;

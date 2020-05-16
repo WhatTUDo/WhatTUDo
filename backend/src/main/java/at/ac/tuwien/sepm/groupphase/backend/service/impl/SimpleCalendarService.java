@@ -3,12 +3,14 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
 import at.ac.tuwien.sepm.groupphase.backend.events.calendar.CalendarFindEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventFindEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ public class SimpleCalendarService implements CalendarService {
     private final ApplicationEventPublisher publisher;
     private final CalendarRepository calendarRepository;
     private final EventRepository eventRepository;
+    private final OrganisationRepository organisationRepository;
 
     @Override
     public Calendar findById(Integer id) {
@@ -68,6 +71,9 @@ public class SimpleCalendarService implements CalendarService {
 
             Calendar calendar = (found.get());
             calendar.setEvents(events);
+
+            List<Organisation> organisations = new ArrayList<Organisation>();
+           // calendar.setOrganisations(organisations);
             publisher.publishEvent(new CalendarFindEvent(calendar.getName()));
             return calendar;
         } else {
@@ -96,8 +102,17 @@ public class SimpleCalendarService implements CalendarService {
     public Calendar save(Calendar calendar) {
         try {
 
-                //TODO: save relations in link table (orga- cal) too! And then change other methods
-            return calendarRepository.save(calendar);
+          Calendar result =  calendarRepository.save(calendar);
+           for(Organisation o : calendar.getOrganisations()){
+
+              List<Calendar> cal = new ArrayList<Calendar>();
+                cal = o.getCalendars();
+                cal.add(calendar);
+                o.setCalendars(cal);
+                organisationRepository.save(o);
+
+            }
+            return result;
         } catch (PersistenceException e) { //TODO: insert right exception
             throw new ServiceException(e.getMessage(), e);
         }

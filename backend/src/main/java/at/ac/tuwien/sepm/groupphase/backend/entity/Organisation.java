@@ -22,7 +22,7 @@ public class Organisation {
     private String name;
 
     @ToString.Exclude
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinTable(
         name = "organisation_calendar",
         joinColumns = @JoinColumn(name = "organisation_id"),
