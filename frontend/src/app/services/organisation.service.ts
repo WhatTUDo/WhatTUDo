@@ -21,12 +21,21 @@ export class OrganisationService {
    */
   postOrganisation(organisation: Organisation): Observable<any> {
     console.log("Post Organisation to Server", Organisation);
-    //TODO: Implement POST call
     let reducedElement = {
       "name": organisation.name,
       "calendars": organisation.calendars
     }
 
     return this.httpClient.post(this.organisationBaseUri, reducedElement);
+  }
+
+  getAll(): Observable<Organisation[]> {
+    console.log("Get all orgas");
+    return this.httpClient.get<Organisation[]>(this.organisationBaseUri);
+  }
+
+  getById(id: number): Observable<Organisation> {
+    console.log("Get orga with ID", id);
+    return this.httpClient.get<Organisation>(this.organisationBaseUri + "/" + id)
   }
 }
