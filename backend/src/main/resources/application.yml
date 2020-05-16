@@ -35,6 +35,8 @@ security:
       - /csrf
       - /events/**
       - /calendars/**
+      - /organisations
+      - /organisations/**
       # Swagger
       - /v2/api-docs
       - /swagger-resources/**

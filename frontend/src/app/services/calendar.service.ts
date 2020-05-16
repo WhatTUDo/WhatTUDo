@@ -13,10 +13,9 @@ export class CalendarService {
 
   constructor(private httpClient: HttpClient, private globals: Globals) { }
 
-  searchCalendar(name: string, organisation: string): Observable<Calendar[]>{
-    let params = new HttpParams().set("name", name)
-      .set("organisation", organisation);
-    return this.httpClient.get<any[]>(this.calendarBaseUri + '/search', {params: params});
+  getAllCalendars(name: string, organisation: string): Observable<Calendar[]>{
+
+    return this.httpClient.get<any[]>(this.calendarBaseUri + '/');
     //supposing it will look smth like this.
   }
 

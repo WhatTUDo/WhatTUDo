@@ -26,8 +26,8 @@ export class CalendarListComponent implements OnInit {
   ngOnInit(): void {
     //call method for user specified calendar recommendation.
     let calendar = new CalendarRepresentation( 2,"Calendar 0", ["Organisation", "Organisation3"] );
-    let calendar1 = new CalendarRepresentation(0,"Calendar1", ["Organisation1"]);
-    let calendar2 = new CalendarRepresentation( 0,"Calendar2", ["Organisation2"] );
+    let calendar1 = new CalendarRepresentation(24,"Calendar1", ["Organisation1"]);
+    let calendar2 = new CalendarRepresentation( 46,"Calendar2", ["Organisation2"] );
     this.list2 = [calendar, calendar1, calendar2] ;
 
   }
@@ -46,11 +46,10 @@ export class CalendarListComponent implements OnInit {
     if (validationIsPassed) {
         // submit to service
       console.log("search")
-      this.calendarService.searchCalendar(formValue.name,formValue.organisation ).subscribe((list) => {
+      this.calendarService.getAllCalendars(formValue.name,formValue.organisation ).subscribe((list) => {
          this.list   = list;
          for(let e of list){
-           //find organisation by id
-           // get name and add to list2
+
          }
 
          },

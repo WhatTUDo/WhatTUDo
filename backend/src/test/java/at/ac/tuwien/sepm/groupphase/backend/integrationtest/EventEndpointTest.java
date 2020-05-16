@@ -91,11 +91,10 @@ public class EventEndpointTest {
 
     @Test
     public void get_validID_shouldReturn_EventWithSpecifiedID() {
-        Organisation orga = organisationRepository.save(new Organisation("Test Organisation9"));
-        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar9", Collections.singletonList(orga)));
-        EventDto eventDto = new EventDto(2, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation11"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar11", Collections.singletonList(orga)));
+        EventDto eventDto = new EventDto(1, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
-
         assertNotNull(returnedEvent);
         assertEquals(eventDto.getName(), returnedEvent.getName());
         assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
@@ -164,6 +163,9 @@ public class EventEndpointTest {
         EventDto eventDtoChanges = new EventDto(returnedEvent.getId(), "Test2", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar.getId());
 
         EventDto finalEvent = endpoint.editEvent(eventDtoChanges);
+
+        System.out.println(returnedEvent.getId());
+        System.out.println(eventDtoChanges.getId());
 
         assertEquals(finalEvent.getName(), eventDtoChanges.getName());
         assertEquals(finalEvent.getEndDateTime(), eventDtoChanges.getEndDateTime());
