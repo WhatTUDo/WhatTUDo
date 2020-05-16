@@ -53,7 +53,7 @@ public class SimpleEventService implements EventService {
         try {
             publisher.publishEvent(new EventCreateEvent(event.getName()));
             return eventRepository.save(event);
-        } catch (PersistenceException e) { //TODO: insert right exception
+        } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
@@ -91,6 +91,7 @@ public class SimpleEventService implements EventService {
         }
     }
 
+    // TODO: Cleanup class and replace log with event publisher
     @Override
     public Event update(Event event) {
         log.info("Service update event {}", event);

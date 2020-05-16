@@ -16,13 +16,13 @@ public abstract class OrganisationMapper {
 
     public abstract OrganisationDto organisationToOrganisationDto(Organisation organisation);
 
-    protected void mapCalendars(Organisation organisation, @MappingTarget OrganisationDto organisationDto) {
+    public void mapCalendars(Organisation organisation, @MappingTarget OrganisationDto organisationDto) {
         organisationDto.setCalendarIds(organisation.getCalendars().stream().map(Calendar::getId).collect(Collectors.toList()));
     }
 
     public abstract Organisation organisationDtoToOrganisation(OrganisationDto organisationDto);
 
-    protected void mapCalendars(OrganisationDto organisationDto, @MappingTarget Organisation organisation) {
+    public void mapCalendars(OrganisationDto organisationDto, @MappingTarget Organisation organisation) {
         organisation.setCalendars(calendarRepository.findAllById(organisationDto.getCalendarIds()));
     }
     /*CalendarService calendarService;

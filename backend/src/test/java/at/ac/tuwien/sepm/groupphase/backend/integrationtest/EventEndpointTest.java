@@ -69,7 +69,7 @@ public class EventEndpointTest {
     }
 
     @Test
-    public void save_withoutName_shouldReturn_ResponseStatusException() {
+    public void save_withoutCorrectParam_shouldReturn_ResponseStatusException() {
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation3"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar3", Collections.singletonList(orga)));
         EventDto eventDto1 = new EventDto(null, "", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
