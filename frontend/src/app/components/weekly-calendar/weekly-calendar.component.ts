@@ -93,7 +93,7 @@ export class WeeklyCalendarComponent implements OnInit {
         event.startDateTime = startDate;
         event.endDateTime = endDate;
       });
-      this.getWeek(0).forEach((day: Date) => {
+      this.displayingWeek.forEach((day: Date) => {
         let keyISOString = this.getMidnight(day).toISOString()
         this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
           let isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
@@ -167,6 +167,7 @@ export class WeeklyCalendarComponent implements OnInit {
   private updateOffsettedDates() {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
+    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
   }
 
   getToday() {
