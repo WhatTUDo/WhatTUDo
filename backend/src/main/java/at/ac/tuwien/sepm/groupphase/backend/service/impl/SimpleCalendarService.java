@@ -36,9 +36,7 @@ public class SimpleCalendarService implements CalendarService {
     @Override
     public Calendar findById(Integer id) {
         Optional<Calendar> found = calendarRepository.findById(id);
-        System.out.println("found one");
         if (found.isPresent()) {
-            System.out.println(found.get().getId() + " " + found.get().getName());
 
             List<Event> events = new ArrayList<Event>();
             List<Integer> eventIds = new ArrayList<Integer>();
@@ -68,11 +66,6 @@ public class SimpleCalendarService implements CalendarService {
                 throw new NotFoundException("No event found with id " + id);
             } **/
 
-
-            System.out.println("Events: " + events);
-            System.out.println(eventRepository.findByCalendarId(id).toString() + "hier");
-
-            System.out.println("Orgas:" + found.get());
             Calendar calendar = (found.get());
             calendar.setEvents(events);
             publisher.publishEvent(new CalendarFindEvent(calendar.getName()));
@@ -81,6 +74,23 @@ public class SimpleCalendarService implements CalendarService {
             throw new NotFoundException("No event found with id " + id);
         }
     }
+
+    @Override
+    public List<Calendar> findAll() {
+        try {
+
+            List<Calendar> result = new ArrayList<Calendar>();
+
+             for(Calendar c : calendarRepository.findAll()){
+                 result.add(findById(c.getId()));
+             }
+             return result;
+
+        } catch (PersistenceException e) { //TODO: insert right exception
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
 
     @Override
     public Calendar save(Calendar calendar) {

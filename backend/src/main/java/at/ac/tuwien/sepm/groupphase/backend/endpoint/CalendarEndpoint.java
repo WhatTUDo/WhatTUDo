@@ -67,6 +67,19 @@ public class CalendarEndpoint {
     }
 
     @CrossOrigin
+    @GetMapping(value = "/")
+    public List<CalendarDto> getAll() {
+        log.info("GET All" + BASE_URL + "");
+        try {
+
+            return testMapper.calendarsToCalendarDtos(calendarService.findAll());
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+
+    @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
@@ -76,11 +89,11 @@ public class CalendarEndpoint {
 
             Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
 
-            System.out.println(calendarEntity.getName()+ "NAME");
-            System.out.println(calendarEntity.getId() + "ID");
-            System.out.println(calendarEntity.getEvents().toString() + " events da");
-            System.out.println(calendarEntity.getOrganisations().toString()+ "das da");
-
+            /**Note: If you set values as eventIds, post method will return them, BUT it will not store them in the DB.
+            If you call getById afterwards its empty as it should be because Create Calendar is NOT for inserting events.
+            Events are only inserted in calendars by creating a new event and setting the right calendar_id.
+             It is best to not give the option to set eventIds while creating a calendar in the frontend at all.
+            **/
             return calendarMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);

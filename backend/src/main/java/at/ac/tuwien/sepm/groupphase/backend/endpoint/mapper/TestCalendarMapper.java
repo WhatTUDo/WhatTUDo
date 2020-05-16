@@ -57,6 +57,14 @@ public abstract class TestCalendarMapper {
         calendar.setEvents(eventList);
     }
 
+    public List<CalendarDto> calendarsToCalendarDtos(List <Calendar> calendars){
+
+        List<CalendarDto> calendarfinal = new ArrayList<CalendarDto>();
+        for(Calendar c : calendars){
+            calendarfinal.add(calendarToCalendarDto(c));
+        }
+        return calendarfinal;
+    }
    /* CalendarService calendarService;
 
     @Autowired
