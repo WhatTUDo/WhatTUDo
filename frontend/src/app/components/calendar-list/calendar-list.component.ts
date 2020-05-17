@@ -14,9 +14,9 @@ import {Organisation} from '../../dtos/organisation';
   styleUrls: ['./calendar-list.component.scss']
 })
 export class CalendarListComponent implements OnInit {
-  list : Calendar[];
-  listOrg : string[];
-  list2 : CalendarRepresentation[];
+  list : Calendar[] = [];
+  listOrg : string[] = [];
+  list2 : CalendarRepresentation[] = [];
 
   searchForm = new FormGroup( {
     name: new FormControl(''),
@@ -27,25 +27,21 @@ export class CalendarListComponent implements OnInit {
   constructor(private calendarService: CalendarService, private router: Router, private organisationService: OrganisationService) { }
 
   ngOnInit(): void {
-    //call method for user specified calendar recommendation.
-    // let calendar = new CalendarRepresentation( 2,"Calendar 0", ["Organisation", "Organisation3"] );
-    // let calendar1 = new CalendarRepresentation(24,"Calendar1", ["Organisation1"]);
-    // let calendar2 = new CalendarRepresentation( 46,"Calendar2", ["Organisation2"] );
-    // this.list2 = [calendar, calendar1, calendar2] ;
     this.calendarService.getAllCalendars().subscribe((list) => {
         this.list   = list;
         for(let e of list){
           for(let a of e.organisationIds){
             this.organisationService.getById(a).subscribe((organisation:Organisation)=>{
-              this.listOrg.push(organisation.name);
+              if(organisation.name != null){
+              this.listOrg.push(organisation.name);}
             },
               err => {
                 console.warn(err);
               })
           }
+          this.listOrg = ["org1", 'org2'];
           this.list2.push(new CalendarRepresentation(e.id, e.name, this.listOrg));
         }
-
       },
       err => {
         console.warn(err);
@@ -55,11 +51,11 @@ export class CalendarListComponent implements OnInit {
 
 
   onSelectCalendar(calendarRep: CalendarRepresentation){
-    this.router.navigate(['/calendar', calendarRep.id])
+    this.router.navigate(['/calendar', calendarRep.id]);
   }
 
   onSelectOrganisation(organisation: string){
-    this.router.navigate(['/'])
+    this.router.navigate(['/']);
   }
 
   onSubmit() {
@@ -67,7 +63,7 @@ export class CalendarListComponent implements OnInit {
     let validationIsPassed = this.validateFormInput(formValue);
     if (validationIsPassed) {
         // submit to service
-      console.log("search")
+      console.log("search");
       this.calendarService.searchCalendars(formValue.name,formValue.organisation ).subscribe((list) => {
          this.list   = list;
          for(let e of list){
@@ -98,7 +94,7 @@ export class CalendarListComponent implements OnInit {
       for (let error of errors) {
         errorMessage += error.message + " ";
       }
-      alert(errorMessage)
+      alert(errorMessage);
       return false;
     }
     return true;

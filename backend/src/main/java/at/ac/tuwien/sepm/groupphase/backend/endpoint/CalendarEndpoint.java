@@ -3,26 +3,38 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TestCalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
+import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 @Slf4j
@@ -32,7 +44,9 @@ import java.util.List;
 public class CalendarEndpoint {
     static final String BASE_URL = "/calendars";
     private final CalendarService calendarService;
+    private final EventService eventService;
     private final CalendarMapper calendarMapper;
+    private final EventMapper eventMapper;
     private final TestCalendarMapper testMapper;
 
 
@@ -58,12 +72,11 @@ public class CalendarEndpoint {
         try {
 
 
-            return testMapper.calendarToCalendarDto(calendarService.findById(id));
+            return calendarMapper.calendarToCalendarDto(calendarService.findById(id));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
-
 
     @CrossOrigin
     @GetMapping(value = "/")
@@ -77,6 +90,35 @@ public class CalendarEndpoint {
         }
     }
 
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/thisWeek")
+    @ApiOperation(value = "Get events of this week")
+    public List<EventDto> getEventsOfTheWeek(@RequestParam(value = "id")  String id,
+                                             @RequestParam(value = "from") String start,
+                                             @RequestParam(value = "to") String end){
+        log.info("GET" + BASE_URL + "Get events of this week {}", id);
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMMM yyyy HH:mm:ss z", Locale.ENGLISH);
+            LocalDateTime dateTimeStart = LocalDateTime.parse(start, formatter);
+            LocalDateTime dateTimeEnd = LocalDateTime.parse(end, formatter);
+            List<Event> events = eventService.findForDates(dateTimeStart, dateTimeEnd);
+            List<EventDto> eventDtos = new ArrayList<>();
+            events.removeIf(e -> e.getCalendar().getId() != Integer.parseInt(id));
+            events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
+            return eventDtos;
+        }
+        catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
+        }
+        catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+        }
+        catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
 
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
@@ -86,14 +128,14 @@ public class CalendarEndpoint {
         log.info("POST " + BASE_URL + "/{}", calendar);
         try {
 
-            Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
+            Calendar calendarEntity = calendarMapper.calendarDtoToCalendar(calendar);
 
             /**Note: If you set values as eventIds, post method will return them, BUT it will not store them in the DB.
             If you call getById afterwards its empty as it should be because Create Calendar is NOT for inserting events.
             Events are only inserted in calendars by creating a new event and setting the right calendar_id.
              It is best to not give the option to set eventIds while creating a calendar in the frontend at all.
             **/
-            return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
+            return calendarMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {

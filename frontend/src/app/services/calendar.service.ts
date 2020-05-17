@@ -23,6 +23,13 @@ export class CalendarService {
     return this.httpClient.get<Calendar>(this.calendarBaseUri + '/' + id);
   }
 
+  getEventsOfTheWeek(id:number, from: Date, to: Date): Observable<any[]>{
+    let params = new HttpParams().set("id", String(id))
+      .set("from", String(from))
+      .set("to", String(to));
+    return this.httpClient.get<any[]>(this.calendarBaseUri+"/thisWeek", {params: params});
+  }
+
 
   //FIXME : this is just to test some parts, has to be changed to a correct implementation.
   searchCalendars(name: string, organisation: string): Observable<Calendar[]> {
