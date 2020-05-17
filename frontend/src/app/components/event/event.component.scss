@@ -8,7 +8,7 @@
   .label-item {
     border: 1px solid var(--text);
     padding: 2pt 8pt;
-    border-radius: 5px;
+    border-radius: $rounded-radius;
     margin-right: 8pt;
 
     fa-icon {
@@ -21,19 +21,17 @@
   display: flex;
   align-items: flex-end;
 
-  height: 100%;
-  width: 100%;
+  height: 40em;
 
-  border-radius: 4pt;
-  overflow: hidden;
+  border-radius: $rounded-radius;
 
   .event-promo-details {
-    border-radius: 0 0 4pt 4pt;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
     width: 100%;
 
     padding: 16pt;
     background-color: var(--overlay);
-    backdrop-filter: blur(4pt);
 
     .event-time {
     }
@@ -49,19 +47,26 @@
   }
 }
 
-.button-container {
-  display: flex;
+.details-stack {
+  > *:not(h2) {
+    margin-bottom: 32pt;
+  }
+}
+
+.participation-button-container {
   text-align: center;
   width: 100%;
 
-  justify-content: space-around;
+  button {
+    margin: 0 16pt;
+  }
 }
 
-.event-attending-status {
-  .event-attending-status-item {
+.participation-status {
+  .participation-status-item {
     text-align: center;
 
-    .event-attending-count {
+    .participation-count {
       font-size: 36pt;
       font-weight: $f-bold;
 
@@ -69,7 +74,7 @@
       text-transform: uppercase;
     }
 
-    .event-attending-label {
+    .participation-label {
       font-size: 12pt;
       font-weight: $f-bold;
 
@@ -81,13 +86,41 @@
   margin-bottom: 8pt;
 }
 
-#comment-container {
+.organization-info {
+  display: flex;
 
+  .avatar {
+    justify-self: flex-start;
+    flex-shrink: 0;
+
+    margin-right: 16pt;
+  }
+
+  .organization-details {
+    text-align: right;
+    justify-self: flex-end;
+
+    .organization-name {
+      font-weight: $f-bold;
+      font-size: 16pt;
+    }
+  }
 }
 
 #comment-area {
-  appearance: none;
-  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+
+  background-color: var(--overlay);
+
+  textarea {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  * {
+    width: 100%;
+  }
 }
 
 label[for=comment-area] {
@@ -95,11 +128,10 @@ label[for=comment-area] {
 }
 
 .event-location-map-container {
-  border-radius: 4pt;
+  border-radius: $rounded-radius;
   overflow: hidden;
   position: relative;
 
-  box-sizing: border-box;
   height: 20em;
 
   iframe {

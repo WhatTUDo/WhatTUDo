@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -90,9 +91,11 @@ public class EventEndpointTest {
 
     @Test
     public void get_validID_shouldReturn_EventWithSpecifiedID() {
-        Organisation orga = organisationRepository.save(new Organisation("Test Organisation11"));
-        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar11", Collections.singletonList(orga)));
-        EventDto eventDto = new EventDto(1, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation9"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar9", Collections.singletonList(orga)));
+        EventDto eventDto = new EventDto(6, "Test Name_new", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+
         EventDto returnedEvent = endpoint.post(eventDto);
         assertNotNull(returnedEvent);
         assertEquals(eventDto.getName(), returnedEvent.getName());
@@ -110,6 +113,21 @@ public class EventEndpointTest {
         } catch (ResponseStatusException e) {
             assertEquals(404, e.getStatus().value());
         }
+    }
+
+    @Test
+    public void get_multipleEvents_WithValidStartEndDates_shouldReturn_listOfEventDtos() {
+        Organisation orga = organisationRepository.save(new Organisation("Test Organisation10"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar10", Collections.singletonList(orga)));
+        EventDto eventDto = new EventDto(10, "Test Name10", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+        EventDto returnedEvent = endpoint.post(eventDto);
+
+        LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
+        LocalDateTime end = LocalDateTime.of(2020, 1, 8, 0, 0);
+
+        List<EventDto> eventDtos = endpoint.getMultiple(null, start, end);
+
+        assertNotEquals(0, eventDtos.size());
     }
 
     @Test
@@ -136,7 +154,7 @@ public class EventEndpointTest {
     public void updateEntityValues_shouldReturn_correctChanges() {
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation6"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar6", Collections.singletonList(orga)));
-        EventDto eventDto = new EventDto(2, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+        EventDto eventDto = new EventDto(3, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
 
         assertEquals(eventDto.getName(), returnedEvent.getName());
@@ -161,7 +179,7 @@ public class EventEndpointTest {
     public void updateEntityStartDateBefore2020_throwsResponseException() {
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation7"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar7", Collections.singletonList(orga)));
-        EventDto eventDto = new EventDto(3, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+        EventDto eventDto = new EventDto(4, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
 
         assertEquals(eventDto.getName(), returnedEvent.getName());
@@ -179,7 +197,7 @@ public class EventEndpointTest {
     public void updateEntityStartDateBeforeEndDate_throwsResponseException() {
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation8"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar8", Collections.singletonList(orga)));
-        EventDto eventDto = new EventDto(4, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+        EventDto eventDto = new EventDto(5, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
 
         assertEquals(eventDto.getName(), returnedEvent.getName());

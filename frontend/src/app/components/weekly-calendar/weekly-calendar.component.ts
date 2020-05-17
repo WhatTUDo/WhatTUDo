@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CalendarEvent} from '../../dtos/calendar-event';
 
 import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {EventService} from "../../services/event.service";
 
 @Component({
   selector: 'app-weekly-calendar',
@@ -20,32 +21,34 @@ export class WeeklyCalendarComponent implements OnInit {
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
 
-  constructor() {
+  constructor(
+    private eventService: EventService
+  ) {
 
-    //Mock data eventsOfTheWeek
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min;
-    } // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-
-    for (let i = 1; i <= 4; i++) {
-      const dateOffset = getRandomInt(0, +1);
-      const startHours = 18 + getRandomInt(-3, +3);
-      const endHours = startHours + getRandomInt(2, 4);
-      let startDate = new Date(2020, 4, 11 + dateOffset, startHours, 0, 0, 0);
-      let endDate = new Date(2020, 4, 11 + dateOffset, endHours, 30, 0, 0);
-
-      let keyISOString = this.getMidnight(startDate).toISOString()
-      let events = this.eventsOfTheWeek.get(keyISOString)
-      if (!events) {
-        events = []
-      }
-      events.push(
-        new CalendarEvent(i, "Test Event " + i, "", startDate, endDate, null, null, null)
-      );
-      this.eventsOfTheWeek.set(keyISOString, events);
-    }
+    // //Mock data eventsOfTheWeek
+    // function getRandomInt(min, max) {
+    //   min = Math.ceil(min);
+    //   max = Math.floor(max);
+    //   return Math.floor(Math.random() * (max - min)) + min;
+    // } // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+    //
+    // for (let i = 1; i <= 4; i++) {
+    //   const dateOffset = getRandomInt(0, +1);
+    //   const startHours = 18 + getRandomInt(-3, +3);
+    //   const endHours = startHours + getRandomInt(2, 4);
+    //   let startDate = new Date(2020, 4, 11 + dateOffset, startHours, 0, 0, 0);
+    //   let endDate = new Date(2020, 4, 11 + dateOffset, endHours, 30, 0, 0);
+    //
+    //   let keyISOString = this.getMidnight(startDate).toISOString()
+    //   let events = this.eventsOfTheWeek.get(keyISOString)
+    //   if (!events) {
+    //     events = []
+    //   }
+    //   events.push(
+    //     new CalendarEvent(i, "Test Event " + i, "", startDate, endDate, null, null, null)
+    //   );
+    //   this.eventsOfTheWeek.set(keyISOString, events);
+    // }
 
     console.log(this.eventsOfTheWeek);
   }
@@ -53,6 +56,8 @@ export class WeeklyCalendarComponent implements OnInit {
   ngOnInit(): void {
     this.displayingDate = this.getToday();
     this.displayingWeek = this.getWeek(this.offset);
+
+    this.loadEventsForWeek(this.getWeek(0)[0], this.getWeek(0)[6]);
     this.updateDatetime();
     setInterval(_ => {
       this.updateDatetime();
@@ -72,6 +77,39 @@ export class WeeklyCalendarComponent implements OnInit {
           }
         })
     }, 500)
+  }
+
+  /**
+   * Calls Service to load Events for the week.
+   * @param from: Start date of week
+   * @param to: End date of week
+   */
+  loadEventsForWeek(from: Date, to: Date) {
+    this.eventService.getMultiplEvents(null, from, to).subscribe((events: Array<CalendarEvent>) => {
+      events.forEach(event => {
+        let startDate = new Date(event.startDateTime)
+        let endDate = new Date(event.endDateTime);
+
+        event.startDateTime = startDate;
+        event.endDateTime = endDate;
+      });
+      this.displayingWeek.forEach((day: Date) => {
+        let keyISOString = this.getMidnight(day).toISOString()
+        this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
+          let isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
+          let isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
+          return isAfterMidnight && isBeforeEndOfDay;
+          }));
+      })
+    }, error => {
+      if (error.status != 404) {
+        alert("Error while loading events: " + error.message);
+      }
+      else {
+        console.log("No events found!");
+      }
+    });
+
   }
 
   updateDatetime() {
@@ -129,6 +167,7 @@ export class WeeklyCalendarComponent implements OnInit {
   private updateOffsettedDates() {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
+    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
   }
 
   getToday() {
@@ -160,6 +199,30 @@ export class WeeklyCalendarComponent implements OnInit {
     let midnight = new Date(date);
     midnight.setHours(0, 0, 0, 0);
     return midnight
+  }
+
+  getEndOfDay(date: Date) {
+    let endOfDay = new Date(date);
+    endOfDay.setHours(23,59, 50);
+    return endOfDay;
+  }
+
+  public getDisplayTimeString(event: CalendarEvent) {
+    let string = event.startDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    string += ' - '
+    string += event.endDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    return string
+  }
+
+  public redirectToDetail(id: number) {
+    console.log("You Clicked: ", id);
+    window.location.replace("/event/" + id);
   }
 
 

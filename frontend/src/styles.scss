@@ -11,6 +11,7 @@
 
   --overlay: rgba(247, 250, 248, 0.5);
   --shadow: rgba(20, 17, 17, 0.25);
+  --placeholder: rgba(20, 17, 17, 0.75);
 
 
   @media (prefers-color-scheme: dark) {
@@ -22,6 +23,7 @@
 
     --overlay: rgba(20, 17, 17, 0.5);
     --shadow: rgba(247, 250, 248, 0.25);
+    --placeholder: rgba(247, 250, 248, 0.75);
   }
 }
 
@@ -49,15 +51,19 @@ body {
   }
 }
 
-h1, h2, h3, h4, h5, h6, .heading, .heading * {
+h1, h2, .heading, .heading * {
+  font-size: 36pt;
   font-weight: $f-bold;
 
   text-transform: uppercase;
+
+  h1 {
+    font-size: 44pt;
+  }
 }
 
-h2, .heading, .heading * {
-  font-size: 36pt;
-
+h3, h4, h5, h6 {
+  margin: 8pt 0 4pt;
 }
 
 a {
@@ -94,21 +100,33 @@ a {
     grid-template-columns: 1fr 1fr 1fr;
     column-gap: 4rem;
 
+    &.scroll > * {
+      height: 500pt;
+      overflow-y: scroll;
+
+      h2 {
+        position: sticky;
+        top: 0;
+
+        background-image: linear-gradient(0deg, var(--overlay), var(--background));
+      }
+    }
+
     &.no-gap {
       column-gap: 0;
     }
-  }
 
-  .grid-item-1-2 {
-    grid-column: 1/3;
-  }
+    .grid-item-1-2 {
+      grid-column: 1/3;
+    }
 
-  .grid-item-2 {
-    grid-column: 2/3;
-  }
+    .grid-item-2 {
+      grid-column: 2/3;
+    }
 
-  .grid-item-3 {
-    grid-column: 3/4;
+    .grid-item-3 {
+      grid-column: 3/4;
+    }
   }
 }
 
@@ -119,9 +137,19 @@ a {
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
   box-shadow: 1px 1px 2px var(--shadow);
 
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 4px 4px 8px var(--shadow);
+  @media (hover: hover) {
+    &:not(.no-hover):hover {
+      transform: scale(1.05);
+      box-shadow: 4px 4px 8px var(--shadow);
+    }
+
+    &.no-hover:hover {
+      opacity: 0.75;
+    }
+  }
+
+  &:focus {
+    opacity: 0.75;
   }
 }
 
@@ -133,13 +161,25 @@ a {
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
   color: $black;
   border: none;
-  border-radius: 4pt;
+  border-radius: $rounded-radius;
+  box-sizing: border-box;
   box-shadow: 1px 1px 2px var(--shadow);
   background-image: linear-gradient(15deg, transparentize($white, 1), transparentize($white, 0.75));
+  background-color: var(--background);
 
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 4px 4px 8px var(--shadow);
+  @media (hover: hover) {
+    &:not(.no-hover):hover {
+      transform: scale(1.05);
+      box-shadow: 4px 4px 8px var(--shadow);
+    }
+
+    &.no-hover:hover {
+      opacity: 0.75;
+    }
+  }
+
+  &:focus {
+    opacity: 0.75;
   }
 
   &.button-green {
@@ -159,23 +199,57 @@ a {
   }
 
   &.button-outlined {
-    border: 2pt solid var(--text);
+    border: 1.25pt solid var(--text);
+    color: var(--text);
     background-image: none;
+  }
+
+  &.button-solid{
+    background-color: var(--text);
+    color: var(--background);
   }
 
   &.small-button {
     border-radius: 3.5pt;
+  }
+
+  &.full-width-form-button {
+    appearance: none;
+
+    color: inherit;
+    background-color: var(--shadow) !important;
+    background-image: none;
+
+    box-shadow: none;
+    width: 100%;
+    padding: 8pt;
+    font-size: 16pt;
+    font-weight: $f-bold;
+
+    border: none;
+    border-top: 2pt solid var(--text);
+    border-radius: 0 0 4pt 4pt;
+
+    &.event-form-submit {
+      padding: 16pt 8pt;
+      background-color: var(--overlay) !important;
+    }
   }
 }
 
 input, textarea {
   padding: 4pt;
 
-  border-radius: 4pt;
-  border: none;
+  border-radius: $rounded-radius;
+  border: none !important;
 
   resize: none;
   background-color: var(--shadow) !important;
+  color: var(--text) !important;
+
+  &.no-outline {
+    outline: none !important;
+  }
 }
 
 textarea {
@@ -189,4 +263,15 @@ iframe {
 
 ::placeholder {
   color: var(--secondary);
+}
+
+.avatar {
+  border-radius: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+
+  &.avatar-small {
+    height: 64pt;
+    width: 64pt;
+  }
 }
