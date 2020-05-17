@@ -19,7 +19,7 @@ import { EventComponent } from './components/event/event.component';
 import { EventCommentComponent } from './components/event-comment/event-comment.component';
 import { EventFormComponent } from './components/event-form/event-form.component';
 import { EventLocationComponent } from './components/event-location/event-location.component';
-import { OrganisationFormComponent } from './organisation-form/organisation-form.component';
+import { OrganisationFormComponent } from './components/organisation-form/organisation-form.component';
 
 @NgModule({
   declarations: [
