@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,6 +31,6 @@ public class Calendar {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "calendar")
-    private List<Event> events = Collections.emptyList();
+    private List<Event> events = new ArrayList<>();
 }
 
