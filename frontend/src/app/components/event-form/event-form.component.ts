@@ -38,6 +38,7 @@ export class EventFormComponent implements OnInit {
 
       // submit to service
       this.service.postEvent(this.event).subscribe( response => {
+        alert("Saved event: " + response);
         console.log(response);
       },
         err => {
