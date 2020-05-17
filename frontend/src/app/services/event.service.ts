@@ -22,6 +22,18 @@ export class EventService {
     return this.httpClient.delete(this.eventBaseUri + '/' + event);
   }
 
+
+  getMultiplEvents(name: string, from: Date, to: Date): Observable<Array<CalendarEvent>> {
+    console.log("Load Multiple events: ");
+    let uriEncodedName = encodeURI(name);
+    let uriEncodedStartDate = encodeURI(from.toISOString());
+    let uriEncodedEndDate = encodeURI(to.toISOString());
+
+    let url = this.eventBaseUri + "?name=" + uriEncodedName + "&from=" + uriEncodedStartDate + "&to=" + uriEncodedEndDate;
+    return this.httpClient.get<Array<CalendarEvent>>(url);
+
+  }
+
   /**
    * Loads specific event with ID, returns Observable.
    * @param id: ID of the Event
