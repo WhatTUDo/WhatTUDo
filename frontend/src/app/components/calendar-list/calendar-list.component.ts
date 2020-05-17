@@ -19,33 +19,34 @@ export class CalendarListComponent implements OnInit {
   list2 : CalendarRepresentation[] = [];
 
   searchForm = new FormGroup( {
-    name: new FormControl(''),
-    organisation: new FormControl('')
+    name: new FormControl('')
   });
 
 
-  constructor(private calendarService: CalendarService, private router: Router, private organisationService: OrganisationService) { }
-
-  ngOnInit(): void {
+  constructor(private calendarService: CalendarService, private router: Router, private organisationService: OrganisationService) {
     this.calendarService.getAllCalendars().subscribe((list) => {
         this.list   = list;
         for(let e of list){
-          for(let a of e.organisationIds){
-            this.organisationService.getById(a).subscribe((organisation:Organisation)=>{
-              if(organisation.name != null){
-              this.listOrg.push(organisation.name);}
-            },
-              err => {
-                console.warn(err);
-              })
+            for(let a of e.organisationIds){
+              this.organisationService.getById(a).subscribe((organisation:Organisation)=>{
+                  if(organisation.name != null){
+                    this.listOrg.push(organisation.name);}
+                },
+                err => {
+                  console.warn(err);
+                })
+            }
+            this.listOrg = ["org1", 'org2'];
+            this.list2.push(new CalendarRepresentation(e.id, e.name, this.listOrg));
           }
-          this.listOrg = ["org1", 'org2'];
-          this.list2.push(new CalendarRepresentation(e.id, e.name, this.listOrg));
-        }
-      },
+        },
       err => {
-        console.warn(err);
+        alert(err.message);
       });
+  }
+
+
+  ngOnInit(): void {
   }
 
 
@@ -64,15 +65,16 @@ export class CalendarListComponent implements OnInit {
     if (validationIsPassed) {
         // submit to service
       console.log("search");
-      this.calendarService.searchCalendars(formValue.name,formValue.organisation ).subscribe((list) => {
+      this.calendarService.searchCalendars(formValue.name ).subscribe((list) => {
          this.list   = list;
+         this.list2 = [];
          for(let e of list){
-
+               this.list2.push(new CalendarRepresentation(e.id, e.name, ))
          }
 
          },
         err => {
-          console.warn(err);
+          alert(err.message);
         });
     }
   }
@@ -84,7 +86,7 @@ export class CalendarListComponent implements OnInit {
    */
   validateFormInput(formValue: any) {
     let errors: Array<Error> = new Array<Error>();
-    if ((formValue.name == "") && (formValue.organisation == "")) {
+    if ((formValue.name == "")) {
       errors.push(new Error("Nothing was given to search."));
     }
 

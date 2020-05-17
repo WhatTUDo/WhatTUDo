@@ -11,9 +11,11 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TestCalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
+import at.ac.tuwien.sepm.groupphase.backend.service.OrganisationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -45,6 +47,7 @@ public class CalendarEndpoint {
     static final String BASE_URL = "/calendars";
     private final CalendarService calendarService;
     private final EventService eventService;
+    private final OrganisationService organisationService;
     private final CalendarMapper calendarMapper;
     private final EventMapper eventMapper;
     private final TestCalendarMapper testMapper;
@@ -79,9 +82,9 @@ public class CalendarEndpoint {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/")
+    @GetMapping(value = "/all")
     public List<CalendarDto> getAll() {
-        log.info("GET All" + BASE_URL + "");
+        log.info("GET All" + BASE_URL + "/all");
         try {
 
             return testMapper.calendarsToCalendarDtos(calendarService.findAll());
@@ -99,9 +102,11 @@ public class CalendarEndpoint {
                                              @RequestParam(value = "to") String end){
         log.info("GET" + BASE_URL + "Get events of this week {}", id);
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, dd MMMM yyyy HH:mm:ss z", Locale.ENGLISH);
-            LocalDateTime dateTimeStart = LocalDateTime.parse(start, formatter);
-            LocalDateTime dateTimeEnd = LocalDateTime.parse(end, formatter);
+            String[] start1 = start.split(" GMT");
+            String[] end1 = end.split(" GMT");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss", Locale.US);
+            LocalDateTime dateTimeStart = LocalDateTime.parse(start1[0], formatter);
+            LocalDateTime dateTimeEnd = LocalDateTime.parse(end1[0], formatter);
             List<Event> events = eventService.findForDates(dateTimeStart, dateTimeEnd);
             List<EventDto> eventDtos = new ArrayList<>();
             events.removeIf(e -> e.getCalendar().getId() != Integer.parseInt(id));
@@ -119,6 +124,36 @@ public class CalendarEndpoint {
         }
     }
 
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/search")
+    @ApiOperation(value = "Get calendars with name")
+    public List<CalendarDto> searchCalendarCombo(@RequestParam(value = "name")  String name){
+        log.info("GET"+BASE_URL+"search {}", name);
+        try{
+        List<Calendar> fromCalendars = calendarService.findByName(name);
+        List<Organisation> fromOrganisations = organisationService.findByName(name);
+        List<Event> fromEvents=eventService.findByName(name);
+            for (Organisation o: fromOrganisations) {
+                if(!o.getCalendars().isEmpty()){
+                fromCalendars.addAll(o.getCalendars());}
+            }
+            for (Event e: fromEvents) {
+                fromCalendars.add(e.getCalendar());
+            }
+            List<CalendarDto> calendarDtos = new ArrayList<>();
+            fromCalendars.forEach(calendar -> calendarDtos.add(calendarMapper.calendarToCalendarDto(calendar)));
+            if(calendarDtos.isEmpty()){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing was found");
+            }
+            return calendarDtos;
+        }
+        catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
+        }
+
+
+    }
 
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)

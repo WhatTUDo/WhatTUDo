@@ -39,13 +39,13 @@ export class CalendarComponent implements OnInit {
     this.displayingWeek = this.getWeek(this.offset);
     let keyISOString = this.getMidnight(this.displayingWeek[0]).toISOString();
     let events = this.eventsOfTheWeek.get(keyISOString);
-    console.log("checkthiss::: "+this.displayingWeek[0])
+    // console.log("checkthiss::: "+this.displayingWeek[0])
     this.calendarService.getEventsOfTheWeek(id, this.displayingWeek[0], this.displayingWeek[6]).subscribe((events1)=>
     {
       this.events = events1;
     },
       err => {
-        console.warn(err);
+        alert(err.message);
       });
     this.eventsOfTheWeek.set(keyISOString, events);  }
 
@@ -61,7 +61,7 @@ export class CalendarComponent implements OnInit {
     this.currentYear = today.getFullYear();
   }
 
-  getWeek(offset = 0) {
+  getWeek(offset: number) {
     const offsetWeeks = Math.round(this.offset/7);
     let currentWeekDates = [];
     let today = this.getToday();

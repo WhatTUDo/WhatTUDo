@@ -9,4 +9,5 @@ public interface CalendarService {
     Calendar findById(Integer id);
     List<Calendar> findAll();
     Calendar save(Calendar calendar);
+    List<Calendar> findByName(String name);
 }

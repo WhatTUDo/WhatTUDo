@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
 import at.ac.tuwien.sepm.groupphase.backend.events.OrganisationCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.organisation.OrganisationEditEvent;
@@ -15,6 +16,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,6 +63,20 @@ public class SimpleOrganisationService implements OrganisationService {
             throw new ServiceException(e.getMessage(), e);
         }
     }
+
+    @Override
+    public List<Organisation> findByName(String name){
+        try{
+            Optional<Organisation> found=  organisationRepository.findByName(name);
+            List<Organisation> organisations = new ArrayList<>();
+            found.ifPresent(organisations::add);
+            return organisations;
+        }
+        catch (PersistenceException e){
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
 
     @Override
     public Organisation findById(int id) {

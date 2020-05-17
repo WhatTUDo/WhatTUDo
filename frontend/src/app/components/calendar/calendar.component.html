@@ -1,79 +1,80 @@
-<div id="weekly-cal-heading" class="heading">
-  <span id="weekly-cal-month">
-    {{this.offset ? displayingWeek[3].toLocaleString('en-US', {month: 'long'}) : currentMonth}}
-  </span>
-  <span id="weekly-cal-date" *ngIf="!this.offset">{{currentDate}}, </span>
-  <span id="weekly-cal-year">
-    {{this.offset ? displayingWeek[3].getFullYear() : currentYear}}
-  </span>
-</div>
+<p>{{calendar.name}}</p>
+<!--<div id="weekly-cal-heading" class="heading">-->
+<!--  <span id="weekly-cal-month">-->
+<!--    {{this.offset ? displayingWeek[3].toLocaleString('en-US', {month: 'long'}) : currentMonth}}-->
+<!--  </span>-->
+<!--  <span id="weekly-cal-date" *ngIf="!this.offset">{{currentDate}}, </span>-->
+<!--  <span id="weekly-cal-year">-->
+<!--    {{this.offset ? displayingWeek[3].getFullYear() : currentYear}}-->
+<!--  </span>-->
+<!--</div>-->
 
-<div class="calendar-navigation desktop" (click)="minusOneWeek()">
-  <fa-icon [icon]="faChevronUp">Last week</fa-icon>
-</div>
+<!--<div class="calendar-navigation desktop" (click)="minusOneWeek()">-->
+<!--  <fa-icon [icon]="faChevronUp">Last week</fa-icon>-->
+<!--</div>-->
 
-<div class="calendar-navigation mobile">
-  <fa-icon [icon]="faChevronLeft" (click)="minusOneDay()">Last day</fa-icon>
-  <fa-icon [icon]="faChevronRight" (click)="addOneDay()">Next day</fa-icon>
-</div>
+<!--<div class="calendar-navigation mobile">-->
+<!--  <fa-icon [icon]="faChevronLeft" (click)="minusOneDay()">Last day</fa-icon>-->
+<!--  <fa-icon [icon]="faChevronRight" (click)="addOneDay()">Next day</fa-icon>-->
+<!--</div>-->
 
-<div class="calender mobile">
-  <div class="week-day-label">{{displayingDate.toLocaleDateString('en-US', { weekday: 'short' })}}</div>
-  <div class="calendar-date-label" [ngClass]="{'today': isToday(displayingDate)}">
-    {{displayingDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}}
-  </div>
+<!--<div class="calender mobile">-->
+<!--  <div class="week-day-label">{{displayingDate.toLocaleDateString('en-US', { weekday: 'short' })}}</div>-->
+<!--  <div class="calendar-date-label" [ngClass]="{'today': isToday(displayingDate)}">-->
+<!--    {{displayingDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}}-->
+<!--  </div>-->
 
-  <div class="calendar-day-swim-lane">
-    <div *ngFor="let event of this.eventsOfTheWeek.get(displayingDate.toISOString())" class="calendar-event"
-         [style.grid-row]="getDisplayRows(event)">
-      <div class="calendar-event-time">{{event.getDisplayTimeString()}}</div>
-      <div class="calendar-event-name">{{event.name}}</div>
-    </div>
-  </div>
-</div>
+<!--  <div class="calendar-day-swim-lane">-->
+<!--    <div *ngFor="let event of this.eventsOfTheWeek.get(displayingDate.toISOString())" class="calendar-event"-->
+<!--         [style.grid-row]="getDisplayRows(event)">-->
+<!--      <div class="calendar-event-time">{{event.getDisplayTimeString()}}</div>-->
+<!--      <div class="calendar-event-name">{{event.name}}</div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
 
-<div class="grid-one-sixth calender desktop">
-  <div class="week-day-label">Mon</div>
-  <div class="week-day-label">Tue</div>
-  <div class="week-day-label">Wed</div>
-  <div class="week-day-label">Thu</div>
-  <div class="week-day-label">Fri</div>
-  <div class="week-day-label">Sat/Sun</div>
+<!--<div class="grid-one-sixth calender desktop">-->
+<!--  <div class="week-day-label">Mon</div>-->
+<!--  <div class="week-day-label">Tue</div>-->
+<!--  <div class="week-day-label">Wed</div>-->
+<!--  <div class="week-day-label">Thu</div>-->
+<!--  <div class="week-day-label">Fri</div>-->
+<!--  <div class="week-day-label">Sat/Sun</div>-->
 
-  <div *ngFor="let date of this.displayingWeek.slice(0,5)" class="calendar-date-label"
-       [ngClass]="{'today': isToday(date)}">{{date.getDate()}}</div>
-  <div class="calendar-date-label">
-    <sup [ngClass]="{'today': isToday(this.displayingWeek[5])}">{{this.displayingWeek[5].getDate()}}</sup>
-    ⁄
-    <sub [ngClass]="{'today': isToday(this.displayingWeek[6])}">{{this.displayingWeek[6].getDate()}}</sub>
-  </div>
+<!--  <div *ngFor="let date of this.displayingWeek.slice(0,5)" class="calendar-date-label"-->
+<!--       [ngClass]="{'today': isToday(date)}">{{date.getDate()}}</div>-->
+<!--  <div class="calendar-date-label">-->
+<!--    <sup [ngClass]="{'today': isToday(this.displayingWeek[5])}">{{this.displayingWeek[5].getDate()}}</sup>-->
+<!--    ⁄-->
+<!--    <sub [ngClass]="{'today': isToday(this.displayingWeek[6])}">{{this.displayingWeek[6].getDate()}}</sub>-->
+<!--  </div>-->
 
-  <div *ngFor="let date of this.displayingWeek.slice(0,5)" class="calendar-day-swim-lane">
-    <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())" class="calendar-event"
-         [style.grid-row]="getDisplayRows(event)">
-      <div class="calendar-event-time">{{event.getDisplayTimeString()}}</div>
-      <div class="calendar-event-name">{{event.name}}</div>
-    </div>
-  </div>
-  <div class="calendar-day-swim-lane weekend-lane-container">
-    <div class="weekend-sat">
-      <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[5].toISOString())" class="calendar-event "
-           [style.grid-row]="getDisplayRows(event)">
-        <div class="calendar-event-time">{{event.getDisplayTimeString()}}</div>
-        <div class="calendar-event-name">{{event.name}}</div>
-      </div>
-    </div>
-    <div class="weekend-sun">
-      <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[6].toISOString())"
-           class="calendar-event weekend-sun"
-           [style.grid-row]="getDisplayRows(event)">
-        <div class="calendar-event-time">{{event.getDisplayTimeString()}}</div>
-        <div class="calendar-event-name">{{event.name}}</div>
-      </div>
-    </div>
-  </div>
-</div>
+<!--  <div *ngFor="let date of this.displayingWeek.slice(0,5)" class="calendar-day-swim-lane">-->
+<!--    <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())" class="calendar-event"-->
+<!--         [style.grid-row]="getDisplayRows(event)">-->
+<!--      <div class="calendar-event-time">{{event.getDisplayTimeString()}}</div>-->
+<!--      <div class="calendar-event-name">{{event.name}}</div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="calendar-day-swim-lane weekend-lane-container">-->
+<!--    <div class="weekend-sat">-->
+<!--      <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[5].toISOString())" class="calendar-event "-->
+<!--           [style.grid-row]="getDisplayRows(event)">-->
+<!--        <div class="calendar-event-time">{{event.getDisplayTimeString()}}</div>-->
+<!--        <div class="calendar-event-name">{{event.name}}</div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="weekend-sun">-->
+<!--      <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[6].toISOString())"-->
+<!--           class="calendar-event weekend-sun"-->
+<!--           [style.grid-row]="getDisplayRows(event)">-->
+<!--        <div class="calendar-event-time">{{event.getDisplayTimeString()}}</div>-->
+<!--        <div class="calendar-event-name">{{event.name}}</div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
 
-<div class="calendar-navigation desktop" (click)="addOneWeek()">
-  <fa-icon [icon]="faChevronDown">Next week</fa-icon>
-</div>
+<!--<div class="calendar-navigation desktop" (click)="addOneWeek()">-->
+<!--  <fa-icon [icon]="faChevronDown">Next week</fa-icon>-->
+<!--</div>-->
