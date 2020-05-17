@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -34,25 +35,10 @@ import java.util.List;
 public class CalendarEndpoint {
     static final String BASE_URL = "/calendars";
     private final CalendarService calendarService;
-    private final CalendarMapper calendarMapper;
+    //private final CalendarMapper calendarMapper;
 
     private final TestCalendarMapper testMapper;
 
-
-   /** @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Edit calendar", authorizations = {@Authorization(value = "apiKey")})
-    public CalendarDto editCalendar(@RequestBody CalendarDto calendar) {
-        log.info("PUT " + BASE_URL + "/{}", calendar);
-        try {
-            Calendar calendarEntity = calendarMapper.calendarDtoToCalendar(calendar);
-            return calendarMapper.calendarToCalendarDto(calendarService.update(calendarEntity));
-        } catch (ValidationException e) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
-        } catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
-        }
-    }**/
 
     @CrossOrigin
     @GetMapping(value = "/{id}")
@@ -69,7 +55,7 @@ public class CalendarEndpoint {
     @CrossOrigin
     @GetMapping(value = "/")
     public List<CalendarDto> getAll() {
-        log.info("GET All" + BASE_URL + "");
+        log.info("GET all" + BASE_URL + "");
         try {
 
             return testMapper.calendarsToCalendarDtos(calendarService.findAll());
@@ -87,13 +73,18 @@ public class CalendarEndpoint {
         log.info("POST " + BASE_URL + "/{}", calendar);
         try {
 
+
+            /**Note: This is to make sure that post will not return any wrongly eventList inputs (which won't get store in the
+             * DB anyway) under any circumstances. (Otherwise it would. but it won't save them in the DB in both cases)
+             * Create Calendar is NOT for inserting events.
+             Events are only inserted in calendars by creating a new event and setting the right calendar_id.
+             It is best to not give the option to set eventIds while creating a calendar in the frontend at all.
+             **/
+            List<Integer> eventsShouldBeEmpty = new ArrayList<Integer>();
+            calendar.setEventIds(eventsShouldBeEmpty);
+
             Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
 
-            /**Note: If you set values as eventIds, post method will return them, BUT it will not store them in the DB.
-            If you call getById afterwards its empty as it should be because Create Calendar is NOT for inserting events.
-            Events are only inserted in calendars by creating a new event and setting the right calendar_id.
-             It is best to not give the option to set eventIds while creating a calendar in the frontend at all.
-            **/
             return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
