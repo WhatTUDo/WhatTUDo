@@ -1,12 +1,12 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-8">
-      <form class="form-inline" [formGroup]="searchForm" (keyup.enter)="onSubmit()">
-        <div class="form-group">
-          <label for="calendar.name"></label>
-          <input type="text" class="form-control" formControlName="name" id="calendar.name" placeholder="Looking for a calendar">
-        </div>
+      <div class="container">
+      <form class="form" [formGroup]="searchForm" (keyup.enter)="onSubmit()">
+          <label for="calendar.name"></label><input type="text" class="form-control" formControlName="name" id="calendar.name" placeholder="Search...">
+          <div class="search"></div>
       </form>
+    </div>
       <br/>
       <table class="table">
         <thead>
@@ -19,7 +19,7 @@
           </th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class = "body">
         <tr *ngFor="let el of list2; let i = index">
           <td>
               <a class="nav-link" (click)="onSelectCalendar(el)" >{{el.name}}</a>
