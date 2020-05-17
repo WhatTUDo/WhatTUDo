@@ -4,16 +4,13 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallbackWithoutResult;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -24,41 +21,30 @@ import java.util.Collections;
 @Profile("generateData")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OrgaCalEventDataGenerator {
-    private final PlatformTransactionManager txManager;
     private final OrganisationRepository organisationRepository;
     private final CalendarRepository calendarRepository;
+    private final EventRepository eventRepository;
 
     @PostConstruct
     public void generateData() {
-        new TransactionTemplate(txManager).execute(new TransactionCallbackWithoutResult() {
-            @Override
-            protected void doInTransactionWithoutResult(TransactionStatus status) {
-                log.info("Generating sample data");
-                generateOrgaAndCalendar();
-            }
-        });
-    }
-
-    private void generateOrgaAndCalendar() {
+        log.info("Generating sample data");
         for (int i = 0; i < 10; i++) {
             Organisation orga = organisationRepository.save(new Organisation("Organisation " + i));
-            orga.getCalendars().add(new Calendar("Calendar " + i, Collections.singletonList(orga)));
-            orga = organisationRepository.save(orga);
+            Calendar calendar = calendarRepository.save(new Calendar("Calendar " + i, Collections.singletonList(orga)));
+            orga.getCalendars().add(calendar);
+            organisationRepository.save(orga);
 
-            generateEvents(orga.getCalendars().get(0).getId());
-        }
-    }
+            for (int j = 0; j < 20; j++) {
+                Event event = new Event(
+                    "Event " + j,
+                    LocalDateTime.of(2020, 4, (j % 28) + 1, 12, 0),
+                    LocalDateTime.of(2020, 4, (j % 28) + 1, 14, 0),
+                    calendar
+                );
+                eventRepository.save(event);
+                calendar.getEvents().add(event);
+            }
 
-    private void generateEvents(Integer calendarId) {
-        Calendar calendar = calendarRepository.findById(calendarId).get();
-        for (int j = 0; j < 20; j++) {
-            Event event = new Event(
-                "Event " + j,
-                LocalDateTime.of(2020, 4, (j % 28) + 1, 12, 0),
-                LocalDateTime.of(2020, 4, (j % 28) + 1, 14, 0),
-                calendar
-            );
-            calendar.getEvents().add(event);
             calendarRepository.save(calendar);
         }
     }
