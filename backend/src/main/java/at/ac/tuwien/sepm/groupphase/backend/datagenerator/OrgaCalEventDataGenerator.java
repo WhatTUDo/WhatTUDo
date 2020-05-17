@@ -27,21 +27,25 @@ public class OrgaCalEventDataGenerator {
 
     @PostConstruct
     public void generateData() {
+        log.info("Generating sample data");
         for (int i = 0; i < 10; i++) {
             Organisation orga = organisationRepository.save(new Organisation("Organisation " + i));
             Calendar calendar = calendarRepository.save(new Calendar("Calendar " + i, Collections.singletonList(orga)));
+            orga.getCalendars().add(calendar);
+            organisationRepository.save(orga);
+
             for (int j = 0; j < 20; j++) {
-                eventRepository.save(new Event(
+                Event event = new Event(
                     "Event " + j,
                     LocalDateTime.of(2020, 4, (j % 28) + 1, 12, 0),
                     LocalDateTime.of(2020, 4, (j % 28) + 1, 14, 0),
                     calendar
-                ));
+                );
+                eventRepository.save(event);
+                calendar.getEvents().add(event);
             }
-        }
-        organisationRepository.findAll().forEach(System.out::println);
-        calendarRepository.findAll().forEach(System.out::println);
-        eventRepository.findAll().forEach(System.out::println);
 
+            calendarRepository.save(calendar);
+        }
     }
 }

@@ -40,6 +40,7 @@ public class OrganisationRepositoryTest {
 
         Organisation orga = organisationRepository.save(new Organisation("Test Name"));
         Calendar cal = calendarRepository.save(new Calendar("Calendar", Collections.singletonList(orga)));
+        orga.getCalendars().add(cal);
         assertAll(
             () -> {
                 assertEquals(1, cal.getOrganisations().size());

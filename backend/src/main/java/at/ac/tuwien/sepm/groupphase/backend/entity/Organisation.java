@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +29,6 @@ public class Organisation {
         joinColumns = @JoinColumn(name = "organisation_id"),
         inverseJoinColumns = @JoinColumn(name = "calendar_id")
     )
-    private List<Calendar> calendars = Collections.emptyList();
+    private List<Calendar> calendars = new ArrayList<>();
 }
 

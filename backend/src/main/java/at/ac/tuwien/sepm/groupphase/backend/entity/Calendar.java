@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,14 +26,11 @@ public class Calendar {
     @NonNull
     @ToString.Exclude
     @ManyToMany(mappedBy = "calendars", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
-    /**@JoinTable(name = "organisation_calendar",
-        joinColumns = @JoinColumn(name = "organisation_ID"),
-        inverseJoinColumns = @JoinColumn(name = "calendar_ID"))**/
     @Size(min = 1)
     private List<Organisation> organisations;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "calendar")
-    private List<Event> events = Collections.emptyList();
+    private List<Event> events = new ArrayList<>();
 }
 

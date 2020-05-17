@@ -66,27 +66,12 @@ public abstract class TestCalendarMapper {
 
     public List<CalendarDto> calendarsToCalendarDtos(List <Calendar> calendars){
 
-        List<CalendarDto> calendarfinal = new ArrayList<CalendarDto>();
+        List<CalendarDto> calendarFinal = new ArrayList<CalendarDto>();
         for(Calendar c : calendars){
-            calendarfinal.add(calendarToCalendarDto(c));
+            calendarFinal.add(calendarToCalendarDto(c));
         }
 
 
-        return calendarfinal;
+        return calendarFinal;
     }
-   /* CalendarService calendarService;
-
-    @Autowired
-    public EventMapper(CalendarService calendarService) {
-        this.calendarService = calendarService;
-    }
-
-    public Event dtoToEntity(EventDto eventDto) {
-        Calendar calendar = calendarService.findById(eventDto.getCalendarId());
-        return new Event(eventDto.getId(), eventDto.getName(), eventDto.getStartDateTime(), eventDto.getEndDateTime(), calendar);
-    }
-
-    public EventDto entityToDto(Event event) {
-        return new EventDto(event.getId(), event.getName(), event.getStartDateTime(), event.getEndDateTime(), (event.getCalendar()).getId());
-    }*/
 }

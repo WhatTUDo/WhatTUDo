@@ -6,6 +6,11 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganisationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+
+import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
+import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +18,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import javax.transaction.Transactional;
+import java.util.*;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -25,6 +33,10 @@ public class OrganisationServiceTest {
     OrganisationService service;
     @Autowired
     OrganisationRepository organisationRepository;
+    @Autowired
+    CalendarService calendarService;
+    @Autowired
+    CalendarRepository calendarRepository;
 
 
     @Test
@@ -54,5 +66,40 @@ public class OrganisationServiceTest {
         assertThrows(ValidationException.class, () -> service.update(updatedOrganisation));
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    @Test
+    @Transactional
+    public void addCalendarToOrga() {
+        // Prep
+        Organisation organisation1 = organisationRepository.save(new Organisation("Orga 1"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test", Lists.newArrayList(organisation1)));
+        organisation1.getCalendars().add(calendar);
+        organisationRepository.save(organisation1);
 
+        // Test
+        Organisation organisation2 = organisationRepository.save(new Organisation("Orga 2"));
+        service.addCalendars(organisation2, Collections.singleton(calendar));
+
+        assertIterableEquals(Collections.singleton(calendar), organisationRepository.findById(organisation2.getId()).get().getCalendars());
+        assertIterableEquals(List.of(organisation1, organisation2), calendarRepository.findById(calendar.getId()).get().getOrganisations());
+    }
+
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
+    @Test
+    @Transactional
+    public void removeCalendarFromOrga() {
+        // Prep
+        Organisation organisation1 = organisationRepository.save(new Organisation("Orga 1"));
+        Organisation organisation2 = organisationRepository.save(new Organisation("Orga 2"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test", Lists.newArrayList(organisation1)));
+        organisation1.getCalendars().add(calendar);
+        organisation2.getCalendars().add(calendar);
+        organisationRepository.saveAll(List.of(organisation1, organisation2));
+
+        // Test
+        service.removeCalendars(organisation2, Collections.singleton(calendar));
+
+        assertIterableEquals(Collections.emptyList(), organisationRepository.findById(organisation2.getId()).get().getCalendars());
+        assertIterableEquals(List.of(organisation1), calendarRepository.findById(calendar.getId()).get().getOrganisations());
+    }
 }
