@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -71,6 +72,11 @@ public class SimpleOrganisationService implements OrganisationService {
         } else {
             throw new NotFoundException("No organisation found with id " + id);
         }
+    }
+
+    @Override
+    public List<Organisation> getAll() {
+        return organisationRepository.findAll();
     }
 
 }
