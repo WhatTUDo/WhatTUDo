@@ -4,6 +4,8 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
 import org.mapstruct.BeforeMapping;
@@ -11,11 +13,14 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.transaction.Transactional;
 import java.util.stream.Collectors;
 
+@Transactional
 @Mapper(componentModel = "spring")
 public abstract class CalendarMapper {
     @Autowired protected OrganisationRepository organisationRepository;
+    @Autowired protected CalendarRepository calendarRepository;
     @Autowired protected EventRepository eventRepository;
 
     public abstract CalendarDto calendarToCalendarDto(Calendar calendar);
@@ -27,7 +32,10 @@ public abstract class CalendarMapper {
 
     @BeforeMapping
     protected void mapEvents(Calendar calendar, @MappingTarget CalendarDto calendarDto) {
-        calendarDto.setEventIds(calendar.getEvents().stream().map(Event::getId).collect(Collectors.toList()));
+        Calendar calEntity = calendarRepository.findById(calendar.getId())
+            .orElseThrow(() -> new NotFoundException("This calendar does not exist in the database"));
+
+        calendarDto.setEventIds(calEntity.getEvents().stream().map(Event::getId).collect(Collectors.toList()));
     }
 
     public abstract Calendar calendarDtoToCalendar(CalendarDto calendarDto);
