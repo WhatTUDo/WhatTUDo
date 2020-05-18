@@ -114,7 +114,6 @@ public class EventEndpoint {
     public EventDto editEvent(@RequestBody EventDto eventDto){
         log.info("PUT " + BASE_URL + "/{}", eventDto);
         try {
-            System.out.println(eventDto.toString());
             Event eventEntity = eventMapper.eventDtoToEvent(eventDto);
             return eventMapper.eventToEventDto(eventService.update(eventEntity));
         } catch (ValidationException e) {
