@@ -52,6 +52,18 @@ public class SimpleCalendarService implements CalendarService {
     }
 
     @Override
+    public List<Calendar> findByName(String name){
+        try{
+
+            return calendarRepository.findAllByNameContains(name);
+        }
+        catch (PersistenceException e){
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+
+    @Override
     public List<Calendar> findAll() {
         try {
 

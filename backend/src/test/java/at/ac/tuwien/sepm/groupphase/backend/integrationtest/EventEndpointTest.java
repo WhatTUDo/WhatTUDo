@@ -92,6 +92,7 @@ public class EventEndpointTest {
     @Test
     public void get_validID_shouldReturn_EventWithSpecifiedID() {
 
+
         Organisation orga = organisationRepository.save(new Organisation("Test Organisation9"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar9", Collections.singletonList(orga)));
         EventDto eventDto = new EventDto(6, "Test Name_new", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());

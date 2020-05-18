@@ -27,6 +27,8 @@ public interface EventService {
      */
     Event findById(int id);
 
+    List<Event> findByName(String name);
+
 
     List<Event> findForDates(LocalDateTime start, LocalDateTime end);
     /**

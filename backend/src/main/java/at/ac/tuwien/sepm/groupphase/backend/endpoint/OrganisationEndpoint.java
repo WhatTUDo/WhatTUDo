@@ -2,11 +2,11 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganisationDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.OrganisationMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganisationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
@@ -20,10 +20,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Collection;
+
 
 
 @Slf4j
@@ -72,6 +72,9 @@ public class OrganisationEndpoint {
         }
     }
 
+
+
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get all Organisations", authorizations = {@Authorization(value = "apiKey")})
@@ -99,6 +102,7 @@ public class OrganisationEndpoint {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
+
 
     @PutMapping(value = "/{id}/calendars")
     @ResponseStatus(HttpStatus.OK)

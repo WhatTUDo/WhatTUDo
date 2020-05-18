@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.events.organisation;
 
+
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)

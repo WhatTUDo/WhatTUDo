@@ -32,6 +32,7 @@ public abstract class OrganisationMapper {
 
     public abstract Organisation organisationDtoToOrganisation(OrganisationDto organisationDto);
 
+
     @BeforeMapping
     public void mapCalendars(OrganisationDto organisationDto, @MappingTarget Organisation organisation) {
         organisation.setCalendars(calendarRepository.findAllById(organisationDto.getCalendarIds()));

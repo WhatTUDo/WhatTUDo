@@ -76,7 +76,7 @@ public class EventEndpoint {
     public List<EventDto> getMultiple(@RequestParam("name") @Nullable String name,
                                       @RequestParam("from") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
                                       @RequestParam("to") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        log.info("GET" + BASE_URL + "?name={}&from={}&to={}", name, start, end);
+        log.info("GET" + BASE_URL + "?name={}&from={}&to={}&calendar_id", name, start, end);
         try {
             List<Event> events = eventService.findForDates(start, end);
             List<EventDto> eventDtos = new ArrayList<>();

@@ -59,6 +59,16 @@ public class SimpleEventService implements EventService {
     }
 
     @Override
+    public List<Event> findByName(String name){
+        try{
+            return  eventRepository.findAllByNameContains(name);
+        }
+        catch (PersistenceException e){
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
     public Event findById(int id) {
         Optional<Event> found = eventRepository.findById(id);
         if (found.isPresent()) {

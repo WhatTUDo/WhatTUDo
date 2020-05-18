@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
 import at.ac.tuwien.sepm.groupphase.backend.events.organisation.OrganisationCreateEvent;
@@ -15,9 +16,10 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -97,6 +99,20 @@ public class SimpleOrganisationService implements OrganisationService {
     }
 
     @Override
+    public List<Organisation> findByName(String name){
+        try{
+            Optional<Organisation> found=  organisationRepository.findByName(name);
+            List<Organisation> organisations = new ArrayList<>();
+            found.ifPresent(organisations::add);
+            return organisations;
+        }
+        catch (PersistenceException e){
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+
+
     public Organisation removeCalendars(Organisation organisation, Collection<Calendar> calendars) {
         log.info("Removing calendars {} from organisation {}", calendars, organisation);
         try {

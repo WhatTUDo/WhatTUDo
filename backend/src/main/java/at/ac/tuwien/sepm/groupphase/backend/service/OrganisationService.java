@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Collection;
 
 public interface OrganisationService {
@@ -51,4 +53,8 @@ public interface OrganisationService {
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
      */
     Organisation removeCalendars(Organisation organisation, Collection<Calendar> calendars);
+
+
+    List<Organisation> findByName(String name);
+
 }

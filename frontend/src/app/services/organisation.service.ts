@@ -1,3 +1,4 @@
+
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Organisation} from '../dtos/organisation';
@@ -20,6 +21,7 @@ export class OrganisationService {
    * @param organisation
    */
   postOrganisation(organisation: Organisation): Observable<any> {
+
     console.log('Post Organisation to Server', Organisation);
     let reducedElement = {
       'name': organisation.name,
@@ -30,11 +32,13 @@ export class OrganisationService {
   }
 
   getAll(): Observable<Organisation[]> {
+
     console.log('Get all orgas');
     return this.httpClient.get<Organisation[]>(this.organisationBaseUri);
   }
 
   getById(id: number): Observable<Organisation> {
+
     console.log('Get orga with ID', id);
     return this.httpClient.get<Organisation>(this.organisationBaseUri + '/' + id);
   }
