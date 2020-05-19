@@ -32,11 +32,11 @@
     </div>
 
     <div class="organization-member-list">
-      <div class="organization-member">
+      <div class="organization-member" *ngFor="let member of organizationMembers">
         <img alt="" class="avatar avatar-small" src="https://picsum.photos/256/256/">
         <div class="organization-member-details">
-          <div class="organization-member-name">Johny Appleseed</div>
-          <div class="organization-member-role">Member</div>
+          <div class="organization-member-name">@{{member.username}}</div>
+          <div class="organization-member-role">{{member.role}}</div>
         </div>
         <div class="organization-member-buttons">
           <div class="clickable no-hover-enlarge no-shadow organization-manage-member-button">
