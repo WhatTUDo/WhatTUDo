@@ -49,7 +49,25 @@ form {
         align-items: center;
 
         input {
-          width: 45%;
+          position: relative;
+
+          //  //FIXME: Use EventEmitter to make this work and not just static.
+          //  ~ app-datetime-picker {
+          //    display: none;
+          //  }
+          //
+          //  &:focus ~ app-datetime-picker {
+          //    display: block;
+          //
+          //    position: absolute;
+          //  }
+          //}
+          //
+          //app-datetime-picker {
+          //  &:hover, &:focus {
+          //    display: block;
+          //  }
+          //
         }
       }
 
@@ -64,3 +82,4 @@ form {
     }
   }
 }
+

@@ -34,7 +34,7 @@ export class EventFormComponent implements OnInit {
       this.event.name = formValue.name;
       this.event.startDateTime = new Date(formValue.startDate);
       this.event.endDateTime = new Date(formValue.endDate);
-      this.event.calendarId = 1;
+      this.event.calendarId = 2;
 
       // submit to service
       this.service.postEvent(this.event).subscribe( response => {
