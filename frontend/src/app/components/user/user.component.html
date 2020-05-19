@@ -8,15 +8,15 @@
     <div class="user-info">
       <img alt="" class="avatar avatar-medium" src="https://picsum.photos/256/256/">
       <div class="user-details">
-        <div class="username">@JaneDoe</div>
+        <div class="username">@{{user.username}}</div>
       </div>
     </div>
     <div class="user-organization-list">
-      <div class="user-organization">
+      <div class="user-organization" *ngFor="let role of userRoleInOrganizations">
         <img alt="" class="avatar avatar-small" src="https://picsum.photos/256/256/">
         <div class="user-organization-detail">
-          <div class="user-organization-name">FS Winf</div>
-          <div class="user-organization-role">Member</div>
+          <div class="user-organization-name">{{role.organizationName}}</div>
+          <div class="user-organization-role">{{role.role}}</div>
         </div>
         <div class="clickable no-hover-enlarge no-shadow user-exit-organization-button">
           <fa-icon [icon]="faSignOutAlt"></fa-icon>

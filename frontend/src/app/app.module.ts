@@ -23,7 +23,6 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { CalendarListComponent } from './components/calendar-list/calendar-list.component';
 import { OrganisationFormComponent } from './components/organisation-form/organisation-form.component';
 import { UserComponent } from './components/user/user.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
 import { CalendarListComponent } from './components/calendar-list/calendar-list.component';
 
 @NgModule({
@@ -39,7 +38,6 @@ import { CalendarListComponent } from './components/calendar-list/calendar-list.
     EventCommentComponent,
     EventFormComponent,
     EventLocationComponent,
-    CalendarComponent,
     CalendarListComponent,
     OrganisationFormComponent,
     UserComponent,
