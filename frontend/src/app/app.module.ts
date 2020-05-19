@@ -22,6 +22,7 @@ import { EventLocationComponent } from './components/event-location/event-locati
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { CalendarListComponent } from './components/calendar-list/calendar-list.component';
 import { OrganisationFormComponent } from './components/organisation-form/organisation-form.component';
+import { UserComponent } from './components/user/user.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import { OrganisationFormComponent } from './components/organisation-form/organi
     CalendarComponent,
     CalendarListComponent,
     OrganisationFormComponent,
-
+    UserComponent,
   ],
   imports: [
     BrowserModule,

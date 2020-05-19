@@ -9,8 +9,8 @@ import {EventFormComponent} from "./components/event-form/event-form.component";
 import {CalendarListComponent} from './components/calendar-list/calendar-list.component';
 import {CalendarComponent} from './components/calendar/calendar.component';
 import {WeeklyCalendarComponent} from './components/weekly-calendar/weekly-calendar.component';
-
 import {OrganisationFormComponent} from './components/organisation-form/organisation-form.component';
+import {UserComponent} from './components/user/user.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -18,6 +18,8 @@ const routes: Routes = [
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'event/:id', component: EventComponent},
   {path: 'form/event/:id', component: EventFormComponent},
+  {path: 'form/organisation/:id', component: OrganisationFormComponent},
+  {path: 'user', component: UserComponent}
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
   //{path: 'week-calendar/:id', component: WeeklyCalendarComponent}
