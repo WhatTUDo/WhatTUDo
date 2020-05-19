@@ -15,7 +15,7 @@
             Calendar Name
           </th>
           <th>
-            Organisation Name
+            Organization Name
           </th>
         </tr>
         </thead>
@@ -25,7 +25,7 @@
               <a class="nav-link" (click)="onSelectCalendar(el)" >{{el.name}}</a>
           </td>
           <td>
-              <a class="nav-link" (click) = onSelectOrganisation(a) *ngFor="let a of el.organisationName; let j = index"> {{a}}</a>
+              <a class="nav-link" (click) = onSelectOrganization(a) *ngFor="let a of el.organizationName; let j = index"> {{a}}</a>
           </td>
         </tr>
         </tbody>

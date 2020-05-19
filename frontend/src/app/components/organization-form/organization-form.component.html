@@ -1,0 +1,15 @@
+<div>
+  <h2>Update Organization</h2>
+  <div class="event-form-container">
+    <div class="event-form">
+      <div class="event-form-input">
+
+        <label>new name: <input [(ngModel)]="organization.name" #organizationName> </label>
+
+        <button class="submit-button button-clickable full-width-form-button no-hover-enlarge event-form-submit"
+                (click)="updateOrganization(organizationName.value)">Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

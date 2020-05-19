@@ -1,8 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.util;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
-import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class Validator {
-    private final OrganisationRepository organisationRepository;
+    private final OrganizationRepository organizationRepository;
     public void validateNewEvent(Event event) {
         if (event == null) {
             throw new ValidationException("Event object must not be null!");
@@ -22,8 +22,8 @@ public class Validator {
             throw new ValidationException("End Date must be after Start Date");
     }
 
-    public void validateUpdateOrganisation(Organisation organisation) {
-        if (organisation.getName().isBlank()) throw new ValidationException("Organisation name must not be empty.");
+    public void validateUpdateOrganization(Organization organization) {
+        if (organization.getName().isBlank()) throw new ValidationException("Organization name must not be empty.");
     }
 
     public void validateMultipleEventsQuery(String name, LocalDateTime start, LocalDateTime end) {
@@ -32,9 +32,9 @@ public class Validator {
     }
 
 
-    public void validateNewOrganisation(Organisation organisation) {
-        if (organisation.getName().isBlank()) throw new ValidationException("Organisation name must not be empty.");
-        if (organisationRepository.findById(organisation.getId()).isPresent()) throw new ValidationException("An Organisation with this ID already exists");
-        if (organisationRepository.findByName(organisation.getName()).isPresent()) throw new ValidationException("An Organisation with this Name already exists");
+    public void validateNewOrganization(Organization organization) {
+        if (organization.getName().isBlank()) throw new ValidationException("Organization name must not be empty.");
+        if (organizationRepository.findById(organization.getId()).isPresent()) throw new ValidationException("An Organization with this ID already exists");
+        if (organizationRepository.findByName(organization.getName()).isPresent()) throw new ValidationException("An Organization with this Name already exists");
     }
 }

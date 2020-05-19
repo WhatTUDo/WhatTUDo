@@ -5,11 +5,11 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.impl.SimpleEventService;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
@@ -22,21 +22,21 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class TestCalendarMapper {
-    @Autowired protected OrganisationRepository organisationRepository;
+    @Autowired protected OrganizationRepository organizationRepository;
 
     @Autowired protected SimpleEventService eventService;
 
     public abstract CalendarDto calendarToCalendarDto(Calendar calendar);
 
     @BeforeMapping
-    protected void mapOrganisations(Calendar calendar, @MappingTarget CalendarDto calendarDto) {
+    protected void mapOrganizations(Calendar calendar, @MappingTarget CalendarDto calendarDto) {
 
         List<Integer> orgaIds = new ArrayList<Integer>();
-        for(Organisation o : calendar.getOrganisations()){
+        for(Organization o : calendar.getOrganizations()){
             orgaIds.add(o.getId());
         }
 
-        calendarDto.setOrganisationIds(orgaIds);
+        calendarDto.setOrganizationIds(orgaIds);
 
         List<Integer> EventIds = new ArrayList<Integer>();
         for(Event e : calendar.getEvents())
@@ -48,12 +48,12 @@ public abstract class TestCalendarMapper {
 
     @BeforeMapping
     protected void mapCalendar(CalendarDto calendarDto, @MappingTarget Calendar calendar) {
-        List<Organisation> orgas = new ArrayList<Organisation>();
+        List<Organization> orgas = new ArrayList<Organization>();
 
-        for (Integer o : calendarDto.getOrganisationIds()) {
-            orgas.add(organisationRepository.findById(o).orElseThrow(() -> new NotFoundException("No Organisation with this ID")));
+        for (Integer o : calendarDto.getOrganizationIds()) {
+            orgas.add(organizationRepository.findById(o).orElseThrow(() -> new NotFoundException("No Organization with this ID")));
 
-            calendar.setOrganisations(orgas);
+            calendar.setOrganizations(orgas);
         }
 
         List<Event> eventList = new ArrayList<Event>();

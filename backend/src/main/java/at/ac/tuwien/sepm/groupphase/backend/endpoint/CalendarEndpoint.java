@@ -11,11 +11,11 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TestCalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
-import at.ac.tuwien.sepm.groupphase.backend.service.OrganisationService;
+import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -43,7 +43,7 @@ public class CalendarEndpoint {
     static final String BASE_URL = "/calendars";
     private final CalendarService calendarService;
     private final EventService eventService;
-    private final OrganisationService organisationService;
+    private final OrganizationService organizationService;
     private final CalendarMapper calendarMapper;
     private final EventMapper eventMapper;
 
@@ -115,11 +115,11 @@ public class CalendarEndpoint {
         log.info("GET" + BASE_URL + "search {}", name);
         try {
             List<Calendar> fromCalendars = calendarService.findByName(name);
-            List<Organisation> fromOrganisations = organisationService.findByName(name);
+            List<Organization> fromOrganisations = organizationService.findByName(name);
             List<Event> fromEvents = eventService.findByName(name);
             Set<Calendar> calendars = new HashSet<>();
             calendars.addAll(fromCalendars);
-            for (Organisation o : fromOrganisations) {
+            for (Organization o : fromOrganisations) {
                 if (!o.getCalendars().isEmpty()) {
                     calendars.addAll(o.getCalendars());
                 }

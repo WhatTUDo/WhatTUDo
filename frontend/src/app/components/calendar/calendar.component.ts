@@ -6,7 +6,7 @@ import {CalendarService} from '../../services/calendar.service';
 import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {CalendarEvent} from '../../dtos/calendar-event';
 import {EventService} from '../../services/event.service';
-import {Organisation} from '../../dtos/organisation';
+import {Organization} from '../../dtos/organization';
 
 @Component({
   selector: 'app-calendar',

@@ -21,7 +21,9 @@ import { EventFormComponent } from './components/event-form/event-form.component
 import { EventLocationComponent } from './components/event-location/event-location.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { CalendarListComponent } from './components/calendar-list/calendar-list.component';
-import { OrganisationFormComponent } from './components/organisation-form/organisation-form.component';
+import { OrganizationFormComponent } from './components/organization-form/organization-form.component';
+import { UserComponent } from './components/user/user.component';
+//import { OrganizationComponent } from './components/organization/organization.component';
 
 @NgModule({
   declarations: [
@@ -36,10 +38,10 @@ import { OrganisationFormComponent } from './components/organisation-form/organi
     EventCommentComponent,
     EventFormComponent,
     EventLocationComponent,
-    CalendarComponent,
     CalendarListComponent,
-    OrganisationFormComponent,
-
+    OrganizationFormComponent,
+    UserComponent,
+   // OrganizationComponent,
   ],
   imports: [
     BrowserModule,

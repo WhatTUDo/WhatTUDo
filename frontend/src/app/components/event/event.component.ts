@@ -27,11 +27,6 @@ export class EventComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // #map, .leaflet-control-container {
-    //   border-radius: 4pt !important;
-    // }
-
-
   }
 
   /**
