@@ -7,6 +7,7 @@ import {MessageComponent} from './components/message/message.component';
 import {EventComponent} from './components/event/event.component';
 import {EventFormComponent} from './components/event-form/event-form.component';
 import {OrganisationFormComponent} from './components/organisation-form/organisation-form.component';
+import {UserComponent} from './components/user/user.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -14,7 +15,8 @@ const routes: Routes = [
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'event/:id', component: EventComponent},
   {path: 'form/event/:id', component: EventFormComponent},
-  {path: 'form/event/:id', component: OrganisationFormComponent}
+  {path: 'form/organisation/:id', component: OrganisationFormComponent},
+  {path: 'user', component: UserComponent}
 
 ];
 

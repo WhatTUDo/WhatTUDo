@@ -20,6 +20,7 @@ import { EventCommentComponent } from './components/event-comment/event-comment.
 import { EventFormComponent } from './components/event-form/event-form.component';
 import { EventLocationComponent } from './components/event-location/event-location.component';
 import { OrganisationFormComponent } from './components/organisation-form/organisation-form.component';
+import { UserComponent } from './components/user/user.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { OrganisationFormComponent } from './components/organisation-form/organi
     EventFormComponent,
     EventLocationComponent,
     OrganisationFormComponent,
+    UserComponent,
   ],
   imports: [
     BrowserModule,
