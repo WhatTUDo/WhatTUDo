@@ -1,0 +1,43 @@
+@import "../../../var.scss";
+
+.organization-info {
+  display: flex;
+  align-items: center;
+
+  padding: 16pt;
+
+  margin-bottom: 16pt;
+
+  .avatar {
+    justify-self: flex-start;
+    flex-shrink: 0;
+
+    margin-right: 16pt;
+  }
+
+  .organization-details {
+    text-align: right;
+    justify-self: flex-end;
+    flex-grow: 1;
+
+    .organization-name {
+      text-align: right;
+      font-weight: $f-bold;
+      font-size: 32pt;
+    }
+  }
+}
+
+.organization-action-container {
+
+  .organization-action {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 16pt;
+    margin-top: 8pt;
+
+    &.dangerous {
+      color: $red;
+    }
+  }
+}
