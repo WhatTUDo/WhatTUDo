@@ -11,6 +11,11 @@ export class OrganizationComponent implements OnInit {
 
   // organization: Organization;
   organization = new Organization(null, "FS Winf", []);
+  // organizationMembers: OrganizationMemberOrSomething[];
+  organizationMembers = [
+    {username: "JaneDoe", role: "Admin"},
+    {username: "JohnyAppleseed", role: "Member"},
+  ]
 
   constructor() {
   }

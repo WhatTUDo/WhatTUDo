@@ -282,10 +282,18 @@ iframe {
   &.avatar-small {
     height: 48pt;
     width: 48pt;
+
+    fa-icon {
+      font-size: 48pt;
+    }
   }
 
   &.avatar-medium {
     height: 72pt;
     width: 72pt;
+
+    fa-icon {
+      font-size: 72pt;
+    }
   }
 }
