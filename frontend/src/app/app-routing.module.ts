@@ -11,6 +11,7 @@ import {CalendarComponent} from './components/calendar/calendar.component';
 import {WeeklyCalendarComponent} from './components/weekly-calendar/weekly-calendar.component';
 import {OrganisationFormComponent} from './components/organisation-form/organisation-form.component';
 import {UserComponent} from './components/user/user.component';
+import {OrganizationComponent} from "./components/organization/organization.component";
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -19,14 +20,14 @@ const routes: Routes = [
   {path: 'event/:id', component: EventComponent},
   {path: 'form/event/:id', component: EventFormComponent},
   {path: 'form/organisation/:id', component: OrganisationFormComponent},
-  {path: 'user', component: UserComponent}
+  {path: 'user', component: UserComponent},
+  {path: 'organization', component: OrganizationComponent},
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
   //{path: 'week-calendar/:id', component: WeeklyCalendarComponent}
 
   {path: 'form/event/:id', component: OrganisationFormComponent},
   {path: 'form/event/:id', component: EventFormComponent},
-  {path: 'calendar-list', component: CalendarListComponent}
 
 
 ];

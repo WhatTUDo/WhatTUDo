@@ -24,6 +24,7 @@ import { CalendarListComponent } from './components/calendar-list/calendar-list.
 import { OrganisationFormComponent } from './components/organisation-form/organisation-form.component';
 import { UserComponent } from './components/user/user.component';
 import { CalendarListComponent } from './components/calendar-list/calendar-list.component';
+import { OrganizationComponent } from './components/organization/organization.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { CalendarListComponent } from './components/calendar-list/calendar-list.
     CalendarListComponent,
     OrganisationFormComponent,
     UserComponent,
+    OrganizationComponent,
   ],
   imports: [
     BrowserModule,
