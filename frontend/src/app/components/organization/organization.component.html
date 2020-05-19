@@ -1,5 +1,6 @@
 <div class="contextual-control">
-  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
+  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
   <span>@Abc</span>
 </div>
 <div class="grid-one-third">
@@ -14,6 +15,7 @@
     <div>
       Als kooperative und engagierte Interessensvertretung wollen wir eine offene Anlaufstelle sein,
       Studierende beim Studium unterstützen, untereinander vernetzen und kompetent beraten.
+      <!-- TODO: Discuss if a description makes sense for a organization. -->
     </div>
     <div class="organization-action-container">
       <div class="organization-action dangerous clickable no-hover-enlarge no-shadow">
@@ -22,9 +24,33 @@
     </div>
   </div>
   <div>
-    <h2>Lorem</h2>
+    <div class="title-icon-button-combo">
+      <h2>People</h2>
+      <div class="icon-button clickable no-hover-enlarge no-shadow">
+        <fa-icon [icon]="faPlus"></fa-icon>
+      </div>
+    </div>
+
+    <div class="organization-member-list">
+      <div class="organization-member">
+        <img alt="" class="avatar avatar-small" src="https://picsum.photos/256/256/">
+        <div class="organization-member-details">
+          <div class="organization-member-name">Johny Appleseed</div>
+          <div class="organization-member-role">Member</div>
+        </div>
+        <div class="organization-member-buttons">
+          <div class="clickable no-hover-enlarge no-shadow organization-manage-member-button">
+            <fa-icon [icon]="faCog"></fa-icon>
+          </div>
+          <div class="clickable no-hover-enlarge no-shadow organization-kick-member-button">
+            <fa-icon [icon]="faTimesCircle"></fa-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
   <div>
-    <h2>Ipsum</h2>
+    <h2>Lorem Ipsum</h2>
   </div>
 </div>
