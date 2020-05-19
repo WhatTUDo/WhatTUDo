@@ -39,6 +39,7 @@ import { UserComponent } from './components/user/user.component';
     EventFormComponent,
     EventLocationComponent,
     CalendarListComponent,
+    CalendarComponent,
     OrganizationFormComponent,
     UserComponent,
    // OrganizationComponent,

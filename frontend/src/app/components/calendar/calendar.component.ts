@@ -15,43 +15,93 @@ import {Organization} from '../../dtos/organization';
 })
 export class CalendarComponent implements OnInit {
 
-  offset = 0;
+  calendar: Calendar = new Calendar(null,null,null,null);
+  events: CalendarEvent[] = [];
+
   currentDate: number;
   currentMonth: String;
   currentYear: number;
 
   displayingDate: Date;
   displayingWeek: Date[]; // Starts at a monday.
-  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
-  events : CalendarEvent[] = [];
-  calendar: Calendar = new Calendar(null, null, null);
+  offset = 0;
 
-  constructor(private eventService: EventService,private route: ActivatedRoute, private calendarService : CalendarService) {
+  viewBeginningAtRow = 1;
+  viewBeginningAtTime = 8 * (60 * 60);
+  viewEndingAtRow = 64;
+  viewEndingAtTime = 24 * (60 * 60) - 1;
+
+  viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
+  viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
+
+
+  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
+
+  constructor(
+    private eventService: EventService,
+    private calendarService: CalendarService,
+    private route: ActivatedRoute
+  ) {
+    console.log(this.eventsOfTheWeek);
   }
 
   ngOnInit(): void {
     let id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.calendarService.getCalendarById(id).subscribe((calendar:Calendar) =>{
+    this.calendarService.getCalendarById(id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
-    },  err => {
+    }, err => {
       console.warn(err);
     });
+    this.displayingDate = this.getToday();
     this.displayingWeek = this.getWeek(this.offset);
-    let keyISOString = this.getMidnight(this.displayingWeek[0]).toISOString();
-    let events = this.eventsOfTheWeek.get(keyISOString);
-    // console.log("checkthiss::: "+this.displayingWeek[0])
-    this.calendarService.getEventsOfTheWeek(id, this.displayingWeek[0], this.displayingWeek[6]).subscribe((events1)=>
-    {
-      this.events = events1;
-    },
-      err => {
-        alert(err.message);
+
+    this.loadEventsForWeek(this.getWeek(0)[0], this.getWeek(0)[6]);
+    this.updateDatetime();
+    setInterval(_ => {
+      this.updateDatetime();
+    }, 1000);
+
+    setInterval(_ => {
+      Array.from(document.getElementsByClassName('calendar-event'))
+        .forEach(event => {
+          const time = event.getElementsByClassName('calendar-event-time')[0];
+          const name = event.getElementsByClassName('calendar-event-name')[0];
+          // @ts-ignore
+          if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
+            // @ts-ignore
+            time.innerText = '…'
+            // @ts-ignore
+            name.innerText = '…';
+          }
+        })
+    }, 500)
+  }
+
+  /**
+   * Calls Service to load Events for the week.
+   * @param from: Start date of week
+   * @param to: End date of week
+   */
+  loadEventsForWeek(from: Date, to: Date) {
+    for(let eventId of this.calendar.eventIds){
+      this.eventService.getEvent(eventId).subscribe((event:CalendarEvent) =>{
+        let startDate = new Date(event.startDateTime);
+        let endDate = new Date(event.endDateTime);
+        event.startDateTime = startDate;
+        event.endDateTime = endDate;
+        this.events.push(event);
+      }, error => {
+        console.warn("Event does not exist");
+      })
+    }
+      this.displayingWeek.forEach((day: Date) => {
+        let keyISOString = this.getMidnight(day).toISOString();
+        this.eventsOfTheWeek.set(keyISOString, this.events.filter(event => {
+          let isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
+          let isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
+          return isAfterMidnight && isBeforeEndOfDay;
+        }));
       });
-    this.eventsOfTheWeek.set(keyISOString, events);  }
-
-  getThisWeekEvents(){
-
-
   }
 
   updateDatetime() {
@@ -61,8 +111,8 @@ export class CalendarComponent implements OnInit {
     this.currentYear = today.getFullYear();
   }
 
-  getWeek(offset: number) {
-    const offsetWeeks = Math.round(this.offset/7);
+  getWeek(offset = 0) {
+    const offsetWeeks = Math.round(this.offset / 7);
     let currentWeekDates = [];
     let today = this.getToday();
 
@@ -109,6 +159,7 @@ export class CalendarComponent implements OnInit {
   private updateOffsettedDates() {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
+    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
   }
 
   getToday() {
@@ -126,10 +177,14 @@ export class CalendarComponent implements OnInit {
     const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
 
     // Calendar View should starts at a time like 8 AM and ends at 23:59PM or even later.
-    const startRow = Math.max(Math.floor((startSecond - 28800) / 57600 * 64), 0) // Proof of concept with magic numbers. TODO: Fix this.
-    const endRow = Math.min(Math.floor((endSecond - 28800) / 57600 * 64), 64) // Proof of concept with magic numbers. TODO: Fix this.
+    const startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow)
+    const endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow)
 
     return `${startRow}/${endRow}`
+  }
+
+  private calcRow(sec) {
+    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
   }
 
   getSecondOffsetFromMidnight(date: Date) {
@@ -142,10 +197,33 @@ export class CalendarComponent implements OnInit {
     return midnight
   }
 
+  getEndOfDay(date: Date) {
+    let endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 50);
+    return endOfDay;
+  }
+
+  public getDisplayTimeString(event: CalendarEvent) {
+    let string = event.startDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    string += ' - '
+    string += event.endDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    return string
+  }
+
+  public redirectToDetail(id: number) {
+    console.log("You Clicked: ", id);
+    window.location.replace("/event/" + id);
+  }
+
 
   faChevronUp = faChevronUp;
   faChevronDown = faChevronDown;
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
 }
-

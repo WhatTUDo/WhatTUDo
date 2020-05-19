@@ -52,7 +52,7 @@ export class CalendarListComponent implements OnInit {
 
 
   onSelectCalendar(calendarRep: CalendarRepresentation){
-    this.router.navigate(['/calendar', calendarRep.id]);
+    this.router.navigate(['calendar/', calendarRep.id]);
   }
 
   onSelectOrganization(organization: string){

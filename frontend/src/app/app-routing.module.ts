@@ -24,7 +24,7 @@ const routes: Routes = [
   //{path: 'organization', component: OrganizationComponent},
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
-  //{path: 'week-calendar/:id', component: WeeklyCalendarComponent}
+  //{path: 'week-calendar/:id', component: WeeklyCalendarComponent},
 
   {path: 'form/event/:id', component: OrganizationFormComponent},
   {path: 'form/event/:id', component: EventFormComponent},
