@@ -32,9 +32,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 
 @Slf4j
@@ -113,32 +111,35 @@ public class CalendarEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
     @ApiOperation(value = "Get calendars with name")
-    public List<CalendarDto> searchCalendarCombo(@RequestParam(value = "name")  String name){
-        log.info("GET"+BASE_URL+"search {}", name);
-        try{
-        List<Calendar> fromCalendars = calendarService.findByName(name);
-        List<Organisation> fromOrganisations = organisationService.findByName(name);
-        List<Event> fromEvents=eventService.findByName(name);
-            for (Organisation o: fromOrganisations) {
-                if(!o.getCalendars().isEmpty()){
-                fromCalendars.addAll(o.getCalendars());}
+    public List<CalendarDto> searchCalendarCombo(@RequestParam(value = "name")  String name) {
+        log.info("GET" + BASE_URL + "search {}", name);
+        try {
+            List<Calendar> fromCalendars = calendarService.findByName(name);
+            List<Organisation> fromOrganisations = organisationService.findByName(name);
+            List<Event> fromEvents = eventService.findByName(name);
+            Set<Calendar> calendars = new HashSet<>();
+            calendars.addAll(fromCalendars);
+            for (Organisation o : fromOrganisations) {
+                if (!o.getCalendars().isEmpty()) {
+                    calendars.addAll(o.getCalendars());
+                }
             }
-            for (Event e: fromEvents) {
-                fromCalendars.add(e.getCalendar());
-            }
-            List<CalendarDto> calendarDtos = new ArrayList<>();
-            fromCalendars.forEach(calendar -> calendarDtos.add(calendarMapper.calendarToCalendarDto(calendar)));
-            if(calendarDtos.isEmpty()){
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing was found");
-            }
-            return calendarDtos;
-        }
-        catch (ServiceException e){
+                for (Event e : fromEvents) {
+                    calendars.add(e.getCalendar());
+                }
+                List<CalendarDto> calendarDtos = new ArrayList<>();
+                calendars.forEach(calendar -> calendarDtos.add(calendarMapper.calendarToCalendarDto(calendar)));
+                if (calendarDtos.isEmpty()) {
+                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing was found");
+                }
+                return calendarDtos;
+
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
         }
 
-
     }
+
 
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
