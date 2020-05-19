@@ -29,7 +29,6 @@
 }
 
 .organization-action-container {
-
   .organization-action {
     text-align: center;
     text-transform: uppercase;
@@ -39,5 +38,43 @@
     &.dangerous {
       color: $red;
     }
+  }
+}
+
+.organization-member {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16pt;
+
+  .organization-member-details {
+    margin-left: 8pt;
+
+    .organization-member-name {
+      font-weight: $f-bold;
+      font-size: 16pt;
+    }
+    .organization-member-role {
+      color: var(--secondary);
+    }
+  }
+  .organization-member-buttons {
+    margin-left: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    * {
+      font-size: 16pt;
+      margin-left: 4pt;
+    }
+  }
+}
+
+.title-icon-button-combo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .icon-button {
+    font-size: 32pt;
+    color: var(--secondary);
   }
 }
