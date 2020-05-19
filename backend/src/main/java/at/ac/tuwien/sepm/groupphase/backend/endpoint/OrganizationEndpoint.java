@@ -1,14 +1,14 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganisationDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.OrganisationMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.OrganizationMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
-import at.ac.tuwien.sepm.groupphase.backend.service.OrganisationService;
+import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -28,26 +28,26 @@ import java.util.Collection;
 
 @Slf4j
 @RestController
-@RequestMapping(value = OrganisationEndpoint.BASE_URL)
+@RequestMapping(value = OrganizationEndpoint.BASE_URL)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class OrganisationEndpoint {
-    static final String BASE_URL = "/organisations";
-    private final OrganisationService organisationService;
-    private final OrganisationMapper organisationMapper;
+public class OrganizationEndpoint {
+    static final String BASE_URL = "/organizations";
+    private final OrganizationService organizationService;
+    private final OrganizationMapper organizationMapper;
     private final CalendarService calendarService;
 
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Edit organisation", authorizations = {@Authorization(value = "apiKey")})
-    public OrganisationDto editOrganisation(@RequestBody OrganisationDto organisation) {
-        log.info("PUT " + BASE_URL + "/{}", organisation); // FIXME: Macht keinen Sinn, Organisation ist nicht in der URL
+    @ApiOperation(value = "Edit organization", authorizations = {@Authorization(value = "apiKey")})
+    public OrganizationDto editOrganization(@RequestBody OrganizationDto organization) {
+        log.info("PUT " + BASE_URL + "/{}", organization); // FIXME: Macht keinen Sinn, Organization ist nicht in der URL
         try {
-            // Organisation organisationEntity = organisationMapper.organisationDtoToOrganisation(organisation);
-            Organisation organisationEntity = organisationService.findById(organisation.getId());
-            organisationEntity.setName(organisation.getName());
-            organisationMapper.mapCalendars(organisation, organisationEntity);
-            return organisationMapper.organisationToOrganisationDto(organisationService.update(organisationEntity));
+            // Organization organizationEntity = organizationMapper.organizationDtoToOrganization(organization);
+            Organization organizationEntity = organizationService.findById(organization.getId());
+            organizationEntity.setName(organization.getName());
+            organizationMapper.mapCalendars(organization, organizationEntity);
+            return organizationMapper.organizationToOrganizationDto(organizationService.update(organizationEntity));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (ValidationException e) {
@@ -59,12 +59,12 @@ public class OrganisationEndpoint {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation(value = "Create Organisation", authorizations = {@Authorization(value = "apiKey")})
-    public OrganisationDto createOrganisation(@RequestBody OrganisationDto organisationDto) {
+    @ApiOperation(value = "Create Organization", authorizations = {@Authorization(value = "apiKey")})
+    public OrganizationDto createOrganization(@RequestBody OrganizationDto organizationDto) {
         log.info("POST " + BASE_URL + "/");
         try {
-            Organisation organisationEntity = organisationMapper.organisationDtoToOrganisation(organisationDto);
-            return organisationMapper.organisationToOrganisationDto(organisationService.create(organisationEntity));
+            Organization organizationEntity = organizationMapper.organizationDtoToOrganization(organizationDto);
+            return organizationMapper.organizationToOrganizationDto(organizationService.create(organizationEntity));
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -77,12 +77,12 @@ public class OrganisationEndpoint {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get all Organisations", authorizations = {@Authorization(value = "apiKey")})
-    public List<OrganisationDto> getAllOrgas() {
+    @ApiOperation(value = "Get all Organizations", authorizations = {@Authorization(value = "apiKey")})
+    public List<OrganizationDto> getAllOrgas() {
         log.info("GET" + BASE_URL + "/");
         try {
-            return organisationService.getAll().stream()
-                .map(organisationMapper::organisationToOrganisationDto)
+            return organizationService.getAll().stream()
+                .map(organizationMapper::organizationToOrganizationDto)
                 .collect(Collectors.toList());
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
@@ -91,11 +91,11 @@ public class OrganisationEndpoint {
 
     @GetMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Get Organisation by ID", authorizations = {@Authorization(value = "apiKey")})
-    public OrganisationDto getOrgaById(@PathVariable(value = "id") Integer id) {
+    @ApiOperation(value = "Get Organization by ID", authorizations = {@Authorization(value = "apiKey")})
+    public OrganizationDto getOrgaById(@PathVariable(value = "id") Integer id) {
         log.info("GET" + BASE_URL + "/");
         try {
-            return organisationMapper.organisationToOrganisationDto(organisationService.findById(id));
+            return organizationMapper.organizationToOrganizationDto(organizationService.findById(id));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -106,13 +106,13 @@ public class OrganisationEndpoint {
 
     @PutMapping(value = "/{id}/calendars")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Add Calendars to an Organisation by ID", authorizations = {@Authorization(value = "apiKey")})
-    public OrganisationDto addCalToOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
+    @ApiOperation(value = "Add Calendars to an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
+    public OrganizationDto addCalToOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
         log.info("PUT " + BASE_URL + "/{}/calendars", orgaId);
         try {
             Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
-            Organisation organisation = organisationService.addCalendars(organisationService.findById(orgaId), calendars);
-            return organisationMapper.organisationToOrganisationDto(organisation);
+            Organization organization = organizationService.addCalendars(organizationService.findById(orgaId), calendars);
+            return organizationMapper.organizationToOrganizationDto(organization);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
@@ -120,13 +120,13 @@ public class OrganisationEndpoint {
 
     @DeleteMapping(value = "/{id}/calendars")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Remove Calendars from an Organisation by ID", authorizations = {@Authorization(value = "apiKey")})
-    public OrganisationDto removeCalFromOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
+    @ApiOperation(value = "Remove Calendars from an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
+    public OrganizationDto removeCalFromOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
         log.info("DELETE " + BASE_URL + "/{}/calendars", orgaId);
         try {
             Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
-            Organisation organisation = organisationService.removeCalendars(organisationService.findById(orgaId), calendars);
-            return organisationMapper.organisationToOrganisationDto(organisation);
+            Organization organization = organizationService.removeCalendars(organizationService.findById(orgaId), calendars);
+            return organizationMapper.organizationToOrganizationDto(organization);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }

@@ -2,10 +2,10 @@ package at.ac.tuwien.sepm.groupphase.backend.datagenerator;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ import java.util.Collections;
 @Profile("generateData")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OrgaCalEventDataGenerator {
-    private final OrganisationRepository organisationRepository;
+    private final OrganizationRepository organizationRepository;
     private final CalendarRepository calendarRepository;
     private final EventRepository eventRepository;
 
@@ -29,10 +29,10 @@ public class OrgaCalEventDataGenerator {
     public void generateData() {
         log.info("Generating sample data");
         for (int i = 0; i < 10; i++) {
-            Organisation orga = organisationRepository.save(new Organisation("Organisation " + i));
+            Organization orga = organizationRepository.save(new Organization("Organization " + i));
             Calendar calendar = calendarRepository.save(new Calendar("Calendar " + i, Collections.singletonList(orga)));
             orga.getCalendars().add(calendar);
-            organisationRepository.save(orga);
+            organizationRepository.save(orga);
 
             for (int j = 0; j < 20; j++) {
                 Event event = new Event(

@@ -3,13 +3,13 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.events.calendar.CalendarFindEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class SimpleCalendarService implements CalendarService {
     private final ApplicationEventPublisher publisher;
     private final CalendarRepository calendarRepository;
     private final EventRepository eventRepository;
-    private final OrganisationRepository organisationRepository;
+    private final OrganizationRepository organizationRepository;
 
     @Override
     public Calendar findById(Integer id) {
@@ -85,13 +85,13 @@ public class SimpleCalendarService implements CalendarService {
         try {
 
           Calendar result =  calendarRepository.save(calendar);
-           for(Organisation o : calendar.getOrganisations()){
+           for(Organization o : calendar.getOrganizations()){
 
               List<Calendar> cal;
                 cal = o.getCalendars();
                 cal.add(calendar);
                 o.setCalendars(cal);
-                organisationRepository.save(o);
+                organizationRepository.save(o);
 
             }
 

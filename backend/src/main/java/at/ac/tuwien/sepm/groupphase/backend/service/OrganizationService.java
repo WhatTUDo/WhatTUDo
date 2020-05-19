@@ -1,60 +1,60 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.Collection;
 
-public interface OrganisationService {
+public interface OrganizationService {
     /**
-     * @return all organisations
+     * @return all organizations
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
      */
-    Collection<Organisation> getAll();
+    Collection<Organization> getAll();
 
     /**
-     * @param id of organisation to be found.
-     * @return the organisation with the specified id.
+     * @param id of organization to be found.
+     * @return the organization with the specified id.
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
      */
-    Organisation findById(int id);
+    Organization findById(int id);
 
     /**
-     * @param organisation - to be created
-     * @return the created organisation
+     * @param organization - to be created
+     * @return the created organization
      * @throws org.hibernate.service.spi.ServiceException                    will be thrown if something goes wrong during data processing.
      * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException will be thrown if name is blank.
      */
-    Organisation create(Organisation organisation);
+    Organization create(Organization organization);
 
     /**
-     * @param organisation to be updated into database with the new values.
-     * @return the updated organisation.
+     * @param organization to be updated into database with the new values.
+     * @return the updated organization.
      * @throws org.hibernate.service.spi.ServiceException                    will be thrown if something goes wrong during data processing.
      * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException will be thrown if name is blank.
      */
-    Organisation update(Organisation organisation);
+    Organization update(Organization organization);
 
     /**
-     * @param organisation - to add the calendars to
-     * @param calendars to be added to this organisation
-     * @return the updated organisation
+     * @param organization - to add the calendars to
+     * @param calendars to be added to this organization
+     * @return the updated organization
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
      */
-    Organisation addCalendars(Organisation organisation, Collection<Calendar> calendars);
+    Organization addCalendars(Organization organization, Collection<Calendar> calendars);
 
 
     /**
-     * @param organisation - to remove the calendars from
-     * @param calendars to be removed from this organisation
-     * @return the updated organisation
+     * @param organization - to remove the calendars from
+     * @param calendars to be removed from this organization
+     * @return the updated organization
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
      */
-    Organisation removeCalendars(Organisation organisation, Collection<Calendar> calendars);
+    Organization removeCalendars(Organization organization, Collection<Calendar> calendars);
 
 
-    List<Organisation> findByName(String name);
+    List<Organization> findByName(String name);
 
 }

@@ -5,8 +5,8 @@ import {Calendar} from '../../dtos/calendar';
 import {CalendarRepresentation} from '../../dtos/calendar-representation';
 import { Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {OrganisationService} from '../../services/organisation.service';
-import {Organisation} from '../../dtos/organisation';
+import {OrganizationService} from '../../services/organization.service';
+import {Organization} from '../../dtos/organization';
 
 @Component({
   selector: 'app-calendar-list',
@@ -23,14 +23,14 @@ export class CalendarListComponent implements OnInit {
   });
 
 
-  constructor(private calendarService: CalendarService, private router: Router, private organisationService: OrganisationService) {
+  constructor(private calendarService: CalendarService, private router: Router, private organizationService: OrganizationService) {
     this.calendarService.getAllCalendars().subscribe((list) => {
         this.list   = list;
         for(let e of list){
-            for(let a of e.organisationIds){
-              this.organisationService.getById(a).subscribe((organisation:Organisation)=>{
-                  if(organisation.name != null){
-                    this.listOrg.push(organisation.name);}
+            for(let a of e.organizationIds){
+              this.organizationService.getById(a).subscribe((organization:Organization)=>{
+                  if(organization.name != null){
+                    this.listOrg.push(organization.name);}
                 },
                 err => {
                   console.warn(err);
@@ -55,7 +55,7 @@ export class CalendarListComponent implements OnInit {
     this.router.navigate(['/calendar', calendarRep.id]);
   }
 
-  onSelectOrganisation(organisation: string){
+  onSelectOrganization(organization: string){
     this.router.navigate(['/']);
   }
 

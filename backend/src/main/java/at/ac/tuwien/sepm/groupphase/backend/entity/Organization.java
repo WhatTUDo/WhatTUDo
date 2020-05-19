@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Organisation {
+public class Organization {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -25,8 +25,8 @@ public class Organisation {
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinTable(
-        name = "organisation_calendar",
-        joinColumns = @JoinColumn(name = "organisation_id"),
+        name = "organization_calendar",
+        joinColumns = @JoinColumn(name = "organization_id"),
         inverseJoinColumns = @JoinColumn(name = "calendar_id")
     )
     private List<Calendar> calendars = new ArrayList<>();

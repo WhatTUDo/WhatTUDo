@@ -27,7 +27,7 @@ public class Calendar {
     @ToString.Exclude
     @ManyToMany(mappedBy = "calendars", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @Size(min = 1)
-    private List<Organisation> organisations;
+    private List<Organization> organizations;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "calendar")

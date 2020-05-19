@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrganisationDto {
+public class OrganizationDto {
     private Integer id;
     private String name;
     private List<Integer> calendarIds;
