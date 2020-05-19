@@ -7,13 +7,18 @@
           <input type="hidden" formControlName="id" name="id">
 
           <div class="form-row event-time">
-            <label for="event.startDate">Start</label>
-            <input type="datetime-local" class="form-control" formControlName="startDate" id="event.startDate"
-                   placeholder="Start …">
-            <div>&ensp;-&ensp;</div>
-            <label for="event.endDate">End</label>
-            <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
-                   placeholder="End …">
+            <div>
+              <label for="event.startDate">Start</label>
+              <input type="datetime-local"
+                     class="form-control" formControlName="startDate" id="event.startDate"
+                     placeholder="Start …">
+            </div>
+            <div>-</div>
+            <div>
+              <label for="event.endDate">End</label>
+              <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
+                     placeholder="End …">
+            </div>
           </div>
           <label for="event.name">Name</label>
           <input type="text" class="form-control event-name form-row" formControlName="name" id="event.name"
@@ -24,7 +29,9 @@
                  placeholder="Description …">
         </div>
 
-        <button class="submit-button button-clickable full-width-form-button no-hover event-form-submit" (click)="onSubmit()">Submit</button>
+        <button class="submit-button button-clickable full-width-form-button no-hover-enlarge event-form-submit"
+                (click)="onSubmit()">Submit
+        </button>
       </div>
     </div>
   </div>

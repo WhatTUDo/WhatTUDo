@@ -1,6 +1,6 @@
 <div *ngIf="this.calendarEvent">
   <div class="contextual-control">
-    <span id="back-button"><fa-icon [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+    <span id="back-button"><a class="clickable no-hover-enlarge" href="/"><fa-icon [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
     <span>{{this.calendarEvent.name}}</span>
   </div>
   <div class="grid-one-third scroll">
@@ -43,7 +43,7 @@
         </div>
       </div>
       <div class="organization-info">
-        <img class="avatar avatar-small" src="https://picsum.photos/256/256/">
+        <img alt="" class="avatar avatar-medium" src="https://picsum.photos/256/256/">
         <div class="organization-details">
           <div class="organization-name">FS Winf</div>
           <div>Als kooperative und engagierte Interessensvertretung wollen wir eine offene Anlaufstelle sein,
@@ -56,7 +56,7 @@
           <iframe id="open-street-map-iframe"
                   src="//www.openstreetmap.org/export/embed.html?bbox=16.36812955141068%2C48.19411795494773%2C16.371696889400486%2C48.19578432955719&amp;layer=mapnik"></iframe>
         </div>
-        <small><a href="https://www.openstreetmap.org/#map=19/48.19495/16.36991">View Larger Map</a></small>
+        <small><a href="https://www.openstreetmap.org/#map=19/48.19495/16.36991">View Larger Map</a></small> <!--TODO: Make this look better-->
       </div>
     </div>
     <div>
@@ -65,11 +65,11 @@
         <app-event-comment [comment]="comment"></app-event-comment>
       </div>
       <div id="comment-area">
-        <label for="comment-area">
+        <label for="comment-textarea">
           Leave a comment
         </label>
         <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"></textarea>
-        <button class="button-clickable full-width-form-button no-hover btn-lg" (click)="addComment()">Send</button>
+        <button class="button-clickable full-width-form-button no-hover-enlarge btn-lg" (click)="addComment()">Send</button>
       </div>
     </div>
 
