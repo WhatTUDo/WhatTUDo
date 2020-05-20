@@ -53,6 +53,7 @@ public class CalendarEndpoint {
 
     @CrossOrigin
     @GetMapping(value = "/{id}")
+    @ApiOperation(value = "Get Calendar by ID")
     public CalendarDto getById(@PathVariable("id") int id) {
         log.info("GET " + BASE_URL + "/{}", id);
         try {
@@ -65,11 +66,11 @@ public class CalendarEndpoint {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/all")
+    @GetMapping(value = "")
+    @ApiOperation(value = "Get all Calendars")
     public List<CalendarDto> getAll() {
         log.info("GET all" + BASE_URL + "");
         try {
-
             return testMapper.calendarsToCalendarDtos(calendarService.findAll());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
