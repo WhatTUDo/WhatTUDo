@@ -13,17 +13,17 @@ import {MessageComponent} from './components/message/message.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
 
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { WeeklyCalendarComponent } from './components/weekly-calendar/weekly-calendar.component';
-import { EventComponent } from './components/event/event.component';
-import { EventCommentComponent } from './components/event-comment/event-comment.component';
-import { EventFormComponent } from './components/event-form/event-form.component';
-import { EventLocationComponent } from './components/event-location/event-location.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
-import { CalendarListComponent } from './components/calendar-list/calendar-list.component';
-import { OrganizationFormComponent } from './components/organization-form/organization-form.component';
-import { UserComponent } from './components/user/user.component';
-//import { OrganizationComponent } from './components/organization/organization.component';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
+import {WeeklyCalendarComponent} from './components/weekly-calendar/weekly-calendar.component';
+import {EventComponent} from './components/event/event.component';
+import {EventCommentComponent} from './components/event-comment/event-comment.component';
+import {EventFormComponent} from './components/event-form/event-form.component';
+import {EventLocationComponent} from './components/event-location/event-location.component';
+import {CalendarComponent} from './components/calendar/calendar.component';
+import {CalendarListComponent} from './components/calendar-list/calendar-list.component';
+import {OrganizationFormComponent} from './components/organization-form/organization-form.component';
+import {UserComponent} from './components/user/user.component';
+import {OrganizationComponent} from './components/organization/organization.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +42,7 @@ import { UserComponent } from './components/user/user.component';
     CalendarComponent,
     OrganizationFormComponent,
     UserComponent,
-   // OrganizationComponent,
+    OrganizationComponent,
   ],
   imports: [
     BrowserModule,
