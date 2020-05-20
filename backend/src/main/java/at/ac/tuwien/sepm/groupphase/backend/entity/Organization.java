@@ -29,6 +29,6 @@ public class Organization {
         joinColumns = @JoinColumn(name = "organization_id"),
         inverseJoinColumns = @JoinColumn(name = "calendar_id")
     )
-    private List<Calendar> calendars = new ArrayList<>();
+    private List<Calendar> calendars = new ArrayList<>(); //FIXME: Use *Set*. Currently returning duplicates.
 }
 
