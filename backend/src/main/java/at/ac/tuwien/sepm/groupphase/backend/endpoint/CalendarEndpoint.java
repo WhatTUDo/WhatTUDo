@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
@@ -19,7 +18,6 @@ import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
@@ -29,8 +27,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import java.util.*;
 
@@ -53,11 +49,10 @@ public class CalendarEndpoint {
 
     @CrossOrigin
     @GetMapping(value = "/{id}")
+    @ApiOperation(value = "Get Calendar by ID")
     public CalendarDto getById(@PathVariable("id") int id) {
         log.info("GET " + BASE_URL + "/{}", id);
         try {
-
-
             return calendarMapper.calendarToCalendarDto(calendarService.findById(id));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
@@ -65,11 +60,11 @@ public class CalendarEndpoint {
     }
 
     @CrossOrigin
-    @GetMapping(value = "/all")
+    @GetMapping(value = "")
+    @ApiOperation(value = "Get all Calendars")
     public List<CalendarDto> getAll() {
         log.info("GET all" + BASE_URL + "");
         try {
-
             return testMapper.calendarsToCalendarDtos(calendarService.findAll());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);

@@ -42,8 +42,8 @@ public class EventServiceTest {
 
     @Test
     public void save_shouldReturn_sameEvent() {
-        Organization orga = organizationRepository.save(new Organization("Test Organization Service 1"));
-        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 1", Collections.singletonList(orga)));
+        //Organization orga = organizationRepository.save(new Organization("Test Organization Service 1"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 1", Collections.singletonList(new Organization())));
         Event eventEntity = new Event("Test Name", LocalDateTime.of(2020, 1, 1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
         Event gottenEvent = service.save(new Event("Test Name", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar));
 
@@ -55,8 +55,8 @@ public class EventServiceTest {
 
     @Test
     public void save_thenRead_shouldReturn_sameEvent() {
-        Organization orga = organizationRepository.save(new Organization("Test Organization Service 2"));
-        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 2", Collections.singletonList(orga)));
+       // Organization orga = organizationRepository.save(new Organization("Test Organization Service 2"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 2", Collections.singletonList(new Organization())));
         Event eventEntity = new Event("Test Name", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
         Event returnedEvent = service.save(eventEntity);
         Event gottenEvent = service.findById(returnedEvent.getId());
@@ -72,8 +72,8 @@ public class EventServiceTest {
 
     @Test
     public void save_withoutCorrectParam_shouldReturn_ValidationException() {
-        Organization orga = organizationRepository.save(new Organization("Test Organization Service 3"));
-        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(orga)));
+        //Organization orga = organizationRepository.save(new Organization("Test Organization Service 3"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(new Organization())));
         Event event1 = new Event("", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
         Event event2 = new Event("Test Event", LocalDateTime.of(2020,1,2,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
         assertThrows(ValidationException.class, () -> service.save(event1));
@@ -83,8 +83,8 @@ public class EventServiceTest {
 
     @Test
     public void delete_nonSavedEvent_IdNotGenerated_throwsValidationException(){
-        Organization orga = organizationRepository.save(new Organization("Test Organization Service 4"));
-        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 4", Collections.singletonList(orga)));
+        //Organization orga = organizationRepository.save(new Organization("Test Organization Service 4"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 4", Collections.singletonList(new Organization())));
 
         Event notSavedEvent = new Event("Non Existent", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
         assertThrows(ValidationException.class, () -> service.delete(notSavedEvent));
@@ -92,8 +92,8 @@ public class EventServiceTest {
 
     @Test
     public void delete_savedEvent_findBYIdReturnsNotFound(){
-        Organization orga = organizationRepository.save(new Organization("Test Organization Service 5"));
-        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 5", Collections.singletonList(orga)));
+       // Organization orga = organizationRepository.save(new Organization("Test Organization Service 5"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 5", Collections.singletonList(new Organization())));
 
         Event eventEntity = new Event("Delete Event Test", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
         Event event = service.save(eventEntity);

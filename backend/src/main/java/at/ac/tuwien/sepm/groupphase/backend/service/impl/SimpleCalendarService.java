@@ -33,31 +33,34 @@ public class SimpleCalendarService implements CalendarService {
     private final OrganizationRepository organizationRepository;
 
     @Override
-    public Calendar findById(Integer id) {
-        Optional<Calendar> found = calendarRepository.findById(id);
-        if (found.isPresent()) {
+    public Calendar findById(Integer id) throws NotFoundException, ServiceException {
+        try {
+            Optional<Calendar> found = calendarRepository.findById(id);
+            if (found.isPresent()) {
+                List<Event> events;
+                events = eventRepository.findByCalendarId(id);
+                Calendar calendar = (found.get());
+                calendar.setEvents(events);
 
-            List<Event> events;
-
-            events = eventRepository.findByCalendarId(id);
-
-
-            Calendar calendar = (found.get());
-            calendar.setEvents(events);
-
-            return calendar;
-        } else {
-            throw new NotFoundException("No event found with id " + id);
+                return calendar;
+            } else {
+                throw new NotFoundException("No event found with id " + id);
+            }
+        }
+        catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
     }
 
     @Override
-    public List<Calendar> findByName(String name){
-        try{
-
-            return calendarRepository.findAllByNameContains(name);
-        }
-        catch (PersistenceException e){
+    public List<Calendar> findByName(String name) throws ServiceException, NotFoundException {
+        try {
+            List<Calendar> calendars = calendarRepository.findAllByNameContains(name);
+            if (calendars.size() <= 0) {
+                throw new NotFoundException("Could not find any Calendars!");
+            }
+            return calendars;
+        } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
     }
@@ -67,12 +70,12 @@ public class SimpleCalendarService implements CalendarService {
     public List<Calendar> findAll() {
         try {
 
-            List<Calendar> result = new ArrayList<Calendar>();
+            List<Calendar> result = new ArrayList<>();
 
-             for(Calendar c : calendarRepository.findAll()){
-                 result.add(findById(c.getId()));
-             }
-             return result;
+            for (Calendar c : calendarRepository.findAll()) {
+                result.add(findById(c.getId()));
+            }
+            return result;
 
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -83,18 +86,17 @@ public class SimpleCalendarService implements CalendarService {
     @Override
     public Calendar save(Calendar calendar) {
         try {
-
-          Calendar result =  calendarRepository.save(calendar);
-           for(Organization o : calendar.getOrganizations()){
-
-              List<Calendar> cal;
+            Calendar result = calendarRepository.save(calendar);
+            if (calendar.getOrganizations() == null) {
+                throw new ServiceException("Could not find Organizations for Calendar");
+            }
+            for (Organization o : calendar.getOrganizations()) {
+                List<Calendar> cal;
                 cal = o.getCalendars();
                 cal.add(calendar);
                 o.setCalendars(cal);
                 organizationRepository.save(o);
-
             }
-
             publisher.publishEvent(new EventCreateEvent(calendar.getName()));
             return result;
         } catch (PersistenceException e) {

@@ -1,9 +1,9 @@
 <div class="contextual-control">
   <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
-  <span>@Abc</span>
+  <span *ngIf="organization">{{organization.name}}</span>
 </div>
-<div class="grid-one-third">
+<div class="grid-one-third" *ngIf="organization">
   <div>
     <h2>You</h2>
     <div class="organization-info">
@@ -51,6 +51,8 @@
 
   </div>
   <div>
-    <h2>Lorem Ipsum</h2>
+    <h2>Calenders</h2>
+    <a *ngFor="let cal of organizationCalenders" href="/calendar/{{cal.id}}"><div>{{cal.name}}</div></a>
+<!--    TODO: Make this pretty-->
   </div>
 </div>

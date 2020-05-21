@@ -24,7 +24,7 @@ export class OrganizationService {
     console.log('Post Organization to Server', Organization);
     let reducedElement = {
       'name': organization.name,
-      'calendars': organization.calendars
+      'calendars': organization.calendarIds
     };
 
     return this.httpClient.post(this.organizationBaseUri, reducedElement);

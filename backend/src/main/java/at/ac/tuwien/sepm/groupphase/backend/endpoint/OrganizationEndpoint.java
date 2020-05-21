@@ -38,6 +38,7 @@ public class OrganizationEndpoint {
 
 
     @PutMapping
+    @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit organization", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto editOrganization(@RequestBody OrganizationDto organization) {
@@ -58,6 +59,7 @@ public class OrganizationEndpoint {
     }
 
     @PostMapping
+    @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create Organization", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto createOrganization(@RequestBody OrganizationDto organizationDto) {
@@ -76,6 +78,7 @@ public class OrganizationEndpoint {
 
 
     @GetMapping
+    @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get all Organizations", authorizations = {@Authorization(value = "apiKey")})
     public List<OrganizationDto> getAllOrgas() {
@@ -90,6 +93,7 @@ public class OrganizationEndpoint {
     }
 
     @GetMapping(value = "/{id}")
+    @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get Organization by ID", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto getOrgaById(@PathVariable(value = "id") Integer id) {
@@ -105,6 +109,7 @@ public class OrganizationEndpoint {
 
 
     @PutMapping(value = "/{id}/calendars")
+    @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add Calendars to an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto addCalToOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
@@ -119,6 +124,7 @@ public class OrganizationEndpoint {
     }
 
     @DeleteMapping(value = "/{id}/calendars")
+    @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Remove Calendars from an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto removeCalFromOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
