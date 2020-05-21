@@ -18,7 +18,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
      *
      * @return list of all event entries in this calendar
      */
-    List<Event>  findByCalendarId(Integer calendar_id);
+    List<Event> findByCalendarId(Integer calendar_id);
 
     List<Event> findAllByStartDateTimeBetween(LocalDateTime start, LocalDateTime end);
 
