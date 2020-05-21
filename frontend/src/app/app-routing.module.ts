@@ -15,20 +15,17 @@ import {OrganizationComponent} from "./components/organization/organization.comp
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
-  {path: 'login', component: LoginComponent},
-  {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
-  {path: 'event/:id', component: EventComponent},
-  {path: 'form/event/:id', component: EventFormComponent},
-  {path: 'form/organization/:id', component: OrganizationFormComponent},
-  {path: 'user', component: UserComponent},
-  {path: 'organization/:id', component: OrganizationComponent},
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
-  //{path: 'week-calendar/:id', component: WeeklyCalendarComponent},
-
-  {path: 'form/event/:id', component: OrganizationFormComponent},
+  {path: 'event/:id', component: EventComponent},
+  {path: 'form/event', component: EventFormComponent},
   {path: 'form/event/:id', component: EventFormComponent},
-
+  {path: 'form/organization', component: OrganizationFormComponent},
+  {path: 'form/organization/:id', component: OrganizationFormComponent},
+  {path: 'login', component: LoginComponent},
+  {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
+  {path: 'organization/:id', component: OrganizationComponent},
+  {path: 'user', component: UserComponent},
 
 ];
 

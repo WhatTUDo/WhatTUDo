@@ -21,10 +21,11 @@ export class OrganizationService {
    */
   postOrganization(organization: Organization): Observable<any> {
 
-    console.log('Post Organization to Server', Organization);
+    console.log('Post Organization to Server', organization);
     let reducedElement = {
+      'id': null,
       'name': organization.name,
-      'calendars': organization.calendarIds
+      'calendarIds': organization.calendarIds
     };
 
     return this.httpClient.post(this.organizationBaseUri, reducedElement);

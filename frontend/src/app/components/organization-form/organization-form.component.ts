@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
-import {Location} from '../../dtos/location';
 import {Organization} from '../../dtos/organization';
 import {OrganizationService} from '../../services/organization.service';
 import {ActivatedRoute} from '@angular/router';
@@ -12,34 +10,55 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class OrganizationFormComponent implements OnInit {
 
-  private organization: Organization;
-  private organizationService: OrganizationService;
-  private route: ActivatedRoute;
+  organization: Organization;
+  isUpdate: boolean;
 
 
-  constructor(private service: OrganizationService) {
-
+  constructor(private organizationService: OrganizationService,
+              private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.getOrganization();
-  }
-
-  /**
-   * Loads the organization for the specified id
-   * @param id of the organization
-   */
-  private getOrganization() {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.organizationService.getById(id).subscribe(orientation => this.organization = orientation);
+    if (id) {
+      this.organizationService.getById(id).subscribe((organization: Organization) => {
+        if (organization) {
+          this.organization = organization;
+          this.isUpdate = true;
+        } else {
+          this.organization = new Organization(null, "", []);
+          this.isUpdate = false;
+        }
+      });
+    } else {
+      this.organization = new Organization(null, "", []);
+      this.isUpdate = false;
+    }
   }
 
   // TODO: add calendars/remove calendars (need fetch all Calendars for that) + actual alert thingy
-  updateOrganization(name: string) {
+  onSubmit(name: string) {
     this.organization.name = name.trim();
     if (!name) {
-      return;
+      return
     }
+    if (this.organization.id) {
+      this.updateOrganization(name);
+    } else {
+      this.createOrganization(name);
+    }
+  }
+
+  createOrganization(name: string) {
+    this.organizationService.postOrganization(this.organization)
+      .subscribe(organization => {
+        this.organization = organization;
+        alert('Organization ' + organization.name + ' created successfully.');
+      });
+  }
+
+
+  updateOrganization(name: string) {
     this.organizationService.putOrganization(this.organization)
       .subscribe(organization => {
         this.organization = organization;
