@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OldUserRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +22,16 @@ import java.util.List;
 public class CustomUserDetailService implements UserService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    private final OldUserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CustomUserDetailService(OldUserRepository userRepository) {
+    public CustomUserDetailService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+
+    public List<ApplicationUser> getAll() {
+        return this.userRepository.findAll();
     }
 
     @Override
@@ -49,8 +55,8 @@ public class CustomUserDetailService implements UserService {
     @Override
     public ApplicationUser findApplicationUserByEmail(String email) {
         LOGGER.debug("Find application user by email");
-        ApplicationUser applicationUser = userRepository.findUserByEmail(email);
-        if (applicationUser != null) return applicationUser;
+        List<ApplicationUser> applicationUsers = userRepository.findByEmail(email);
+        if (applicationUsers != null) return applicationUsers.get(0);
         throw new NotFoundException(String.format("Could not find the user with the email address %s", email));
     }
 }
