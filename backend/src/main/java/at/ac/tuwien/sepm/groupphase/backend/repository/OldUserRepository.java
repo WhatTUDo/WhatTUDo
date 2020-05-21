@@ -7,13 +7,13 @@ import org.springframework.stereotype.Repository;
 
 //TODO: replace this class with a correct ApplicationUser JPARepository implementation
 @Repository
-public class UserRepository {
+public class OldUserRepository {
 
     private final ApplicationUser user;
     private final ApplicationUser admin;
 
     @Autowired
-    public UserRepository(PasswordEncoder passwordEncoder) {
+    public OldUserRepository(PasswordEncoder passwordEncoder) {
         user = new ApplicationUser(0, "user", "user@email.com", passwordEncoder.encode("password"));
         admin = new ApplicationUser(1, "admin", "admin@email.com", passwordEncoder.encode("password"));
     }
