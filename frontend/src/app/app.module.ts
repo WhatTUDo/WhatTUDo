@@ -24,6 +24,7 @@ import {CalendarListComponent} from './components/calendar-list/calendar-list.co
 import {OrganizationFormComponent} from './components/organization-form/organization-form.component';
 import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from './components/organization/organization.component';
+import { EditUserComponent } from './components/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import {OrganizationComponent} from './components/organization/organization.comp
     OrganizationFormComponent,
     UserComponent,
     OrganizationComponent,
+    EditUserComponent,
   ],
   imports: [
     BrowserModule,
