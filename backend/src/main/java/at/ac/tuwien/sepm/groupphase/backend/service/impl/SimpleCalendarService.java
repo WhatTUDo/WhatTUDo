@@ -33,29 +33,33 @@ public class SimpleCalendarService implements CalendarService {
     private final OrganizationRepository organizationRepository;
 
     @Override
-    public Calendar findById(Integer id) {
-        Optional<Calendar> found = calendarRepository.findById(id);
-        if (found.isPresent()) {
+    public Calendar findById(Integer id) throws NotFoundException, ServiceException {
+        try {
+            Optional<Calendar> found = calendarRepository.findById(id);
+            if (found.isPresent()) {
+                List<Event> events;
+                events = eventRepository.findByCalendarId(id);
+                Calendar calendar = (found.get());
+                calendar.setEvents(events);
 
-            List<Event> events;
-
-            events = eventRepository.findByCalendarId(id);
-
-
-            Calendar calendar = (found.get());
-            calendar.setEvents(events);
-
-            return calendar;
-        } else {
-            throw new NotFoundException("No event found with id " + id);
+                return calendar;
+            } else {
+                throw new NotFoundException("No event found with id " + id);
+            }
+        }
+        catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
     }
 
     @Override
-    public List<Calendar> findByName(String name) {
+    public List<Calendar> findByName(String name) throws ServiceException, NotFoundException {
         try {
-
-            return calendarRepository.findAllByNameContains(name);
+            List<Calendar> calendars = calendarRepository.findAllByNameContains(name);
+            if (calendars.size() <= 0) {
+                throw new NotFoundException("Could not find any Calendars!");
+            }
+            return calendars;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
