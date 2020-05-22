@@ -15,8 +15,7 @@ import javax.transaction.Transactional;
 public abstract class UserMapper {
     @Autowired protected UserRepository userRepository;
 
+
     public abstract UserDto applicationUserToUserDto(ApplicationUser user);
-
     public abstract ApplicationUser userDtoToApplicationUser(UserDto userDto);
-
 }
