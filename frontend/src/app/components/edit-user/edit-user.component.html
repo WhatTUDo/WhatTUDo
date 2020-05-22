@@ -1,56 +1,65 @@
 <div class="container bootstrap snippets">
   <div class="row">
     <div class="col-xs-12 col-sm-9">
-      <form class="form-horizontal">
-        <div class="panel panel-default">
-          <div class="panel-body text-center">
+      <form class="form-horizontal" [formGroup]="updateForm" (ngSubmit)="update()">
+        <div class="container">
+          <div class="text-center">
             <img alt="" class="profile-avatar" src="https://picsum.photos/256/256/">
           </div>
         </div>
 
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">User info</h4>
+        <div class="container">
+          <div>
+            <h4>User info</h4>
           </div>
-          <div class="panel-body">
+          <div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">User Name</label>
+              <label class="col-sm control-label">User Name</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control">
+                <input type="text" formControlName="username" class="form-control" id="username">
+                <div *ngIf="updateForm.controls.username.errors" class ="jasmine-errored">
+                  <small class = "form-text text-warning"
+                         *ngIf="updateForm.controls.username.errors.maxLength">This username is too long!
+                  </small>
+                </div>
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">E-mail</label>
+              <label class="col-sm control-label">E-mail</label>
               <div class="col-sm-10">
-                <input type="email" class="form-control">
+                <input type="email" formControlName="email" class="form-control" id = "email">
+                <div *ngIf="updateForm.controls.email.errors" class ="jasmine-errored">
+                  <small class = "form-text text-warning"
+                         *ngIf="updateForm.controls.email.errors.pattern">Please enter a valid email!
+                  </small>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title">Security</h4>
+        <div class="container">
+          <div>
+            <h4>Security</h4>
           </div>
-          <div class="panel-body">
+          <div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Current password</label>
+              <label class="col-sm control-label">Current password</label>
               <div class="col-sm-10">
-                <input type="password" class="form-control">
+                <input type="password" formControlName="currentPassword" class="form-control" id="currentPassword">
+
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">New password</label>
+              <label class="col-sm control-label">New password</label>
               <div class="col-sm-10">
-                <input type="password" class="form-control">
+                <input type="password" formControlName="newPassword" class="form-control" id="newPassword">
               </div>
             </div>
-            <div class="form-group">
-              <div class="col-sm-10 col-sm-offset-2">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-default">Cancel</button>
-                <button  class ="btn btn-danger">Delete Account</button>
-              </div>
+              <div class="user-action-container">
+                <div (click)="update()" class="user-action submit clickable no-hover-enlarge no-shadow">Submit</div>
+                <div (click)="clearForm()" class="user-action clickable no-hover-enlarge no-shadow">Cancel</div>
+                <div class="user-action dangerous clickable no-hover-enlarge no-shadow">Delete Account</div>
             </div>
           </div>
         </div>
