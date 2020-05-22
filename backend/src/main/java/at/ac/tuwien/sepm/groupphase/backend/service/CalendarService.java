@@ -44,5 +44,5 @@ public interface CalendarService {
      * @throws NotFoundException is thrown when no Calendar Entities are found.
      * @throws ServiceException is thrown when some errors occur during the database query.
      */
-    List<Calendar> findByName(String name) throws NotFoundException, ServiceException;
+    List<Calendar> findByName(String name) throws ServiceException;
 }
