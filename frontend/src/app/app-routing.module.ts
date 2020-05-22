@@ -16,12 +16,15 @@ import {EditUserComponent} from './components/edit-user/edit-user.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
+  {path: 'calendar-list', component: CalendarListComponent},
+  {path: 'calendar/:id', component: CalendarComponent},
+  {path: 'event/:id', component: EventComponent},
+  {path: 'form/event', component: EventFormComponent},
+  {path: 'form/event/:id', component: EventFormComponent},
+  {path: 'form/organization', component: OrganizationFormComponent},
+  {path: 'form/organization/:id', component: OrganizationFormComponent},
   {path: 'login', component: LoginComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
-  {path: 'event/:id', component: EventComponent},
-  {path: 'form/event/:id', component: EventFormComponent},
-  {path: 'form/organization/:id', component: OrganizationFormComponent},
-  {path: 'user', component: UserComponent},
   {path: 'organization/:id', component: OrganizationComponent},
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
@@ -29,8 +32,9 @@ const routes: Routes = [
 
   {path: 'form/event/:id', component: OrganizationFormComponent},
   {path: 'form/event/:id', component: EventFormComponent},
-  {path: 'editUser', component: EditUserComponent}
+  {path: 'editUser', component: EditUserComponent},
 
+  {path: 'user', component: UserComponent},
 
 ];
 

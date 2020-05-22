@@ -1,26 +1,19 @@
 package at.ac.tuwien.sepm.groupphase.backend.repository;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-//TODO: replace this class with a correct ApplicationUser JPARepository implementation
-@Repository
-public class UserRepository {
+import java.util.List;
+import java.util.Optional;
 
-    private final ApplicationUser user;
-    private final ApplicationUser admin;
+public interface UserRepository extends JpaRepository<ApplicationUser, Integer> {
 
-    @Autowired
-    public UserRepository(PasswordEncoder passwordEncoder) {
-        user = new ApplicationUser(0, "user", "user@email.com", passwordEncoder.encode("password"));
-        admin = new ApplicationUser(1, "admin", "admin@email.com", passwordEncoder.encode("password"));
-    }
+    List<ApplicationUser> findByName(String name);
 
-    public ApplicationUser findUserByEmail(String email) {
-        if (email.equals(user.getEmail())) return user;
-        if (email.equals(admin.getEmail())) return admin;
-        return null; // In this case null is returned to fake Repository behavior
-    }
+    List<ApplicationUser> findAll();
+
+    List<ApplicationUser> findByEmail(String email);
+
+    Optional<ApplicationUser> findById(Integer id);
+
 }
