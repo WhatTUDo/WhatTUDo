@@ -14,7 +14,7 @@ import {Calendar} from "../../dtos/calendar";
 export class OrganizationComponent implements OnInit {
 
   organization: Organization;
-  organizationCalenders: Calendar[] = [];
+  organizationCalendars: Calendar[] = [];
   // organization = new Organization(null, "FS Winf", []);
   // organizationMembers: OrganizationMemberOrSomething[];
   organizationMembers = [
@@ -40,7 +40,7 @@ export class OrganizationComponent implements OnInit {
       this.organization = organization;
       for (let calID of organization.calendarIds) {
         this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
-          this.organizationCalenders.push(cal);
+          this.organizationCalendars.push(cal);
 
         }, err => {
           alert(err.message);

@@ -1,10 +1,9 @@
 <div id="weekly-cal-heading" class="heading">
   <span id="weekly-cal-month">
-    {{this.offset ? displayingWeek[3].toLocaleString('en-US', {month: 'long'}) : currentMonth}}
+    {{displayingWeek[3].toLocaleString('en-US', {month: 'long'})}}
   </span>
-  <span id="weekly-cal-date" *ngIf="!this.offset">{{currentDate}}, </span>
   <span id="weekly-cal-year">
-    {{this.offset ? displayingWeek[3].getFullYear() : currentYear}}
+    {{displayingWeek[3].getFullYear()}}
   </span>
 </div>
 
@@ -17,7 +16,7 @@
   <fa-icon [icon]="faChevronRight" (click)="addOneDay()">Next day</fa-icon>
 </div>
 
-<div class="calender mobile">
+<div class="calendar mobile">
   <div class="week-day-label">{{displayingDate.toLocaleDateString('en-US', { weekday: 'short' })}}</div>
   <div class="calendar-date-label" [ngClass]="{'today': isToday(displayingDate)}">
     {{displayingDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}}
@@ -25,14 +24,14 @@
 
   <div class="calendar-day-swim-lane">
     <div *ngFor="let event of this.eventsOfTheWeek.get(displayingDate.toISOString())" class="calendar-event"
-         [style.grid-row]="getDisplayRows(event)">
+         [style.grid-row]="getDisplayRows(event)" (click)="redirectToDetail(event.id)">
       <div class="calendar-event-time" *ngIf="event != null">{{this.getDisplayTimeString(event)}}</div>
       <div class="calendar-event-name" *ngIf="event != null">{{event.name}}</div>
     </div>
   </div>
 </div>
 
-<div class="grid-one-sixth calender desktop">
+<div class="grid-one-sixth calendar desktop">
   <div class="week-day-label">Mon</div>
   <div class="week-day-label">Tue</div>
   <div class="week-day-label">Wed</div>

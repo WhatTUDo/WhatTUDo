@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Calendar} from '../../dtos/calendar';
-import {Router,ActivatedRoute, ParamMap} from '@angular/router';
-import {Observable} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
 import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {CalendarEvent} from '../../dtos/calendar-event';
 import {EventService} from '../../services/event.service';
-import {Organization} from '../../dtos/organization';
 
 @Component({
   selector: 'app-calendar',
@@ -15,7 +13,7 @@ import {Organization} from '../../dtos/organization';
 })
 export class CalendarComponent implements OnInit {
 
-  calendar: Calendar = new Calendar(null,null,null,null);
+  calendar: Calendar = new Calendar(null, null, null, null);
   events: CalendarEvent[] = [];
 
   currentDate: number;
@@ -40,7 +38,7 @@ export class CalendarComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private calendarService: CalendarService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {
     console.log(this.eventsOfTheWeek);
   }
@@ -52,14 +50,10 @@ export class CalendarComponent implements OnInit {
     }, err => {
       console.warn(err);
     });
-    this.displayingDate = this.getToday();
+    this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
 
     this.loadEventsForWeek(this.getWeek(0)[0], this.getWeek(0)[6]);
-    this.updateDatetime();
-    setInterval(_ => {
-      this.updateDatetime();
-    }, 1000);
 
     setInterval(_ => {
       Array.from(document.getElementsByClassName('calendar-event'))
@@ -83,8 +77,8 @@ export class CalendarComponent implements OnInit {
    * @param to: End date of week
    */
   loadEventsForWeek(from: Date, to: Date) {
-    for(let eventId of this.calendar.eventIds){
-      this.eventService.getEvent(eventId).subscribe((event:CalendarEvent) =>{
+    for (let eventId of this.calendar.eventIds) {
+      this.eventService.getEvent(eventId).subscribe((event: CalendarEvent) => {
         let startDate = new Date(event.startDateTime);
         let endDate = new Date(event.endDateTime);
         event.startDateTime = startDate;
@@ -94,25 +88,18 @@ export class CalendarComponent implements OnInit {
         console.warn("Event does not exist");
       })
     }
-      this.displayingWeek.forEach((day: Date) => {
-        let keyISOString = this.getMidnight(day).toISOString();
-        this.eventsOfTheWeek.set(keyISOString, this.events.filter(event => {
-          let isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
-          let isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
-          return isAfterMidnight && isBeforeEndOfDay;
-        }));
-      });
-  }
-
-  updateDatetime() {
-    const today = this.getToday();
-    this.currentMonth = today.toLocaleString('en-US', {month: 'long'});
-    this.currentDate = today.getDate();
-    this.currentYear = today.getFullYear();
+    this.displayingWeek.forEach((day: Date) => {
+      let keyISOString = this.getMidnight(day).toISOString();
+      this.eventsOfTheWeek.set(keyISOString, this.events.filter(event => {
+        let isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
+        let isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
+        return isAfterMidnight && isBeforeEndOfDay;
+      }));
+    });
   }
 
   getWeek(offset = 0) {
-    const offsetWeeks = Math.round(this.offset / 7);
+    const offsetWeeks = Math.round(offset / 7);
     let currentWeekDates = [];
     let today = this.getToday();
 

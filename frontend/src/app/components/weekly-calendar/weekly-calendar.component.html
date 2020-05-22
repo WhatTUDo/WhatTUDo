@@ -17,7 +17,7 @@
   <fa-icon [icon]="faChevronRight" (click)="addOneDay()">Next day</fa-icon>
 </div>
 
-<div class="calender mobile">
+<div class="calendar mobile">
   <div class="week-day-label">{{displayingDate.toLocaleDateString('en-US', { weekday: 'short' })}}</div>
   <div class="calendar-date-label" [ngClass]="{'today': isToday(displayingDate)}">
     {{displayingDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}}
@@ -32,7 +32,7 @@
   </div>
 </div>
 
-<div class="grid-one-sixth calender desktop">
+<div class="grid-one-sixth calendar desktop">
   <div class="week-day-label">Mon</div>
   <div class="week-day-label">Tue</div>
   <div class="week-day-label">Wed</div>
