@@ -36,6 +36,7 @@ security:
       - /events/**
       - /calendars/**
       - /organizations/**
+      - /users/**
       # Swagger
       - /v2/api-docs
       - /swagger-resources/**

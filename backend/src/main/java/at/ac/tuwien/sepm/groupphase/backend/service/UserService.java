@@ -38,4 +38,6 @@ public interface UserService extends UserDetailsService {
      * @throws ValidationException is thrown if the User Entity does not pass validation.
      */
     ApplicationUser saveNewUser(ApplicationUser user) throws ServiceException, ValidationException;
+
+    ApplicationUser updateUser(ApplicationUser user);
 }

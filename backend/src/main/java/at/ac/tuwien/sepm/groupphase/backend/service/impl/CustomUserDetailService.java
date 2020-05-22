@@ -85,4 +85,14 @@ public class CustomUserDetailService implements UserService {
             throw new ServiceException(e.getMessage());
         }
     }
+
+    @Override
+    public ApplicationUser updateUser(ApplicationUser user) {
+        try {
+            return userRepository.save(user);
+        }catch (IllegalArgumentException e){
+            throw new ServiceException(e.getMessage());
+        }
+
+    }
 }

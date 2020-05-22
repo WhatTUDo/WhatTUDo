@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,5 +42,13 @@ public class UserEndpoint {
         catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         }
+    }
+
+    @PutMapping
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation("update user")
+    public UserDto updateUser(@RequestBody UserDto user){
+        return userMapper.applicationUserToUserDto(userService.updateUser(userMapper.userDtoToApplicationUser(user)));
     }
 }

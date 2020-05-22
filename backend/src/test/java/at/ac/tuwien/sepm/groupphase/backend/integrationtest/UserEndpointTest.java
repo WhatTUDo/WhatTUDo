@@ -34,4 +34,32 @@ public class UserEndpointTest {
 
     }
 
+    @Test
+    public void updateUser(){
+        UserDto userDto = new UserDto(null, "user1", "testy@test.com", "hunter2");
+
+        UserDto savedUserDto = userEndpoint.createNewUser(userDto);
+
+        assertNotNull(savedUserDto);
+        assertEquals(userDto.getName(), savedUserDto.getName());
+
+        UserDto userDto1 = new UserDto(savedUserDto.getId(), "user2", userDto.getEmail(), userDto.getPassword());
+
+        UserDto updateUser = userEndpoint.updateUser(userDto1);
+
+        assertEquals(userDto1.getName(), updateUser.getName());
+
+
+         userDto1 = new UserDto(savedUserDto.getId(), null, "user2@test.com", null);
+
+        updateUser = userEndpoint.updateUser(userDto1);
+
+        assertEquals(savedUserDto.getId(), updateUser.getId());
+        assertEquals(userDto1.getEmail(), updateUser.getEmail());
+
+
+    }
+
+
+
 }
