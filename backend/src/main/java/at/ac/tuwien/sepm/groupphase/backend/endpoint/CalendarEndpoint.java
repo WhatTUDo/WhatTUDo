@@ -41,7 +41,6 @@ public class CalendarEndpoint {
     private final EventService eventService;
     private final OrganizationService organizationService;
     private final CalendarMapper calendarMapper;
-    private final EventMapper eventMapper;
 
 
     private final TestCalendarMapper testMapper;
