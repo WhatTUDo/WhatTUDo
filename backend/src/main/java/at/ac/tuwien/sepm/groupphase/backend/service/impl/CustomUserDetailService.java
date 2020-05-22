@@ -75,9 +75,7 @@ public class CustomUserDetailService implements UserService {
         try {
             validator.validateNewUser(user);
             String encodedPassword = passwordEncoder.encode(user.getPassword());
-
             user.setPassword(encodedPassword);
-
             return this.userRepository.save(user);
         }
         catch (ValidationException e) {
