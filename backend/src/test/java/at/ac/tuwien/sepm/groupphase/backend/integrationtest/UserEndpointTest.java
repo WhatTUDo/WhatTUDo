@@ -43,14 +43,14 @@ public class UserEndpointTest {
         assertNotNull(savedUserDto);
         assertEquals(userDto.getName(), savedUserDto.getName());
 
-        UserDto userDto1 = new UserDto(savedUserDto.getId(), "user2", userDto.getEmail(), userDto.getPassword());
+        UserDto userDto1 = new UserDto(savedUserDto.getId(), "user2", null, null);
 
         UserDto updateUser = userEndpoint.updateUser(userDto1);
 
         assertEquals(userDto1.getName(), updateUser.getName());
 
 
-         userDto1 = new UserDto(savedUserDto.getId(), null, "user2@test.com", null);
+         userDto1 = new UserDto(savedUserDto.getId(), null, "user43@test.com", null);
 
         updateUser = userEndpoint.updateUser(userDto1);
 

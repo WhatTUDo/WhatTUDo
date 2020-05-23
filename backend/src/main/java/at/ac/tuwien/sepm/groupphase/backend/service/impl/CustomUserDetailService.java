@@ -66,7 +66,7 @@ public class CustomUserDetailService implements UserService {
     public ApplicationUser findApplicationUserByEmail(String email) {
         LOGGER.debug("Find application user by email");
         List<ApplicationUser> applicationUsers = userRepository.findByEmail(email);
-        if (applicationUsers != null) return applicationUsers.get(0);
+        if (applicationUsers != null && !applicationUsers.isEmpty()) return applicationUsers.get(0);
         throw new NotFoundException(String.format("Could not find the user with the email address %s", email));
     }
 
@@ -77,11 +77,9 @@ public class CustomUserDetailService implements UserService {
             String encodedPassword = passwordEncoder.encode(user.getPassword());
             user.setPassword(encodedPassword);
             return this.userRepository.save(user);
-        }
-        catch (ValidationException e) {
+        } catch (ValidationException e) {
             throw new ValidationException(e.getMessage());
-        }
-        catch (PersistenceException e) {
+        } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
     }
@@ -89,10 +87,14 @@ public class CustomUserDetailService implements UserService {
     @Override
     public ApplicationUser updateUser(ApplicationUser user) {
         try {
+            validator.validateUpdateUser(user);
+            if(user.getEmail() != null){
+            if(!userRepository.findByEmail(user.getEmail()).isEmpty()){
+                throw new ValidationException("A user already registered with this email!");
+            }}
             return userRepository.save(user);
-        }catch (IllegalArgumentException e){
+        } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
         }
-
     }
 }

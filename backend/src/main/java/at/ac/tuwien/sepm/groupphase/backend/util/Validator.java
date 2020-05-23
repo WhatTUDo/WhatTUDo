@@ -45,6 +45,21 @@ public class Validator {
         if (organizationRepository.findByName(organization.getName()).isPresent()) throw new ValidationException("An Organization with this Name already exists");
     }
 
+    public void validateUpdateUser(ApplicationUser user){
+        List<Exception> exceptions = new ArrayList<>();
+        if(user == null){ exceptions.add(new ValidationException("User cannot be null")); }
+        if(user.getEmail() != null){
+            if (!emailIsValid(user.getEmail())) {
+                exceptions.add(new ValidationException("Email is not in a valid format!"));
+            }
+        }
+        if (!exceptions.isEmpty()) {
+            String summary = createExceptionSummaryString(exceptions);
+            throw new ValidationException(summary);
+        }
+
+    }
+
     public void validateNewUser(ApplicationUser user) {
         List<Exception> exceptions = new ArrayList<>();
         if (user == null) exceptions.add(new ValidationException("User cannot be null!"));
