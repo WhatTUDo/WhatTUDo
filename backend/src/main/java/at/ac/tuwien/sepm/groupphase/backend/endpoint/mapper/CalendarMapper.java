@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -14,6 +15,8 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -38,6 +41,20 @@ public abstract class CalendarMapper {
         calendarDto.setEventIds(calEntity.getEvents().stream().map(Event::getId).collect(Collectors.toList()));
     }
 
+    public abstract Calendar calendarCreateDtoToCalendar(CalendarCreateDto calendarCreateDto);
+
+    @BeforeMapping
+    protected void mapOrganizations(CalendarCreateDto calendarCreateDto, @MappingTarget Calendar calendar) {
+        List<Organization> orgas = new ArrayList<>();
+        orgas.add(organizationRepository.findById(calendarCreateDto.getOrgaId()).orElseThrow(() -> new NotFoundException("No Organization with this ID")));
+        calendar.setOrganizations(orgas);
+    }
+
+    @BeforeMapping
+    protected void mapEvents(@SuppressWarnings("unused") CalendarCreateDto calendarDto, @MappingTarget Calendar calendar) {
+        calendar.setEvents(new ArrayList<>());
+    }
+
     public abstract Calendar calendarDtoToCalendar(CalendarDto calendarDto);
 
     @BeforeMapping
@@ -49,4 +66,6 @@ public abstract class CalendarMapper {
     protected void mapEvents(CalendarDto calendarDto, @MappingTarget Calendar calendar) {
         calendar.setEvents(eventRepository.findAllById(calendarDto.getEventIds()));
     }
+
+    public abstract List<CalendarDto> calendarsToCalendarDtos(List<Calendar> calendars);
 }

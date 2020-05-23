@@ -6,69 +6,29 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
-import java.lang.invoke.MethodHandles;
-import java.sql.SQLOutput;
-import java.util.List;
+import java.util.Optional;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CustomUserDetailService implements UserService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final UserRepository userRepository;
-
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
-    @Autowired
-    Validator validator;
-
-    @Autowired
-    public CustomUserDetailService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-
-    public List<ApplicationUser> getAll() {
-        return this.userRepository.findAll();
-    }
+    private final PasswordEncoder passwordEncoder;
+    private final Validator validator;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        LOGGER.debug("Load all user by email");
-        try {
-            ApplicationUser applicationUser = findApplicationUserByEmail(email);
-
-            List<GrantedAuthority> grantedAuthorities;
-            if (false)
-                grantedAuthorities = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");
-            else
-                grantedAuthorities = AuthorityUtils.createAuthorityList("ROLE_USER");
-
-            return new User(applicationUser.getEmail(), applicationUser.getPassword(), grantedAuthorities);
-        } catch (NotFoundException e) {
-            throw new UsernameNotFoundException(e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public ApplicationUser findApplicationUserByEmail(String email) {
-        LOGGER.debug("Find application user by email");
-        List<ApplicationUser> applicationUsers = userRepository.findByEmail(email);
-        if (applicationUsers != null && !applicationUsers.isEmpty()) return applicationUsers.get(0);
-        throw new NotFoundException(String.format("Could not find the user with the email address %s", email));
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
     @Override
@@ -104,16 +64,16 @@ public class CustomUserDetailService implements UserService {
     public ApplicationUser changeUserPassword(String email, String currentPassword, String newPassword) {
         try {
             validator.validateChangePassword(email, currentPassword, newPassword);
-            List<ApplicationUser> foundUser = userRepository.findByEmail(email);
+            Optional<ApplicationUser> foundUser = userRepository.findByEmail(email);
             if (foundUser.isEmpty()) {
                 throw new NotFoundException("User does not exist");
             }
-            if (!passwordEncoder.matches(currentPassword, foundUser.get(0).getPassword())) {
+            if (!passwordEncoder.matches(currentPassword, foundUser.get().getPassword())) {
                 throw new ValidationException("Wrong password!");
             }
             String encodedNewPassword = passwordEncoder.encode(newPassword);
-            foundUser.get(0).setPassword(encodedNewPassword);
-            return userRepository.save(foundUser.get(0));
+            foundUser.get().setPassword(encodedNewPassword);
+            return userRepository.save(foundUser.get());
         }catch (PersistenceException | IllegalArgumentException e){
             throw new ServiceException(e.getMessage());
         }
