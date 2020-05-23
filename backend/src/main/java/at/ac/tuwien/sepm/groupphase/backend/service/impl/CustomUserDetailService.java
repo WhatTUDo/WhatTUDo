@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
 import java.lang.invoke.MethodHandles;
+import java.sql.SQLOutput;
 import java.util.List;
 
 @Service
@@ -88,13 +89,36 @@ public class CustomUserDetailService implements UserService {
     public ApplicationUser updateUser(ApplicationUser user) {
         try {
             validator.validateUpdateUser(user);
-            if(user.getEmail() != null){
-            if(!userRepository.findByEmail(user.getEmail()).isEmpty()){
-                throw new ValidationException("A user already registered with this email!");
-            }}
+            if (user.getEmail() != null) {
+                if (!userRepository.findByEmail(user.getEmail()).isEmpty()) {
+                    throw new ValidationException("A user already registered with this email!");
+                }
+            }
             return userRepository.save(user);
         } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
         }
     }
+
+    @Override
+    public ApplicationUser changeUserPassword(String email, String currentPassword, String newPassword) {
+        try {
+            validator.validateChangePassword(email, currentPassword, newPassword);
+            List<ApplicationUser> foundUser = userRepository.findByEmail(email);
+            if (foundUser.isEmpty()) {
+                throw new NotFoundException("User does not exist");
+            }
+            if (!passwordEncoder.matches(currentPassword, foundUser.get(0).getPassword())) {
+                throw new ValidationException("Wrong password!");
+            }
+            String encodedNewPassword = passwordEncoder.encode(newPassword);
+            foundUser.get(0).setPassword(encodedNewPassword);
+            return userRepository.save(foundUser.get(0));
+        }catch (PersistenceException | IllegalArgumentException e){
+            throw new ServiceException(e.getMessage());
+        }
+
+    }
+
+
 }

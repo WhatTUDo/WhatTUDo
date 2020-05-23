@@ -40,4 +40,6 @@ public interface UserService extends UserDetailsService {
     ApplicationUser saveNewUser(ApplicationUser user) throws ServiceException, ValidationException;
 
     ApplicationUser updateUser(ApplicationUser user);
+
+    ApplicationUser changeUserPassword(String email, String currentPassword, String newPassword);
 }

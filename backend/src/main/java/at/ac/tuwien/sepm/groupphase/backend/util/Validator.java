@@ -59,7 +59,29 @@ public class Validator {
         }
 
     }
+    public void validateChangePassword(String email, String currentPassword, String newPassword ){
+        List<Exception> exceptions = new ArrayList<>();
+        if(email == null){
+            exceptions.add(new ValidationException("Email cannot be null or empty!"));
+        }else{
+            if(!emailIsValid(email)){
+                exceptions.add(new ValidationException("Email is not in a valid format!"));
+            }
+        }
+        if(currentPassword == null){
+            exceptions.add(new ValidationException("Current password cannot be null"));
+        }// FIXME: Add password validation
+        if(newPassword == null){
+            exceptions.add(new ValidationException("Current password cannot be null"));
+        } // FIXME: Add password validation
 
+        if (!exceptions.isEmpty()) {
+            String summary = createExceptionSummaryString(exceptions);
+            throw new ValidationException(summary);
+        }
+
+
+}
     public void validateNewUser(ApplicationUser user) {
         List<Exception> exceptions = new ArrayList<>();
         if (user == null) exceptions.add(new ValidationException("User cannot be null!"));
