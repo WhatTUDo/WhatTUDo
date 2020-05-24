@@ -50,7 +50,14 @@ public class ApplicationUser implements UserDetails {
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (isSysAdmin) authorities.add(AdminAuthority.ADMIN);
         for (OrganizationMembership membership : memberships) {
-            authorities.add(MemberAuthority.of(membership.getOrganization(), membership.getRole()));
+            switch (membership.getRole()) {
+                case ADMIN:
+                    authorities.add(MemberAuthority.of(membership.getOrganization(), OrganizationRole.ADMIN));
+                case MOD:
+                    authorities.add(MemberAuthority.of(membership.getOrganization(), OrganizationRole.MOD));
+                case MEMBER:
+                    authorities.add(MemberAuthority.of(membership.getOrganization(), OrganizationRole.MEMBER));
+            }
         }
         return authorities;
     }

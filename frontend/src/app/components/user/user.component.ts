@@ -11,6 +11,7 @@ export class UserComponent implements OnInit {
 
   // user: User;
   user= {
+    id: 1,
     username: "JaneDoe",
   } //TODO: Use DTO and not a mock class. Refactor if needed.
   // userRoleInOrganizations: OrganizationMemberOrSomething[];

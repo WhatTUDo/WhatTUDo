@@ -74,7 +74,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     ) throws IOException {
         ApplicationUser user = ((ApplicationUser) authResult.getPrincipal());
 
-        response.getWriter().write(jwtTokenizer.getAuthToken(user.getUsername()));
+        List<String> authorities = user.getAuthorities().stream().map(Object::toString).collect(Collectors.toList());
+        response.getWriter().write(jwtTokenizer.getAuthToken(user.getUsername(), authorities));
         LOGGER.info("Successfully authenticated user {}", user.getUsername());
     }
 }

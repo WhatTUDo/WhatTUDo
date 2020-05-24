@@ -58,7 +58,7 @@ VALUES (1, 'person1@tuwien.ac.at', false, 'Person 1', '$2a$10$ua4K4vhX75mvmEWkHh
        (9, 'person9@tuwien.ac.at', false, 'Person 9', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S');
 
 INSERT INTO ORGA_MEMBERSHIP (ORGANIZATION_ID, USER_ID, ROLE)
-VALUES (1, 1, 'MEMBER'),
+VALUES (1, 1, 'MOD'),
        (1, 2, 'MEMBER'),
        (2, 1, 'MEMBER'),
        (2, 3, 'MEMBER'),

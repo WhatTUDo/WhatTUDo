@@ -1,6 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.config.jwt;
 
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -8,6 +10,7 @@ import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -18,6 +21,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,7 +71,10 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             if (username == null || username.isEmpty()) throw new IllegalArgumentException("Token contains no user");
 
-            return Optional.of(new UsernamePasswordAuthenticationToken(username, null));
+            Collection<? extends GrantedAuthority> authorities = userRepository.findByName(username)
+                .map(ApplicationUser::getAuthorities)
+                .orElseThrow(NotFoundException::new);
+            return Optional.of(new UsernamePasswordAuthenticationToken(username, null, authorities));
         }
     }
 }

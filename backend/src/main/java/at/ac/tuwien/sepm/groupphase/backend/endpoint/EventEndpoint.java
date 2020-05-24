@@ -76,7 +76,7 @@ public class EventEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     @ApiOperation(value = "Get Multiple Events")
-    public List<EventDto> getMultiple(@RequestParam("name") @Nullable String name,
+    public List<EventDto> getMultiple(@RequestParam("name") String name,
                                       @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
                                       @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         log.info("GET" + BASE_URL + "?name={}&from={}&to={}&calendar_id", name, start, end);

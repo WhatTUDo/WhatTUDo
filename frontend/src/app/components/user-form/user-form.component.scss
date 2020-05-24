@@ -6,14 +6,18 @@
     display: inline-flex;
     text-transform: uppercase;
     font-size: 16pt;
-    margin-top: 8pt;
-    padding: 20px;
+    margin: 8pt 8pt 16pt 0;
+
+    a {
+      color: inherit;
+    }
+
+    &.primary-action {
+      color: var(--accent);
+    }
 
     &.dangerous {
       color: $red;
-    }
-    &.submit{
-      color: $blue;
     }
   }
 }

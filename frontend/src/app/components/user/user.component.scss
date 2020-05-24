@@ -40,10 +40,12 @@
       font-weight: $f-bold;
       font-size: 16pt;
     }
+
     .user-organization-role {
       color: var(--secondary);
     }
   }
+
   .user-exit-organization-button {
     margin-left: auto;
   }
@@ -56,6 +58,14 @@
     text-transform: uppercase;
     font-size: 16pt;
     margin-top: 8pt;
+
+    a {
+      color: inherit;
+    }
+
+    &.primary-action {
+      color: var(--accent);
+    }
 
     &.dangerous {
       color: $red;

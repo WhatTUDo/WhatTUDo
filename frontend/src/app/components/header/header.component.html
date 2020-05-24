@@ -16,6 +16,9 @@
       <li class="nav-item">
         <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/calendar-list" routerLinkActive="active">Calendars</a>
       </li>
+      <li class="clickable no-hover-enlarge no-shadow"(click)="logMeIn()">
+        Log me in
+      </li>
     </ul>
     <ul class="navbar-nav mr-5" id="user-avatar">
       <a class="nav-link" *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active"><fa-icon [icon]="faUserCircle">Login</fa-icon></a>
