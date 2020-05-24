@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.UserMapper;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
@@ -23,11 +23,13 @@ public class ChangeUserPasswordEndpoint {
     private final UserService userService;
     private final UserMapper userMapper;
 
+
+    //fixme: Use RequestBody instead of Params.
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("update user password")
-    public UserDto changeUserPassword(@RequestParam(value = "email") String email, @RequestParam(value = "currentPassword") String currentPassword, @RequestParam(value = "newPassword") String newPassword){
+    public LoggedInUserDto changeUserPassword(@RequestParam(value = "email") String email, @RequestParam(value = "currentPassword") String currentPassword, @RequestParam(value = "newPassword") String newPassword){
        try{
         return userMapper.applicationUserToUserDto(userService.changeUserPassword(email, currentPassword, newPassword));}
        catch (ServiceException e){

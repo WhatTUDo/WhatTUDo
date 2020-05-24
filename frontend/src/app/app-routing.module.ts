@@ -32,7 +32,8 @@ const routes: Routes = [
 
   {path: 'form/event/:id', component: OrganizationFormComponent},
   {path: 'form/event/:id', component: EventFormComponent},
-  {path: 'editUser', component: EditUserComponent},
+  {path: 'form/user', component: EditUserComponent}, //new user creation
+  {path: 'form/user/:id', component: EditUserComponent}, //edit existing user
 
   {path: 'user', component: UserComponent},
 
