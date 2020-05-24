@@ -52,6 +52,7 @@ public class UserEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("update user")
     public LoggedInUserDto updateUser(@RequestBody LoggedInUserDto userDto){
+        log.info("PUT "+ BASE_URL, userDto);
 //        final ApplicationUser user = (ApplicationUser) SecurityContextHolder.getContext()
 //            .getAuthentication()
 //            .getPrincipal();

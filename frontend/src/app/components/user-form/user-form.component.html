@@ -1,0 +1,87 @@
+<div>
+  <div>
+    <form class="form-horizontal" [formGroup]="updateForm" (ngSubmit)="update()">
+      <div class="container">
+        <div class="text-center">
+          <img alt="" class="avatar avatar-medium" src="https://picsum.photos/256/256/">
+        </div>
+      </div>
+
+      <div>
+        <div>
+          <h4>User info</h4>
+        </div>
+        <div>
+          <div class="form-group">
+            <label for="username" class="control-label">Username</label>
+            <div>
+              <input type="text" formControlName="username" class="form-control" autocomplete="username"
+                     id="username">
+              <div *ngIf="updateForm.controls.username.errors" class="jasmine-errored">
+                <small class="form-text text-warning"
+                       *ngIf="updateForm.controls.username.errors.maxLength">This username is too long!
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="email" class="control-label">Email</label>
+            <div>
+              <input type="email" formControlName="email" class="form-control" autocomplete="email" id="email">
+              <div *ngIf="updateForm.controls.email.errors" class="jasmine-errored">
+                <small class="form-text text-warning"
+                       *ngIf="updateForm.controls.email.errors.pattern">Please enter a valid email!
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="user-action-container">
+      <div (click)="update()" class="user-action submit clickable no-hover-enlarge no-shadow">Update</div>
+      <div (click)="clearForm()" class="user-action clickable no-hover-enlarge no-shadow">Cancel</div>
+    </div>
+    </form>
+      <div>
+        <div>
+          <h4>Security</h4>
+        </div>
+        <form class="form-horizontal" [formGroup]="changePwdForm" (ngSubmit)="update()">
+          <div class="form-group">
+            <label for="currentPassword" class="control-label">Current password</label>
+            <div>
+              <input type="password" formControlName="currentPassword" class="form-control"
+                     autocomplete="current-password" id="currentPassword">
+              <div *ngIf="changePwdForm.controls.currentPassword.errors" class="jasmine-errored">
+                <small class="form-text text-warning"
+                       *ngIf="changePwdForm.controls.currentPassword.errors.required">Please enter your current Password!
+                </small>
+
+            </div>
+          </div>
+          </div>
+          <div class="form-group">
+            <label for="newPassword" class="control-label">New password</label>
+            <div>
+              <input type="password" formControlName="newPassword" class="form-control" autocomplete="new-password"
+                     id="newPassword">
+              <div *ngIf="changePwdForm.controls.newPassword.errors" class="jasmine-errored">
+                <small class="form-text text-warning"
+                       *ngIf="changePwdForm.controls.newPassword.errors.required">Please enter your new Password!
+                </small>
+            </div>
+          </div>
+          </div>
+          <div class="user-action-container">
+            <div (click)="changePassword()" class="user-action submit clickable no-hover-enlarge no-shadow">Change Password</div>
+            <div (click)="clearForm()" class="user-action clickable no-hover-enlarge no-shadow">Cancel</div>
+          </div>
+
+        </form>
+          <div class="user-action-container">
+            <div class="user-action dangerous clickable no-hover-enlarge no-shadow">Delete Account</div>
+          </div>
+        </div>
+      </div>
+  </div>

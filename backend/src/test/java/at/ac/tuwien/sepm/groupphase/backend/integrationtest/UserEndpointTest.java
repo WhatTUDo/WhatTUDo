@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.ChangeUserPasswordEndpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.UserEndpoint;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.ChangePasswordDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.IncomingUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import org.junit.jupiter.api.Test;
@@ -75,7 +76,7 @@ public class UserEndpointTest {
 
         LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
 
-        LoggedInUserDto changePasswordUserDto =  userPasswordEndpoint.changeUserPassword(savedUserDto.getEmail(), "hunter3", "hunter4");
+        LoggedInUserDto changePasswordUserDto =  userPasswordEndpoint.changeUserPassword(new ChangePasswordDto(savedUserDto.getEmail(), "hunter3", "hunter4"));
 
 //        assertTrue(passwordEncoder.matches("hunter4", changePasswordUserDto.getPassword()));
 

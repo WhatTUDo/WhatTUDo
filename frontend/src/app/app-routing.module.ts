@@ -12,7 +12,7 @@ import {WeeklyCalendarComponent} from './components/weekly-calendar/weekly-calen
 import {OrganizationFormComponent} from './components/organization-form/organization-form.component';
 import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from "./components/organization/organization.component";
-import {EditUserComponent} from './components/edit-user/edit-user.component';
+import {UserFormComponent} from './components/user-form/user-form.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -32,8 +32,9 @@ const routes: Routes = [
 
   {path: 'form/event/:id', component: OrganizationFormComponent},
   {path: 'form/event/:id', component: EventFormComponent},
-  {path: 'form/user', component: EditUserComponent}, //new user creation
-  {path: 'form/user/:id', component: EditUserComponent}, //edit existing user
+  {path: 'form/user', component: UserFormComponent}, //new user creation
+  {path: 'form/user/:id', component: UserFormComponent}, //edit existing user
+  {path: 'editUser', component: UserFormComponent}, //edit existing user//delete this row
 
   {path: 'user', component: UserComponent},
 

@@ -24,7 +24,7 @@ import {CalendarListComponent} from './components/calendar-list/calendar-list.co
 import {OrganizationFormComponent} from './components/organization-form/organization-form.component';
 import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from './components/organization/organization.component';
-import { EditUserComponent } from './components/edit-user/edit-user.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,7 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
     OrganizationFormComponent,
     UserComponent,
     OrganizationComponent,
-    EditUserComponent,
+    UserFormComponent,
   ],
   imports: [
     BrowserModule,
