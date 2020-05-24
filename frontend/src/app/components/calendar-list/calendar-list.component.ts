@@ -58,15 +58,12 @@ export class CalendarListComponent implements OnInit {
     this.router.navigate(['calendar/', calendarRep.id]);
   }
 
-<<<<<<< HEAD
   onSelectEditCalendar(calendarRep: CalendarRepresentation){
     this.router.navigate(['/edit/calendar', calendarRep.id]);
   }
 
-  onSelectOrganisation(organisation: string){
-=======
+
   onSelectOrganization(organization: string){
->>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
     this.router.navigate(['/']);
   }
 
@@ -113,14 +110,15 @@ export class CalendarListComponent implements OnInit {
     return true;
   }
 
-  add(name: string, eventIds: number[], organisationIds: number[]) {
+   add(name: string, eventIds: number[], organizationIds: number[]) {
     name = name.trim();
     if (!name) { return; }
-    this.calendarService.addCalendar({name, eventIds, organisationIds} as Calendar)
+    this.calendarService.addCalendar({name, eventIds, organizationIds} as Calendar)
       .subscribe(newcalendar => {
         this.list2.push(new CalendarRepresentation(newcalendar.id, newcalendar.name, this.listOrg));
       });
   }
+
 
   delete(id: number): void {
 

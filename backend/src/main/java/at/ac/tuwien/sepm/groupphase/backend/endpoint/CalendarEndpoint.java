@@ -137,16 +137,29 @@ public class CalendarEndpoint {
 
 
     }
-    @PreAuthorize("hasPermission(#calendar, 'MOD')")
+   // @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
-    public CalendarDto create(@RequestBody CalendarCreateDto calendar) {
+    public CalendarDto post(@RequestBody CalendarDto calendar) {
         log.info("POST " + BASE_URL + "/{}", calendar);
         try {
-            Calendar calendarEntity = calendarMapper.calendarCreateDtoToCalendar(calendar);
-            return calendarMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
+
+
+            /**Note: This is to make sure that post will not return any wrongly eventList inputs (which won't get store in the
+             * DB anyway) under any circumstances. (Otherwise it would. but it won't save them in the DB in both cases)
+             * Create Calendar is NOT for inserting events.
+             Events are only inserted in calendars by creating a new event and setting the right calendar_id.
+             It is best to not give the option to set eventIds while creating a calendar in the frontend at all.
+             **/
+
+            List<Integer> eventsShouldBeEmpty = new ArrayList<Integer>();
+            calendar.setEventIds(eventsShouldBeEmpty);
+
+            Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
+
+            return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -172,7 +185,7 @@ public class CalendarEndpoint {
         }
     }
 
-
+    
     @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
