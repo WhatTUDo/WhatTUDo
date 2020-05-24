@@ -19,6 +19,8 @@ calendar1 : Calendar;
   constructor(
     private route: ActivatedRoute,
     private calendarService: CalendarService,
+
+    private location: Location
   ) { }
 
 
@@ -36,7 +38,12 @@ calendar1 : Calendar;
 
   update(): void {
 
-  this.calendarService.editCalendar(this.calendar);
+  this.calendarService.editCalendar(this.calendar)
+      .subscribe(() => this.goBack());
 }
+
+  goBack(): void {
+    this.location.back();
+  }
 
 }
