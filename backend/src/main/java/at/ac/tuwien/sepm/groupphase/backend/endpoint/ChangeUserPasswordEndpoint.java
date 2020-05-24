@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,7 +25,7 @@ public class ChangeUserPasswordEndpoint {
     private final UserService userService;
     private final UserMapper userMapper;
 
-
+    @PreAuthorize("hasRole('SYSADMIN') || #changePasswordDto.username == principal.username")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
