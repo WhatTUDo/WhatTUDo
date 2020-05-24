@@ -1,19 +1,22 @@
-import {AfterContentChecked,ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {AfterContentChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
-  selector: 'app-edit-user',
+  selector: 'app-user-form',
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
 export class UserFormComponent implements OnInit, AfterContentChecked {
-  updateForm:FormGroup;
+  updateForm: FormGroup;
   changePwdForm: FormGroup;
-  constructor(private formBuilder: FormBuilder, private cd: ChangeDetectorRef) {
-    this.updateForm=this.formBuilder.group(
+
+  constructor(private formBuilder: FormBuilder, private cd: ChangeDetectorRef,
+              private route: ActivatedRoute) {
+    this.updateForm = this.formBuilder.group(
       {
         username: new FormControl('', Validators.max(255)),
-        email: new FormControl('',[
+        email: new FormControl('', [
           Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]),
       }
     );
@@ -24,25 +27,27 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
       }
     );
   }
+
   ngOnInit(): void {
   }
 
   public update() {
-    if(this.updateForm.valid) {
-      //call update method in service.
-        }
-  }
-
-  public changePassword() {
-    if(this.changePwdForm.valid) {
+    if (this.updateForm.valid) {
       //call update method in service.
     }
   }
 
-  public clearForm(){
+  public changePassword() {
+    if (this.changePwdForm.valid) {
+      //call update method in service.
+    }
+  }
+
+  public clearForm() {
     this.updateForm.reset();
     this.changePwdForm.reset();
   }
+
   ngAfterContentChecked() {
     this.cd.detectChanges();
   }

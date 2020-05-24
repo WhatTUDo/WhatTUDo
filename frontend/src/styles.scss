@@ -7,17 +7,18 @@
   --background: #F7FAF8;
   --text: #141111;
   --secondary: #807C7C;
-  --accent: saturate(mix(#7CC9F2, #141111, 75), 50);
+  --accent: #7CC9F2;
 
   --overlay: rgba(247, 250, 248, 0.5);
   --shadow: rgba(20, 17, 17, 0.25);
   --placeholder: rgba(20, 17, 17, 0.75);
+
   @media (prefers-color-scheme: dark) {
 
     --background: #141111;
     --text: #F7FAF8;
     --secondary: #807c7c;
-    --accent: desaturate(mix(#7CC9F2, #F7FAF8, 75), 50);
+    --accent: #7CC9F2;
 
     --overlay: rgba(20, 17, 17, 0.5);
     --shadow: rgba(247, 250, 248, 0.25);
@@ -246,7 +247,7 @@ a {
   }
 }
 
-input, textarea {
+input, select, textarea {
   padding: 4pt;
 
   border-radius: $rounded-radius;
