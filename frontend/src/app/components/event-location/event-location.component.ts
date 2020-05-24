@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {EventService} from "../../services/event.service";
 import {Location} from "../../dtos/location";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
@@ -12,6 +12,7 @@ import {faMapMarked} from "@fortawesome/free-solid-svg-icons";
 export class EventLocationComponent implements OnInit {
 
   @Output() locationSaved = new EventEmitter<Location>();
+  @Input() location: Location;
 
   constructor(private eventService: EventService,
               private sanitizer: DomSanitizer) {
