@@ -7,19 +7,18 @@
   --background: #F7FAF8;
   --text: #141111;
   --secondary: #807C7C;
-  --accent: saturate(mix(#7CC9F2, #141111, 75), 50);
+  --accent: #7CC9F2;
 
   --overlay: rgba(247, 250, 248, 0.5);
   --shadow: rgba(20, 17, 17, 0.25);
   --placeholder: rgba(20, 17, 17, 0.75);
-
 
   @media (prefers-color-scheme: dark) {
 
     --background: #141111;
     --text: #F7FAF8;
     --secondary: #807c7c;
-    --accent: desaturate(mix(#7CC9F2, #F7FAF8, 75), 50);
+    --accent: #7CC9F2;
 
     --overlay: rgba(20, 17, 17, 0.5);
     --shadow: rgba(247, 250, 248, 0.25);
@@ -83,6 +82,7 @@ a {
 
   fa-icon {
     font-size: 0.75em;
+    color: inherit;
   }
 
   span::after {
@@ -91,6 +91,10 @@ a {
 
   span:last-of-type::after {
     content: none;
+  }
+
+  a {
+    color: inherit;
   }
 }
 
@@ -134,16 +138,20 @@ a {
 
 .clickable {
   cursor: pointer;
+  user-select: none;
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
-  box-shadow: 1px 1px 2px var(--shadow);
+
+  &:not(.no-shadow) {
+    box-shadow: 1px 1px 2px var(--shadow);
+  }
 
   @media (hover: hover) {
-    &:not(.no-hover):hover {
+    &:not(.no-hover-enlarge):hover {
       transform: scale(1.05);
       box-shadow: 4px 4px 8px var(--shadow);
     }
 
-    &.no-hover:hover {
+    &.no-hover-enlarge:hover {
       opacity: 0.75;
     }
   }
@@ -167,13 +175,15 @@ a {
   background-image: linear-gradient(15deg, transparentize($white, 1), transparentize($white, 0.75));
   background-color: var(--background);
 
+  user-select: none;
+
   @media (hover: hover) {
-    &:not(.no-hover):hover {
+    &:not(.no-hover-enlarge):hover {
       transform: scale(1.05);
       box-shadow: 4px 4px 8px var(--shadow);
     }
 
-    &.no-hover:hover {
+    &.no-hover-enlarge:hover {
       opacity: 0.75;
     }
   }
@@ -204,7 +214,7 @@ a {
     background-image: none;
   }
 
-  &.button-solid{
+  &.button-solid {
     background-color: var(--text);
     color: var(--background);
   }
@@ -237,7 +247,7 @@ a {
   }
 }
 
-input, textarea {
+input, select, textarea {
   padding: 4pt;
 
   border-radius: $rounded-radius;
@@ -271,7 +281,20 @@ iframe {
   -webkit-user-drag: none;
 
   &.avatar-small {
-    height: 64pt;
-    width: 64pt;
+    height: 48pt;
+    width: 48pt;
+
+    fa-icon {
+      font-size: 48pt;
+    }
+  }
+
+  &.avatar-medium {
+    height: 72pt;
+    width: 72pt;
+
+    fa-icon {
+      font-size: 72pt;
+    }
   }
 }

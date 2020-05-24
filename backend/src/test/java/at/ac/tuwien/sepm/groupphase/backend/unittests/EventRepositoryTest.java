@@ -2,11 +2,11 @@ package at.ac.tuwien.sepm.groupphase.backend.unittests;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.OrganisationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,11 +33,11 @@ public class EventRepositoryTest {
     @Autowired
     CalendarRepository calendarRepository;
     @Autowired
-    OrganisationRepository organisationRepository;
+    OrganizationRepository organizationRepository;
 
     @Test
     public void repoBasics() {
-        Organisation orga = organisationRepository.save(new Organisation("Test Organisation"));
+        Organization orga = organizationRepository.save(new Organization("Test Organization"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar", Collections.singletonList(orga)));
 
         assertThrows(InvalidDataAccessApiUsageException.class, () -> eventRepository.save(null));
@@ -48,7 +48,7 @@ public class EventRepositoryTest {
 
     @Test
     public void eventBasics() {
-        Organisation orga = organisationRepository.save(new Organisation("Test Organisation"));
+        Organization orga = organizationRepository.save(new Organization("Test Organization"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar", Collections.singletonList(orga)));
         Event event = eventRepository.save(new Event("Test Name", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar));
 
@@ -64,7 +64,7 @@ public class EventRepositoryTest {
 
     @Test
     public void whenQueryForEventsBetweenDates_shouldEventsExist_returnEvents() {
-        Organisation orga = organisationRepository.save(new Organisation("Test Organisation"));
+        Organization orga = organizationRepository.save(new Organization("Test Organization"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar", Collections.singletonList(orga)));
         Event event1 = eventRepository.save(new Event("Test Name", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar));
         Event event2 = eventRepository.save(new Event("Test Name", LocalDateTime.of(2020,1,3,15,30),LocalDateTime.of(2020,1,3,16,0),calendar));

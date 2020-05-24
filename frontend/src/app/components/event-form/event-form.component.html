@@ -4,27 +4,43 @@
     <div class="event-form-container">
       <div class="event-form">
         <div class="event-form-input">
-          <input type="hidden" formControlName="id" name="id">
-
+          <input type="hidden" formControlName="id" name="id" [(ngModel)]="event.id">
+          <!-- FIXME: Stop using formControlName due to deprecation with use of ngModel.
+                I don't know other elegant way to 2-way bind the data with form fields other than ngModel.
+          -->
+          <div class="form-row calendar">
+            <label for="event.calendarId">Calendar</label>
+            <select class="form-control" formControlName="calendarId" id="event.calendarId">
+              <option *ngFor="let cal of editableCalendars" value="{{cal.id}}">{{cal.name}}</option>
+            </select>
+          </div>
           <div class="form-row event-time">
-            <label for="event.startDate">Start</label>
-            <input type="datetime-local" class="form-control" formControlName="startDate" id="event.startDate"
-                   placeholder="Start …">
-            <div>&ensp;-&ensp;</div>
-            <label for="event.endDate">End</label>
-            <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
-                   placeholder="End …">
+            <div>
+              <label for="event.startDate">Start</label>
+              <input type="datetime-local"
+                     class="form-control" formControlName="startDate" id="event.startDate"
+                     placeholder="Start …" [(ngModel)]="event.startDateTime">
+            </div>
+            <div>-</div>
+            <div>
+              <label for="event.endDate">End</label>
+              <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
+                     placeholder="End …" [(ngModel)]="event.endDateTime">
+            </div>
           </div>
           <label for="event.name">Name</label>
           <input type="text" class="form-control event-name form-row" formControlName="name" id="event.name"
-                 placeholder="Event Name …">
+                 placeholder="Event Name …" [(ngModel)]="event.name">
 
           <label for="event.description">Description</label>
           <input type="text" class="form-control form-row" formControlName="name" id="event.description"
-                 placeholder="Description …">
+                 placeholder="Description …" value="Description not yet implemented">
+          <!--          FIXME: [(ngModel)]="event.description"-->
         </div>
 
-        <button class="submit-button button-clickable full-width-form-button no-hover event-form-submit" (click)="onSubmit()">Submit</button>
+        <button class="submit-button button-clickable full-width-form-button no-hover-enlarge event-form-submit"
+                (click)="onSubmit()">Submit
+        </button>
       </div>
     </div>
   </div>
@@ -38,9 +54,9 @@
     </div>
 
     <label for="location-picker">Location</label>
-    <input type="hidden" id="location" name="location" value="123">
+    <input type="hidden" id="location" name="location" formControlName="location" [(ngModel)]="event.location">
     <div id="location-picker">
-      <app-event-location (locationSaved)="saveLocationToEvent($event)"></app-event-location>
+      <app-event-location (locationSaved)="saveLocationToEvent($event)" [location]="event.location"></app-event-location>
     </div>
   </div>
   <div>

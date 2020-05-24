@@ -3,7 +3,7 @@ export class Calendar{
     public id : number,
     public name : string,
     public eventIds ?: number[],
-    public organisationIds ?: number[]
+    public organizationIds ?: number[]
   ) {
   }
 }

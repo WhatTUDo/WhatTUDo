@@ -17,6 +17,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -36,7 +37,7 @@ public class EventEndpoint {
     private final EventMapper eventMapper;
 
 
-    //  @PreAuthorize("hasRole('Member')")
+    @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
@@ -53,6 +54,7 @@ public class EventEndpoint {
         }
     }
 
+    @PreAuthorize("hasPermission(#event, 'MEMBER')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -69,13 +71,14 @@ public class EventEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     @ApiOperation(value = "Get Multiple Events")
-    public List<EventDto> getMultiple(@RequestParam("name") @Nullable String name,
-                                      @RequestParam("from") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-                                      @RequestParam("to") @Nullable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+    public List<EventDto> getMultiple(@RequestParam("name") String name,
+                                      @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                                      @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
         log.info("GET" + BASE_URL + "?name={}&from={}&to={}&calendar_id", name, start, end);
         try {
             List<Event> events = eventService.findForDates(start, end);
@@ -83,21 +86,19 @@ public class EventEndpoint {
 
             events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
             return eventDtos;
-        }
-        catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
-        }
-        catch (ValidationException e) {
+        } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
 
-        @CrossOrigin
-        @GetMapping(value = "/{id}")
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @GetMapping(value = "/{id}")
     public EventDto getById(@PathVariable("id") int id) {
         log.info("GET " + BASE_URL + "/{}", id);
         try {
@@ -107,11 +108,13 @@ public class EventEndpoint {
         }
     }
 
+
     @CrossOrigin
+    @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto editEvent(@RequestBody EventDto eventDto){
+    public EventDto editEvent(@RequestBody EventDto eventDto) {
         log.info("PUT " + BASE_URL + "/{}", eventDto);
         try {
             Event eventEntity = eventMapper.eventDtoToEvent(eventDto);

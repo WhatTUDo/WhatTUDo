@@ -10,6 +10,6 @@ import java.util.List;
 public class CalendarDto {
     private Integer id;
     private String name;
-    private List<Integer> organisationIds;
+    private List<Integer> organizationIds;
     private List<Integer> eventIds;
 }

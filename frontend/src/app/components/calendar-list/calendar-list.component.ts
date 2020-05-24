@@ -5,8 +5,9 @@ import {Calendar} from '../../dtos/calendar';
 import {CalendarRepresentation} from '../../dtos/calendar-representation';
 import { Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {OrganisationService} from '../../services/organisation.service';
-import {Organisation} from '../../dtos/organisation';
+
+import {OrganizationService} from '../../services/organization.service';
+import {Organization} from '../../dtos/organization';
 import {CalendarEditComponent} from '../calendar-edit/calendar-edit.component';
 
 @Component({
@@ -25,14 +26,14 @@ export class CalendarListComponent implements OnInit {
   });
 
 
-  constructor(private calendarService: CalendarService, private router: Router, private organisationService: OrganisationService) {
+  constructor(private calendarService: CalendarService, private router: Router, private organizationService: OrganizationService) {
     this.calendarService.getAllCalendars().subscribe((list) => {
         this.list   = list;
         for(let e of list){
-            for(let a of e.organisationIds){
-              this.organisationService.getById(a).subscribe((organisation:Organisation)=>{
-                  if(organisation.name != null){
-                    this.listOrg.push(organisation.name);}
+            for(let a of e.organizationIds){
+              this.organizationService.getById(a).subscribe((organization:Organization)=>{
+                  if(organization.name != null){
+                    this.listOrg.push(organization.name);}
                 },
                 err => {
                   console.warn(err);
@@ -54,14 +55,18 @@ export class CalendarListComponent implements OnInit {
 
 
   onSelectCalendar(calendarRep: CalendarRepresentation){
-    this.router.navigate(['/calendar', calendarRep.id]);
+    this.router.navigate(['calendar/', calendarRep.id]);
   }
 
+<<<<<<< HEAD
   onSelectEditCalendar(calendarRep: CalendarRepresentation){
     this.router.navigate(['/edit/calendar', calendarRep.id]);
   }
 
   onSelectOrganisation(organisation: string){
+=======
+  onSelectOrganization(organization: string){
+>>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
     this.router.navigate(['/']);
   }
 

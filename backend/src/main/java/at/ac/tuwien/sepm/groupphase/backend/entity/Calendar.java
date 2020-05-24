@@ -18,11 +18,11 @@ import java.util.List;
 public class Calendar {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NonNull
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String name;
 
     @NonNull
@@ -30,7 +30,7 @@ public class Calendar {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToMany(mappedBy = "calendars", fetch = FetchType.EAGER)
     @Size(min = 1)
-    private List<Organisation> organisations;
+    private List<Organization> organizations;
 
 
     @ToString.Exclude

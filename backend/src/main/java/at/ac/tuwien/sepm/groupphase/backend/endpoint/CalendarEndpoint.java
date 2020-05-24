@@ -1,37 +1,34 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
-
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
-
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TestCalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organisation;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
-import at.ac.tuwien.sepm.groupphase.backend.service.OrganisationService;
+import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -45,14 +42,12 @@ public class CalendarEndpoint {
     static final String BASE_URL = "/calendars";
     private final CalendarService calendarService;
     private final EventService eventService;
-    private final OrganisationService organisationService;
+    private final OrganizationService organizationService;
     private final CalendarMapper calendarMapper;
     private final EventMapper eventMapper;
-
-
     private final TestCalendarMapper testMapper;
 
-
+    @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping(value = "/{id}")
     public CalendarDto getById(@PathVariable("id") int id) {
@@ -66,49 +61,52 @@ public class CalendarEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping(value = "/all")
     public List<CalendarDto> getAll() {
         log.info("GET all" + BASE_URL + "");
         try {
 
-            return testMapper.calendarsToCalendarDtos(calendarService.findAll());
+            return calendarMapper.calendarsToCalendarDtos(calendarService.findAll());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
-    @CrossOrigin
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/thisWeek")
-    @ApiOperation(value = "Get events of this week")
-    public List<EventDto> getEventsOfTheWeek(@RequestParam(value = "id")  String id,
-                                             @RequestParam(value = "from") String start,
-                                             @RequestParam(value = "to") String end){
-        log.info("GET" + BASE_URL + "Get events of this week {}", id);
-        try {
-            String[] start1 = start.split(" GMT");
-            String[] end1 = end.split(" GMT");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss", Locale.US);
-            LocalDateTime dateTimeStart = LocalDateTime.parse(start1[0], formatter);
-            LocalDateTime dateTimeEnd = LocalDateTime.parse(end1[0], formatter);
-            List<Event> events = eventService.findForDates(dateTimeStart, dateTimeEnd);
-            List<EventDto> eventDtos = new ArrayList<>();
-            events.removeIf(e -> e.getCalendar().getId() != Integer.parseInt(id));
-            events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
-            return eventDtos;
-        }
-        catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
-        }
-        catch (ValidationException e) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-        }
-        catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
-    }
+//    @PreAuthorize("permitAll()")
+//    @CrossOrigin
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping(value = "/thisWeek")
+//    @ApiOperation(value = "Get events of this week")
+//    public List<EventDto> getEventsOfTheWeek(@RequestParam(value = "id")  String id,
+//                                             @RequestParam(value = "from") String start,
+//                                             @RequestParam(value = "to") String end){
+//        log.info("GET" + BASE_URL + "Get events of this week {}", id);
+//        try {
+//            String[] start1 = start.split(" GMT");
+//            String[] end1 = end.split(" GMT");
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss", Locale.US);
+//            LocalDateTime dateTimeStart = LocalDateTime.parse(start1[0], formatter);
+//            LocalDateTime dateTimeEnd = LocalDateTime.parse(end1[0], formatter);
+//            List<Event> events = eventService.findForDates(dateTimeStart, dateTimeEnd);
+//            List<EventDto> eventDtos = new ArrayList<>();
+//            events.removeIf(e -> e.getCalendar().getId() != Integer.parseInt(id));
+//            events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
+//            return eventDtos;
+//        }
+//        catch (ServiceException e) {
+//            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
+//        }
+//        catch (ValidationException e) {
+//            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+//        }
+//        catch (NotFoundException e) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+//        }
+//    }
 
+    @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
@@ -117,9 +115,9 @@ public class CalendarEndpoint {
         log.info("GET"+BASE_URL+"search {}", name);
         try{
         List<Calendar> fromCalendars = calendarService.findByName(name);
-        List<Organisation> fromOrganisations = organisationService.findByName(name);
+        List<Organization> fromOrganizations = organizationService.findByName(name);
         List<Event> fromEvents=eventService.findByName(name);
-            for (Organisation o: fromOrganisations) {
+            for (Organization o: fromOrganizations) {
                 if(!o.getCalendars().isEmpty()){
                 fromCalendars.addAll(o.getCalendars());}
             }
@@ -139,29 +137,16 @@ public class CalendarEndpoint {
 
 
     }
-
+    @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
-    public CalendarDto post(@RequestBody CalendarDto calendar) {
+    public CalendarDto create(@RequestBody CalendarCreateDto calendar) {
         log.info("POST " + BASE_URL + "/{}", calendar);
         try {
-
-
-            /**Note: This is to make sure that post will not return any wrongly eventList inputs (which won't get store in the
-             * DB anyway) under any circumstances. (Otherwise it would. but it won't save them in the DB in both cases)
-             * Create Calendar is NOT for inserting events.
-             Events are only inserted in calendars by creating a new event and setting the right calendar_id.
-             It is best to not give the option to set eventIds while creating a calendar in the frontend at all.
-            **/
-
-            List<Integer> eventsShouldBeEmpty = new ArrayList<Integer>();
-            calendar.setEventIds(eventsShouldBeEmpty);
-
-            Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
-
-            return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
+            Calendar calendarEntity = calendarMapper.calendarCreateDtoToCalendar(calendar);
+            return calendarMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {

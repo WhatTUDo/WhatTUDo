@@ -1,0 +1,74 @@
+@import "../../../var.scss";
+
+.user-info {
+  display: flex;
+  align-items: center;
+
+  padding: 16pt;
+
+  margin-bottom: 16pt;
+
+  .avatar {
+    justify-self: flex-start;
+    flex-shrink: 0;
+
+    margin-right: 16pt;
+  }
+
+  .user-details {
+    text-align: right;
+    justify-self: flex-end;
+    flex-grow: 1;
+
+    .username {
+      text-align: right;
+      font-weight: $f-bold;
+      font-size: 32pt;
+    }
+  }
+}
+
+.user-organization {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16pt;
+
+  .user-organization-details {
+    margin-left: 8pt;
+
+    .user-organization-name {
+      font-weight: $f-bold;
+      font-size: 16pt;
+    }
+
+    .user-organization-role {
+      color: var(--secondary);
+    }
+  }
+
+  .user-exit-organization-button {
+    margin-left: auto;
+  }
+}
+
+.user-action-container {
+
+  .user-action {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 16pt;
+    margin-top: 8pt;
+
+    a {
+      color: inherit;
+    }
+
+    &.primary-action {
+      color: var(--accent);
+    }
+
+    &.dangerous {
+      color: $red;
+    }
+  }
+}

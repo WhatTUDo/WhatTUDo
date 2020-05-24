@@ -1,30 +1,89 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import at.ac.tuwien.sepm.groupphase.backend.config.authorities.AdminAuthority;
+import at.ac.tuwien.sepm.groupphase.backend.config.authorities.MemberAuthority;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "USER")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
-public class ApplicationUser {
+@RequiredArgsConstructor
+public class ApplicationUser implements UserDetails {
     @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "NAME")
+    @NonNull
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "EMAIL")
+    @NonNull
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "PASSWORD")
+    @NonNull
+    @Column(name = "password")
     private String password;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER) // Eager necessary because of getAuthorities()
+    private Set<OrganizationMembership> memberships = new HashSet<>();
+
+    @Column(name = "is_sysadmin")
+    private boolean isSysAdmin = false;
+
+    /**
+     * Infers the User Roles (authorities) from the admin status and the memberships
+     * @return a list of granted authorities
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if (isSysAdmin) authorities.add(AdminAuthority.ADMIN);
+        for (OrganizationMembership membership : memberships) {
+            switch (membership.getRole()) {
+                case ADMIN:
+                    authorities.add(MemberAuthority.of(membership.getOrganization(), OrganizationRole.ADMIN));
+                case MOD:
+                    authorities.add(MemberAuthority.of(membership.getOrganization(), OrganizationRole.MOD));
+                case MEMBER:
+                    authorities.add(MemberAuthority.of(membership.getOrganization(), OrganizationRole.MEMBER));
+            }
+        }
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

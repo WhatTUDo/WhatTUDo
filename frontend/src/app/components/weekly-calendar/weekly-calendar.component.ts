@@ -37,7 +37,7 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.displayingDate = this.getToday();
+    this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
 
     this.loadEventsForWeek(this.getWeek(0)[0], this.getWeek(0)[6]);
@@ -102,7 +102,7 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   getWeek(offset = 0) {
-    const offsetWeeks = Math.round(this.offset / 7);
+    const offsetWeeks = Math.round(offset / 7);
     let currentWeekDates = [];
     let today = this.getToday();
 

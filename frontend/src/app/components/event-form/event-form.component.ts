@@ -3,6 +3,9 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {Location} from "../../dtos/location";
 import {EventService} from "../../services/event.service";
+import {CalendarService} from "../../services/calendar.service";
+import {Calendar} from "../../dtos/calendar";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-event-form',
@@ -10,9 +13,11 @@ import {EventService} from "../../services/event.service";
   styleUrls: ['./event-form.component.scss']
 })
 export class EventFormComponent implements OnInit {
+  editableCalendars: Calendar[] = [];
 
-  private event: CalendarEvent
-  reactiveEventForm = new FormGroup( {
+  isUpdate: Boolean = false;
+  event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
+  reactiveEventForm = new FormGroup({
     id: new FormControl(''),
     name: new FormControl(''),
     startDate: new FormControl(''),
@@ -21,10 +26,21 @@ export class EventFormComponent implements OnInit {
     labels: new FormControl('')
   });
 
-  constructor(private service: EventService) { }
+  constructor(private eventService: EventService, private calendarService: CalendarService, private route: ActivatedRoute) {
+    const id = +this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
+        if (event) {
+          this.event = event;
+          this.isUpdate = true;
+        } else {
+        }
+      });
+    }
+    this.getAllEditableCalendars()
+  }
 
   ngOnInit(): void {
-    this.event = new CalendarEvent(null, null, null, null, null, null, null, null);
   }
 
   onSubmit() {
@@ -34,16 +50,21 @@ export class EventFormComponent implements OnInit {
       this.event.name = formValue.name;
       this.event.startDateTime = new Date(formValue.startDate);
       this.event.endDateTime = new Date(formValue.endDate);
-      this.event.calendarId = 1;
+      this.event.calendarId = +formValue.calendarId;
 
-      // submit to service
-      this.service.postEvent(this.event).subscribe( response => {
-        alert("Saved event: " + response);
-        console.log(response);
-      },
-        err => {
-        console.warn(err);
-        });
+      // submit to eventService
+      if (this.isUpdate) {
+        alert("Update not implemented!");
+      } else {
+        this.eventService.postEvent(this.event).subscribe(response => {
+            alert("Saved event: " + response);
+            console.log(response);
+          },
+          err => {
+            console.warn(err);
+            alert("Error: " + err.error);
+          });
+      }
     }
   }
 
@@ -66,6 +87,9 @@ export class EventFormComponent implements OnInit {
     if (!this.event.location) {
       errors.push(new Error("A location must be specified!"));
     }
+    if (!this.event.calendarId) {
+      errors.push(new Error("A event must belongs to a calendar."));
+    }
 
     if (errors.length > 0) {
       console.warn(errors);
@@ -87,6 +111,9 @@ export class EventFormComponent implements OnInit {
 
   }
 
-
-
+  getAllEditableCalendars() {
+    this.calendarService.getAllCalendars().subscribe((calendars: Calendar[]) => {
+      this.editableCalendars = calendars;
+    }) //FIXME: Make me to fetch only editable calendars.
+  }
 }

@@ -1,7 +1,7 @@
 logging:
   file.name: ./log/backend.log
   level:
-    root: DEBUG
+    root: INFO
 
 spring:
   datasource:
@@ -33,9 +33,7 @@ security:
       - /
       - /favicon.ico
       - /csrf
-      - /events/**
-      - /calendars/**
-      - /organisations/**
+      - /changePwd/**
       # Swagger
       - /v2/api-docs
       - /swagger-resources/**
