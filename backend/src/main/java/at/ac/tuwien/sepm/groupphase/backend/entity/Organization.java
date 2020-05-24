@@ -4,8 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table
@@ -30,5 +30,9 @@ public class Organization {
         inverseJoinColumns = @JoinColumn(name = "calendar_id")
     )
     private List<Calendar> calendars = new ArrayList<>(); //FIXME: Use *Set*. Currently returning duplicates.
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE})
+    private Set<OrganizationMembership> memberships;
 }
 

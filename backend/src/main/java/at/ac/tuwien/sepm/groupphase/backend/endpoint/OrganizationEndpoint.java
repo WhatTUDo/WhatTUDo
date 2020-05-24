@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -37,6 +38,7 @@ public class OrganizationEndpoint {
     private final CalendarService calendarService;
 
 
+    @PreAuthorize("hasPermission(#organization, 'MOD')")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -58,6 +60,7 @@ public class OrganizationEndpoint {
         }
     }
 
+    @PreAuthorize("hasRole('SYSADMIN')")
     @PostMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
@@ -74,9 +77,7 @@ public class OrganizationEndpoint {
         }
     }
 
-
-
-
+    @PreAuthorize("permitAll()")
     @GetMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -92,6 +93,7 @@ public class OrganizationEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
     @GetMapping(value = "/{id}")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -107,7 +109,7 @@ public class OrganizationEndpoint {
         }
     }
 
-
+    @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
     @PutMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -123,6 +125,7 @@ public class OrganizationEndpoint {
         }
     }
 
+    @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
     @DeleteMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)

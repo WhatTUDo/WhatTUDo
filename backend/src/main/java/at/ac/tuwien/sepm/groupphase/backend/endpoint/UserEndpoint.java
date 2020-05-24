@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -25,12 +26,13 @@ public class UserEndpoint {
     private final UserService userService;
     private final UserMapper userMapper;
 
+    @PreAuthorize("permitAll()")
     @PostMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create New User!")
     public LoggedInUserDto createNewUser(@RequestBody IncomingUserDto user) {
-        log.info("POST " + BASE_URL, user);
+        log.info("POST " + BASE_URL);
         try {
             ApplicationUser newUser = userService.saveNewUser(userMapper.userDtoToApplicationUser(user));
 
@@ -44,6 +46,7 @@ public class UserEndpoint {
         }
     }
 
+    @PreAuthorize("hasRole('SYSADMIN') || #userDto.name == principal.username")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -66,6 +69,4 @@ public class UserEndpoint {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
-
-
 }

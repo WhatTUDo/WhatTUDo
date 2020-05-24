@@ -14,8 +14,8 @@ public class OldUserRepository {
 
     @Autowired
     public OldUserRepository(PasswordEncoder passwordEncoder) {
-        user = new ApplicationUser(0, "user", "user@email.com", passwordEncoder.encode("password"));
-        admin = new ApplicationUser(1, "admin", "admin@email.com", passwordEncoder.encode("password"));
+        user = new ApplicationUser("user", "user@email.com", passwordEncoder.encode("password"));
+        admin = new ApplicationUser("admin", "admin@email.com", passwordEncoder.encode("password"));
     }
 
     public ApplicationUser findUserByEmail(String email) {
