@@ -17,6 +17,7 @@ export class CalendarListComponent implements OnInit {
   list : Calendar[] = [];
   listOrg : string[] = [];
   list2 : CalendarRepresentation[] = [];
+  newcalendar : Calendar;
 
   searchForm = new FormGroup( {
     name: new FormControl('')
@@ -100,6 +101,15 @@ export class CalendarListComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  add(name: string, eventIds: number[], organisationIds: number[]) {
+    name = name.trim();
+    if (!name) { return; }
+    this.calendarService.addCalendar({name, eventIds, organisationIds} as Calendar)
+      .subscribe(newcalendar => {
+        this.list2.push(new CalendarRepresentation(newcalendar.id, newcalendar.name, this.listOrg));
+      });
   }
 
 }

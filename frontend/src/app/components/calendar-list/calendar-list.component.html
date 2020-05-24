@@ -32,4 +32,17 @@
       </table>
     </div>
   </div>
+
+  <div>
+    <table class="table">    <thead>  <tr class ="table-titles">
+    <th>
+      Create a new calendar named:
+    </th>
+  </tr></thead>      </table>
+    </div><div>
+    <input #calendarName />
+          <button (click)="add(calendarName.value, [], [11]); calendarName.value=''">
+    create
+  </button></div>
+
 </div>

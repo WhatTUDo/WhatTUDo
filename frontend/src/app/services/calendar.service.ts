@@ -34,7 +34,13 @@ export class CalendarService {
   searchCalendars(name: string): Observable<any[]> {
     let params = new HttpParams().set("name", name) ;
     return this.httpClient.get<any[]>(this.calendarBaseUri+'/search', {params: params});
+
   }
+  /** POST: add a new calendar to the server */
+  addCalendar (calendar: Calendar): Observable<Calendar> {
+    return this.httpClient.post<Calendar>(this.calendarBaseUri + '/' , calendar);
+  }
+
 
 
 }
