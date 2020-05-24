@@ -18,7 +18,7 @@ import java.util.*;
 public class ApplicationUser implements UserDetails {
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NonNull
@@ -34,6 +34,7 @@ public class ApplicationUser implements UserDetails {
     private String password;
 
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE})
     private Set<OrganizationMembership> memberships = new HashSet<>();
 
