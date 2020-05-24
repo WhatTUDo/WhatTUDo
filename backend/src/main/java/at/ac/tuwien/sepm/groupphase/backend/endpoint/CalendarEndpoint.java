@@ -169,7 +169,7 @@ public class CalendarEndpoint {
         }
     }
 
-    //  @PreAuthorize("hasRole('Member')")
+    //  @PreAuthorize("hasRole('Admin')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")

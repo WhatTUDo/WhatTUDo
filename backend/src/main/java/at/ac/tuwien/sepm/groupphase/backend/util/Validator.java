@@ -14,12 +14,31 @@ import java.time.LocalDateTime;
 public class Validator {
     private final OrganisationRepository organisationRepository;
     public void validateNewEvent(Event event) {
+
+        String result = "Following problems with this input: \n";
+
         if (event == null) {
-            throw new ValidationException("Event object must not be null!");
+
+          throw new ValidationException("Event object must not be null!");
         }
-        if (event.getName().isBlank()) throw new ValidationException("Event name must not be empty.");
-        if (event.getEndDateTime().compareTo(event.getStartDateTime()) < 0)
-            throw new ValidationException("End Date must be after Start Date");
+
+        if (event.getName().isBlank()) {
+            result += "Event name must not be empty.\n";
+            //throw new ValidationException("Event name must not be empty.");
+            }
+        if (!(event.getStartDateTime().isBefore(event.getEndDateTime()))) {
+            result += "End Date must be after Start Date. \n";
+           // throw new ValidationException("End Date must be after Start Date");
+        }
+        if((event.getEndDateTime().getYear() < 2020)){
+            result += "End Date is not valid. Year is before this calendar even existed. \n";
+        }
+
+
+        if (!(result.equals("Following problems with this input: \n"))){
+
+            throw new ValidationException(result);
+        }
     }
 
     public void validateUpdateOrganisation(Organisation organisation) {
@@ -33,8 +52,26 @@ public class Validator {
 
 
     public void validateNewOrganisation(Organisation organisation) {
-        if (organisation.getName().isBlank()) throw new ValidationException("Organisation name must not be empty.");
-        if (organisationRepository.findById(organisation.getId()).isPresent()) throw new ValidationException("An Organisation with this ID already exists");
-        if (organisationRepository.findByName(organisation.getName()).isPresent()) throw new ValidationException("An Organisation with this Name already exists");
+
+        String result = "Following problems with this input: \n";
+
+        if (organisation.getName().isBlank()) {
+            result += "Organisation name must not be empty. \n";
+            //throw new ValidationException("Organisation name must not be empty.");
+        }
+        if (organisationRepository.findById(organisation.getId()).isPresent()) {
+            result += "An Organisation with this ID already exists. \n";
+            //throw new ValidationException("An Organisation with this ID already exists");
+        }
+        if (organisationRepository.findByName(organisation.getName()).isPresent()) {
+
+            result += "An Organisation with this Name already exists. \n";
+            //throw new ValidationException("An Organisation with this Name already exists");
+        }
+
+        if (!(result.equals("Following problems with this input: \n"))){
+
+            throw new ValidationException(result);
+        }
     }
 }

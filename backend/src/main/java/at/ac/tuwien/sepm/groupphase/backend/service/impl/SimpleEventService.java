@@ -102,36 +102,24 @@ public class SimpleEventService implements EventService {
     }
 
     // TODO: Cleanup class and replace log with event publisher
+
+
     @Override
     public Event update(Event event) {
         log.info("Service update event {}", event);
         try {
-            Event tochange = eventRepository.findById(event.getId()).get();
-            //TODO check with isPresent first
+
+
+            Optional<Event> found = eventRepository.findById(event.getId());
+            if (found.isPresent()) {
+
+
+                publisher.publishEvent(new EventCreateEvent(event.getName()));
+
+
             if((event.getName().isBlank())) {
                 throw new ValidationException("name can't be blank!");
             }
-
-         /**   if (!(event.getName().isBlank()) && !(event.getName().isEmpty())) {
-
-                tochange.setName(event.getName());
-            }
-
-            if (event.getEndDateTime().compareTo(event.getStartDateTime()) < 0) {
-
-                throw new ValidationException("end-date must be after start-date");
-            }
-
-            //TODO: better validation
-
-
-            if((event.getStartDateTime() != null) && (event.getStartDateTime().isBefore(event.getEndDateTime()))){
-                tochange.setStartDateTime(event.getStartDateTime());
-            }
-            if((event.getEndDateTime() != null)&& (event.getStartDateTime().isBefore(event.getEndDateTime()))){
-                tochange.setEndDateTime(event.getEndDateTime());
-            }
-          **/
 
             if((event.getStartDateTime().getYear() < 2020)){
                 throw new ValidationException("start date not valid");
@@ -141,9 +129,12 @@ public class SimpleEventService implements EventService {
                 throw new ValidationException("start date can't be before end date!");
             }
 
-           // tochange.setCalendar(event.getCalendar());
-
            return eventRepository.save(event);
+            }
+
+            else {
+                throw new NotFoundException("No event found with id " + event.getId());
+            }
 
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e){
             throw new ValidationException(e.getMessage());

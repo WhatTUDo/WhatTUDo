@@ -121,15 +121,6 @@ public class SimpleCalendarService implements CalendarService {
             Calendar toDelete = this.findById(id);
             List<Organisation> olist = toDelete.getOrganisations();
 
-   /**         for(Organisation o : olist){
-
-                if(o != null){
-
-                List<Calendar> li = new ArrayList<Calendar>();
-                li.add(toDelete);
-                organisationService.removeCalendars(o,li);
-                System.out.println("HERE" + toDelete.toString());} **/
-
             try {
                 olist.forEach(it -> it.getCalendars().remove(toDelete));
                 organisationRepository.saveAll(olist);
@@ -140,16 +131,6 @@ public class SimpleCalendarService implements CalendarService {
             } catch (PersistenceException e) {
                 throw new ServiceException(e.getMessage(), e);
             }
-
-
-          /**  System.out.println("Hierhin?");
-            System.out.println("NOT HERE" + toDelete.toString());
-
-            List<Organisation> makeEmpty = new ArrayList<Organisation>();
-            toDelete.setOrganisations(makeEmpty);
-
-            System.out.println(toDelete.toString());
-            calendarRepository.delete(calendarRepository.save(toDelete)); **/
 
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ValidationException(e.getMessage());
