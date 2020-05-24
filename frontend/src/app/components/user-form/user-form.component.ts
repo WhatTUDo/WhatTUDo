@@ -3,10 +3,10 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-edit-user',
-  templateUrl: './edit-user.component.html',
-  styleUrls: ['./edit-user.component.scss']
+  templateUrl: './user-form.component.html',
+  styleUrls: ['./user-form.component.scss']
 })
-export class EditUserComponent implements OnInit, AfterContentChecked {
+export class UserFormComponent implements OnInit, AfterContentChecked {
   updateForm:FormGroup;
   constructor(private formBuilder: FormBuilder, private cd: ChangeDetectorRef) {
     this.updateForm=this.formBuilder.group(
