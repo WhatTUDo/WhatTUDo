@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
+import org.aspectj.weaver.ast.Not;
 import org.hibernate.service.spi.ServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,7 @@ import javax.persistence.PersistenceException;
 import java.lang.invoke.MethodHandles;
 import java.sql.SQLOutput;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomUserDetailService implements UserService {
@@ -89,12 +91,24 @@ public class CustomUserDetailService implements UserService {
     public ApplicationUser updateUser(ApplicationUser user) {
         try {
             validator.validateUpdateUser(user);
-            if (user.getEmail() != null) {
+            Optional<ApplicationUser> find = userRepository.findById(user.getId());
+            if(find.isEmpty()){
+                throw new NotFoundException("User not found");
+           }
+            ApplicationUser old = find.get();
+            if (user.getEmail() == null || user.getEmail().equals("")) {
+                user.setEmail(old.getEmail());
+            }else{
                 if (!userRepository.findByEmail(user.getEmail()).isEmpty()) {
                     throw new ValidationException("A user already registered with this email!");
                 }
             }
-            return userRepository.save(user);
+
+            if (user.getName() == null || user.getName().equals("")){
+              user.setName(old.getName());
+            }
+            user.setPassword(old.getPassword());
+                return userRepository.save(user);
         } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -114,11 +128,12 @@ public class CustomUserDetailService implements UserService {
             String encodedNewPassword = passwordEncoder.encode(newPassword);
             foundUser.get(0).setPassword(encodedNewPassword);
             return userRepository.save(foundUser.get(0));
-        }catch (PersistenceException | IllegalArgumentException e){
+        } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
         }
 
     }
+
 
 
 }

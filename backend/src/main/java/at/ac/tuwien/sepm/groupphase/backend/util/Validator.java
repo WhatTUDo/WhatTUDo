@@ -48,7 +48,7 @@ public class Validator {
     public void validateUpdateUser(ApplicationUser user){
         List<Exception> exceptions = new ArrayList<>();
         if(user == null){ exceptions.add(new ValidationException("User cannot be null")); }
-        if(user.getEmail() != null){
+        if(user.getEmail() != null && !user.getEmail().equals("")){
             if (!emailIsValid(user.getEmail())) {
                 exceptions.add(new ValidationException("Email is not in a valid format!"));
             }
