@@ -1,9 +1,11 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Entity

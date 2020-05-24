@@ -107,7 +107,7 @@ public class EventEndpoint {
         }
     }
 
-
+    @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})

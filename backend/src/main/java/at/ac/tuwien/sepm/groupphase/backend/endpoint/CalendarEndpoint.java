@@ -188,5 +188,23 @@ public class CalendarEndpoint {
     }
 
 
+    @CrossOrigin
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Edit calendar", authorizations = {@Authorization(value = "apiKey")})
+    public CalendarDto editCalendar(@RequestBody CalendarDto calendarDto){
+        log.info("PUT " + BASE_URL + "/{}", calendarDto);
+        try {
+            Calendar calendar = testMapper.calendarDtoToCalendar(calendarDto);
+
+            return testMapper.calendarToCalendarDto(calendarService.update(calendar));
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+
 
 }

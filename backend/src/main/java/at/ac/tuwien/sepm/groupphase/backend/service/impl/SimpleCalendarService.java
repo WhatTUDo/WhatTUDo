@@ -16,6 +16,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.OrganisationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Hibernate;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -126,6 +127,19 @@ public class SimpleCalendarService implements CalendarService {
                 organisationRepository.saveAll(olist);
 
                 toDelete.getOrganisations().removeAll(olist);
+
+                if(this.findById(id).getEvents() != null){
+
+                    for(Event e : toDelete.getEvents()){
+
+                        eventRepository.delete(e);
+                    }
+
+                    List<Event> empty = new ArrayList<Event>();
+                    toDelete.setEvents(empty);
+
+                }
+
                 calendarRepository.delete(toDelete);
 
             } catch (PersistenceException e) {
@@ -134,6 +148,41 @@ public class SimpleCalendarService implements CalendarService {
 
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ValidationException(e.getMessage());
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Calendar update(Calendar calendar) {
+        try {
+
+            Calendar toUpdate = this.findById(calendar.getId());
+
+            if(!(calendar.getName().isBlank()) || !(calendar.getName().equals((this.findById(calendar.getId())).getName()))){
+               toUpdate.setName(calendar.getName());
+                }
+
+            toUpdate.setOrganisations(calendar.getOrganisations());
+
+
+            /**   List<Calendar> thiscal = new ArrayList<Calendar>();
+                thiscal.add(calendar);
+                 for(Organisation o : calendar.getOrganisations()){
+
+                 List<Calendar> cal;
+                 cal = o.getCalendars();
+                 if(!(cal.contains(calendar))) {
+                     cal.add(calendar);
+                 }
+                 organisationService.addCalendars(o,thiscal);
+
+                 }**/
+
+              //  Calendar result =  calendarRepository.save(this.findById(calendar.getId()));
+
+            publisher.publishEvent(new EventCreateEvent(calendar.getName()));
+            return calendarRepository.save(toUpdate);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }

@@ -7,6 +7,7 @@ import java.util.List;
 public interface CalendarService {
 
     Calendar findById(Integer id);
+
     List<Calendar> findAll();
 
     /**
@@ -29,4 +30,14 @@ public interface CalendarService {
      *         - calendar has no id in db
      */
     void delete(Integer id);
+
+    /**
+     * @param calendar to be updated into database .
+     * @return the changed calendar.
+     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException will be thrown if.
+     *         - name of calendar is empty;
+     *
+     */
+    Calendar update(Calendar calendar);
 }
