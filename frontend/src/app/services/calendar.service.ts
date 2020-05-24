@@ -15,7 +15,7 @@ export class CalendarService {
 
   getAllCalendars(): Observable<any[]>{
     console.log("Get All Calendars")
-    return this.httpClient.get<any[]>(this.calendarBaseUri + '');
+    return this.httpClient.get<any[]>(this.calendarBaseUri + '/all');
   }
 
   getCalendarById(id: number): Observable<Calendar> {

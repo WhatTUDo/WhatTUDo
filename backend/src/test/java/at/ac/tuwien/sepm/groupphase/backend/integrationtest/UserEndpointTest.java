@@ -76,9 +76,9 @@ public class UserEndpointTest {
 
         LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
 
-        LoggedInUserDto changePasswordUserDto =  userPasswordEndpoint.changeUserPassword(new ChangePasswordDto(savedUserDto.getEmail(), "hunter3", "hunter4"));
+        LoggedInUserDto changePasswordUserDto =  userPasswordEndpoint.changeUserPassword(new ChangePasswordDto(savedUserDto.getName(),savedUserDto.getEmail(), "hunter3", "hunter4"));
 
-//        assertTrue(passwordEncoder.matches("hunter4", changePasswordUserDto.getPassword()));
+//        assertTrue(passwordEncoder.matches("hunter4", changePasswordUserDto()));
 
 
     }

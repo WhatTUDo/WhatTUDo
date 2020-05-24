@@ -73,37 +73,37 @@ public class CalendarEndpoint {
         }
     }
 
-    @PreAuthorize("permitAll()")
-    @CrossOrigin
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/thisWeek")
-    @ApiOperation(value = "Get events of this week")
-    public List<EventDto> getEventsOfTheWeek(@RequestParam(value = "id")  String id,
-                                             @RequestParam(value = "from") String start,
-                                             @RequestParam(value = "to") String end){
-        log.info("GET" + BASE_URL + "Get events of this week {}", id);
-        try {
-            String[] start1 = start.split(" GMT");
-            String[] end1 = end.split(" GMT");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss", Locale.US);
-            LocalDateTime dateTimeStart = LocalDateTime.parse(start1[0], formatter);
-            LocalDateTime dateTimeEnd = LocalDateTime.parse(end1[0], formatter);
-            List<Event> events = eventService.findForDates(dateTimeStart, dateTimeEnd);
-            List<EventDto> eventDtos = new ArrayList<>();
-            events.removeIf(e -> e.getCalendar().getId() != Integer.parseInt(id));
-            events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
-            return eventDtos;
-        }
-        catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
-        }
-        catch (ValidationException e) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-        }
-        catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
-    }
+//    @PreAuthorize("permitAll()")
+//    @CrossOrigin
+//    @ResponseStatus(HttpStatus.OK)
+//    @GetMapping(value = "/thisWeek")
+//    @ApiOperation(value = "Get events of this week")
+//    public List<EventDto> getEventsOfTheWeek(@RequestParam(value = "id")  String id,
+//                                             @RequestParam(value = "from") String start,
+//                                             @RequestParam(value = "to") String end){
+//        log.info("GET" + BASE_URL + "Get events of this week {}", id);
+//        try {
+//            String[] start1 = start.split(" GMT");
+//            String[] end1 = end.split(" GMT");
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss", Locale.US);
+//            LocalDateTime dateTimeStart = LocalDateTime.parse(start1[0], formatter);
+//            LocalDateTime dateTimeEnd = LocalDateTime.parse(end1[0], formatter);
+//            List<Event> events = eventService.findForDates(dateTimeStart, dateTimeEnd);
+//            List<EventDto> eventDtos = new ArrayList<>();
+//            events.removeIf(e -> e.getCalendar().getId() != Integer.parseInt(id));
+//            events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
+//            return eventDtos;
+//        }
+//        catch (ServiceException e) {
+//            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
+//        }
+//        catch (ValidationException e) {
+//            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+//        }
+//        catch (NotFoundException e) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+//        }
+//    }
 
     @PreAuthorize("permitAll()")
     @CrossOrigin
