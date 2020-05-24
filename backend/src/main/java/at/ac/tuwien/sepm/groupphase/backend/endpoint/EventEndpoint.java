@@ -109,10 +109,7 @@ public class EventEndpoint {
     }
 
 
-<<<<<<< HEAD
     @CrossOrigin
-=======
->>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
     @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
     @PutMapping
     @ResponseStatus(HttpStatus.OK)

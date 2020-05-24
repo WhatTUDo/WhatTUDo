@@ -9,18 +9,15 @@ import {EventFormComponent} from "./components/event-form/event-form.component";
 import {CalendarListComponent} from './components/calendar-list/calendar-list.component';
 import {CalendarComponent} from './components/calendar/calendar.component';
 import {WeeklyCalendarComponent} from './components/weekly-calendar/weekly-calendar.component';
-<<<<<<< HEAD
 
-=======
->>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
+
 import {OrganizationFormComponent} from './components/organization-form/organization-form.component';
 import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from "./components/organization/organization.component";
 import {UserFormComponent} from './components/user-form/user-form.component';
-<<<<<<< HEAD
+
 import {CalendarEditComponent} from './components/calendar-edit/calendar-edit.component';
-=======
->>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
+
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
