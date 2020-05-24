@@ -38,33 +38,50 @@
         </div>
       </div>
 
+    <div class="user-action-container">
+      <div (click)="update()" class="user-action submit clickable no-hover-enlarge no-shadow">Update</div>
+      <div (click)="clearForm()" class="user-action clickable no-hover-enlarge no-shadow">Cancel</div>
+    </div>
+    </form>
       <div>
         <div>
           <h4>Security</h4>
         </div>
-        <div>
+        <form class="form-horizontal" [formGroup]="changePwdForm" (ngSubmit)="update()">
           <div class="form-group">
             <label for="currentPassword" class="control-label">Current password</label>
             <div>
               <input type="password" formControlName="currentPassword" class="form-control"
                      autocomplete="current-password" id="currentPassword">
+              <div *ngIf="changePwdForm.controls.currentPassword.errors" class="jasmine-errored">
+                <small class="form-text text-warning"
+                       *ngIf="changePwdForm.controls.currentPassword.errors.required">Please enter your current Password!
+                </small>
 
             </div>
+          </div>
           </div>
           <div class="form-group">
             <label for="newPassword" class="control-label">New password</label>
             <div>
               <input type="password" formControlName="newPassword" class="form-control" autocomplete="new-password"
                      id="newPassword">
+              <div *ngIf="changePwdForm.controls.newPassword.errors" class="jasmine-errored">
+                <small class="form-text text-warning"
+                       *ngIf="changePwdForm.controls.newPassword.errors.required">Please enter your new Password!
+                </small>
             </div>
           </div>
+          </div>
           <div class="user-action-container">
-            <div (click)="update()" class="user-action submit clickable no-hover-enlarge no-shadow">Submit</div>
+            <div (click)="changePassword()" class="user-action submit clickable no-hover-enlarge no-shadow">Change Password</div>
             <div (click)="clearForm()" class="user-action clickable no-hover-enlarge no-shadow">Cancel</div>
+          </div>
+
+        </form>
+          <div class="user-action-container">
             <div class="user-action dangerous clickable no-hover-enlarge no-shadow">Delete Account</div>
           </div>
         </div>
       </div>
-    </form>
   </div>
-</div>
