@@ -35,7 +35,7 @@ public class ApplicationUser implements UserDetails {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER) // Eager necessary because of getAuthorities()
     private Set<OrganizationMembership> memberships = new HashSet<>();
 
     @Column(name = "is_sysadmin")

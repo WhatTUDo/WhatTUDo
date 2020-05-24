@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.config.jwt;
 
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UserLoginDto user = new ObjectMapper().readValue(request.getInputStream(), UserLoginDto.class);
             //Compares the user with CustomUserDetailService#loadUserByUsername and check if the credentials are correct
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                user.getEmail(),
+                user.getUsername(),
                 user.getPassword())
             );
         } catch (IOException e) {
@@ -71,14 +72,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         FilterChain chain,
         Authentication authResult
     ) throws IOException {
-        User user = ((User) authResult.getPrincipal());
+        ApplicationUser user = ((ApplicationUser) authResult.getPrincipal());
 
-        List<String> roles = user.getAuthorities()
-            .stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.toList());
-
-        response.getWriter().write(jwtTokenizer.getAuthToken(user.getUsername(), roles));
+        response.getWriter().write(jwtTokenizer.getAuthToken(user.getUsername()));
         LOGGER.info("Successfully authenticated user {}", user.getUsername());
     }
 }

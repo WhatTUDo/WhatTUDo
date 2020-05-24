@@ -6,7 +6,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,7 +27,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private final SecurityProperties securityProperties;
     private final UserRepository userRepository;
 
-    @Autowired
     public JwtAuthorizationFilter(AuthenticationManager authenticationManager, SecurityProperties securityProperties, UserRepository userRepository) {
         super(authenticationManager);
         this.securityProperties = securityProperties;
@@ -67,14 +65,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             String username = claims.getSubject();
 
-            List<SimpleGrantedAuthority> authorities = ((List<?>) claims
-                .get("rol")).stream()
-                .map(authority -> new SimpleGrantedAuthority((String) authority))
-                .collect(Collectors.toList());
-
             if (username == null || username.isEmpty()) throw new IllegalArgumentException("Token contains no user");
 
-            return Optional.of(new UsernamePasswordAuthenticationToken(username, null, authorities));
+            return Optional.of(new UsernamePasswordAuthenticationToken(username, null));
         }
     }
 }
