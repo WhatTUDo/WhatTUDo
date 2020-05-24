@@ -9,6 +9,7 @@ import {EventFormComponent} from "./components/event-form/event-form.component";
 import {CalendarListComponent} from './components/calendar-list/calendar-list.component';
 import {CalendarComponent} from './components/calendar/calendar.component';
 import {WeeklyCalendarComponent} from './components/weekly-calendar/weekly-calendar.component';
+import {CalendarEditComponent} from './components/calendar-edit/calendar-edit.component';
 
 import {OrganisationFormComponent} from './components/organisation-form/organisation-form.component';
 
@@ -20,6 +21,7 @@ const routes: Routes = [
   {path: 'form/event/:id', component: EventFormComponent},
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
+  {path: 'edit/calendar/:id', component: CalendarEditComponent},
   //{path: 'week-calendar/:id', component: WeeklyCalendarComponent}
 
   {path: 'form/event/:id', component: OrganisationFormComponent}

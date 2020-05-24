@@ -7,6 +7,7 @@ import { Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {OrganisationService} from '../../services/organisation.service';
 import {Organisation} from '../../dtos/organisation';
+import {CalendarEditComponent} from '../calendar-edit/calendar-edit.component';
 
 @Component({
   selector: 'app-calendar-list',
@@ -54,6 +55,10 @@ export class CalendarListComponent implements OnInit {
 
   onSelectCalendar(calendarRep: CalendarRepresentation){
     this.router.navigate(['/calendar', calendarRep.id]);
+  }
+
+  onSelectEditCalendar(calendarRep: CalendarRepresentation){
+    this.router.navigate(['/edit/calendar', calendarRep.id]);
   }
 
   onSelectOrganisation(organisation: string){

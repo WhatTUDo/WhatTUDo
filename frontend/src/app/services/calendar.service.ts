@@ -41,6 +41,11 @@ export class CalendarService {
     return this.httpClient.post<Calendar>(this.calendarBaseUri + '/' , calendar);
   }
 
+  /** EDIT: edit a calendar */
+  editCalendar (calendar: Calendar): Observable<Calendar> {
+    return this.httpClient.put<Calendar>(this.calendarBaseUri + '/' , calendar);
+  }
+
   /** DELETE: delete the calendar from the server */
   deleteCalendar (calendar: Calendar | number): Observable<Calendar> {
     const id = typeof calendar === 'number' ? calendar : calendar.id;
