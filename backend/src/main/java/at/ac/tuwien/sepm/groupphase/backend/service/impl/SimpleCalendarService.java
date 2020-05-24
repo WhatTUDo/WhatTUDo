@@ -38,6 +38,7 @@ public class SimpleCalendarService implements CalendarService {
     private final OrganizationRepository organizationRepository;
     private final OrganizationService organizationService;
 
+
     @Override
     public Calendar findById(Integer id) throws NotFoundException, ServiceException {
         try {

@@ -8,7 +8,9 @@ import org.hibernate.service.spi.ServiceException;
 import java.util.List;
 
 public interface CalendarService {
+;
 
+<<<<<<< HEAD
 
 
     /**
@@ -30,6 +32,8 @@ public interface CalendarService {
     Calendar update(Calendar calendar);
 
 
+=======
+>>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
     /**
      * Finds and returns 1 Calendar with the specified ID
      * @param id
@@ -49,8 +53,13 @@ public interface CalendarService {
 
     /**
      *
+<<<<<<< HEAD
      * @param calendar Calendar to save  (depending on given ID)
      * @return Saved Calendar
+=======
+     * @param calendar Calendar to save / update (depending on given ID)
+     * @return Saved / updated Calendar
+>>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
      * @throws NotFoundException is thrown when the Calendar Entity with the specified ID is not in DB
      * @throws ServiceException is thrown when some errors occur during the database query.
      * @throws ValidationException is thrown when the given Calendar does not pass validation.

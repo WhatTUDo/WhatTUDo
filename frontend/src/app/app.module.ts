@@ -25,7 +25,10 @@ import {OrganizationFormComponent} from './components/organization-form/organiza
 import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from './components/organization/organization.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
+<<<<<<< HEAD
 import { CalendarEditComponent } from './components/calendar-edit/calendar-edit.component';
+=======
+>>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
 
 @NgModule({
   declarations: [
@@ -41,6 +44,7 @@ import { CalendarEditComponent } from './components/calendar-edit/calendar-edit.
     EventFormComponent,
     EventLocationComponent,
     CalendarListComponent,
+
 
     CalendarComponent,
     OrganizationFormComponent,

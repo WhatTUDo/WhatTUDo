@@ -137,15 +137,17 @@ public class CalendarEndpoint {
 
 
     }
+
+
    // @PreAuthorize("hasPermission(#calendar, 'MOD')")
+
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
-    public CalendarDto post(@RequestBody CalendarDto calendar) {
+    public CalendarDto create(@RequestBody CalendarDto calendar) {
         log.info("POST " + BASE_URL + "/{}", calendar);
         try {
-
 
             /**Note: This is to make sure that post will not return any wrongly eventList inputs (which won't get store in the
              * DB anyway) under any circumstances. (Otherwise it would. but it won't save them in the DB in both cases)
@@ -160,6 +162,7 @@ public class CalendarEndpoint {
             Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
 
             return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
+
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -185,7 +188,7 @@ public class CalendarEndpoint {
         }
     }
 
-    
+
     @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)

@@ -9,12 +9,18 @@ import {EventFormComponent} from "./components/event-form/event-form.component";
 import {CalendarListComponent} from './components/calendar-list/calendar-list.component';
 import {CalendarComponent} from './components/calendar/calendar.component';
 import {WeeklyCalendarComponent} from './components/weekly-calendar/weekly-calendar.component';
+<<<<<<< HEAD
 
+=======
+>>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
 import {OrganizationFormComponent} from './components/organization-form/organization-form.component';
 import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from "./components/organization/organization.component";
 import {UserFormComponent} from './components/user-form/user-form.component';
+<<<<<<< HEAD
 import {CalendarEditComponent} from './components/calendar-edit/calendar-edit.component';
+=======
+>>>>>>> e885a5e8793bb0b8ba24038fdad4155a693da08f
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -30,7 +36,7 @@ const routes: Routes = [
   {path: 'organization/:id', component: OrganizationComponent},
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
-  {path: 'edit/calendar/:id', component: CalendarEditComponent},
+
   //{path: 'week-calendar/:id', component: WeeklyCalendarComponent},
 
   {path: 'form/event/:id', component: OrganizationFormComponent},
@@ -38,6 +44,7 @@ const routes: Routes = [
   {path: 'form/user', component: UserFormComponent}, //new user creation
   {path: 'form/user/:id', component: UserFormComponent}, //edit existing user
   {path: 'editUser', component: UserFormComponent}, //edit existing user//delete this row
+  {path: 'edit/calendar/:id', component: CalendarEditComponent},
 
 
   {path: 'user', component: UserComponent},

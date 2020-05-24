@@ -32,7 +32,6 @@ public class Calendar {
     @Size(min = 1)
     private List<Organization> organizations;
 
-
     @ToString.Exclude
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.MERGE)
     private List<Event> events = new ArrayList<>();
