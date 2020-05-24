@@ -112,6 +112,14 @@ export class CalendarListComponent implements OnInit {
       });
   }
 
+  delete(id: number): void {
+
+  this.calendarService.deleteCalendar({id} as Calendar) .subscribe(()=> {
+          this.calendarService.getAllCalendars()
+    .subscribe(list2 => this.list2 = list2);
+    });
+}
+
 }
 
 

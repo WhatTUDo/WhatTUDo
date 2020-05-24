@@ -27,6 +27,10 @@
           <td>
               <a class="nav-link" (click) = onSelectOrganisation(a) *ngFor="let a of el.organisationName; let j = index"> {{a}}</a>
           </td>
+          <td>
+          <button class="delete" title="delete calendar"
+                  (click)="delete(el.id)">delete</button>
+          </td>
         </tr>
         </tbody>
       </table>

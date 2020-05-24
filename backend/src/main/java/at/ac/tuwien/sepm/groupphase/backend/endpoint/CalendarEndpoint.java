@@ -169,5 +169,24 @@ public class CalendarEndpoint {
         }
     }
 
+    //  @PreAuthorize("hasRole('Member')")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping(value = "/{id}")
+   // @ApiOperation(value = "Delete calendar", authorizations = {@Authorization(value = "apiKey")})
+    public void deleteCalendar(@PathVariable("id") Integer id) {
+        log.info("DELETE"  + BASE_URL + "/{}", id);
+        try {
+            calendarService.delete(id);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+
 
 }

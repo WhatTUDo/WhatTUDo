@@ -41,6 +41,14 @@ export class CalendarService {
     return this.httpClient.post<Calendar>(this.calendarBaseUri + '/' , calendar);
   }
 
+  /** DELETE: delete the calendar from the server */
+  deleteCalendar (calendar: Calendar | number): Observable<Calendar> {
+    const id = typeof calendar === 'number' ? calendar : calendar.id;
+    const url = `${this.calendarBaseUri}/${id}`;
+
+    return this.httpClient.delete<Calendar>(url);
+  }
+
 
 
 }
