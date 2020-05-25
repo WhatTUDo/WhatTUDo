@@ -19,37 +19,41 @@ import {Organization} from '../../dtos/organization';
 })
 export class CalendarListComponent implements OnInit {
   list : Calendar[] = [];
-  listOrg : string[] = [];
   list2 : CalendarRepresentation[] = [];
-  newcalendar : Calendar;
-
+  mapCalOrg  = new Map<number, Organization[]>();
   searchForm = new FormGroup( {
     name: new FormControl('')
   });
 
 
   constructor(private calendarService: CalendarService, private router: Router, private organizationService: OrganizationService) {
+ this.getAllCalendars();
+  }
+
+  getAllCalendars() {
     this.calendarService.getAllCalendars().subscribe((list) => {
         this.list   = list;
+        this.list2 = [];
         for(let e of list){
-            for(let a of e.organizationIds){
-              this.organizationService.getById(a).subscribe((organization:Organization)=>{
-                  if(organization.name != null){
-                    this.listOrg.push(organization.name);}
-                },
-                err => {
-                  console.warn(err);
-                })
-            }
-            this.listOrg = ["org1", 'org2'];
-            this.list2.push(new CalendarRepresentation(e.id, e.name, this.listOrg));
+          let listOrg : Organization[] = [];
+          for(let a of e.organizationIds){
+            this.organizationService.getById(a).subscribe((organization:Organization)=>{
+                if(organization != null){
+                  listOrg.push(organization);
+                }
+              },
+              err => {
+                console.warn(err);
+              })
           }
-        },
+          this.mapCalOrg.set(e.id,listOrg );
+          this.list2.push(new CalendarRepresentation(e.id, e.name, listOrg));
+        }
+      },
       err => {
         alert(err.message);
       });
   }
-
 
   ngOnInit(): void {
   }
@@ -66,8 +70,8 @@ export class CalendarListComponent implements OnInit {
   }
 
 
-  onSelectOrganization(organization: string){
-    this.router.navigate(['/']);
+  onSelectOrganization(organization: Organization){
+    this.router.navigate(['organization/', organization.id]);
   }
 
   onSubmit() {
@@ -118,7 +122,7 @@ export class CalendarListComponent implements OnInit {
     if (!name) { return; }
     this.calendarService.addCalendar({name, eventIds, organizationIds} as Calendar)
       .subscribe(newcalendar => {
-        this.list2.push(new CalendarRepresentation(newcalendar.id, newcalendar.name, this.listOrg));
+        this.list2.push(new CalendarRepresentation(newcalendar.id, newcalendar.name, this.mapCalOrg.get(newcalendar.id)));
       });
   }
 
@@ -126,8 +130,7 @@ export class CalendarListComponent implements OnInit {
   delete(id: number): void {
 
   this.calendarService.deleteCalendar({id} as Calendar) .subscribe(()=> {
-          this.calendarService.getAllCalendars()
-    .subscribe(list2 => this.list2 = list2);
+         this.getAllCalendars();
     });
 }
 
