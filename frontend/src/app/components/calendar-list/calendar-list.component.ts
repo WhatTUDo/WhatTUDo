@@ -84,7 +84,13 @@ export class CalendarListComponent implements OnInit {
          this.list   = list;
          this.list2 = [];
          for(let e of list){
-               this.list2.push(new CalendarRepresentation(e.id, e.name, ))
+           let listOrg : Organization[] = [];
+           for(let a of e.organizationIds){
+             this.organizationService.getById(a).subscribe((organization:Organization)=>{ listOrg.push(organization);
+             });
+           }
+           this.mapCalOrg.set(e.id, listOrg);
+           this.list2.push(new CalendarRepresentation(e.id, e.name, listOrg));
          }
 
          },
