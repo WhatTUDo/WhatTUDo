@@ -8,5 +8,12 @@ import java.util.Optional;
 
 @Repository
 public interface OrganizationRepository extends JpaRepository<Organization, Integer> {
+
+    /**
+     * Find the organization in the db with the specified name.
+     *
+     * @param name name of the organization.
+     * @return the organization with the specified name
+     */
     Optional<Organization> findByName(String name);
 }

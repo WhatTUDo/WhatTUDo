@@ -8,36 +8,72 @@ import java.util.List;
 
 public interface EventService {
 
+    /**
+     * Deletes a single event from the db.
+     *
+     * @param event event to be deleted from db
+     * @throws org.hibernate.service.spi.ServiceException                    if something goes wrong during data processing.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException if:
+     *                                                                       - id == null;
+     *                                                                       - TODO IllegalArgument + IvalidaDataAccess
+     */
     void delete(Event event);
 
     /**
-     * @param event to be saved into database .
+     * Save a new event into the database
+     *
+     * @param event event to be saved into database .
      * @return the new event.
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
-     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException will be thrown if.
-     *         - name of event is empty;
-     *         - startDateTime is after endDateTime;
+     * @throws org.hibernate.service.spi.ServiceException                    if something goes wrong during data processing.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException if:
+     *                                                                       - name of event is empty;
+     *                                                                       - startDateTime is after endDateTime;
      */
     Event save(Event event);
 
     /**
-     * @param id of event to be found.
-     * @return the event with the specified id.
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * Find a single event by id.
+     *
+     * @param id id of the event entry.
+     * @return the event entry
+     * @throws org.hibernate.service.spi.ServiceException                       if something goes wrong during data processing.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException if no event with this id is saved in database
      */
     Event findById(int id);
 
+    /**
+     * Find events by name.
+     *
+     * @param name name (or part of a name) for which a search will be performed.
+     * @return List of event entities that match the search-name
+     * @throws org.hibernate.service.spi.ServiceException                       if something goes wrong during data processing.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException if no event with this id is saved in database
+     */
     List<Event> findByName(String name);
 
-
-    List<Event> findForDates(LocalDateTime start, LocalDateTime end);
     /**
-     * @param event to be updated into database with the new values.
-     * @return the new event.
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
-     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException will be thrown if.
+     * Find all Events with a start-date between two dates.
      *
-     *         - startDateTime is after endDateTime;
+     * @param start earliest start-date of the event.
+     * @param end   latest start-date of the event.
+     * @return list of all event entries that have a start-date between start and end.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException if no events are between start and end
+     * @throws org.hibernate.service.spi.ServiceException                       if something goes wrong during data processing.
+     */
+    List<Event> findForDates(LocalDateTime start, LocalDateTime end);
+
+    /**
+     * Update a single event in the db with new values
+     *
+     * @param event event to be updated into database with the new values.
+     * @return the updated event entry.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException if no event with this id is saved in db
+     * @throws org.hibernate.service.spi.ServiceException                       if something goes wrong during data processing.
+     *                                                                          - TODO IllegalArgument + IvalidaDataAccess
+     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException    if:
+     *                                                                          - name is empty
+     *                                                                          - startDateTime is in the past
+     *                                                                          - startDateTime is after endDateTime;
      */
     Event update(Event event);
 
