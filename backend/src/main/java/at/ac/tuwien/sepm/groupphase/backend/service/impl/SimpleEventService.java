@@ -68,6 +68,7 @@ public class SimpleEventService implements EventService {
         }
     }
 
+    // FIXME: catch PersistenceException, throw ServiceException
     @Override
     public Event findById(int id) {
         Optional<Event> found = eventRepository.findById(id);
@@ -80,6 +81,7 @@ public class SimpleEventService implements EventService {
         }
     }
 
+    //FIXME: catch validationException throw new validationException redundant? same für NotfoundException
     @Override
     public List<Event> findForDates(LocalDateTime start, LocalDateTime end) {
         try {
@@ -102,8 +104,7 @@ public class SimpleEventService implements EventService {
     }
 
     // TODO: Cleanup class and replace log with event publisher
-
-
+    // TODO: extract validation into validator class.
     @Override
     public Event update(Event event) {
         log.info("Service update event {}", event);

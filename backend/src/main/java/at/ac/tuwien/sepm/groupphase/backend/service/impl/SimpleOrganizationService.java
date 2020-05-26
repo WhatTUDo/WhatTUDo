@@ -16,6 +16,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,12 +32,13 @@ public class SimpleOrganizationService implements OrganizationService {
     private final CalendarRepository calendarRepository;
     private final Validator validator;
 
-
+    //FIXME: catch persistance throw service
     @Override
     public Collection<Organization> getAll() {
         return organizationRepository.findAll();
     }
 
+    //FIXME: catch persistance throw service
     @Override
     public Organization findById(int id) {
         Optional<Organization> found = organizationRepository.findById(id);
@@ -99,18 +101,16 @@ public class SimpleOrganizationService implements OrganizationService {
     }
 
     @Override
-    public List<Organization> findByName(String name){
-        try{
-            Optional<Organization> found=  organizationRepository.findByName(name);
+    public List<Organization> findByName(String name) {
+        try {
+            Optional<Organization> found = organizationRepository.findByName(name);
             List<Organization> organizations = new ArrayList<>();
             found.ifPresent(organizations::add);
             return organizations;
-        }
-        catch (PersistenceException e){
+        } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
     }
-
 
 
     public Organization removeCalendars(Organization organization, Collection<Calendar> calendars) {

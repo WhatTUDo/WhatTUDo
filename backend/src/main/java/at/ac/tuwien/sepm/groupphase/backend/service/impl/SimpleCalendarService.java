@@ -59,6 +59,7 @@ public class SimpleCalendarService implements CalendarService {
         }
     }
 
+    //FIXME: lt. interface throws NotFoundException. wird nicht nur eine leere liste übergeben falls nix matched?
     @Override
     public List<Calendar> findByName(String name) throws ServiceException {
         try {
@@ -69,7 +70,7 @@ public class SimpleCalendarService implements CalendarService {
         }
     }
 
-
+    //FIXME: lt. Interface throws NotFoundException
     @Override
     public List<Calendar> findAll() {
         try {
@@ -86,7 +87,7 @@ public class SimpleCalendarService implements CalendarService {
         }
     }
 
-
+    //FIXME: validation missing?
     @Override
     public Calendar save(Calendar calendar) {
         try {
@@ -152,6 +153,7 @@ public class SimpleCalendarService implements CalendarService {
         }
     }
 
+    //FIXME: validation?
     @Override
     public Calendar update(Calendar calendar) {
         try {
