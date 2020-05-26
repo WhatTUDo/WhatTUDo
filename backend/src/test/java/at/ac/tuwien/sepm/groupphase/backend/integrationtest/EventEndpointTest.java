@@ -1,50 +1,104 @@
 package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
+import at.ac.tuwien.sepm.groupphase.backend.config.jwt.JwtTokenizer;
+import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.EventEndpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
+import org.apache.catalina.connector.Response;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import static at.ac.tuwien.sepm.groupphase.backend.basetest.TestData.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 public class EventEndpointTest {
 
     @Autowired
+    private MockMvc mockMvc;
+
+    @Autowired
     EventEndpoint endpoint;
+
     @Autowired
     CalendarRepository calendarRepository;
+
     @Autowired
     OrganizationRepository organizationRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    private JwtTokenizer jwtTokenizer;
+
+    @Autowired
+    private SecurityProperties securityProperties;
+
 
     @Test
-    public void save_shouldReturn_sameEvent() {
+    public void save_shouldReturn_sameEvent() throws Exception {
+
         Organization orga = organizationRepository.save(new Organization("Test Organization1"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar1", Collections.singletonList(orga)));
         EventDto eventDto = new EventDto(1, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
-        EventDto returnedEvent = endpoint.post(eventDto);
 
-        assertEquals(eventDto.getName(), returnedEvent.getName());
-        assertEquals(eventDto.getEndDateTime(), returnedEvent.getEndDateTime());
-        assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
-        assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
+        Optional<ApplicationUser> found  = userRepository.findById(1);
+        ApplicationUser user = new ApplicationUser();
+        if(found.isPresent()) {
+            user = found.get();
+        }
+            MvcResult mvcResult = this.mockMvc.perform(post(BASE_URI + "/events").contentType(MediaType.APPLICATION_JSON).content(String.valueOf(eventDto))
+                .header(securityProperties.getAuthHeader(), jwtTokenizer.getAuthToken(user.getName(), user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))))
+                .andDo(print())
+                .andReturn();
+            MockHttpServletResponse response = mvcResult.getResponse();
+            System.out.println("here");
+            assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+
+//        EventDto returnedEvent = endpoint.post(eventDto);
+//        assertEquals(eventDto.getName(), returnedEvent.getName());
+//        assertEquals(eventDto.getEndDateTime(), returnedEvent.getEndDateTime());
+//        assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
+//        assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
     }
 
     @Test
