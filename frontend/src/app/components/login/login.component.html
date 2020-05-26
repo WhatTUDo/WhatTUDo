@@ -10,21 +10,18 @@
     <div class="col-md-6 mx-auto">
       <span class="anchor" id="formLogin"></span>
 
-      <div class="card rounded-0">
-        <div class="card-header">
-          <h3 class="mb-0">Login</h3>
-        </div>
+      <div>
+        <h3>Login</h3>
 
         <div class="card-body">
           <form class="form" [formGroup]="loginForm" (ngSubmit)="loginUser()">
-
             <div class="form-group">
               <label for="inputUsername">Username</label>
               <input type="text" name="username" formControlName="username" class="form-control" id="inputUsername"
-                     aria-describedby="usernameHelp" placeholder="Enter username">
+                     aria-describedby="usernameHelp" autocomplete="username" placeholder="Enter username">
               <div *ngIf="submitted && loginForm.controls.username.errors" class="error">
-                <small class="form-text text-warning" *ngIf="loginForm.controls.username.errors.required">Your username is
-                  required!
+                <small class="form-text text-warning" *ngIf="loginForm.controls.username.errors.required">
+                  Your username is required!
                 </small>
               </div>
             </div>
@@ -32,7 +29,7 @@
             <div class="form-group">
               <label for="password">Password</label>
               <input type="password" name="password" formControlName="password" class="form-control" id="password"
-                     placeholder="Password">
+                     autocomplete="current-password" placeholder="Password">
               <div *ngIf="submitted && loginForm.controls.password.errors" class="error">
                 <small class="form-text text-warning" *ngIf="loginForm.controls.password.errors.required">Your password
                   is
@@ -44,7 +41,8 @@
               </div>
             </div>
 
-            <button type="button" (click)="loginUser()" class="btn btn-success float-right">Login</button>
+            <button type="button" (click)="loginUser()" class="button-clickable button-green small-button">Login
+            </button>
 
           </form>
         </div>

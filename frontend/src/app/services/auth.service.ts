@@ -11,7 +11,7 @@ import {Globals} from '../global/globals';
 })
 export class AuthService {
 
-  private authBaseUri: string = this.globals.backendUri + '/authentication';
+  private authBaseUri: string = this.globals.backendUri + 'api/v1/authentication';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
@@ -32,8 +32,8 @@ export class AuthService {
    * Check if a valid JWT token is saved in the localStorage
    */
   isLoggedIn() {
-    return true;
-    // return !!this.getToken() && (this.getTokenExpirationDate(this.getToken()).valueOf() > new Date().valueOf());
+    // return true;
+    return !!this.getToken() && (this.getTokenExpirationDate(this.getToken()).valueOf() > new Date().valueOf());
   }
 
   logoutUser() {
