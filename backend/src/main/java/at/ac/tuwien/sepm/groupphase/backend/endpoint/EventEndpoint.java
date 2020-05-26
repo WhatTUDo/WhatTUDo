@@ -38,6 +38,7 @@ public class EventEndpoint {
 
 
     @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
+    @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})

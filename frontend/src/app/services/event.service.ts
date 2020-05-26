@@ -55,10 +55,29 @@ export class EventService {
       "calendarId": event.calendarId,
       "endDateTime": event.endDateTime,
       "name": event.name,
-      "startDateTime": event.startDateTime
+      "startDateTime": event.startDateTime,
+      "location": event.location
     }
 
     return this.httpClient.post(this.eventBaseUri, reducedElement);
+  }
+
+  /**
+   * Put event to Server --> Update Event
+   * @param event
+   */
+  putEvent(event: CalendarEvent): Observable<any> {
+    console.log("Put Event to Server", CalendarEvent);
+    let reducedElement = {
+      "id": event.id,
+      "calendarId": event.calendarId,
+      "endDateTime": event.endDateTime,
+      "name": event.name,
+      "startDateTime": event.startDateTime,
+      "location": event.location
+    }
+
+    return this.httpClient.put(this.eventBaseUri, reducedElement);
   }
 
   /**

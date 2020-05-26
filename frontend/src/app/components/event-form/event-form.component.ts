@@ -54,7 +54,14 @@ export class EventFormComponent implements OnInit {
 
       // submit to eventService
       if (this.isUpdate) {
-        alert("Update not implemented!");
+        this.eventService.putEvent(this.event).subscribe(response => {
+            alert("Updated event: " + response);
+            console.log(response);
+          },
+          err => {
+            console.warn(err);
+            alert("Error: " + err.error);
+          });
       } else {
         this.eventService.postEvent(this.event).subscribe(response => {
             alert("Saved event: " + response);
