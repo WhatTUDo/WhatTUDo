@@ -1,39 +1,48 @@
+<!-- FIXME: Styling with table is no more recommended -->
+<!-- TODO: General restyling should be done -->
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-8">
-      <div class="container">
-      <form class="form" [formGroup]="searchForm" (keyup.enter)="onSubmit()">
-          <label for="calendar.name"></label><input type="text" class="form-control" formControlName="name" id="calendar.name" placeholder="Search...">
-          <div class="search"></div>
-      </form>
-    </div>
+      <div>
+        <form class="form input-button-combo" [formGroup]="searchForm" (keyup.enter)="onSubmit()">
+          <label for="calendar.name"></label>
+          <input type="text" class="form-control" formControlName="name" id="calendar.name" placeholder="Search...">
+          <button type="submit" class="button-clickable button-solid no-hover-enlarge">Submit</button>
+        </form>
+      </div>
       <br/>
       <table class="table">
         <thead>
-        <tr class ="table-titles">
+        <tr class="table-titles">
           <th>
             Calendar Name
           </th>
           <th>
             Organization Name
           </th>
+          <th colspan="2">
+            Actions
+          </th>
         </tr>
         </thead>
-        <tbody class = "body">
+        <tbody>
         <tr *ngFor="let el of list2; let i = index">
           <td>
-              <a class="nav-link" (click)="onSelectCalendar(el)" >{{el.name}}</a>
+            <a class="nav-link" (click)="onSelectCalendar(el)">{{el.name}}</a>
           </td>
           <td>
-              <a class="nav-link" (click) = onSelectOrganization(a) *ngFor="let a of el.organization; let j = index"> {{a.name}}</a>
+            <a class="nav-link" (click)=onSelectOrganization(a)
+               *ngFor="let a of el.organization; let j = index"> {{a.name}}</a>
           </td>
           <td>
-            <button class="edit" title="edit calendar"
-                    (click)="onSelectEditCalendar(el)">edit</button>
+            <button class="button-clickable button-blue small-button" title="edit calendar"
+                    (click)="onSelectEditCalendar(el)">Edit
+            </button>
           </td>
           <td>
-          <button class="delete" title="delete calendar"
-                  (click)="delete(el.id)">delete</button>
+            <button class="button-clickable button-red small-button" title="delete calendar"
+                    (click)="delete(el.id)">Delete
+            </button>
 
           </td>
         </tr>
@@ -42,16 +51,15 @@
     </div>
   </div>
 
-  <div>
-    <table class="table">    <thead>  <tr class ="table-titles">
-    <th>
-      Create a new calendar named:
-    </th>
-  </tr></thead>      </table>
-    </div><div>
-    <input #calendarName />
-          <button (click)="add(calendarName.value, [], [1]); calendarName.value=''">
-    create
-  </button></div>
+  <div style="margin: 8pt 0" class="col-md-8">
+    Create a new calendar named:
+  </div>
+  <div style="margin-bottom: 16pt"  class="col-md-8 input-button-combo">
+    <input #calendarName/>
+    <button class="button-clickable button-solid no-hover-enlarge"
+            (click)="add(calendarName.value, [], [1]); calendarName.value=''">
+      Create
+    </button>
+  </div>
 
 </div>

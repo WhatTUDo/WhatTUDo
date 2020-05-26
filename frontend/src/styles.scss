@@ -298,3 +298,30 @@ iframe {
     }
   }
 }
+
+.input-button-combo {
+  display: flex;
+  flex-wrap: nowrap;
+
+  input {
+    width: 100%;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  button {
+    padding: 0 16pt;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  &.flat-bottom {
+    input {
+      border-bottom-left-radius: 0;
+    }
+
+    button {
+      border-bottom-right-radius: 0;
+    }
+  }
+}
