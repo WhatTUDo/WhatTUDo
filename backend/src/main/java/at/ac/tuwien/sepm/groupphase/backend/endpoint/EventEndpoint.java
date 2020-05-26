@@ -43,7 +43,6 @@ public class EventEndpoint {
     @DeleteMapping
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
     public void deleteEvent(@RequestBody EventDto eventDto) {
-        log.info("DELETE /api/v1/events body: {}", eventDto);
         try {
             eventService.delete(eventMapper.eventDtoToEvent(eventDto));
         } catch (ServiceException e) {
@@ -61,7 +60,6 @@ public class EventEndpoint {
     @PostMapping
     @ApiOperation(value = "Create event", authorizations = {@Authorization(value = "apiKey")})
     public EventDto post(@RequestBody EventDto event) {
-        log.info("POST " + BASE_URL + "/{}", event);
         try {
             Event eventEntity = eventMapper.eventDtoToEvent(event);
             return eventMapper.eventToEventDto(eventService.save(eventEntity));
@@ -77,10 +75,11 @@ public class EventEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     @ApiOperation(value = "Get Multiple Events")
-    public List<EventDto> getMultiple(@RequestParam("name") String name,
-                                      @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-                                      @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-        log.info("GET" + BASE_URL + "?name={}&from={}&to={}&calendar_id", name, start, end);
+    public List<EventDto> getMultiple(
+        @RequestParam("name") String name,
+        @RequestParam("from") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+        @RequestParam("to") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end
+    ) {
         try {
             List<Event> events = eventService.findForDates(start, end);
             List<EventDto> eventDtos = new ArrayList<>();
@@ -96,12 +95,10 @@ public class EventEndpoint {
         }
     }
 
-
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping(value = "/{id}")
     public EventDto getById(@PathVariable("id") int id) {
-        log.info("GET " + BASE_URL + "/{}", id);
         try {
             return eventMapper.eventToEventDto(eventService.findById(id));
         } catch (NotFoundException e) {
@@ -109,14 +106,12 @@ public class EventEndpoint {
         }
     }
 
-
     @CrossOrigin
     @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
     public EventDto editEvent(@RequestBody EventDto eventDto) {
-        log.info("PUT " + BASE_URL + "/{}", eventDto);
         try {
             Event eventEntity = eventMapper.eventDtoToEvent(eventDto);
             return eventMapper.eventToEventDto(eventService.update(eventEntity));
@@ -126,5 +121,4 @@ public class EventEndpoint {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
-
 }

@@ -25,7 +25,7 @@ import {OrganizationFormComponent} from './components/organization-form/organiza
 import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from './components/organization/organization.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
-import { CalendarEditComponent } from './components/calendar-edit/calendar-edit.component';
+import { CalendarFormComponent } from './components/calendar-form/calendar-form.component';
 
 
 @NgModule({
@@ -47,7 +47,7 @@ import { CalendarEditComponent } from './components/calendar-edit/calendar-edit.
     CalendarComponent,
     OrganizationFormComponent,
     UserComponent,
-    CalendarEditComponent,
+    CalendarFormComponent,
     OrganizationComponent,
     UserFormComponent,
   ],

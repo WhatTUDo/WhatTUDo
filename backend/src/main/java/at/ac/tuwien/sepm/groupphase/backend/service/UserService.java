@@ -30,6 +30,5 @@ public interface UserService extends UserDetailsService {
     ApplicationUser updateUser(ApplicationUser user);
 
     //TODO
-    ApplicationUser changeUserPassword(String email, String currentPassword, String newPassword);
-
+    ApplicationUser changeUserPassword(String username, String currentPassword, String newPassword);
 }

@@ -7,7 +7,7 @@ import { Router} from '@angular/router';
 import {Observable} from 'rxjs';
 
 
-import {CalendarEditComponent} from '../calendar-edit/calendar-edit.component';
+import {CalendarFormComponent} from '../calendar-form/calendar-form.component';
 import {OrganizationService} from '../../services/organization.service';
 import {Organization} from '../../dtos/organization';
 
@@ -66,7 +66,7 @@ export class CalendarListComponent implements OnInit {
   }
 
   onSelectEditCalendar(calendarRep: CalendarRepresentation){
-    this.router.navigate(['/edit/calendar', calendarRep.id]);
+    this.router.navigate(['/form/calendar', calendarRep.id]);
   }
 
 

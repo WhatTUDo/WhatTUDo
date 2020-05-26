@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
@@ -29,16 +30,20 @@ public class ChangeUserPasswordEndpoint {
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation("update user password")
-    public LoggedInUserDto changeUserPassword(@RequestBody ChangePasswordDto changePasswordDto){
-       try{
-        return userMapper.applicationUserToUserDto(userService.changeUserPassword(changePasswordDto.getEmail(), changePasswordDto.getCurrentPassword(), changePasswordDto.getNewPassword()));}
-       catch (ServiceException e){
-           throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
-       }catch (ValidationException e){
-           throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-       } catch (NotFoundException e){
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-       }
+    @ApiOperation(value = "Update User Password", authorizations = {@Authorization(value = "apiKey")})
+    public LoggedInUserDto changeUserPassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        try {
+            return userMapper.applicationUserToUserDto(userService.changeUserPassword(
+                changePasswordDto.getUsername(),
+                changePasswordDto.getCurrentPassword(),
+                changePasswordDto.getNewPassword()
+            ));
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 }

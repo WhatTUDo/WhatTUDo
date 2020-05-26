@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {faChevronLeft, faCog, faPlus, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {faChevronLeft, faChevronRight, faCog, faPlus, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import {Organization} from "../../dtos/organization";
 import {ActivatedRoute} from "@angular/router";
 import {OrganizationService} from "../../services/organization.service";
@@ -15,7 +15,6 @@ export class OrganizationComponent implements OnInit {
 
   organization: Organization;
   organizationCalendars: Calendar[] = [];
-  // organization = new Organization(null, "FS Winf", []);
   // organizationMembers: OrganizationMemberOrSomething[];
   organizationMembers = [
     {username: "JaneDoe", role: "Admin"},
@@ -55,6 +54,7 @@ export class OrganizationComponent implements OnInit {
   // }
 
   faChevronLeft = faChevronLeft;
+  faChevronRight = faChevronRight;
   faPlus = faPlus;
   faCog = faCog;
   faTimesCircle = faTimesCircle;

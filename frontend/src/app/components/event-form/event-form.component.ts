@@ -19,6 +19,7 @@ export class EventFormComponent implements OnInit {
   event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
   reactiveEventForm = new FormGroup({
     id: new FormControl(''),
+    calendarId: new FormControl(''),
     name: new FormControl(''),
     startDate: new FormControl(''),
     endDate: new FormControl(''),
@@ -50,7 +51,7 @@ export class EventFormComponent implements OnInit {
       this.event.name = formValue.name;
       this.event.startDateTime = new Date(formValue.startDate);
       this.event.endDateTime = new Date(formValue.endDate);
-      this.event.calendarId = +formValue.calendarId;
+      this.event.calendarId = formValue.calendarId;
 
       // submit to eventService
       if (this.isUpdate) {
@@ -94,7 +95,7 @@ export class EventFormComponent implements OnInit {
     if (!this.event.location) {
       errors.push(new Error("A location must be specified!"));
     }
-    if (!this.event.calendarId) {
+    if (!formValue.calendarId) {
       errors.push(new Error("A event must belongs to a calendar."));
     }
 

@@ -82,14 +82,10 @@ public class Validator {
     }
 
 
-    public void validateChangePassword(String email, String currentPassword, String newPassword ){
+    public void validateChangePassword(String username, String currentPassword, String newPassword ){
         List<Exception> exceptions = new ArrayList<>();
-        if(email == null){
-            exceptions.add(new ValidationException("Email cannot be null or empty!"));
-        }else{
-            if(!emailIsValid(email)){
-                exceptions.add(new ValidationException("Email is not in a valid format!"));
-            }
+        if(username == null){
+            exceptions.add(new ValidationException("Username cannot be null or empty!"));
         }
         if(currentPassword == null){
             exceptions.add(new ValidationException("Current password cannot be null"));

@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.groupphase.backend.config.jwt;
+package at.ac.tuwien.sepm.groupphase.backend.auth.jwt;
 
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
 import io.jsonwebtoken.Jwts;
@@ -6,8 +6,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class JwtTokenizer {
@@ -18,7 +18,7 @@ public class JwtTokenizer {
         this.securityProperties = securityProperties;
     }
 
-    public String getAuthToken(String user, List<String> roles) {
+    public String getAuthToken(String user, Collection<String> roles) {
         byte[] signingKey = securityProperties.getJwtSecret().getBytes();
         String token = Jwts.builder()
             .signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)

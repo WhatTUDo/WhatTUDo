@@ -78,3 +78,24 @@
     color: var(--secondary);
   }
 }
+
+.calendar-list {
+
+  a {
+    color: inherit;
+  }
+
+  .calendar-list-item {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 24pt;
+
+    padding: 16pt 8pt;
+
+    border-top: 1pt solid var(--text);
+    border-bottom: 1pt solid var(--text);
+  }
+}
