@@ -1,11 +1,11 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 
-import at.ac.tuwien.sepm.groupphase.backend.config.authorities.AdminAuthority;
-import at.ac.tuwien.sepm.groupphase.backend.config.authorities.MemberAuthority;
+import at.ac.tuwien.sepm.groupphase.backend.auth.authorities.AdminAuthority;
+import at.ac.tuwien.sepm.groupphase.backend.auth.CustomUserDetails;
+import at.ac.tuwien.sepm.groupphase.backend.auth.authorities.MemberAuthority;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.*;
@@ -15,7 +15,7 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class ApplicationUser implements UserDetails {
+public class ApplicationUser implements CustomUserDetails {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

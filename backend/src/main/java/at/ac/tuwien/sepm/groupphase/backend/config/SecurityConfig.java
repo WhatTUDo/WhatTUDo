@@ -1,8 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.config;
 
-import at.ac.tuwien.sepm.groupphase.backend.config.jwt.JwtAuthenticationFilter;
-import at.ac.tuwien.sepm.groupphase.backend.config.jwt.JwtAuthorizationFilter;
-import at.ac.tuwien.sepm.groupphase.backend.config.jwt.JwtTokenizer;
+import at.ac.tuwien.sepm.groupphase.backend.auth.jwt.JwtAuthenticationFilter;
+import at.ac.tuwien.sepm.groupphase.backend.auth.jwt.JwtAuthorizationFilter;
+import at.ac.tuwien.sepm.groupphase.backend.auth.jwt.JwtTokenizer;
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;

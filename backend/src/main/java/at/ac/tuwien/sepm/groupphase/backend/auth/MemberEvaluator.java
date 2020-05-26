@@ -1,7 +1,7 @@
-package at.ac.tuwien.sepm.groupphase.backend.config;
+package at.ac.tuwien.sepm.groupphase.backend.auth;
 
-import at.ac.tuwien.sepm.groupphase.backend.config.authorities.AdminAuthority;
-import at.ac.tuwien.sepm.groupphase.backend.config.authorities.MemberAuthority;
+import at.ac.tuwien.sepm.groupphase.backend.auth.authorities.AdminAuthority;
+import at.ac.tuwien.sepm.groupphase.backend.auth.authorities.MemberAuthority;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;

@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.config;
 
+import at.ac.tuwien.sepm.groupphase.backend.auth.MemberEvaluator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
