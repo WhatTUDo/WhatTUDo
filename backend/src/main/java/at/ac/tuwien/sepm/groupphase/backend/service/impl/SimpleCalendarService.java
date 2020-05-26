@@ -63,8 +63,7 @@ public class SimpleCalendarService implements CalendarService {
     @Override
     public List<Calendar> findByName(String name) throws ServiceException {
         try {
-            List<Calendar> calendars = calendarRepository.findAllByNameContains(name);
-            return calendars;
+            return calendarRepository.findAllByNameContains(name);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -102,7 +101,7 @@ public class SimpleCalendarService implements CalendarService {
                 o.setCalendars(cal);
                 organizationRepository.save(o);
             }
-            publisher.publishEvent(new EventCreateEvent(calendar.getName()));
+            publisher.publishEvent(new EventCreateEvent(result.getName()));
             return result;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -117,7 +116,6 @@ public class SimpleCalendarService implements CalendarService {
             } else {
                 throw new ValidationException("Id is not defined");
             }
-            publisher.publishEvent(new EventDeleteEvent(this.findById(id).getName()));
 
             Calendar toDelete = this.findById(id);
             List<Organization> olist = toDelete.getOrganizations();
@@ -145,7 +143,7 @@ public class SimpleCalendarService implements CalendarService {
             } catch (PersistenceException e) {
                 throw new ServiceException(e.getMessage(), e);
             }
-
+            publisher.publishEvent(new EventDeleteEvent(toDelete.getName()));
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ValidationException(e.getMessage());
         } catch (PersistenceException e) {
@@ -182,8 +180,9 @@ public class SimpleCalendarService implements CalendarService {
 
               //  Calendar result =  calendarRepository.save(this.findById(calendar.getId()));
 
-            publisher.publishEvent(new EventCreateEvent(calendar.getName()));
-            return calendarRepository.save(toUpdate);
+            Calendar savedCalendar = calendarRepository.save(toUpdate);
+            publisher.publishEvent(new EventCreateEvent(savedCalendar.getName()));
+            return savedCalendar;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
