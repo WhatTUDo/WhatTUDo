@@ -72,3 +72,11 @@ VALUES (1, 1, 'MOD'),
        (8, 9, 'MEMBER'),
        (9, 9, 'MEMBER');
 
+INSERT INTO EVENT (ID, END_DATE_TIME, NAME, START_DATE_TIME, CALENDAR_ID)
+VALUES (1, '2020-05-26 18:00:00', 'Grillparty der FS Architektur', '2020-05-26 12:00:00', 1),
+       (2, '2020-05-28 20:00:00', 'Online-Beratung', '2020-05-28 19:00:00', 2),
+       (3, '2020-05-25 11:30:00', 'Gemeinsames Fruehstueck mit den Fachschaften', '2020-05-25 09:00:00', 7),
+       (4, '2020-05-29 18:00:00', 'Feier zum 150.Gruendungstag', '2020-05-29 12:00:00', 4),
+       (5, '2020-06-02 21:00:00', 'Seminar zum ES-Tut', '2020-06-02 19:30:00', 3),
+       (6, '2020-05-29 15:00:00', 'Tutorium zum Thema Studienabschluss', '2020-05-25 14:00:00', 5);
+
