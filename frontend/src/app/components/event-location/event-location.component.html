@@ -1,25 +1,29 @@
-<div class="row">
-  <div class="col-sm-6">
-    <h4>Location Search</h4>
-    <form>
-      <input type="text" name="addressSearch" id="addressSearch">
-      <button (click)="performSearch()"> search</button>
-    </form>
-    <div>
-      <div *ngIf="this.searchComplete" id="location-search-results-container">
-        <div class="clickable" *ngFor="let result of this.searchResults"
-             (click)="addressClicked(result)"> {{result.display_name}}</div>
-      </div>
-    </div>
-    <div *ngIf="this.addressSelected">
-      <button *ngIf="!this.selectionComplete" class="button-clickable button-green btn-sm" (click)="saveButtonClicked()">Save Location</button>
-    </div>
+<h3>Location</h3>
+<div class="map-container">
+  <div class="map-preview-placeholder" *ngIf="!this.addressSelected">
+    <fa-icon [icon]="faMapMarked"></fa-icon>
   </div>
-  <div class="col-sm-6" *ngIf="this.addressSelected">
-    <h4>Preview</h4>
-    <iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"
-            [src]="previewURL"
-            style="border: 1px solid black"></iframe>
+  <iframe *ngIf="this.addressSelected"
+          [src]="previewURL"></iframe>
+</div>
+<form>
+  <div class="input-button-combo" [class.flat-bottom]="this.searchComplete">
+    <label for="addressSearch">Search Location</label>
+    <input type="search" name="addressSearch" id="addressSearch">
+    <button class="button-clickable button-solid no-hover-enlarge" (click)="performSearch()">Search</button>
+  </div>
+</form>
+<div>
+  <div *ngIf="this.searchComplete" id="location-search-results-container">
+    <div class="clickable no-hover-enlarge location-result-entry" *ngFor="let result of this.searchResults"
+         (click)="addressClicked(result)"> {{result.display_name}}</div>
   </div>
 </div>
+<div *ngIf="this.addressSelected" class="selected-button-container">
+  <button *ngIf="!this.selectionComplete" class="button-clickable button-green small-button"
+          (click)="saveButtonClicked()">Save Location
+  </button>
+</div>
+
+
 

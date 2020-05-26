@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CalendarEvent} from '../../dtos/calendar-event';
 
 import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {EventService} from "../../services/event.service";
 
 @Component({
   selector: 'app-weekly-calendar',
@@ -16,43 +17,30 @@ export class WeeklyCalendarComponent implements OnInit {
 
   displayingDate: Date;
   displayingWeek: Date[]; // Starts at a monday.
-  offset = 0; // Currently in WEEKS. Probably should be in days for mobile compatibility.
+  offset = 0;
+
+  viewBeginningAtRow = 1;
+  viewBeginningAtTime = 8 * (60 * 60);
+  viewEndingAtRow = 64;
+  viewEndingAtTime = 24 * (60 * 60) - 1;
+
+  viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
+  viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
+
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
 
-  constructor() {
-
-    //Mock data eventsOfTheWeek
-    function getRandomInt(min, max) {
-      min = Math.ceil(min);
-      max = Math.floor(max);
-      return Math.floor(Math.random() * (max - min)) + min;
-    } // Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-
-    for (let i = 1; i <= 4; i++) {
-      const dateOffset = getRandomInt(0, +1);
-      const startHours = 18 + getRandomInt(-3, +3);
-      const endHours = startHours + getRandomInt(2, 4);
-      let startDate = new Date(2020, 4, 11 + dateOffset, startHours, 0, 0, 0);
-      let endDate = new Date(2020, 4, 11 + dateOffset, endHours, 30, 0, 0);
-
-      let keyISOString = this.getMidnight(startDate).toISOString()
-      let events = this.eventsOfTheWeek.get(keyISOString)
-      if (!events) {
-        events = []
-      }
-      events.push(
-        new CalendarEvent(i, "Test Event " + i, "", startDate, endDate, null, null, null)
-      );
-      this.eventsOfTheWeek.set(keyISOString, events);
-    }
-
+  constructor(
+    private eventService: EventService
+  ) {
     console.log(this.eventsOfTheWeek);
   }
 
   ngOnInit(): void {
     this.displayingDate = this.getToday();
     this.displayingWeek = this.getWeek(this.offset);
+
+    this.loadEventsForWeek(this.getWeek(0)[0], this.getWeek(0)[6]);
     this.updateDatetime();
     setInterval(_ => {
       this.updateDatetime();
@@ -74,6 +62,38 @@ export class WeeklyCalendarComponent implements OnInit {
     }, 500)
   }
 
+  /**
+   * Calls Service to load Events for the week.
+   * @param from: Start date of week
+   * @param to: End date of week
+   */
+  loadEventsForWeek(from: Date, to: Date) {
+    this.eventService.getMultiplEvents(null, from, to).subscribe((events: Array<CalendarEvent>) => {
+      events.forEach(event => {
+        let startDate = new Date(event.startDateTime)
+        let endDate = new Date(event.endDateTime);
+
+        event.startDateTime = startDate;
+        event.endDateTime = endDate;
+      });
+      this.displayingWeek.forEach((day: Date) => {
+        let keyISOString = this.getMidnight(day).toISOString()
+        this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
+          let isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
+          let isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
+          return isAfterMidnight && isBeforeEndOfDay;
+        }));
+      })
+    }, error => {
+      if (error.status != 404) {
+        alert("Error while loading events: " + error.message);
+      } else {
+        console.log("No events found!");
+      }
+    });
+
+  }
+
   updateDatetime() {
     const today = this.getToday();
     this.currentMonth = today.toLocaleString('en-US', {month: 'long'});
@@ -82,7 +102,7 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   getWeek(offset = 0) {
-    const offsetWeeks = Math.round(this.offset/7);
+    const offsetWeeks = Math.round(this.offset / 7);
     let currentWeekDates = [];
     let today = this.getToday();
 
@@ -129,6 +149,7 @@ export class WeeklyCalendarComponent implements OnInit {
   private updateOffsettedDates() {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
+    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
   }
 
   getToday() {
@@ -146,10 +167,14 @@ export class WeeklyCalendarComponent implements OnInit {
     const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
 
     // Calendar View should starts at a time like 8 AM and ends at 23:59PM or even later.
-    const startRow = Math.max(Math.floor((startSecond - 28800) / 57600 * 64), 0) // Proof of concept with magic numbers. TODO: Fix this.
-    const endRow = Math.min(Math.floor((endSecond - 28800) / 57600 * 64), 64) // Proof of concept with magic numbers. TODO: Fix this.
+    const startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow)
+    const endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow)
 
     return `${startRow}/${endRow}`
+  }
+
+  private calcRow(sec) {
+    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
   }
 
   getSecondOffsetFromMidnight(date: Date) {
@@ -160,6 +185,30 @@ export class WeeklyCalendarComponent implements OnInit {
     let midnight = new Date(date);
     midnight.setHours(0, 0, 0, 0);
     return midnight
+  }
+
+  getEndOfDay(date: Date) {
+    let endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 50);
+    return endOfDay;
+  }
+
+  public getDisplayTimeString(event: CalendarEvent) {
+    let string = event.startDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    string += ' - '
+    string += event.endDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    return string
+  }
+
+  public redirectToDetail(id: number) {
+    console.log("You Clicked: ", id);
+    window.location.replace("/event/" + id);
   }
 
 

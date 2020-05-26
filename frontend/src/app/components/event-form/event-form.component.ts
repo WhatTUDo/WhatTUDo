@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {CalendarEvent} from "../../dtos/calendar-event";
-import {EventLocationComponent} from "../event-location/event-location.component";
 import {Location} from "../../dtos/location";
 import {EventService} from "../../services/event.service";
 
@@ -35,14 +34,16 @@ export class EventFormComponent implements OnInit {
       this.event.name = formValue.name;
       this.event.startDateTime = new Date(formValue.startDate);
       this.event.endDateTime = new Date(formValue.endDate);
-      this.event.calendarId = 1;
+      this.event.calendarId = 33; //fixme: shouldn't be hard coded.
 
       // submit to service
       this.service.postEvent(this.event).subscribe( response => {
+        alert("Saved event: " + response);
         console.log(response);
       },
         err => {
         console.warn(err);
+        alert("Error: " +  err.error);
         });
     }
   }

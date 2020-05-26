@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Organisation {
+public class Organization {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -22,12 +23,12 @@ public class Organisation {
     private String name;
 
     @ToString.Exclude
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinTable(
-        name = "organisation_calendar",
-        joinColumns = @JoinColumn(name = "organisation_id"),
+        name = "organization_calendar",
+        joinColumns = @JoinColumn(name = "organization_id"),
         inverseJoinColumns = @JoinColumn(name = "calendar_id")
     )
-    private List<Calendar> calendars = Collections.emptyList();
+    private List<Calendar> calendars = new ArrayList<>(); //FIXME: Use *Set*. Currently returning duplicates.
 }
 

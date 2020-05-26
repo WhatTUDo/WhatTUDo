@@ -1,8 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.events.event;
 
-import org.springframework.context.ApplicationEvent;
+import lombok.EqualsAndHashCode;
 
-public class EventCreateEvent extends ApplicationEvent {
+@EqualsAndHashCode(callSuper = true)
+public class EventCreateEvent extends EventEvent {
     public EventCreateEvent(String name) {
         super(name);
     }

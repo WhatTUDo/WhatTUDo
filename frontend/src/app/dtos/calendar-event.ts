@@ -4,7 +4,7 @@ import {EventComment} from "./event-comment";
 
 export class CalendarEvent {
   constructor(
-    id: number,
+    public id: number,
     public name: string,
     public description: string,
     public startDateTime: Date,

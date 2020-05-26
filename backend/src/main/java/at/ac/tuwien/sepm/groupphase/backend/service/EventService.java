@@ -1,6 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import org.hibernate.criterion.Example;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface EventService {
 
@@ -20,13 +24,13 @@ public interface EventService {
      * @param id of event to be found.
      * @return the event with the specified id.
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
-     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException will be thrown if
-     *         - name of event is empty;
-     *         - startDateTime is after endDateTime;
      */
     Event findById(int id);
 
+    List<Event> findByName(String name);
 
+
+    List<Event> findForDates(LocalDateTime start, LocalDateTime end);
     /**
      * @param event to be updated into database with the new values.
      * @return the new event.

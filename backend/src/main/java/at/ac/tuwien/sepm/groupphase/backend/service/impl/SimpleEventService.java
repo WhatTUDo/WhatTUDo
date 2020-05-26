@@ -17,8 +17,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.PersistenceException;
-import javax.validation.constraints.Null;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -53,8 +53,18 @@ public class SimpleEventService implements EventService {
         try {
             publisher.publishEvent(new EventCreateEvent(event.getName()));
             return eventRepository.save(event);
-        } catch (PersistenceException e) { //TODO: insert right exception
+        } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<Event> findByName(String name){
+        try{
+            return  eventRepository.findAllByNameContains(name);
+        }
+        catch (PersistenceException e){
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -71,11 +81,31 @@ public class SimpleEventService implements EventService {
     }
 
     @Override
+    public List<Event> findForDates(LocalDateTime start, LocalDateTime end) {
+        try {
+            validator.validateMultipleEventsQuery(null, start, end);
+            List<Event> foundEvents = eventRepository.findAllByStartDateTimeBetween(start, end);
+            if (foundEvents.size() == 0) {
+                throw new NotFoundException("Could not find any events between the specified dates: " +  start.toString() + ", " + end.toString());
+            }
+            return foundEvents;
+        }
+        catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        }
+        catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage(), e);
+        }
+    }
+
+    // TODO: Cleanup class and replace log with event publisher
+    @Override
     public Event update(Event event) {
         log.info("Service update event {}", event);
         try {
-
-
             Event tochange = eventRepository.findById(event.getId()).get();
             //TODO check with isPresent first
             if((event.getName().isBlank())) {
@@ -102,6 +132,7 @@ public class SimpleEventService implements EventService {
                 tochange.setEndDateTime(event.getEndDateTime());
             }
           **/
+
             if((event.getStartDateTime().getYear() < 2020)){
                 throw new ValidationException("start date not valid");
             }

@@ -7,13 +7,18 @@
           <input type="hidden" formControlName="id" name="id">
 
           <div class="form-row event-time">
-            <label for="event.startDate">Start</label>
-            <input type="datetime-local" class="form-control" formControlName="startDate" id="event.startDate"
-                   placeholder="Start …">
-            <div>&ensp;-&ensp;</div>
-            <label for="event.endDate">End</label>
-            <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
-                   placeholder="End …">
+            <div>
+              <label for="event.startDate">Start</label>
+              <input type="datetime-local"
+                     class="form-control" formControlName="startDate" id="event.startDate"
+                     placeholder="Start …">
+            </div>
+            <div>-</div>
+            <div>
+              <label for="event.endDate">End</label>
+              <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
+                     placeholder="End …">
+            </div>
           </div>
           <label for="event.name">Name</label>
           <input type="text" class="form-control event-name form-row" formControlName="name" id="event.name"
@@ -24,18 +29,19 @@
                  placeholder="Description …">
         </div>
 
-        <button class="submit-button clickable full-width-button no-hover">Submit</button>
+        <button class="submit-button button-clickable full-width-form-button no-hover-enlarge event-form-submit"
+                (click)="onSubmit()">Submit
+        </button>
       </div>
     </div>
   </div>
   <div>
     <h2>Details</h2>
-    <div class="form-group">
-      <label for="label-picker">Labels</label>
-      <input type="hidden" id="labels" name="labels" value="123">
-      <div id="label-picker" style="background-color: lightgreen; height: 150px">
-        I am a label picker.
-      </div>
+    <h3>Labels</h3>
+    <label for="label-picker">Labels</label>
+    <input type="hidden" id="labels" name="labels" value="123">
+    <div id="label-picker" style="background-color: var(--shadow); border-radius: 4pt; padding: 1em; height: 150px">
+      I am a label picker.
     </div>
 
     <label for="location-picker">Location</label>
@@ -50,43 +56,3 @@
     </p>
   </div>
 </form>
-
-<!--<h1>Create New Event</h1>-->
-<!--<div class="row">-->
-<!--  <div class="col-md-8">-->
-<!--    <h3>Event Details</h3>-->
-<!--    <p>Note: Fields with * are <b>Required Fields</b>. </p>-->
-<!--    <form [formGroup]="reactiveEventForm">-->
-<!--      <input type="hidden" formControlName="id" name="id">-->
-<!--      <div class="form-group">-->
-<!--        <label for="event.name">Name</label>-->
-<!--        <input type="text" class="form-control" formControlName="name" id="event.name">-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <label for="event.startDate">Start</label>-->
-<!--        <input type="datetime-local" class="form-control" formControlName="startDate" id="event.startDate">-->
-<!--      </div>-->
-<!--      <div class="form-group">-->
-<!--        <label for="event.endDate">End</label>-->
-<!--        <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate">-->
-<!--      </div>-->
-<!--      <div>-->
-<!--      </div>-->
-
-<!--      <div class="btn-group-lg">-->
-<!--        <button class="button-clickable button-green btn-lg" (click)="onSubmit()">-->
-<!--          Submit-->
-<!--        </button>-->
-<!--        <button class="button-clickable button-red btn-lg">-->
-<!--          Cancel-->
-<!--        </button>-->
-<!--      </div>-->
-
-<!--    </form>-->
-
-<!--  </div>-->
-<!--  <div class="col-md-4">-->
-<!--    <h3>Recommendations</h3>-->
-<!--    <p>The application will deliver smart recommendations as you complete the event entry. <a href="">Learn More. </a></p>-->
-<!--  </div>-->
-<!--</div>-->

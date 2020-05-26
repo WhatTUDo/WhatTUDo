@@ -5,6 +5,12 @@
   border-color: #f2847c
 }
 
+form {
+  label {
+    display: none;
+  }
+}
+
 .event-form-container {
   display: flex;
   align-items: flex-end;
@@ -13,7 +19,7 @@
 
   height: 40em;
 
-  border-radius: 4pt;
+  border-radius: $rounded-radius;
 
   .event-form {
     border-radius: 0 0 4pt 4pt;
@@ -25,16 +31,12 @@
 
       color: var(--text);
 
-      label {
-        display: none;
-      }
-
       ::placeholder {
         color: var(--placeholder); //TODO: Make a placeholder var0
       }
 
       .form-row {
-        margin-bottom: 4pt;
+        margin: 0 0 4pt;
       }
 
       .event-time {
@@ -47,7 +49,25 @@
         align-items: center;
 
         input {
-          width: 45%;
+          position: relative;
+
+          //  //FIXME: Use EventEmitter to make this work and not just static.
+          //  ~ app-datetime-picker {
+          //    display: none;
+          //  }
+          //
+          //  &:focus ~ app-datetime-picker {
+          //    display: block;
+          //
+          //    position: absolute;
+          //  }
+          //}
+          //
+          //app-datetime-picker {
+          //  &:hover, &:focus {
+          //    display: block;
+          //  }
+          //
         }
       }
 
@@ -60,21 +80,6 @@
 
       }
     }
-
-    .full-width-button {
-      appearance: none;
-      border: none;
-      background-color: var(--overlay);
-      box-shadow: none;
-      width: 100%;
-      padding: 16pt;
-      font-size: 16pt;
-      font-weight: $f-bold;
-      border-top: 2pt solid var(--text);
-
-      &:hover, &:focus {
-        opacity: 0.75;
-      }
-    }
   }
 }
+
