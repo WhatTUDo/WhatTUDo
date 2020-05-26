@@ -32,7 +32,6 @@ public class UserEndpoint {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create New User!")
     public LoggedInUserDto createNewUser(@RequestBody IncomingUserDto user) {
-        log.info("POST " + BASE_URL);
         try {
             ApplicationUser newUser = userService.saveNewUser(userMapper.userDtoToApplicationUser(user));
 
@@ -52,13 +51,6 @@ public class UserEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("update user")
     public LoggedInUserDto updateUser(@RequestBody LoggedInUserDto userDto){
-        log.info("PUT "+ BASE_URL, userDto);
-//        final ApplicationUser user = (ApplicationUser) SecurityContextHolder.getContext()
-//            .getAuthentication()
-//            .getPrincipal();
-//        if(!userDto.getId().equals(user.getId())){
-//            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "A problem occurred while auth");
-//        }
         try {
             return userMapper.applicationUserToUserDto(userService.updateUser(userMapper.loggedInUserDtoToApplicationUser(userDto)));
         } catch (ServiceException e){

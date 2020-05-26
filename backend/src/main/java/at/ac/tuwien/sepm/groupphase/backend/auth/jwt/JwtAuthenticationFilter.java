@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.groupphase.backend.config.jwt;
+package at.ac.tuwien.sepm.groupphase.backend.auth.jwt;
 
 import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
@@ -11,8 +11,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Collection;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
@@ -74,7 +71,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     ) throws IOException {
         ApplicationUser user = ((ApplicationUser) authResult.getPrincipal());
 
-        List<String> authorities = user.getAuthorities().stream().map(Object::toString).collect(Collectors.toList());
+        Collection<String> authorities = user.getAuthorityStrings();
         response.getWriter().write(jwtTokenizer.getAuthToken(user.getUsername(), authorities));
         LOGGER.info("Successfully authenticated user {}", user.getUsername());
     }

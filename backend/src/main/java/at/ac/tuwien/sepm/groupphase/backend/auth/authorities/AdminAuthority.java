@@ -1,4 +1,4 @@
-package at.ac.tuwien.sepm.groupphase.backend.config.authorities;
+package at.ac.tuwien.sepm.groupphase.backend.auth.authorities;
 
 import org.springframework.security.core.GrantedAuthority;
 

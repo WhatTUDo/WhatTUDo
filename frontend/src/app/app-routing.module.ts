@@ -16,7 +16,7 @@ import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from "./components/organization/organization.component";
 import {UserFormComponent} from './components/user-form/user-form.component';
 
-import {CalendarEditComponent} from './components/calendar-edit/calendar-edit.component';
+import {CalendarFormComponent} from './components/calendar-form/calendar-form.component';
 
 
 const routes: Routes = [
@@ -24,24 +24,20 @@ const routes: Routes = [
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
   {path: 'event/:id', component: EventComponent},
-  {path: 'form/event', component: EventFormComponent},
-  {path: 'form/event/:id', component: EventFormComponent},
-  {path: 'form/organization', component: OrganizationFormComponent},
-  {path: 'form/organization/:id', component: OrganizationFormComponent},
   {path: 'login', component: LoginComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'organization/:id', component: OrganizationComponent},
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
 
-  //{path: 'week-calendar/:id', component: WeeklyCalendarComponent},
-
-  {path: 'form/event/:id', component: OrganizationFormComponent},
+  {path: 'form/event', component: EventFormComponent},
   {path: 'form/event/:id', component: EventFormComponent},
+  {path: 'form/organization', component: OrganizationFormComponent},
+  {path: 'form/organization/:id', component: OrganizationFormComponent},
   {path: 'form/user', component: UserFormComponent}, //new user creation
   {path: 'form/user/:id', component: UserFormComponent}, //edit existing user
-  {path: 'editUser', component: UserFormComponent}, //edit existing user//delete this row
-  {path: 'edit/calendar/:id', component: CalendarEditComponent},
+  {path: 'form/calendar', component: CalendarFormComponent},
+  {path: 'form/calendar/:id', component: CalendarFormComponent},
 
 
   {path: 'user', component: UserComponent},

@@ -52,7 +52,12 @@
   </div>
   <div>
     <h2>Calendars</h2>
-    <a *ngFor="let cal of organizationCalendars" href="/calendar/{{cal.id}}"><div>{{cal.name}}</div></a>
-<!--    TODO: Make this pretty-->
+    <div class="calendar-list">
+      <a *ngFor="let cal of organizationCalendars" href="/calendar/{{cal.id}}">
+        <div class="calendar-list-item clickable no-hover-enlarge no-shadow">{{cal.name}}
+          <fa-icon [icon]="faChevronRight">Show Calendar</fa-icon>
+        </div>
+      </a>
+    </div>
   </div>
 </div>
