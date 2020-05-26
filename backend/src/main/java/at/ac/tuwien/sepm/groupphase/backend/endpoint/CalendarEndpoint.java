@@ -1,11 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TestCalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -27,11 +24,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 @Slf4j
@@ -44,14 +38,12 @@ public class CalendarEndpoint {
     private final EventService eventService;
     private final OrganizationService organizationService;
     private final CalendarMapper calendarMapper;
-    private final EventMapper eventMapper;
     private final TestCalendarMapper testMapper;
 
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping(value = "/{id}")
     public CalendarDto getById(@PathVariable("id") int id) {
-        log.info("GET " + BASE_URL + "/{}", id);
         try {
             return calendarMapper.calendarToCalendarDto(calendarService.findById(id));
         } catch (NotFoundException e) {
@@ -63,7 +55,6 @@ public class CalendarEndpoint {
     @CrossOrigin
     @GetMapping(value = "/all")
     public List<CalendarDto> getAll() {
-        log.info("GET all" + BASE_URL + "");
         try {
             return calendarMapper.calendarsToCalendarDtos(calendarService.findAll());
         } catch (NotFoundException e) {
@@ -71,88 +62,48 @@ public class CalendarEndpoint {
         }
     }
 
-//    @PreAuthorize("permitAll()")
-//    @CrossOrigin
-//    @ResponseStatus(HttpStatus.OK)
-//    @GetMapping(value = "/thisWeek")
-//    @ApiOperation(value = "Get events of this week")
-//    public List<EventDto> getEventsOfTheWeek(@RequestParam(value = "id")  String id,
-//                                             @RequestParam(value = "from") String start,
-//                                             @RequestParam(value = "to") String end){
-//        log.info("GET" + BASE_URL + "Get events of this week {}", id);
-//        try {
-//            String[] start1 = start.split(" GMT");
-//            String[] end1 = end.split(" GMT");
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd yyyy HH:mm:ss", Locale.US);
-//            LocalDateTime dateTimeStart = LocalDateTime.parse(start1[0], formatter);
-//            LocalDateTime dateTimeEnd = LocalDateTime.parse(end1[0], formatter);
-//            List<Event> events = eventService.findForDates(dateTimeStart, dateTimeEnd);
-//            List<EventDto> eventDtos = new ArrayList<>();
-//            events.removeIf(e -> e.getCalendar().getId() != Integer.parseInt(id));
-//            events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
-//            return eventDtos;
-//        }
-//        catch (ServiceException e) {
-//            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
-//        }
-//        catch (ValidationException e) {
-//            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-//        }
-//        catch (NotFoundException e) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-//        }
-//    }
-
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
     @ApiOperation(value = "Get calendars with name")
-    public List<CalendarDto> searchCalendarCombo(@RequestParam(value = "name")  String name){
-        log.info("GET"+BASE_URL+"search {}", name);
-        try{
-        List<Calendar> fromCalendars = calendarService.findByName(name);
-        List<Organization> fromOrganizations = organizationService.findByName(name);
-        List<Event> fromEvents=eventService.findByName(name);
-            for (Organization o: fromOrganizations) {
-                if(!o.getCalendars().isEmpty()){
-                fromCalendars.addAll(o.getCalendars());}
+    public List<CalendarDto> searchCalendarCombo(@RequestParam(value = "name") String name) {
+        try {
+            List<Calendar> fromCalendars = calendarService.findByName(name);
+            List<Organization> fromOrganizations = organizationService.findByName(name);
+            List<Event> fromEvents = eventService.findByName(name);
+            for (Organization o : fromOrganizations) {
+                if (!o.getCalendars().isEmpty()) {
+                    fromCalendars.addAll(o.getCalendars());
+                }
             }
-            for (Event e: fromEvents) {
+            for (Event e : fromEvents) {
                 fromCalendars.add(e.getCalendar());
             }
             List<CalendarDto> calendarDtos = new ArrayList<>();
             fromCalendars.forEach(calendar -> calendarDtos.add(calendarMapper.calendarToCalendarDto(calendar)));
-            if(calendarDtos.isEmpty()){
+            if (calendarDtos.isEmpty()) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing was found");
             }
             return calendarDtos;
-        }
-        catch (ServiceException e){
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
         }
 
 
     }
 
-
-   // @PreAuthorize("hasPermission(#calendar, 'MOD')")
-
+    @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
     public CalendarDto create(@RequestBody CalendarDto calendar) {
-        log.info("POST " + BASE_URL + "/{}", calendar);
         try {
-
             List<Integer> eventsShouldBeEmpty = new ArrayList<Integer>();
             calendar.setEventIds(eventsShouldBeEmpty);
-
             Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
-
             return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
-
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -160,34 +111,12 @@ public class CalendarEndpoint {
         }
     }
 
-
- /**   @PreAuthorize("hasPermission(#calendar, 'MOD')")
-    @CrossOrigin
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
-    public CalendarDto create(@RequestBody CalendarCreateDto calendar) {
-        log.info("POST " + BASE_URL + "/{}", calendar);
-        try {
-            Calendar calendarEntity = calendarMapper.calendarCreateDtoToCalendar(calendar);
-            return calendarMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
-        } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
-        } catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
-        }
-    } **/
-
-
-
-
-    //  @PreAuthorize("hasRole('Admin')")
+    @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")
-   // @ApiOperation(value = "Delete calendar", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Delete calendar", authorizations = {@Authorization(value = "apiKey")})
     public void deleteCalendar(@PathVariable("id") Integer id) {
-        log.info("DELETE"  + BASE_URL + "/{}", id);
         try {
             calendarService.delete(id);
         } catch (ServiceException e) {
@@ -199,16 +128,14 @@ public class CalendarEndpoint {
         }
     }
 
-
+    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
     @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit calendar", authorizations = {@Authorization(value = "apiKey")})
-    public CalendarDto editCalendar(@RequestBody CalendarDto calendarDto){
-        log.info("PUT " + BASE_URL + "/{}", calendarDto);
+    public CalendarDto editCalendar(@RequestBody CalendarDto calendarDto) {
         try {
             Calendar calendar = testMapper.calendarDtoToCalendar(calendarDto);
-
             return testMapper.calendarToCalendarDto(calendarService.update(calendar));
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
@@ -216,7 +143,4 @@ public class CalendarEndpoint {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
-
-
-
 }

@@ -78,10 +78,10 @@ public class CustomUserDetailService implements UserService {
     }
 
     @Override
-    public ApplicationUser changeUserPassword(String email, String currentPassword, String newPassword) {
+    public ApplicationUser changeUserPassword(String username, String currentPassword, String newPassword) {
         try {
-            validator.validateChangePassword(email, currentPassword, newPassword);
-            Optional<ApplicationUser> foundUser = userRepository.findByEmail(email);
+            validator.validateChangePassword(username, currentPassword, newPassword);
+            Optional<ApplicationUser> foundUser = userRepository.findByName(username);
             if (foundUser.isEmpty()) {
                 throw new NotFoundException("User does not exist");
             }
@@ -94,8 +94,5 @@ public class CustomUserDetailService implements UserService {
         } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
         }
-
     }
-
-
 }

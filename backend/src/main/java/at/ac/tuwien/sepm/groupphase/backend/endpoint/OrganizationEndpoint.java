@@ -44,7 +44,6 @@ public class OrganizationEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit organization", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto editOrganization(@RequestBody OrganizationDto organization) {
-        log.info("PUT " + BASE_URL + "/{}", organization); // FIXME: Macht keinen Sinn, Organization ist nicht in der URL
         try {
             // Organization organizationEntity = organizationMapper.organizationDtoToOrganization(organization);
             Organization organizationEntity = organizationService.findById(organization.getId());
@@ -66,7 +65,6 @@ public class OrganizationEndpoint {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create Organization", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto createOrganization(@RequestBody OrganizationDto organizationDto) {
-        log.info("POST " + BASE_URL + "/");
         try {
             Organization organizationEntity = organizationMapper.organizationDtoToOrganization(organizationDto);
             return organizationMapper.organizationToOrganizationDto(organizationService.create(organizationEntity));
@@ -83,7 +81,6 @@ public class OrganizationEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get all Organizations", authorizations = {@Authorization(value = "apiKey")})
     public List<OrganizationDto> getAllOrgas() {
-        log.info("GET" + BASE_URL + "/");
         try {
             return organizationService.getAll().stream()
                 .map(organizationMapper::organizationToOrganizationDto)
@@ -99,7 +96,6 @@ public class OrganizationEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get Organization by ID", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto getOrgaById(@PathVariable(value = "id") Integer id) {
-        log.info("GET" + BASE_URL + "/");
         try {
             return organizationMapper.organizationToOrganizationDto(organizationService.findById(id));
         } catch (NotFoundException e) {
@@ -115,7 +111,6 @@ public class OrganizationEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add Calendars to an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto addCalToOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
-        log.info("PUT " + BASE_URL + "/{}/calendars", orgaId);
         try {
             Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
             Organization organization = organizationService.addCalendars(organizationService.findById(orgaId), calendars);
@@ -131,7 +126,6 @@ public class OrganizationEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Remove Calendars from an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto removeCalFromOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
-        log.info("DELETE " + BASE_URL + "/{}/calendars", orgaId);
         try {
             Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
             Organization organization = organizationService.removeCalendars(organizationService.findById(orgaId), calendars);
