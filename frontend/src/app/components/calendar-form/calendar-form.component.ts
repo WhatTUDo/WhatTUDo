@@ -1,32 +1,28 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {Calendar} from '../../dtos/calendar';
+import {Component, OnInit} from '@angular/core';
 import {CalendarService} from '../../services/calendar.service';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+import {ActivatedRoute} from '@angular/router';
+import {Location} from '@angular/common';
+import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
-  selector: 'app-calendar-edit',
-  templateUrl: './calendar-edit.component.html',
-  styleUrls: ['./calendar-edit.component.css']
+  selector: 'app-calendar-form',
+  templateUrl: './calendar-form.component.html',
+  styleUrls: ['./calendar-form.component.scss']
 })
 
-export class CalendarEditComponent implements OnInit {
-@Input() calendar: Calendar;
+export class CalendarFormComponent implements OnInit {
 
-calendar1 : Calendar;
-
+  calendar;
 
   constructor(
     private route: ActivatedRoute,
     private calendarService: CalendarService,
-
     private location: Location
-  ) { }
-
+  ) {
+  }
 
 
   ngOnInit(): void {
-
     this.getCalendar();
   }
 
@@ -37,13 +33,14 @@ calendar1 : Calendar;
   }
 
   update(): void {
-
-  this.calendarService.editCalendar(this.calendar)
+    this.calendarService.editCalendar(this.calendar)
       .subscribe(() => this.goBack());
-}
+  }
 
   goBack(): void {
     this.location.back();
   }
+
+  faChevronLeft = faChevronLeft;
 
 }
