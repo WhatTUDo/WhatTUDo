@@ -93,7 +93,8 @@ public class CalendarEndpoint {
 
     }
 
-    @PreAuthorize("hasPermission(#calendar, 'MOD')")
+
+   // @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping

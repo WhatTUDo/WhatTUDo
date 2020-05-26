@@ -30,10 +30,12 @@ export class CalendarListComponent implements OnInit {
  this.getAllCalendars();
   }
 
+
   getAllCalendars() {
     this.calendarService.getAllCalendars().subscribe((list) => {
         this.list   = list;
         this.list2 = [];
+
         for(let e of list){
           let listOrg : Organization[] = [];
           for(let a of e.organizationIds){
@@ -129,6 +131,7 @@ export class CalendarListComponent implements OnInit {
     this.calendarService.addCalendar({name, eventIds, organizationIds} as Calendar)
       .subscribe(newcalendar => {
         this.list2.push(new CalendarRepresentation(newcalendar.id, newcalendar.name, this.mapCalOrg.get(newcalendar.id)));
+        this.getAllCalendars();
       });
   }
 

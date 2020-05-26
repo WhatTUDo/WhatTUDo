@@ -34,18 +34,17 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     @Override
+    @Transactional
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
             getAuthToken(request).ifPresent(it -> SecurityContextHolder.getContext().setAuthentication(it));
+            chain.doFilter(request, response);
         } catch (IllegalArgumentException | JwtException e) {
-            log.debug("Invalid authorization attempt: {}", e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid authorization header or token");
-            return;
+            log.debug("Invalid authorization attempt: {}", e.getMessage());
         }
-        chain.doFilter(request, response);
     }
 
     @Transactional
@@ -53,25 +52,28 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(securityProperties.getAuthHeader());
         if (token == null || token.isEmpty() || !token.startsWith(securityProperties.getAuthTokenPrefix())) {
             return Optional.empty();
+        } else if (token.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Token must start with 'Bearer'");
         } else {
-            byte[] signingKey = securityProperties.getJwtSecret().getBytes();
+            String username = getUsername(token);
+            if (username == null || username.isEmpty()) {
+                throw new IllegalArgumentException("Token contains no user");
+            } else {
+                Collection<? extends GrantedAuthority> authorities = userRepository.findByName(username)
+                    .map(ApplicationUser::getAuthorities)
+                    .orElseThrow(() -> new NotFoundException(String.format("Could not find user with name '%s'", username)));
 
-            if (!token.startsWith("Bearer ")) {
-                throw new IllegalArgumentException("Token must start with 'Bearer'");
+                return Optional.of(new UsernamePasswordAuthenticationToken(username, null, authorities));
             }
-            Claims claims = Jwts.parser()
-                .setSigningKey(signingKey)
-                .parseClaimsJws(token.replace(securityProperties.getAuthTokenPrefix(), ""))
-                .getBody();
-
-            String username = claims.getSubject();
-
-            if (username == null || username.isEmpty()) throw new IllegalArgumentException("Token contains no user");
-
-            Collection<? extends GrantedAuthority> authorities = userRepository.findByName(username)
-                .map(ApplicationUser::getAuthorities)
-                .orElseThrow(NotFoundException::new);
-            return Optional.of(new UsernamePasswordAuthenticationToken(username, null, authorities));
         }
+    }
+
+    private String getUsername(String token) {
+        return Jwts.parserBuilder()
+            .setSigningKey(securityProperties.getJwtSecret().getBytes())
+            .build()
+            .parseClaimsJws(token.replace(securityProperties.getAuthTokenPrefix(), ""))
+            .getBody()
+            .getSubject();
     }
 }
