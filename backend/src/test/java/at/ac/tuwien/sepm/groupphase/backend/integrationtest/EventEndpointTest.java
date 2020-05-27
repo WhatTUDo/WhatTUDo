@@ -95,13 +95,6 @@ public class EventEndpointTest {
     @Autowired
     private WebApplicationContext context;
 
-
-
-    private Integer org_id;
-    private Integer cal_id;
-
-
-
     @Before
     public void setup() {
         mockMvc = MockMvcBuilders
@@ -134,6 +127,7 @@ public class EventEndpointTest {
         memberships.add(new OrganizationMembership(orga, user, OrganizationRole.MEMBER));
         user.setMemberships(memberships);
         user = userRepository.save(user);
+
         //EventDto eventDto = new EventDto(1, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         String jsonString = "{ \"id\":1,\"name\":\"Test Name\", \"startDateTime\": \"2020-01-01T15:30:00\", \"endDateTime\": \"2020-01-01T15:30:00\", \"calendarId\":"+calendar.getId()+"}";
             MvcResult mvcResult = this.mockMvc.perform(post("/events").contentType(MediaType.APPLICATION_JSON).content(jsonString)

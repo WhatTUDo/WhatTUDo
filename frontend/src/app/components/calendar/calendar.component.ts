@@ -13,7 +13,7 @@ import {EventService} from '../../services/event.service';
 })
 export class CalendarComponent implements OnInit {
 
-  calendar: Calendar = new Calendar(null, null, null, null);
+  calendar: Calendar;
   events: CalendarEvent[] = [];
 
 
@@ -48,13 +48,13 @@ export class CalendarComponent implements OnInit {
     let id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.calendarService.getCalendarById(id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
+      this.loadEventsForWeek(this.getWeek(0)[0], this.getWeek(0)[6]);
     }, err => {
       console.warn(err);
     });
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
 
-    this.loadEventsForWeek(this.getWeek(this.offset)[0], this.getWeek(this.offset)[6]);
 
     setInterval(_ => {
       Array.from(document.getElementsByClassName('calendar-event'))
