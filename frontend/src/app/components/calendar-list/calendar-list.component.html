@@ -7,7 +7,7 @@
         <form class="form input-button-combo" [formGroup]="searchForm" (keyup.enter)="onSubmit()">
           <label for="calendar.name"></label>
           <input type="text" class="form-control" formControlName="name" id="calendar.name" placeholder="Search...">
-          <button type="submit" class="button-clickable button-solid no-hover-enlarge">Submit</button>
+          <button type="submit" class="button-solid no-hover-enlarge">Submit</button>
         </form>
       </div>
       <br/>
@@ -35,12 +35,12 @@
                *ngFor="let a of el.organization; let j = index"> {{a.name}}</a>
           </td>
           <td>
-            <button class="button-clickable button-blue small-button" title="edit calendar"
+            <button class="button-blue small-button" title="edit calendar"
                     (click)="onSelectEditCalendar(el)">Edit
             </button>
           </td>
           <td>
-            <button class="button-clickable button-red small-button" title="delete calendar"
+            <button class="button-red small-button" title="delete calendar"
                     (click)="delete(el.id)">Delete
             </button>
 
@@ -56,7 +56,7 @@
   </div>
   <div style="margin-bottom: 16pt"  class="col-md-8 input-button-combo">
     <input #calendarName/>
-    <button class="button-clickable button-solid no-hover-enlarge"
+    <button class="button-solid no-hover-enlarge"
             (click)="add(calendarName.value, [], [1]); calendarName.value=''">
       Create
     </button>

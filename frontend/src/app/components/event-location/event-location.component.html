@@ -10,7 +10,7 @@
   <div class="input-button-combo" [class.flat-bottom]="this.searchComplete">
     <label for="addressSearch">Search Location</label>
     <input type="search" name="addressSearch" id="addressSearch">
-    <button class="button-clickable button-solid no-hover-enlarge" (click)="performSearch()">Search</button>
+    <button class="button-solid no-hover-enlarge" (click)="performSearch()">Search</button>
   </div>
 </form>
 <div>
@@ -20,7 +20,7 @@
   </div>
 </div>
 <div *ngIf="this.addressSelected" class="selected-button-container">
-  <button *ngIf="!this.selectionComplete" class="button-clickable button-green small-button"
+  <button *ngIf="!this.selectionComplete" class="button-green small-button"
           (click)="saveButtonClicked()">Save Location
   </button>
 </div>
