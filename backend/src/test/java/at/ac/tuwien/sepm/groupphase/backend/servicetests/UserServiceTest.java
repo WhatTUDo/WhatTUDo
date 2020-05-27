@@ -34,7 +34,7 @@ public class UserServiceTest {
 
     @Test
     public void when_savedUser_findAllUsers_shouldReturnCorrectUserDetails() {
-        userService.saveNewUser(new ApplicationUser("TestUser", "testy@test.com", "hunter2"));
+        userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
         ApplicationUser user = (ApplicationUser) userService.loadUserByUsername("TestUser");
         assert (user.getId() != null && user.getId() != 0);
 

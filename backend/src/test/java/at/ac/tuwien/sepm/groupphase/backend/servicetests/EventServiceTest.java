@@ -34,8 +34,10 @@ public class EventServiceTest {
 
     @Autowired
     EventService service;
+
     @Autowired
     CalendarRepository calendarRepository;
+
     @Autowired
     OrganizationRepository organizationRepository;
 

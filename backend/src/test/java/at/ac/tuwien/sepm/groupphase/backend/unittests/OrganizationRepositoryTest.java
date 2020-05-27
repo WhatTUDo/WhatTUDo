@@ -31,13 +31,10 @@ public class OrganizationRepositoryTest {
         assertThrows(InvalidDataAccessApiUsageException.class, () -> organizationRepository.save(null));
         assertThrows(NullPointerException.class, () -> organizationRepository.save(new Organization(null)));
         organizationRepository.save(new Organization("Test Name"));
-        organizationRepository.save(new Organization("Test Name"));
     }
 
     @Test
     public void calendarBasics() {
-        calendarRepository.save(new Calendar("Calendar", Collections.emptyList())); // TODO: Should Throw
-
         Organization orga = organizationRepository.save(new Organization("Test Name"));
         Calendar cal = calendarRepository.save(new Calendar("Calendar", Collections.singletonList(orga)));
         orga.getCalendars().add(cal);
