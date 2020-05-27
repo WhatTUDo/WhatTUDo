@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
       const authRequest: AuthRequest = new AuthRequest(this.loginForm.controls.username.value, this.loginForm.controls.password.value);
       this.authenticateUser(authRequest);
     } else {
-      console.log('Invalid input');
+      alert('Invalid input');
     }
   }
 
@@ -52,13 +52,13 @@ export class LoginComponent implements OnInit {
       },
       error => {
         console.log('Could not log in due to:');
-        console.log(error);
         this.error = true;
         if (typeof error.error === 'object') {
           this.errorMessage = error.error.error;
         } else {
           this.errorMessage = error.error;
         }
+        alert(this.errorMessage);
       }
     );
   }

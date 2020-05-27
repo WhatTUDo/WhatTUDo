@@ -65,7 +65,7 @@ export class EventComponent implements OnInit {
 
   private deleteEvent() {
     this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
-      alert("Event deleted");
+      console.log("Event deleted");
     }, error => {
       // display Error.
     })
@@ -75,16 +75,16 @@ export class EventComponent implements OnInit {
   public participate(status: number) {
     switch (status) {
       case 0:
-        alert("You declined!");
+        console.log("You declined!");
         break;
       case 1:
-        alert("You are attending!");
+        console.log("You are attending!");
         break;
       case 2:
-        alert("You are interested!");
+        console.log("You are interested!");
         break;
       default:
-        alert("No idea what you want!");
+        console.log("No idea what you want!");
         break;
     }
   }
@@ -94,9 +94,9 @@ export class EventComponent implements OnInit {
     if (textArea) {
       let comment = textArea.value;
       if (comment || comment.length > 0) {
-        alert("Comments aren't live yet, but here's what you wrote: " + comment);
+        console.log("Comments aren't live yet, but here's what you wrote: " + comment);
       } else {
-        alert('Could not read comment!');
+        console.log('Could not read comment!');
       }
     }
   }

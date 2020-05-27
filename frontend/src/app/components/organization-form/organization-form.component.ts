@@ -53,7 +53,7 @@ export class OrganizationFormComponent implements OnInit {
     this.organizationService.postOrganization(this.organization)
       .subscribe(organization => {
         this.organization = organization;
-        alert('Organization ' + organization.name + ' created successfully.');
+        console.log('Organization ' + organization.name + ' created successfully.');
       });
   }
 
@@ -62,7 +62,7 @@ export class OrganizationFormComponent implements OnInit {
     this.organizationService.putOrganization(this.organization)
       .subscribe(organization => {
         this.organization = organization;
-        alert('Organization ' + organization.name + ' updated successfully.');
+        console.log('Organization ' + organization.name + ' updated successfully.');
       });
   }
 
