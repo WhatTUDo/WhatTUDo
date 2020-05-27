@@ -1,7 +1,8 @@
 <div *ngIf="this.calendarEvent">
   <div class="contextual-control">
-    <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
-    <span>{{this.calendarEvent.name}}</span>
+    <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+    <span>Event: {{this.calendarEvent.name}}</span>
   </div>
   <div class="grid-one-third scroll">
     <div>
@@ -37,9 +38,9 @@
           </div>
         </div>
         <div class="participation-button-container grid-one-third no-gap">
-          <button class="button-clickable button-blue btn-lg" (click)="participate(1)">Attend</button>
-          <button class="button-clickable button-yellow btn-lg" (click)="participate(2)">Interested</button>
-          <button class="button-clickable button-red btn-lg" (click)="participate(0)">Decline</button>
+          <button class="button-blue btn-lg" (click)="participate(1)">Attend</button>
+          <button class="button-yellow btn-lg" (click)="participate(2)">Interested</button>
+          <button class="button-red btn-lg" (click)="participate(0)">Decline</button>
         </div>
       </div>
       <div class="organization-info">
@@ -56,7 +57,8 @@
           <iframe id="open-street-map-iframe"
                   src="//www.openstreetmap.org/export/embed.html?bbox=16.36812955141068%2C48.19411795494773%2C16.371696889400486%2C48.19578432955719&amp;layer=mapnik"></iframe>
         </div>
-        <small><a href="https://www.openstreetmap.org/#map=19/48.19495/16.36991">View Larger Map</a></small> <!--TODO: Make this look better-->
+        <small><a href="https://www.openstreetmap.org/#map=19/48.19495/16.36991">View Larger Map</a></small>
+        <!--TODO: Make this look better-->
       </div>
     </div>
     <div>
@@ -69,7 +71,8 @@
           Leave a comment
         </label>
         <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"></textarea>
-        <button class="button-clickable full-width-form-button no-hover-enlarge btn-lg" (click)="addComment()">Send</button>
+        <button class="full-width-form-button no-hover-enlarge btn-lg" (click)="addComment()">Send
+        </button>
       </div>
     </div>
 

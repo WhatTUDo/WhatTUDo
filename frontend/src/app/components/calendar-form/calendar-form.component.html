@@ -1,6 +1,6 @@
 <div class="contextual-control">
-  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
-    [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
+  <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span *ngIf="calendar">Calendar: {{calendar.name}}</span>
 </div>
 <div class="grid-one-third" *ngIf="calendar">
@@ -9,12 +9,27 @@
     <label for="calendar.name">Name</label>
     <div class="input-button-combo">
       <input id="calendar.name" [(ngModel)]="calendar.name" placeholder="name">
-      <button class="update button-clickable button-solid no-hover-enlarge no-shadow" title="Update calendar"
+      <button class="update button-solid no-hover-enlarge no-shadow" title="Update calendar"
               (click)="update()">
         Submit
       </button>
     </div>
   </div>
   <div>
+    <h2>Organizations</h2>
+    <div class="organization-list">
+      <div class="organization" *ngFor="let org of calendarOrganizations">
+        <div class="organization-details">
+          <a href="/organization/{{org.id}}">
+            <div class="organization-name clickable no-shadow no-hover-enlarge">{{org.name}}</div>
+          </a>
+        </div>
+        <div class="calendar-organizations-buttons">
+        </div>
+      </div>
+    </div>
+    <div style="width: 66%; text-align: center; margin: 0 auto; font-style: italic">
+      You can add or remove this calendar to your organization on the organization page.
+    </div>
   </div>
 </div>
