@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -85,7 +86,7 @@ public class EventEndpointTest {
 
 
 
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void save_shouldReturn_sameEvent() throws Exception {
 
