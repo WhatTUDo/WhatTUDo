@@ -1,0 +1,17 @@
+@import "../../../var.scss";
+
+.organization {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16pt;
+
+  .organization-details {
+    margin-left: 8pt;
+
+    .organization-name {
+      font-weight: $f-bold;
+      font-size: 16pt;
+    }
+  }
+}
+
