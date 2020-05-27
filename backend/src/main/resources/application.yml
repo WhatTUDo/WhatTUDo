@@ -34,7 +34,6 @@ security:
       - /favicon.ico
       - /csrf
       - /changePwd/**
-      - /events/**
       # Swagger
       - /v2/api-docs
       - /swagger-resources/**
