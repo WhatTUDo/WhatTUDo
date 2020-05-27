@@ -52,7 +52,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String token = request.getHeader(securityProperties.getAuthHeader());
         if (token == null || token.isEmpty() || !token.startsWith(securityProperties.getAuthTokenPrefix())) {
             return Optional.empty();
-        } else if (token.startsWith("Bearer ")) {
+        } else if (!token.startsWith("Bearer ")) {
             throw new IllegalArgumentException("Token must start with 'Bearer'");
         } else {
             String username = getUsername(token);
