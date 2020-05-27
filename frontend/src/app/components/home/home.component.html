@@ -2,25 +2,18 @@
 <div class="grid-one-third">
   <app-weekly-calendar class="grid-item-1-2"></app-weekly-calendar>
   <div>
-    <h2>Lorem ipsum</h2>
+    <h2>Test Me</h2>
 
-    <div style="margin-bottom: 8pt" *ngIf="authService.isLoggedIn()">
-      <a href="/form/event/0">
-        <button class="button-clickable button-solid btn-lg">Add New Event</button>
-      </a>
-    </div>
     <div style="margin-bottom: 8pt">
-      <a href="/user">
-        <button class="button-clickable button-solid btn-lg">¡Hola! Soy un MOCK USER.</button>
+      <a href="/form/event">
+        <button class="button-solid btn-lg" [disabled]="!authService.isLoggedIn()">Add New Event</button>
       </a>
+      <small *ngIf="!authService.isLoggedIn()">You have to log in before you can make modifications.</small>
     </div>
     <div style="margin-bottom: 8pt">
       <a href="/organization/1">
-        <button class="button-clickable button-solid btn-lg">Bonjour! Je suis l'ORGANIZATION 1.</button>
+        <button class="button-solid btn-lg">Organization 1</button>
       </a>
     </div>
-    <a href="/event/3" style="font-size: 24pt">Test Event 🎉</a>
-    <p style="font-size: 24pt;color:#807C7C">Implement me! 😀</p>
-
   </div>
 </div>
