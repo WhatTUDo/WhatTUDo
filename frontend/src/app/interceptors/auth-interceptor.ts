@@ -18,10 +18,14 @@ export class AuthInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    const authReq = req.clone({
-      headers: req.headers.set('Authorization', this.authService.getToken())
-    });
+    if (this.authService.isLoggedIn()) {
+      const authReq = req.clone({
+        headers: req.headers.set('Authorization', this.authService.getToken())
+      });
+      return next.handle(authReq);
+    }
 
-    return next.handle(authReq);
+    // Do not intercept requests if not logged in.
+    return next.handle(req);
   }
 }
