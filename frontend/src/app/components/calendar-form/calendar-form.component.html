@@ -7,10 +7,10 @@
   <div>
     <h2>Update Calendar</h2>
     <div class="form-group">
-      <label for="calendar.organizationIds">Organization</label>
-        <select id="calendar.organizationIds" class="form-control" [(ngModel)]="calendar.organizationIds[0]">
-          <option *ngFor="let org of this.organizations" value="{{org.id}}">{{org.name}}</option>
-        </select>
+<!--      <label for="calendar.organizationIds">Organization</label>-->
+<!--        <select id="calendar.organizationIds" class="form-control" [(ngModel)]="calendar.organizationIds[0]">-->
+<!--          <option *ngFor="let org of this.organizations" value="{{org.id}}">{{org.name}}</option>-->
+<!--        </select>-->
         <label for="calendar.name">Name</label>
         <input class="form-control " id="calendar.name"  placeholder="name" [(ngModel)]="calendar.name">
         <button class="update button-clickable button-solid no-hover-enlarge no-shadow" title="Update calendar"
@@ -22,7 +22,8 @@
   <div>
     <h2>Organizations</h2>
     <div class="organization-list">
-      <div class="organization" *ngFor="let org of calendarOrganizations">
+      <div class="organization" *ngFor="let org of this.organizations">
+        <input type="checkbox" name="this.organizations[]">
         <div class="organization-details">
           <a href="/organization/{{org.id}}">
             <div class="organization-name clickable no-shadow no-hover-enlarge">{{org.name}}</div>
