@@ -16,6 +16,7 @@ export class CalendarComponent implements OnInit {
   calendar: Calendar = new Calendar(null, null, null, null);
   events: CalendarEvent[] = [];
 
+
   currentDate: number;
   currentMonth: String;
   currentYear: number;
@@ -53,7 +54,7 @@ export class CalendarComponent implements OnInit {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
 
-    this.loadEventsForWeek(this.getWeek(0)[0], this.getWeek(0)[6]);
+    this.loadEventsForWeek(this.getWeek(this.offset)[0], this.getWeek(this.offset)[6]);
 
     setInterval(_ => {
       Array.from(document.getElementsByClassName('calendar-event'))
@@ -96,6 +97,8 @@ export class CalendarComponent implements OnInit {
         return isAfterMidnight && isBeforeEndOfDay;
       }));
     });
+
+    this.events = [];
   }
 
   getWeek(offset = 0) {
