@@ -35,20 +35,28 @@ public class SimpleOrganizationService implements OrganizationService {
     private final CalendarRepository calendarRepository;
     private final Validator validator;
 
-    //FIXME: catch persistance throw service
+
     @Override
     public Collection<Organization> getAll() {
-        return organizationRepository.findAll();
+        try {
+            return organizationRepository.findAll();
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
     }
 
-    //FIXME: catch persistance throw service
+
     @Override
     public Organization findById(int id) {
-        Optional<Organization> found = organizationRepository.findById(id);
-        if (found.isPresent()) {
-            return found.get();
-        } else {
-            throw new NotFoundException("No organization found with id " + id);
+        try {
+            Optional<Organization> found = organizationRepository.findById(id);
+            if (found.isPresent()) {
+                return found.get();
+            } else {
+                throw new NotFoundException("No organization found with id " + id);
+            }
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
         }
     }
 
@@ -67,7 +75,6 @@ public class SimpleOrganizationService implements OrganizationService {
     @Override
     public Organization update(Organization organization) {
         validator.validateUpdateOrganization(organization);
-
         try {
             Optional<Organization> found = organizationRepository.findById(organization.getId());
             if (found.isPresent()) {
