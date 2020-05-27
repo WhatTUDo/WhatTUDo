@@ -6,6 +6,7 @@ import {EventService} from "../../services/event.service";
 import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
+import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-event-form',
@@ -124,4 +125,6 @@ export class EventFormComponent implements OnInit {
       this.editableCalendars = calendars;
     }) //FIXME: Make me to fetch only editable calendars.
   }
+
+  faChevronLeft = faChevronLeft;
 }
