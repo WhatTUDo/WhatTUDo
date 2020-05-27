@@ -13,13 +13,9 @@ import {EventService} from '../../services/event.service';
 })
 export class CalendarComponent implements OnInit {
 
+  id: number;
   calendar: Calendar;
   events: CalendarEvent[] = [];
-
-
-  currentDate: number;
-  currentMonth: String;
-  currentYear: number;
 
   displayingDate: Date;
   displayingWeek: Date[]; // Starts at a monday.
@@ -33,7 +29,6 @@ export class CalendarComponent implements OnInit {
   viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
   viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
 
-
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
 
   constructor(
@@ -41,20 +36,20 @@ export class CalendarComponent implements OnInit {
     private calendarService: CalendarService,
     private route: ActivatedRoute,
   ) {
-    console.log(this.eventsOfTheWeek);
+
   }
 
   ngOnInit(): void {
-    let id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.calendarService.getCalendarById(id).subscribe((calendar: Calendar) => {
+    this.id = parseInt(this.route.snapshot.paramMap.get('id'));
+    this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
-      this.loadEventsForWeek(this.getWeek(0)[0], this.getWeek(0)[6]);
+
+      this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     }, err => {
       console.warn(err);
     });
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
-
 
     setInterval(_ => {
       Array.from(document.getElementsByClassName('calendar-event'))
