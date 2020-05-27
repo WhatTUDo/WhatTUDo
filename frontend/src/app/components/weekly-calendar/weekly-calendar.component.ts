@@ -87,7 +87,7 @@ export class WeeklyCalendarComponent implements OnInit {
       if (error.status != 404) {
         alert("Error while loading events: " + error.message);
       } else {
-        console.log("No events found!");
+        alert("No events found!");
       }
     });
 

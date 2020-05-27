@@ -31,14 +31,14 @@ export class EventCommentComponent implements OnInit {
 
   public vote(isUpvote: boolean) {
     if (isUpvote) {
-      alert("You upvoted this comment!");
+      console.log("You upvoted this comment!");
     } else {
-      alert("You downvoted this comment!");
+      console.log("You downvoted this comment!");
     }
   }
 
   public respondButtonClicked() {
-    alert("You clicked the respond button!");
+    console.log("You clicked the respond button!");
   }
 
 }

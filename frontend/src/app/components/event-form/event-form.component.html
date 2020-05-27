@@ -1,3 +1,7 @@
+<div class="contextual-control">
+  <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+</div>
 <form [formGroup]="reactiveEventForm" class="grid-one-third">
   <div>
     <h2>New Event</h2>
@@ -33,7 +37,7 @@
                  placeholder="Event Name …" [(ngModel)]="event.name">
 
           <label for="event.description">Description</label>
-          <input type="text" class="form-control form-row" formControlName="name" id="event.description"
+          <input type="text" class="form-control form-row" formControlName="description" id="event.description"
                  placeholder="Description …" value="Description not yet implemented">
           <!--          FIXME: [(ngModel)]="event.description"-->
         </div>

@@ -26,7 +26,10 @@ export class CalendarListComponent implements OnInit {
   });
 
 
-  constructor(private calendarService: CalendarService, private router: Router, private organizationService: OrganizationService) {
+  constructor(
+    private calendarService: CalendarService,
+    private router: Router,
+    private organizationService: OrganizationService) {
  this.getAllCalendars();
   }
 
