@@ -33,14 +33,13 @@ export class WeeklyCalendarComponent implements OnInit {
   constructor(
     private eventService: EventService
   ) {
-    console.log(this.eventsOfTheWeek);
   }
 
   ngOnInit(): void {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
 
-    this.loadEventsForWeek(this.getWeek(0)[0], this.getWeek(0)[6]);
+    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     this.updateDatetime();
     setInterval(_ => {
       this.updateDatetime();

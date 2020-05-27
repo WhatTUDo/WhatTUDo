@@ -6,7 +6,6 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -54,7 +53,7 @@ public class Validator {
         if (organization.getName().isBlank()) throw new ValidationException("Organization name must not be empty.");
     }
 
-    public void validateMultipleEventsQuery(String name, LocalDateTime start, LocalDateTime end) {
+    public void validateMultipleEventsQuery(LocalDateTime start, LocalDateTime end) {
         if (start.isAfter(end)) throw new ValidationException("End Date must be after Start Date");
 
     }
