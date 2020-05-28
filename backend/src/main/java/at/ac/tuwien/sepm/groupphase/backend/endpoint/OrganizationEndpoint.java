@@ -105,6 +105,24 @@ public class OrganizationEndpoint {
         }
     }
 
+
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    @DeleteMapping(value = "/{id}")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete Organization", authorizations = {@Authorization(value = "apiKey")})
+    public Integer deleteOrga(@PathVariable(value = "id") Integer id) {
+        try {
+            return this.organizationService.delete(id);
+        }
+        catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+        catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
     @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
     @PutMapping(value = "/{id}/calendars")
     @CrossOrigin
