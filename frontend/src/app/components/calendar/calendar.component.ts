@@ -43,7 +43,6 @@ export class CalendarComponent implements OnInit {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
-      this.calendar.eventIds = calendar.eventIds;
     }, err => {
       console.warn(err);
     });
