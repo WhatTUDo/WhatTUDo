@@ -5,7 +5,7 @@
 </div>
 <div class="grid-one-third" *ngIf="organization">
   <div>
-    <h2>You</h2>
+    <h2>This Team</h2>
     <div class="organization-info">
       <img alt="" class="avatar avatar-medium" src="https://picsum.photos/256/256/">
       <div class="organization-details">
@@ -48,16 +48,40 @@
         </div>
       </div>
     </div>
-
   </div>
   <div>
-    <h2>Calendars</h2>
-    <div class="calendar-list">
-      <a *ngFor="let cal of organizationCalendars" href="/calendar/{{cal.id}}">
-        <div class="calendar-list-item clickable no-hover-enlarge no-shadow">{{cal.name}}
-          <fa-icon [icon]="faChevronRight">Show Calendar</fa-icon>
+    <div class="title-icon-button-combo">
+      <h2>Calendars</h2>
+      <div class="icon-button clickable no-hover-enlarge no-shadow" (click)="calendarAddExpanded = !calendarAddExpanded">
+        <fa-icon *ngIf="!calendarAddExpanded" [icon]="faPlus"></fa-icon>
+        <fa-icon *ngIf="calendarAddExpanded" [icon]="faTimes"></fa-icon>
+      </div>
+    </div>
+    <div class="add-calendar-selector" *ngIf="calendarAddExpanded">
+      <label for="event.calendarId">Calendar</label>
+      <div class="input-button-combo">
+        <select #selectCalenderId class="form-control" id="event.calendarId"
+                [ngModel]="selectCalendar(+selectCalenderId.value)">
+          <option *ngFor="let cal of editableCalendars" value="{{cal.id}}"
+                  [disabled]="organization.calendarIds.includes(cal.id)">{{cal.name}}</option>
+        </select>
+        <button class="button-solid no-hover-enlarge" (click)="onSubmitAddCalendar(pickedCalendarId)"
+                [disabled]="!pickedCalendarId">Submit
+        </button>
+      </div>
+    </div>
+    <div>
+      <div *ngFor="let cal of organizationCalendars"
+           class="organization-calendar">
+        <div class="organization-calendar-details clickable no-hover-enlarge no-shadow" (click)="goToCalendar(cal.id)">
+          <div class="organization-calendar-name">{{cal.name}}</div>
         </div>
-      </a>
+        <div class="organization-calendar-buttons">
+          <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faTimesCircle" (click)="removeCalendar(cal.id)">
+            Remove Calendar
+          </fa-icon>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {faChevronLeft, faChevronRight, faCog, faPlus, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import {faChevronLeft, faChevronRight, faCog, faPlus, faTimes, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 import {Organization} from "../../dtos/organization";
 import {ActivatedRoute} from "@angular/router";
 import {OrganizationService} from "../../services/organization.service";
@@ -20,11 +20,15 @@ export class OrganizationComponent implements OnInit {
     {username: "JaneDoe", role: "Admin"},
     {username: "JohnyAppleseed", role: "Member"},
   ]
+  editableCalendars: Calendar[];
+  pickedCalendarId: number;
+  calendarAddExpanded: boolean = false;
 
   constructor(private organizationService: OrganizationService, private calendarService: CalendarService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadOrganization(id);
+    this.getAllEditableCalendars();
   }
 
   ngOnInit(): void {
@@ -50,12 +54,54 @@ export class OrganizationComponent implements OnInit {
     })
   }
 
-  // deleteOrganization() {
-  // }
+  goToCalendar(id: number) {
+    window.location.replace("/calendar/" + id);
+  }
+
+  onSubmitAddCalendar(calId: number) {
+    this.addCalendar(calId);
+    this.calendarAddExpanded = false;
+    delete this.pickedCalendarId;
+  }
+
+  addCalendar(calId: number) {
+    console.log('Cal ID' + calId);
+    this.organizationService.addCalToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
+      this.organization = organization;
+      this.calendarService.getCalendarById(calId).subscribe((cal: Calendar) => {
+        this.organizationCalendars.push(cal);
+      })
+    }, err => {
+      alert(err.message);
+    });
+
+  }
+
+  selectCalendar(calId: number) {
+    this.pickedCalendarId = calId;
+  }
+
+  removeCalendar(calId: number) {
+    this.organizationService.removeCalToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
+      this.organization = organization;
+      this.organizationCalendars = this.organizationCalendars.filter((cal: Calendar) => {
+        return cal.id != calId
+      })
+    }, err => {
+      alert(err.message);
+    });
+  }
+
+  getAllEditableCalendars() {
+    this.calendarService.getAllCalendars().subscribe((calendars: Calendar[]) => {
+      this.editableCalendars = calendars;
+    }) //FIXME: Make me to fetch only editable calendars.
+  }
 
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
   faPlus = faPlus;
+  faTimes = faTimes;
   faCog = faCog;
   faTimesCircle = faTimesCircle;
 }
