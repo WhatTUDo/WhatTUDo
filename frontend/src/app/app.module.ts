@@ -26,6 +26,7 @@ import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from './components/organization/organization.component';
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { CalendarFormComponent } from './components/calendar-form/calendar-form.component';
+import { OrganizationListComponent } from './components/organization-list/organization-list.component';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { CalendarFormComponent } from './components/calendar-form/calendar-form.
     CalendarFormComponent,
     OrganizationComponent,
     UserFormComponent,
+    OrganizationListComponent,
   ],
   imports: [
     BrowserModule,
