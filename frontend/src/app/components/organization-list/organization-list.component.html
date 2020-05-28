@@ -1,1 +1,15 @@
-<p>organization-list works!</p>
+<h1>Organizations</h1>
+
+<div class="list-group">
+  <div class="list-group-item" *ngFor="let org of this.organizations">
+    <div class="col">
+      <h4>{{org.name}}</h4>
+      <p>Active Members: {{20 + org.id}}</p>
+      <p>Upcoming Events: 0</p>
+    </div>
+    <div class="btn-group">
+      <button class="clickable button-yellow btn-lg" (click)="onClickedEdit(org.id)">Edit</button>
+      <button class="clickable button-red btn-lg" (click)="onClickedDelete(org.id)">Delete</button>
+    </div>
+  </div>
+</div>
