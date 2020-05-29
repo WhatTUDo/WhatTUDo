@@ -66,7 +66,8 @@ public class Validator {
             result += "Organisation name must not be empty. \n";
             //throw new ValidationException("Organization name must not be empty.");
         }
-        if (organizationRepository.findById(organization.getId()).isPresent()) {
+
+        if (organization.getId() != null && organizationRepository.findById(organization.getId()).isPresent()) {
             result += "An Organization with this ID already exists. \n";
             //throw new ValidationException("An Organisation with this ID already exists");
         }

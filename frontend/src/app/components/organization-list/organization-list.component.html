@@ -1,5 +1,10 @@
 <h1>Organizations</h1>
 
+<div class="btn-group">
+  <button class="clickable button-green btn-lg" (click)="onClickedAddNew()">
+    Add New
+  </button>
+</div>
 <div class="list-group">
   <div class="list-group-item" *ngFor="let org of this.organizations">
     <div class="col">

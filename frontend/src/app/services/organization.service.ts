@@ -48,8 +48,17 @@ export class OrganizationService {
    * @param organization updated version of organization to be saved
    */
   putOrganization(organization: Organization): Observable<any> {
-    console.log('Put Organization to Server', Organization);
+    console.log('Put Organization to Server', organization);
     return this.httpClient.put(this.organizationBaseUri, organization);
+  }
+
+  /**
+   * Deletes Organization and removes all associated calendars.
+   * @param id
+   */
+  deleteOrganization(id: number): Observable<number> {
+    console.log("Delete Organization with ID ", id);
+    return this.httpClient.delete<number>(this.organizationBaseUri + "/" + id);
   }
 
   /**

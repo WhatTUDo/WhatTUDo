@@ -33,7 +33,17 @@ export class OrganizationListComponent implements OnInit {
   }
 
   private onClickedDelete(id: number) {
-    alert("Delete not yet implemented. (clicked ID " + id + ")");
+    this.organizationService.deleteOrganization(id).subscribe( deletedID => {
+      this.organizations = this.organizations.filter(elem => elem.id != deletedID);
+      alert("Deleted Organization with id: " + deletedID);
+    }, error => {
+      console.warn(error);
+      alert(error.error.message);
+    });
+  }
+
+  private onClickedAddNew() {
+    window.location.replace("/form/organization/0");
   }
 
 }
