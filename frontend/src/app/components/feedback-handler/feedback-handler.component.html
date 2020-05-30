@@ -1,4 +1,4 @@
-<div class="feedback-container {{getState()}}" id="feedback-container" [@makeVisible] = "isVisible ? 'visible' : 'invisible'">
+<div class="feedback-container {{getState()}}" id="feedback-container" [@makeVisible] = "getVisibility() ? 'visible' : 'invisible'">
   <div class="feedback-inner">
     <div class="float-right dismissButton" (click)="onDismiss()">
       <fa-icon [icon]="faTimes"></fa-icon>

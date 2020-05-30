@@ -9,7 +9,8 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
   animations: [
     trigger("makeVisible", [
       state('visible', style({
-          opacity: 1
+          opacity: 1,
+          display: 'block'
         })
       ),
       state('invisible', style({
@@ -30,17 +31,21 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 @Injectable()
 export class FeedbackHandlerComponent implements OnInit {
 
-  @Input() isVisible: boolean = false;
   faTimes = faTimes;
 
   static header: String;
-  static message: String
-  static state: State
+  static message: String;
+  static state: State;
+  static isVisible: Boolean;
 
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  getVisibility() {
+    return FeedbackHandlerComponent.isVisible;
   }
 
   getState() {
@@ -68,16 +73,16 @@ export class FeedbackHandlerComponent implements OnInit {
   }
 
   private static displayMessage(header: String, message: String, state: State = State.Neutral) {
-
+    this.isVisible = true;
     this.message = message;
     this.header = header;
     this.state = state;
 
-  console.log(header, message)
+    console.log(header, message)
   }
 
-  onDismiss() {
-    this.isVisible = !this.isVisible;
+   onDismiss() {
+    FeedbackHandlerComponent.isVisible = !FeedbackHandlerComponent.isVisible;
     console.log("Dismiss");
   }
 }
