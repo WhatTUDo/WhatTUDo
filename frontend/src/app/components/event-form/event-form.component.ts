@@ -7,6 +7,7 @@ import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
+import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
 
 @Component({
   selector: 'app-event-form',
@@ -17,6 +18,7 @@ export class EventFormComponent implements OnInit {
   editableCalendars: Calendar[] = [];
 
   isUpdate: Boolean = false;
+  showFeedback: Boolean = false;
   event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
   reactiveEventForm = new FormGroup({
     id: new FormControl(''),
@@ -35,7 +37,6 @@ export class EventFormComponent implements OnInit {
         if (event) {
           this.event = event;
           this.isUpdate = true;
-        } else {
         }
       });
     }
@@ -57,21 +58,24 @@ export class EventFormComponent implements OnInit {
       // submit to eventService
       if (this.isUpdate) {
         this.eventService.putEvent(this.event).subscribe(response => {
+            FeedbackHandlerComponent.displaySuccess("Updated Event!", response.toString());
             console.log("Updated event: " + response);
+            FeedbackHandlerComponent.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
           },
           err => {
             console.warn(err);
-            alert("Error: " + err.error.message);
+            FeedbackHandlerComponent.displayError("Error", err.error.message);
           });
       } else {
         this.eventService.postEvent(this.event).subscribe(response => {
             console.log("Saved event: " + response);
+            FeedbackHandlerComponent.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
           },
           err => {
             console.warn(err);
-            alert("Error: " + err.error.message);
+            FeedbackHandlerComponent.displayError("Error", err.error.message);
           });
       }
     }
@@ -106,7 +110,8 @@ export class EventFormComponent implements OnInit {
       for (let error of errors) {
         errorMessage += error.message + " ";
       }
-      alert(errorMessage)
+      this.showFeedback = true;
+      FeedbackHandlerComponent.displayError("Validation Error(s)", errorMessage);
       return false;
     }
     return true;

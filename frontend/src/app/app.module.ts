@@ -12,7 +12,7 @@ import {LoginComponent} from './components/login/login.component';
 import {MessageComponent} from './components/message/message.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
-
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {WeeklyCalendarComponent} from './components/weekly-calendar/weekly-calendar.component';
 import {EventComponent} from './components/event/event.component';
@@ -27,6 +27,7 @@ import {OrganizationComponent} from './components/organization/organization.comp
 import { UserFormComponent } from './components/user-form/user-form.component';
 import { CalendarFormComponent } from './components/calendar-form/calendar-form.component';
 import { OrganizationListComponent } from './components/organization-list/organization-list.component';
+import { FeedbackHandlerComponent } from './components/feedback-handler/feedback-handler.component';
 
 
 @NgModule({
@@ -43,8 +44,6 @@ import { OrganizationListComponent } from './components/organization-list/organi
     EventFormComponent,
     EventLocationComponent,
     CalendarListComponent,
-
-
     CalendarComponent,
     OrganizationFormComponent,
     UserComponent,
@@ -52,9 +51,11 @@ import { OrganizationListComponent } from './components/organization-list/organi
     OrganizationComponent,
     UserFormComponent,
     OrganizationListComponent,
+    FeedbackHandlerComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
