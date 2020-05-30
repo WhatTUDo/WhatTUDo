@@ -48,7 +48,7 @@ public class EventEndpoint {
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
         }
     }
 
@@ -88,7 +88,7 @@ public class EventEndpoint {
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
 
@@ -99,7 +99,7 @@ public class EventEndpoint {
         try {
             return eventMapper.eventToEventDto(eventService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
 
@@ -116,6 +116,8 @@ public class EventEndpoint {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
 }

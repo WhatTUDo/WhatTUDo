@@ -190,14 +190,13 @@ public class Validator {
         }
     }
 
-    //FIXME: event.getStartDateTime < now?
     public void validateUpdateEvent(Event event) {
         List<Exception> exceptions = new ArrayList<>();
         if (event.getName().isBlank()) {
             exceptions.add(new ValidationException("Name must not be empty"));
         }
-        if ((event.getStartDateTime().getYear() < 2020)) {
-            exceptions.add(new ValidationException("Start-date must not be in the past"));
+        if ((event.getStartDateTime().isBefore(LocalDateTime.now()))) {
+            exceptions.add(new ValidationException("Start date must not be in the past"));
         }
         if (!(event.getStartDateTime().isBefore(event.getEndDateTime()))) {
             exceptions.add(new ValidationException("Start date must be before end date"));

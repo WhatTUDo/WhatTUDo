@@ -51,7 +51,7 @@ public class OrganizationEndpoint {
             organizationMapper.mapCalendars(organization, organizationEntity);
             return organizationMapper.organizationToOrganizationDto(organizationService.update(organizationEntity));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -99,7 +99,7 @@ public class OrganizationEndpoint {
         try {
             return organizationMapper.organizationToOrganizationDto(organizationService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
@@ -119,7 +119,7 @@ public class OrganizationEndpoint {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
         catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
         }
     }
 
