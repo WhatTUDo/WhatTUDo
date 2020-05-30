@@ -78,7 +78,6 @@ public class Validator {
         }
 
         if (!(result.equals("Following problems with this input: \n"))) {
-
             throw new ValidationException(result);
         }
     }

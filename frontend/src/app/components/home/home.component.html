@@ -1,3 +1,4 @@
+<app-feedback-handler [isVisible]="showError"></app-feedback-handler>
 <div class="contextual-control">{{currentTime}}</div>
 <div class="grid-one-third">
   <app-weekly-calendar class="grid-item-1-2"></app-weekly-calendar>
@@ -14,6 +15,9 @@
       <a href="/organization/1">
         <button class="button-solid btn-lg">Organization 1</button>
       </a>
+      <button class="button-solid btn-lg" (click)="toggleFeedback(0)">Test Success</button>
+      <button class="button-solid btn-lg" (click)="toggleFeedback(1)">Test Warning</button>
+      <button class="button-solid btn-lg" (click)="toggleFeedback(2)">Test Error</button>
     </div>
   </div>
 </div>
