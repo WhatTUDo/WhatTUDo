@@ -28,6 +28,10 @@ import { UserFormComponent } from './components/user-form/user-form.component';
 import { CalendarFormComponent } from './components/calendar-form/calendar-form.component';
 import { OrganizationListComponent } from './components/organization-list/organization-list.component';
 import { FeedbackHandlerComponent } from './components/feedback-handler/feedback-handler.component';
+import {MatSelectModule} from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+
+
 
 
 @NgModule({
@@ -61,7 +65,9 @@ import { FeedbackHandlerComponent } from './components/feedback-handler/feedback
     HttpClientModule,
     NgbModule,
     FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatSelectModule,
+    MatSliderModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

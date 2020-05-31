@@ -1,18 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {CalendarService} from '../../services/calendar.service';
 import {ActivatedRoute} from '@angular/router';
 import {Location} from '@angular/common';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {OrganizationService} from '../../services/organization.service';
-import {FormControl, FormGroup} from '@angular/forms';
+import {MatSelectModule} from '@angular/material/select';
+
 import {Calendar} from '../../dtos/calendar';
 import {Organization} from '../../dtos/organization';
-import {observable} from 'rxjs';
 
 @Component({
   selector: 'app-calendar-form',
   templateUrl: './calendar-form.component.html',
-  styleUrls: ['./calendar-form.component.scss']
+  styleUrls: ['./calendar-form.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class CalendarFormComponent implements OnInit {
@@ -21,16 +22,12 @@ export class CalendarFormComponent implements OnInit {
 
   organizations: Array<Organization>;
 
-  reactiveCalendarForm = new FormGroup( {
-    organizationIds: new FormControl(''),
-    name: new FormControl('')
-  });
-
   constructor(
     private route: ActivatedRoute,
     private calendarService: CalendarService,
     private organizationService: OrganizationService,
-    private location: Location
+    private location: Location,
+    private select: MatSelectModule
   ) {
   }
 
@@ -66,6 +63,8 @@ export class CalendarFormComponent implements OnInit {
     });
   }
 
+
+
   private validateFormData(calendar: any): boolean {
     let errors = [];
 
@@ -87,6 +86,11 @@ export class CalendarFormComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  private compare(id1: number, id2: number): boolean {
+    console.log("compared" + id1 + " with " +id2);
+    return id1 && id2 ? id1 === id2  : false;
   }
 
   faChevronLeft = faChevronLeft;
