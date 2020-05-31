@@ -1,0 +1,43 @@
+.feedback-container {
+  border-radius: 5px;
+  background-color: #90ee90;
+  position: absolute;
+  z-index: 100;
+  width: 85vw;
+  top: 5vh;
+  left: 5vw;
+}
+
+.feedback-neutral {
+  border: 1px solid grey;
+  background-color: rgba(149, 149, 149, 1)
+}
+
+.feedback-success {
+  border: 1px solid green;
+  background-color: rgba(144, 238, 144, 1);
+}
+
+.feedback-warning {
+  border: 1px solid #7b7b05;
+  background-color: rgba(222, 194, 20, 1);
+}
+
+.feedback-error {
+  border: 1px solid darkred;
+  background-color: rgba(252, 125, 121, 1);
+}
+
+.feedback-inner {
+  margin: 10px 10px 15px 10px
+}
+
+.feedback-headline {
+  font-weight: 600;
+  font-size: 20px;
+
+}
+
+.feedback-text {
+
+}

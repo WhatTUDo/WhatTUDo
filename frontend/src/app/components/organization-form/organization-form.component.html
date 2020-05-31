@@ -1,16 +1,17 @@
 <div>
   <h2>{{isUpdate?"Update":"Create"}} Organization</h2>
-  <div class="event-form-container">
-    <div class="event-form">
-      <div class="event-form-input">
+  <div>
 
-        <label for="organization-name">Name</label>
-        <input id="organization-name" [(ngModel)]="organization.name" #organizationName>
-
-        <button class="submit-button full-width-form-button no-hover-enlarge event-form-submit"
+  </div>
+        <div class="form-group">
+          <label for="organization.name">
+            Name: *
+          </label>
+          <input type=text class="form-control" id="organization.name" [(ngModel)]="organization.name" #organizationName>
+        <button class="submit-button clickable button-green btn-lg"
                 (click)="onSubmit(organizationName.value)">Submit
         </button>
-      </div>
-    </div>
-  </div>
+        </div>
+
+
 </div>

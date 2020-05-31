@@ -66,7 +66,8 @@ public class Validator {
             result += "Organisation name must not be empty. \n";
             //throw new ValidationException("Organization name must not be empty.");
         }
-        if (organizationRepository.findById(organization.getId()).isPresent()) {
+
+        if (organization.getId() != null && organizationRepository.findById(organization.getId()).isPresent()) {
             result += "An Organization with this ID already exists. \n";
             //throw new ValidationException("An Organisation with this ID already exists");
         }
@@ -77,7 +78,6 @@ public class Validator {
         }
 
         if (!(result.equals("Following problems with this input: \n"))) {
-
             throw new ValidationException(result);
         }
     }
@@ -189,14 +189,13 @@ public class Validator {
         }
     }
 
-    //FIXME: event.getStartDateTime < now?
     public void validateUpdateEvent(Event event) {
         List<Exception> exceptions = new ArrayList<>();
         if (event.getName().isBlank()) {
             exceptions.add(new ValidationException("Name must not be empty"));
         }
-        if ((event.getStartDateTime().getYear() < 2020)) {
-            exceptions.add(new ValidationException("Start-date must not be in the past"));
+        if ((event.getStartDateTime().isBefore(LocalDateTime.now()))) {
+            exceptions.add(new ValidationException("Start date must not be in the past"));
         }
         if (!(event.getStartDateTime().isBefore(event.getEndDateTime()))) {
             exceptions.add(new ValidationException("Start date must be before end date"));

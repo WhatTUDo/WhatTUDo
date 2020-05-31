@@ -134,9 +134,7 @@ public class SimpleCalendarService implements CalendarService {
                 toDelete.setEvents(empty);
 
             }
-
             calendarRepository.delete(toDelete);
-
 
             publisher.publishEvent(new EventDeleteEvent(toDelete.getName()));
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {

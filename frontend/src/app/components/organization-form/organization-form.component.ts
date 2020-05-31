@@ -54,7 +54,11 @@ export class OrganizationFormComponent implements OnInit {
       .subscribe(organization => {
         this.organization = organization;
         console.log('Organization ' + organization.name + ' created successfully.');
-      });
+        window.location.replace("/organization/" + this.organization.id);
+      },
+        error => {
+          alert("Could not create organization: " + error.error.message);
+        });
   }
 
 
@@ -63,7 +67,11 @@ export class OrganizationFormComponent implements OnInit {
       .subscribe(organization => {
         this.organization = organization;
         console.log('Organization ' + organization.name + ' updated successfully.');
-      });
+        window.location.replace("/organization/" + this.organization.id);
+      },
+        error => {
+          alert("Could not update organization: " + error.error.message);
+        });
   }
 
 

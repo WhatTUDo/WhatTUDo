@@ -53,29 +53,21 @@
       font-weight: $f-bold;
       font-size: 16pt;
     }
+
     .organization-member-role {
       color: var(--secondary);
     }
   }
+
   .organization-member-buttons {
     margin-left: auto;
     display: flex;
     flex-wrap: nowrap;
+
     * {
       font-size: 16pt;
       margin-left: 4pt;
     }
-  }
-}
-
-.title-icon-button-combo {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  .icon-button {
-    font-size: 32pt;
-    color: var(--secondary);
   }
 }
 
@@ -94,8 +86,45 @@
     font-size: 24pt;
 
     padding: 16pt 8pt;
+  }
+}
 
-    border-top: 1pt solid var(--text);
-    border-bottom: 1pt solid var(--text);
+.organization-calendar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  width: 100%;
+  margin-bottom: 16pt;
+
+  .organization-calendar-details {
+    width: 100%;
+    margin-left: 8pt;
+    color: var(--text);
+
+    .organization-calendar-name {
+      font-weight: $f-bold;
+      font-size: 24pt;
+    }
+  }
+
+  .organization-calendar-buttons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    * {
+      font-size: 16pt;
+      margin-left: 4pt;
+    }
+  }
+}
+
+.add-calendar-selector {
+  margin-bottom: 8pt;
+
+  label {
+    display: none;
   }
 }

@@ -11,6 +11,9 @@
       <li class="nav-item">
         <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/calendar-list" routerLinkActive="active">Calendars</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/organization-list" routerLinkActive="active">Organizations</a>
+      </li>
     </ul>
     <ul class="navbar-nav mr-5" id="avatar avatar-medium">
       <a class="nav-link" *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active">

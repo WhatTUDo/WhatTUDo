@@ -47,7 +47,7 @@ public class CalendarEndpoint {
         try {
             return calendarMapper.calendarToCalendarDto(calendarService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
 
@@ -58,7 +58,7 @@ public class CalendarEndpoint {
         try {
             return calendarMapper.calendarsToCalendarDtos(calendarService.findAll());
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
 
@@ -83,7 +83,7 @@ public class CalendarEndpoint {
             List<CalendarDto> calendarDtos = new ArrayList<>();
             fromCalendars.forEach(calendar -> calendarDtos.add(calendarMapper.calendarToCalendarDto(calendar)));
             if (calendarDtos.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing was found");
+                throw new ResponseStatusException(HttpStatus.OK, "Nothing was found"); //FIXME return empty array?
             }
             return calendarDtos;
         } catch (ServiceException e) {
@@ -101,7 +101,7 @@ public class CalendarEndpoint {
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
     public CalendarDto create(@RequestBody CalendarDto calendar) {
         try {
-            List<Integer> eventsShouldBeEmpty = new ArrayList<Integer>();
+            List<Integer> eventsShouldBeEmpty = new ArrayList<>();
             calendar.setEventIds(eventsShouldBeEmpty);
             Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
             return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
@@ -125,7 +125,7 @@ public class CalendarEndpoint {
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
         }
     }
 

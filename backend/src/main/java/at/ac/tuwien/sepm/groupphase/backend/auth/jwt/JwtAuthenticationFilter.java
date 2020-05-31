@@ -36,6 +36,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         HttpServletResponse response
     ) throws AuthenticationException {
         try {
+            log.info("Attempting Authnetication", request);
             UserLoginDto user = new ObjectMapper().readValue(request.getInputStream(), UserLoginDto.class);
             //Compares the user with CustomUserDetailService#loadUserByUsername and check if the credentials are correct
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -70,6 +71,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     ) throws IOException {
         ApplicationUser user = ((ApplicationUser) authResult.getPrincipal());
         response.getWriter().write(jwtTokenizer.getAuthToken(user.getUsername(), user.getAuthorityStrings()));
-        log.info("Successfully authenticated user {}", user.getUsername());
+        log.info("Successfully authenticated user {} for auhtorities {}", user.getUsername(), user.getAuthorityStrings());
     }
 }
