@@ -5,7 +5,7 @@ import {Location} from '@angular/common';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {OrganizationService} from '../../services/organization.service';
 import {MatSelectModule} from '@angular/material/select';
-
+import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
 import {Calendar} from '../../dtos/calendar';
 import {Organization} from '../../dtos/organization';
 
@@ -47,7 +47,23 @@ export class CalendarFormComponent implements OnInit {
     if (this.validateFormData(this.calendar)) {
 
       this.calendarService.editCalendar(this.calendar).subscribe( observable => {
+
         console.log("Updated calendar: ", observable);
+        let errors = Array<any>();
+        this.calendar.organizationIds.forEach(orgId => {
+          let calendarID = this.calendar.id;
+          this.organizationService.addCalendarToOrga(orgId, calendarID).subscribe(
+            observable => {
+              console.log("Added Calendar " + calendarID + " to Organisation " + orgId);
+            },
+            error => {
+              errors.push(error);
+            }, () => {
+              if (errors.length > 0) {
+                FeedbackHandlerComponent.displayError("Error!", "Could not add one or more Organisations to Calendar!");
+              }
+            })
+        })
         this.goBack();
       });
     }

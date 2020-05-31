@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Collection;
@@ -124,14 +125,16 @@ public class OrganizationEndpoint {
     }
 
     @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
-    @PutMapping(value = "/{id}/calendars")
+    @PutMapping(value = "/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add Calendars to an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
-    public OrganizationDto addCalToOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
+    public OrganizationDto addCalToOrga(@RequestParam("calendarId") Integer calenderId, @RequestParam("organizationId") Integer organizationId) {
         try {
-            Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
-            Organization organization = organizationService.addCalendars(organizationService.findById(orgaId), calendars);
+            List<Calendar> calendarList = new ArrayList<>();
+            calendarList.add(calendarService.findById(calenderId));
+//            Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
+            Organization organization = organizationService.addCalendars(organizationService.findById(organizationId), calendarList);
             return organizationMapper.organizationToOrganizationDto(organization);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);

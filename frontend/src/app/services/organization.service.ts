@@ -65,21 +65,22 @@ export class OrganizationService {
    * @param organizationId ID of organization where calendar should be added.
    * @param calendarId ID of calendar to be added.
    */
-  addCalToOrga(organizationId: number, calendarId: number): Observable<any> {
-    console.log(`Add Calendar ${calendarId} to`, Organization);
+  addCalendarToOrga(organizationId: number, calendarId: number): Observable<any> {
+    console.log(`Add Calendar ${calendarId} to`, organizationId);
     let params = new HttpParams();
-    params = params.set('id', String(calendarId));
+    params = params.set('calendarId', String(calendarId));
+    params = params.set('organizationId', String(organizationId));
     console.log(params);
-    return this.httpClient.put(this.organizationBaseUri + `/${organizationId}/calendars`, {}, {
+    return this.httpClient.put(this.organizationBaseUri + `/calendars`, {}, {
       params: params
-    })
+    });
   }
 
   /**
    * @param organizationId ID of organization where calendar should be added.
    * @param calendarId ID of calendar to be added.
    */
-  removeCalToOrga(organizationId: number, calendarId: number): Observable<any> {
+  removeCalendarToOrga(organizationId: number, calendarId: number): Observable<any> {
     console.log(`Remove Calendar ${calendarId} to`, Organization);
     let params = new HttpParams();
     params = params.set('id', String(calendarId));

@@ -147,33 +147,23 @@ public class SimpleCalendarService implements CalendarService {
     @Override
     public Calendar update(Calendar calendar) {
         try {
-            Calendar toUpdate = this.findById(calendar.getId());
-
-            if (!(calendar.getName().isBlank()) || !(calendar.getName().equals((this.findById(calendar.getId())).getName()))) {
-                toUpdate.setName(calendar.getName());
-            }
-            toUpdate.setOrganizations(calendar.getOrganizations());
+            Calendar calendarToUpdate = this.findById(calendar.getId());
             validator.validateUpdateCalendar(calendar);
 
+            calendarToUpdate.setName(calendar.getName());
+            calendarToUpdate.setOrganizations(calendar.getOrganizations());
 
-            /**   List<Calendar> thiscal = new ArrayList<Calendar>();
-             thiscal.add(calendar);
-             for(Organisation o : calendar.getOrganisations()){
-             List<Calendar> cal;
-             cal = o.getCalendars();
-             if(!(cal.contains(calendar))) {
-             cal.add(calendar);
-             }
-             organisationService.addCalendars(o,thiscal);
-             }
-             Calendar result =  calendarRepository.save(this.findById(calendar.getId()));
-             **/
-
-            Calendar savedCalendar = calendarRepository.save(toUpdate);
+            Calendar savedCalendar = calendarRepository.save(calendarToUpdate);
             publisher.publishEvent(new EventCreateEvent(savedCalendar.getName()));
             return savedCalendar;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
+        }
+        catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
+        }
+        catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
         }
     }
 }

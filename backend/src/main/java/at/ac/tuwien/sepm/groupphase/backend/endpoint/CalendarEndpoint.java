@@ -129,7 +129,7 @@ public class CalendarEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
+//    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
     @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
