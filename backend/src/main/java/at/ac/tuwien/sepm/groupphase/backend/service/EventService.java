@@ -70,4 +70,6 @@ public interface EventService {
      */
     Event update(Event event) throws NotFoundException, ServiceException, ValidationException;
 
+    List<Event> getByCalendarId(Integer id) throws ServiceException;
+
 }

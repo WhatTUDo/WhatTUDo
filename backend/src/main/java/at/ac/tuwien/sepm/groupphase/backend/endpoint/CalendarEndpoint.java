@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TestCalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
@@ -92,6 +93,8 @@ public class CalendarEndpoint {
 
 
     }
+
+
 
 
    // @PreAuthorize("hasPermission(#calendar, 'MOD')")

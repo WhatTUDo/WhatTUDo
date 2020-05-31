@@ -13,14 +13,6 @@ import {EventService} from '../../services/event.service';
 })
 export class CalendarComponent implements OnInit {
 
-  constructor(
-    private eventService: EventService,
-    private calendarService: CalendarService,
-    private route: ActivatedRoute,
-  ) {
-
-  }
-
   id: number;
   calendar: Calendar;
   events: CalendarEvent[] = [];
@@ -45,17 +37,29 @@ export class CalendarComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
 
-  ngOnInit(): void {
+  constructor(
+    private eventService: EventService,
+    private calendarService: CalendarService,
+    private route: ActivatedRoute,
+  ) {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
+    this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) =>{
+      this.events = events;
+      this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+    });
     this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
     }, err => {
       console.warn(err);
     });
+
+  }
+
+  ngOnInit(): void {
+
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
 
-    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
 
     setInterval(_ => {
       Array.from(document.getElementsByClassName('calendar-event'))
@@ -79,17 +83,24 @@ export class CalendarComponent implements OnInit {
    * @param to: End date of week
    */
   loadEventsForWeek(from: Date, to: Date) {
-    for (const eventId of this.calendar.eventIds) {
-      this.eventService.getEvent(eventId).subscribe((event: CalendarEvent) => {
-        const startDate = new Date(event.startDateTime);
-        const endDate = new Date(event.endDateTime);
-        event.startDateTime = startDate;
-        event.endDateTime = endDate;
-        this.events.push(event);
-      }, error => {
-        console.warn('Event does not exist');
-      });
-    }
+    // for (const eventId of this.calendar.eventIds) {
+    //   this.eventService.getEvent(eventId).subscribe((event: CalendarEvent) => {
+    //     const startDate = new Date(event.startDateTime);
+    //     const endDate = new Date(event.endDateTime);
+    //     event.startDateTime = startDate;
+    //     event.endDateTime = endDate;
+    //     this.events.push(event);
+    //   }, error => {
+    //     console.warn('Event does not exist');
+    //   });
+    // }
+    this.events.forEach(event => {
+      let startDate = new Date(event.startDateTime);
+      let endDate = new Date(event.endDateTime);
+
+      event.startDateTime = startDate;
+      event.endDateTime = endDate;
+    });
     this.displayingWeek.forEach((day: Date) => {
       const keyISOString = this.getMidnight(day).toISOString();
       this.eventsOfTheWeek.set(keyISOString, this.events.filter(event => {
@@ -98,8 +109,6 @@ export class CalendarComponent implements OnInit {
         return isAfterMidnight && isBeforeEndOfDay;
       }));
     });
-
-    this.events = [];
   }
 
   getWeek(offset = 0) {

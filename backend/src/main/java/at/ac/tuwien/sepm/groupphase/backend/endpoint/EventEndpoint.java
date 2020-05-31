@@ -120,4 +120,21 @@ public class EventEndpoint {
             throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/calendarId/{id}")
+    @ApiOperation(value = "Get Calendar Events", authorizations = {@Authorization(value = "apiKey")})
+    public List<EventDto> getEventsByCalendarId(@PathVariable("id") Integer id){
+        log.info("getEventsByCalendarId");
+        try {
+            List<Event> events = eventService.getByCalendarId(id);
+            List<EventDto> eventDtos = new ArrayList<>();
+            events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
+            return eventDtos;
+        }catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
 }

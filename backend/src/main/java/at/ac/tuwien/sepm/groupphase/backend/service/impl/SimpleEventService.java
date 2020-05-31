@@ -116,5 +116,14 @@ public class SimpleEventService implements EventService {
         }
     }
 
+    @Override
+    public List<Event> getByCalendarId(Integer id) throws ServiceException {
+        try{
+        return eventRepository.findByCalendarId(id);
+        }catch (PersistenceException e){
+            throw new ServiceException(e.getMessage(),e);
+        }
+    }
+
 
 }
