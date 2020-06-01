@@ -41,6 +41,9 @@ public class ApplicationUser implements CustomUserDetails {
     @Column(name = "is_sysadmin")
     private boolean isSysAdmin = false;
 
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<AttendanceStatus> attendanceStatuses;
     /**
      * Infers the User Roles (authorities) from the admin status and the memberships
      * @return a list of granted authorities

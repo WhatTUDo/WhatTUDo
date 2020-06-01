@@ -7,6 +7,7 @@ import org.springframework.lang.NonNull;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table
@@ -37,5 +38,10 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "calendar_id", nullable = false)
     private Calendar calendar;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
+    private List<AttendanceStatus> attendanceStatuses;
+
 }
 

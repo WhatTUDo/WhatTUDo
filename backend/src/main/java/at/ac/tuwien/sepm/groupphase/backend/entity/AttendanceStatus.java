@@ -17,14 +17,14 @@ public class AttendanceStatus<Attendance> {
     private Integer id;
 
     @NonNull
+    @ToString.Exclude
     @ManyToOne
-    @MapsId("user_id")
     @JoinColumn(name = "user_id")
     private ApplicationUser user;
 
     @NonNull
+    @ToString.Exclude
     @ManyToOne
-    @MapsId("event_id")
     @JoinColumn(name = "event_id")
     private Event event;
 
