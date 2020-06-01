@@ -145,7 +145,7 @@ public class EventEndpointTest {
         assertEquals(returnedCalendar.getId(), gottenCalendar.getId());
 
     }
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void save_withoutCorrectParam_shouldReturn_ResponseStatusException() {
         Organization orga = organizationRepository.save(new Organization("Test Organization3"));
@@ -155,18 +155,18 @@ public class EventEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto1));
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto2));
     }
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void save_withNoArgs_shouldReturn_ResponseStatusException() {
         EventDto eventDto = new EventDto();
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto));
     }
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void save_nullObject_shouldReturn_ResponseStatusException() {
         assertThrows(ResponseStatusException.class, () -> endpoint.post(null));
     }
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void get_validID_shouldReturn_EventWithSpecifiedID() {
 
@@ -182,7 +182,7 @@ public class EventEndpointTest {
         assertEquals(eventDto.getEndDateTime(), returnedEvent.getEndDateTime());
         assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
     }
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void get_invalidID_shouldReturn_ResponseStatusException_With404Code() {
         int uselessID = 123456;
@@ -193,7 +193,7 @@ public class EventEndpointTest {
             assertEquals(404, e.getStatus().value());
         }
     }
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void get_multipleEvents_WithValidStartEndDates_shouldReturn_listOfEventDtos() {
         Organization orga = organizationRepository.save(new Organization("Test Organization10"));
@@ -208,7 +208,7 @@ public class EventEndpointTest {
 
         assertNotEquals(0, eventDtos.size());
     }
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void delete_nonSavedEvent_IdNotGenerated_throwsResponseStatusException() {
         Organization orga = organizationRepository.save(new Organization("Test Organization4"));
@@ -217,7 +217,7 @@ public class EventEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.deleteEvent(notSavedEvent));
     }
 
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void delete_savedEvent_findBYIdReturnsResponseException() {
         Organization orga = organizationRepository.save(new Organization("Test Organization5"));
@@ -228,7 +228,7 @@ public class EventEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.getById(returnedEvent.getId()));
     }
 
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void updateEntityValues_shouldReturn_correctChanges() {
         Organization orga = organizationRepository.save(new Organization("Test Organization6"));
@@ -253,7 +253,7 @@ public class EventEndpointTest {
         assertEquals(finalEvent.getStartDateTime(), eventDtoChanges.getStartDateTime());
         assertEquals(finalEvent.getCalendarId(), eventDtoChanges.getCalendarId());
     }
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void updateEntityStartDateBefore2020_throwsResponseException() {
         Organization orga = organizationRepository.save(new Organization("Test Organization7"));
@@ -271,7 +271,7 @@ public class EventEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.editEvent(eventDtoChanges));
 
     }
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_2", "MEMBER_4"})
     @Test
     public void updateEntityStartDateBeforeEndDate_throwsResponseException() {
         Organization orga = organizationRepository.save(new Organization("Test Organization8"));
