@@ -1,7 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.unittests;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatus;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import org.junit.jupiter.api.Test;
@@ -19,20 +21,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
 @ActiveProfiles("test")
-public class OrganizationRepositoryTest {
+public class AttendanceRepositoryTest {
     @Autowired
-    OrganizationRepository organizationRepository;
-    @Autowired
-    CalendarRepository calendarRepository;
+    AttendanceRepository attendanceRepository;
 
     @Test
     public void repoBasics() {
         //noinspection ConstantConditions
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> organizationRepository.save(null));
-        assertThrows(NullPointerException.class, () -> organizationRepository.save(new Organization(null)));
-        organizationRepository.save(new Organization("Test Name"));
+        assertThrows(InvalidDataAccessApiUsageException.class, () -> attendanceRepository.save(null));
+        assertThrows(NullPointerException.class, () -> attendanceRepository.save(new AttendanceStatus(null,null,null)));
+      //  attendanceRepository.save(new AttendanceStatus("Test Name"));
     }
-
+/*
     @Test
     public void organizationBasics() {
         Organization orga = organizationRepository.save(new Organization("Test Organization 1"));
@@ -49,4 +49,5 @@ public class OrganizationRepositoryTest {
             }
         );
     }
+    */
 }

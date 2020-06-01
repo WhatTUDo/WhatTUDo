@@ -1,6 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationStatus;
+import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatus;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import org.hibernate.service.spi.ServiceException;
@@ -11,10 +11,10 @@ public interface AttendanceService {
     /**
      * Create a Attendance entity
      *
-     * @param applicationStatus status that is going to be created or updated
+     * @param attendanceStatus status that is going to be created or updated
      * @throws ServiceException is thrown if something goes wrong during data processing.
      */
-    ApplicationStatus create(ApplicationStatus applicationStatus) throws ServiceException;
+    AttendanceStatus create(AttendanceStatus attendanceStatus) throws ServiceException;
 
 
     /**

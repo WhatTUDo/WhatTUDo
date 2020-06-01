@@ -1,8 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationStatus;
-import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatus;
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
@@ -22,14 +21,14 @@ public class SimpleAttendanceService implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
 
     @Override
-    public ApplicationStatus create(ApplicationStatus applicationStatus) throws ServiceException {
+    public AttendanceStatus create(AttendanceStatus attendanceStatus) throws ServiceException {
         try {
-            List<ApplicationStatus> list = attendanceRepository.getByUser(applicationStatus.getUser());
-            if (list.contains(applicationStatus.getEvent())) {
-                attendanceRepository.delete(applicationStatus);
+            List<AttendanceStatus> list = attendanceRepository.getByUser(attendanceStatus.getUser());
+            if (list.contains(attendanceStatus.getEvent())) {
+                attendanceRepository.delete(attendanceStatus);
 
             }
-            return attendanceRepository.save(applicationStatus);
+            return attendanceRepository.save(attendanceStatus);
         }catch (PersistenceException e){
             throw new ServiceException(e.getMessage(), e);
         }
