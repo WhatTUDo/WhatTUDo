@@ -49,22 +49,16 @@ export class CalendarFormComponent implements OnInit {
       this.calendarService.editCalendar(this.calendar).subscribe( observable => {
 
         console.log("Updated calendar: ", observable);
-        let errors = Array<any>();
-        this.calendar.organizationIds.forEach(orgId => {
-          let calendarID = this.calendar.id;
-          this.organizationService.addCalendarToOrga(orgId, calendarID).subscribe(
-            observable => {
-              console.log("Added Calendar " + calendarID + " to Organisation " + orgId);
-            },
-            error => {
-              errors.push(error);
-            }, () => {
-              if (errors.length > 0) {
-                FeedbackHandlerComponent.displayError("Error!", "Could not add one or more Organisations to Calendar!");
-              }
-            })
-        })
-        this.goBack();
+      }, error => {
+        FeedbackHandlerComponent.displayError(error.error.status, error.error.message);
+      }, () => {
+        this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
+          console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
+        }, error => {
+          FeedbackHandlerComponent.displayError(error.error.status, error.error.message);
+        }, () => {
+          this.goBack();
+        });
       });
     }
   }

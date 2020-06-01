@@ -147,14 +147,43 @@ public class SimpleCalendarService implements CalendarService {
     @Override
     public Calendar update(Calendar calendar) {
         try {
-            Calendar calendarToUpdate = this.findById(calendar.getId());
             validator.validateUpdateCalendar(calendar);
 
-            calendarToUpdate.setName(calendar.getName());
-            calendarToUpdate.setOrganizations(calendar.getOrganizations());
-
-            Calendar savedCalendar = calendarRepository.save(calendarToUpdate);
+            Calendar savedCalendar = calendarRepository.save(calendar);
             publisher.publishEvent(new EventCreateEvent(savedCalendar.getName()));
+            return savedCalendar;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
+        }
+        catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        }
+    }
+
+    public Calendar updateOrganizationsWithList(Calendar calendar, List<Organization> organizations) {
+        try {
+            //remove calendar from all orgs it is associated, and save
+            Optional<Calendar> currentCalendar = calendarRepository.findById(calendar.getId());
+            if (currentCalendar.isPresent()) {
+                List<Organization> savedOrgs = currentCalendar.get().getOrganizations();
+                savedOrgs.forEach( org -> {
+                    org.getCalendars().removeIf(cal -> cal.getId().equals(calendar.getId()));
+                });
+                organizationRepository.saveAll(savedOrgs);
+            }
+            //add calendar to all organisations, remove first to avoid double entries.
+            organizations.forEach(org -> {
+                org.getCalendars().removeIf(cal -> cal.getId().equals(calendar.getId()));
+                org.getCalendars().add(calendar);
+            });
+
+            //save organizations to ensure data correctness. Save & return calendar.
+            organizationRepository.saveAll(organizations);
+            calendar.setOrganizations(new ArrayList<>(organizations));
+            Calendar savedCalendar = calendarRepository.save(calendar);
             return savedCalendar;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);

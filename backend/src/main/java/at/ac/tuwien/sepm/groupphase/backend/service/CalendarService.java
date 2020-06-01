@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
@@ -65,4 +66,15 @@ public interface CalendarService {
      * @throws ServiceException is thrown if something goes wrong during data processing.
      */
     List<Calendar> findByName(String name) throws ServiceException;
+
+    /**
+     * TODO: Updates a Calendar with the given Organization Entities. Also updates the Calendar data for Organization items.
+     * @param calendar
+     * @param organizations
+     * @return
+     * @throws ServiceException    is thrown if something goes wrong during data processing.
+     * @throws ValidationException is thrown if the Calendar Entity does not pass validation.
+     * @throws NotFoundException   is thrown if the Calendar Entity Id is not found in Database.
+     */
+    Calendar updateOrganizationsWithList(Calendar calendar, List<Organization> organizations) throws ServiceException, NotFoundException, ValidationException;
 }
