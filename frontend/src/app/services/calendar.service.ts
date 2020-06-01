@@ -47,6 +47,11 @@ export class CalendarService {
     return this.httpClient.delete<Calendar>(url);
   }
 
+  updateOrganizations(calendar: Calendar): Observable<Calendar> {
+    console.log("Updating organizations: ", calendar.organizationIds)
+    return this.httpClient.put<Calendar>(this.calendarBaseUri + "/organizations", calendar);
+  }
+
 
 
 }
