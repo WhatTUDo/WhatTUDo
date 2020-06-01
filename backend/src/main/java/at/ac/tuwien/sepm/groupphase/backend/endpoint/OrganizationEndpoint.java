@@ -124,16 +124,14 @@ public class OrganizationEndpoint {
     }
 
     @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
-    @PutMapping(value = "/calendars")
+    @PutMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add Calendars to an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
-    public OrganizationDto addCalToOrga(@RequestParam("calendarId") Integer calenderId, @RequestParam("organizationId") Integer organizationId) {
+    public OrganizationDto addCalToOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
         try {
-            List<Calendar> calendarList = new ArrayList<>();
-            calendarList.add(calendarService.findById(calenderId));
-//            Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
-            Organization organization = organizationService.addCalendars(organizationService.findById(organizationId), calendarList);
+            Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
+            Organization organization = organizationService.addCalendars(organizationService.findById(orgaId), calendars);
             return organizationMapper.organizationToOrganizationDto(organization);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);

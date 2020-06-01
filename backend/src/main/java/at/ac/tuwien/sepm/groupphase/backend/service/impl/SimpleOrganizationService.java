@@ -151,4 +151,7 @@ public class SimpleOrganizationService implements OrganizationService {
             throw new ServiceException(e.getMessage(), e);
         }
     }
+
+    public void test() {
+    }
 }
