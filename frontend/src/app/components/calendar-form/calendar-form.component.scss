@@ -15,6 +15,22 @@
   }
 }
 
-.mat-select-panel {
-}
+.form-container {
+  background-color: $white;
+  border-radius: $rounded-radius;
+  border: 2pt solid $black;
 
+  .mat-select-container {
+    padding: 8pt;
+
+    .mat-form-field > * {
+      padding: 0;
+    }
+  }
+
+  .always-black {
+    color: $black !important;
+    border-top: 2pt solid $black;
+    background-color: $white !important;
+  }
+}
