@@ -3,10 +3,12 @@
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
 </div>
 <div class="centered-two-third">
+  <h2>Event</h2>
+
   <form class="form input-button-combo" [formGroup]="searchForm" (keyup.enter)="onSubmit()">
     <label for="calendar.name"></label>
     <input type="text" class="form-control" formControlName="name" id="calendar.name" placeholder="Search...">
-    <button type="submit" class="button-solid no-hover-enlarge">Submit</button>
+    <button type="submit" class="button-solid no-hover-enlarge">Filter</button>
   </form>
   <div>
     <div class="calendar" *ngFor="let el of list2">
@@ -32,11 +34,12 @@
     </div>
   </div>
   <div>
-    <label for="calendarName" style="margin: 8pt 0 4pt">
-      Create a new calendar named:
+    <h2>New Calendar</h2>
+    <label for="calendarName">
+      Name
     </label>
-    <div style="margin-bottom: 16pt" class="input-button-combo">
-      <input id="calendarName" #calendarName/>
+    <div class="input-button-combo">
+      <input id="calendarName" #calendarName>
       <button class="button-solid no-hover-enlarge"
               (click)="add(calendarName.value, [], [1]); calendarName.value=''">
         Create
