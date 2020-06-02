@@ -1,9 +1,36 @@
 @import "../../../var.scss";
 
-table {
-  color: inherit;
+form {
+  margin: 16pt 0;
+}
 
-  tr {
+.calendar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  width: 100%;
+  margin-bottom: 16pt;
+
+  .calendar-details {
     width: 100%;
+    color: var(--text);
+
+    .calendar-name {
+      font-weight: $f-bold;
+      font-size: 24pt;
+    }
+  }
+
+  .calendar-buttons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    * {
+      font-size: 16pt;
+      margin-left: 4pt;
+    }
   }
 }

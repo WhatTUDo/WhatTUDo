@@ -1,67 +1,46 @@
-<!-- FIXME: Styling with table is no more recommended -->
-<!-- TODO: General restyling should be done -->
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-8">
-      <div>
-        <form class="form input-button-combo" [formGroup]="searchForm" (keyup.enter)="onSubmit()">
-          <label for="calendar.name"></label>
-          <input type="text" class="form-control" formControlName="name" id="calendar.name" placeholder="Search...">
-          <button type="submit" class="button-solid no-hover-enlarge">Submit</button>
-        </form>
+<div class="contextual-control">
+  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
+</div>
+<div class="centered-two-third">
+  <form class="form input-button-combo" [formGroup]="searchForm" (keyup.enter)="onSubmit()">
+    <label for="calendar.name"></label>
+    <input type="text" class="form-control" formControlName="name" id="calendar.name" placeholder="Search...">
+    <button type="submit" class="button-solid no-hover-enlarge">Submit</button>
+  </form>
+  <div>
+    <div class="calendar" *ngFor="let el of list2">
+      <div class="calendar-details">
+        <a (click)="onSelectCalendar(el)">
+          <div class="calendar-name clickable no-shadow no-hover-enlarge">{{el.name}}</div>
+        </a>
+        <div>
+          <a (click)=onSelectOrganization(a)
+             *ngFor="let a of el.organization">
+            <div class="clickable no-shadow no-hover-enlarge">{{a.name}}</div>
+          </a>
+        </div>
       </div>
-      <br/>
-      <table class="table">
-        <thead>
-        <tr class="table-titles">
-          <th>
-            Calendar Name
-          </th>
-          <th>
-            Organization Name
-          </th>
-          <th colspan="2">
-            Actions
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let el of list2; let i = index">
-          <td>
-            <a class="clickable no-shadow no-hover-enlarge" (click)="onSelectCalendar(el)">{{el.name}}</a>
-          </td>
-          <td>
-            <a (click)=onSelectOrganization(a)
-               *ngFor="let a of el.organization; let j = index">
-              <div class="clickable no-shadow no-hover-enlarge">{{a.name}}</div>
-            </a>
-          </td>
-          <td>
-            <button class="button-blue small-button" title="edit calendar"
-                    (click)="onSelectEditCalendar(el)">Edit
-            </button>
-          </td>
-          <td>
-            <button class="button-red small-button" title="delete calendar"
-                    (click)="delete(el.id)">Delete
-            </button>
-
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div class="calendar-buttons">
+        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faCog" (click)="onSelectEditCalendar(el)">
+          Edit Calendar
+        </fa-icon>
+        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faTimesCircle" (click)="delete(el.id)">
+          Remove Calendar
+        </fa-icon>
+      </div>
     </div>
   </div>
-
-  <div style="margin: 8pt 0" class="col-md-8">
-    Create a new calendar named:
+  <div>
+    <label for="calendarName" style="margin: 8pt 0 4pt">
+      Create a new calendar named:
+    </label>
+    <div style="margin-bottom: 16pt" class="input-button-combo">
+      <input id="calendarName" #calendarName/>
+      <button class="button-solid no-hover-enlarge"
+              (click)="add(calendarName.value, [], [1]); calendarName.value=''">
+        Create
+      </button>
+    </div>
   </div>
-  <div style="margin-bottom: 16pt" class="col-md-8 input-button-combo">
-    <input #calendarName/>
-    <button class="button-solid no-hover-enlarge"
-            (click)="add(calendarName.value, [], [1]); calendarName.value=''">
-      Create
-    </button>
-  </div>
-
 </div>
