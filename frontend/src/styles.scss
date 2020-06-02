@@ -131,15 +131,15 @@ a {
       grid-column: 3/4;
     }
   }
-}
 
-.centered-two-third {
-  display: grid;
-  grid-template-columns: 0.5fr 2fr 0.5fr;
-  column-gap: 4rem;
+  .centered-two-third {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 0.5fr;
+    column-gap: 4rem;
 
-  * {
-    grid-column: 2/3;
+    * {
+      grid-column: 2/3;
+    }
   }
 }
 
