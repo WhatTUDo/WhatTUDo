@@ -25,12 +25,12 @@ export class CalendarComponent implements OnInit {
   viewBeginningAtTime = 8 * (60 * 60);
   viewEndingAtRow = 64;
   viewEndingAtTime = 24 * (60 * 60) - 1;
+  viewMinRows = 8;
 
   viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
   viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
-
 
   faChevronUp = faChevronUp;
   faChevronDown = faChevronDown;
@@ -177,10 +177,17 @@ export class CalendarComponent implements OnInit {
     const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
 
     // Calendar View should starts at a time like 8 AM and ends at 23:59PM or even later.
-    const startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow);
-    const endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow);
+    let startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow);
+    let endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow);
 
-    return `${startRow}/${endRow}`;
+    if (endRow - startRow < this.viewMinRows) {
+      const delta = this.viewMinRows - (endRow - startRow);
+      const endRowOffset = delta + endRow > this.viewEndingAtRow ? this.viewEndingAtRow - endRow : delta;
+      const startRowOffset = delta - endRowOffset;
+      startRow += startRowOffset;
+      endRow += endRowOffset;
+    }
+    return `${startRow}/${endRow}`
   }
 
   private calcRow(sec) {
