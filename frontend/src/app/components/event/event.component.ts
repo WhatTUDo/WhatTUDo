@@ -49,14 +49,19 @@ export class EventComponent implements OnInit {
   }
 
   public getEventTimeString() {
-    let startDateTime: Date = new Date(this.calendarEvent.startDateTime);
-    let endDateTime: Date = new Date(this.calendarEvent.endDateTime);
+    const startDateTime: Date = new Date(this.calendarEvent.startDateTime);
+    const endDateTime: Date = new Date(this.calendarEvent.endDateTime);
+    const endsOnTheSameDay = (startDateTime.toDateString() == endDateTime.toDateString())
     let string = startDateTime.toLocaleTimeString('en-US', {
+      month: 'short',
+      day: 'numeric',
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
     string += ' - '
     string += endDateTime.toLocaleTimeString('en-US', {
+      month: endsOnTheSameDay ? undefined : 'short',
+      day: endsOnTheSameDay ? undefined : 'numeric',
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")

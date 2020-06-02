@@ -132,6 +132,16 @@ a {
     }
   }
 
+  .centered-one-third {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    column-gap: 4rem;
+
+    * {
+      grid-column: 2/3;
+    }
+  }
+
   .centered-two-third {
     display: grid;
     grid-template-columns: 0.5fr 2fr 0.5fr;
