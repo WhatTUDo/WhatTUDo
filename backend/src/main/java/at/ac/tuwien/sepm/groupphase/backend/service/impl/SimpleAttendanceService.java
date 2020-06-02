@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatus;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatusPossibilities;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
@@ -30,28 +31,113 @@ public class SimpleAttendanceService implements AttendanceService {
 
             }
             return attendanceRepository.save(attendanceStatus);
-        }catch (PersistenceException e){
+        } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
 
     @Override
     public List<ApplicationUser> getUsersByEvent(Event event) throws ServiceException {
-        List<AttendanceStatus> list = attendanceRepository.getByEvent(event);
-        List<ApplicationUser> users = new ArrayList<>();
-        for (AttendanceStatus a: list) {
-            users.add(a.getUser());
+        try {
+            List<AttendanceStatus> list = attendanceRepository.getByEvent(event);
+            List<ApplicationUser> users = new ArrayList<>();
+            for (AttendanceStatus a : list) {
+                users.add(a.getUser());
+            }
+            return users;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
-        return users;
     }
 
     @Override
     public List<Event> getEventByUser(ApplicationUser user) throws ServiceException {
-        List<AttendanceStatus> list = attendanceRepository.getByUser(user);
-        List<Event> events = new ArrayList<>();
-        for (AttendanceStatus a: list) {
-            events.add(a.getEvent());
+        try {
+            List<AttendanceStatus> list = attendanceRepository.getByUser(user);
+            List<Event> events = new ArrayList<>();
+            for (AttendanceStatus a : list) {
+                events.add(a.getEvent());
+            }
+            return events;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
-        return events;
     }
+
+
+    @Override
+    public List<Event> getEventUserIsAttending(ApplicationUser user) throws ServiceException {
+        try {
+            List<AttendanceStatus> list = attendanceRepository.getByUser(user);
+            List<Event> events = new ArrayList<>();
+            for (AttendanceStatus a : list) {
+                if (a.getStatus().equals(AttendanceStatusPossibilities.ATTENDING)) {
+                    events.add(a.getEvent());
+                }
+            }
+            return events;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Event> getEventUserIsInterested(ApplicationUser user) throws ServiceException {
+        try {
+            List<AttendanceStatus> list = attendanceRepository.getByUser(user);
+            List<Event> events = new ArrayList<>();
+            for (AttendanceStatus a : list) {
+                if (a.getStatus().equals(AttendanceStatusPossibilities.INTERESTED)) {
+                    events.add(a.getEvent());
+                }
+            }
+            return events;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<ApplicationUser> getUsersAttendingEvent(Event event) throws ServiceException {
+        try {
+            List<AttendanceStatus> list = attendanceRepository.getByEvent(event);
+            List<ApplicationUser> users = new ArrayList<>();
+            for (AttendanceStatus a : list) {
+                if(a.getStatus().equals(AttendanceStatusPossibilities.ATTENDING)){
+                users.add(a.getUser());}
+            }
+            return users;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }    }
+
+    @Override
+    public List<ApplicationUser> getUsersInterestedInEvent(Event event) throws ServiceException {
+        try {
+            List<AttendanceStatus> list = attendanceRepository.getByEvent(event);
+            List<ApplicationUser> users = new ArrayList<>();
+            for (AttendanceStatus a : list) {
+                if(a.getStatus().equals(AttendanceStatusPossibilities.INTERESTED)){
+                    users.add(a.getUser());}
+            }
+            return users;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }     }
+
+    @Override
+    public List<ApplicationUser> getUsersDecliningEvent(Event event) throws ServiceException {
+        try {
+            List<AttendanceStatus> list = attendanceRepository.getByEvent(event);
+            List<ApplicationUser> users = new ArrayList<>();
+            for (AttendanceStatus a : list) {
+                if(a.getStatus().equals(AttendanceStatusPossibilities.DECLINED)){
+                    users.add(a.getUser());}
+            }
+            return users;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }     }
+
+
 }

@@ -35,5 +35,12 @@ public interface AttendanceService {
      */
     List<Event> getEventByUser(ApplicationUser user) throws ServiceException;
 
+     List<Event> getEventUserIsAttending(ApplicationUser user) throws ServiceException;
 
+     List<Event> getEventUserIsInterested(ApplicationUser user) throws ServiceException;
+
+    List<ApplicationUser> getUsersAttendingEvent(Event event) throws ServiceException;
+
+    List<ApplicationUser> getUsersInterestedInEvent(Event event) throws ServiceException;
+    List<ApplicationUser> getUsersDecliningEvent(Event event) throws ServiceException;
 }
