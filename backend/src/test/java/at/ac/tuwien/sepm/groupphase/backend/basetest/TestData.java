@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.basetest;
 
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,5 @@ public interface TestData {
             add("ROLE_USER");
         }
     };
-
-
 
 }

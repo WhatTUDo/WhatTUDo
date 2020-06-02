@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -36,11 +37,21 @@ public class SimpleAttendanceService implements AttendanceService {
 
     @Override
     public List<ApplicationUser> getUsersByEvent(Event event) throws ServiceException {
-        return null;
+        List<AttendanceStatus> list = attendanceRepository.getByEvent(event);
+        List<ApplicationUser> users = new ArrayList<>();
+        for (AttendanceStatus a: list) {
+            users.add(a.getUser());
+        }
+        return users;
     }
 
     @Override
     public List<Event> getEventByUser(ApplicationUser user) throws ServiceException {
-        return null;
+        List<AttendanceStatus> list = attendanceRepository.getByUser(user);
+        List<Event> events = new ArrayList<>();
+        for (AttendanceStatus a: list) {
+            events.add(a.getEvent());
+        }
+        return events;
     }
 }
