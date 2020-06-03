@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -58,10 +60,10 @@ public class EventEndpointTest {
     @Autowired
     EventEndpoint endpoint;
 
-    @Autowired
+    @MockBean
     CalendarRepository calendarRepository;
 
-    @Autowired
+    @MockBean
     OrganizationRepository organizationRepository;
 
     @Autowired
@@ -94,8 +96,8 @@ public class EventEndpointTest {
         this.calendar = calendarRepository.save(new Calendar("Test Calendar2", Collections.singletonList(orga)));
         this.orga.setId(1);
         this.calendar.setId(1);
-        calendarRepository.save(calendar);
         organizationRepository.save(orga);
+        calendarRepository.save(calendar);
 
     }
 
