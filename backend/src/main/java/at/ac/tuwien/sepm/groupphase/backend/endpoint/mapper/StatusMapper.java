@@ -15,9 +15,9 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-@Transactional
 @Mapper(componentModel = "spring")
 public abstract class StatusMapper {
     @Autowired
@@ -45,6 +45,11 @@ public abstract class StatusMapper {
         applicationStatus.setUser(found.get());
     }
 
+    @BeforeMapping
+    protected void mapStatus(StatusDto statusDto, @MappingTarget AttendanceStatus attendanceStatus){
+        attendanceStatus.setLastModified(LocalDateTime.now());
+    }
+
     public abstract AttendanceStatus statusDtoToApplicationStatus(StatusDto statusDto);
 
     @BeforeMapping
@@ -56,6 +61,7 @@ public abstract class StatusMapper {
     protected void mapUser(AttendanceStatus applicationStatus, @MappingTarget StatusDto statusDto){
        statusDto.setUserId(applicationStatus.getUser().getId());
     }
+
 
     public abstract StatusDto applicationStatusToStatusDto(AttendanceStatus applicationStatus);
 

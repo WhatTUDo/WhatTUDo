@@ -4,7 +4,10 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatus;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatusPossibilities;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,18 +18,26 @@ import org.springframework.stereotype.Service;
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SimpleAttendanceService implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
+    private final EventRepository eventRepository;
+    private final UserRepository userRepository;
 
     @Override
     public AttendanceStatus create(AttendanceStatus attendanceStatus) throws ServiceException {
         try {
             List<AttendanceStatus> list = attendanceRepository.getByUser(attendanceStatus.getUser());
-            if (list.contains(attendanceStatus.getEvent())) {
+            if (!list.isEmpty()) {
+                for (AttendanceStatus a: list) {
+                    if(a.getEvent().equals(attendanceStatus.getEvent())){
+                        attendanceRepository.delete(attendanceStatus);
+                    }
+                }
                 attendanceRepository.delete(attendanceStatus);
 
             }
@@ -66,9 +77,13 @@ public class SimpleAttendanceService implements AttendanceService {
 
 
     @Override
-    public List<Event> getEventUserIsAttending(ApplicationUser user) throws ServiceException {
+    public List<Event> getEventUserIsAttending(Integer userId) throws ServiceException, NotFoundException {
         try {
-            List<AttendanceStatus> list = attendanceRepository.getByUser(user);
+            Optional<ApplicationUser> userFound= userRepository.findById(userId);
+            if(!userFound.isPresent()){
+                throw new NotFoundException("user not found");
+            }
+            List<AttendanceStatus> list = attendanceRepository.getByUser(userFound.get());
             List<Event> events = new ArrayList<>();
             for (AttendanceStatus a : list) {
                 if (a.getStatus().equals(AttendanceStatusPossibilities.ATTENDING)) {
@@ -82,9 +97,13 @@ public class SimpleAttendanceService implements AttendanceService {
     }
 
     @Override
-    public List<Event> getEventUserIsInterested(ApplicationUser user) throws ServiceException {
+    public List<Event> getEventUserIsInterested(Integer userId) throws ServiceException , NotFoundException{
         try {
-            List<AttendanceStatus> list = attendanceRepository.getByUser(user);
+            Optional<ApplicationUser> userFound= userRepository.findById(userId);
+            if(!userFound.isPresent()){
+                throw new NotFoundException("user not found");
+            }
+            List<AttendanceStatus> list = attendanceRepository.getByUser(userFound.get());
             List<Event> events = new ArrayList<>();
             for (AttendanceStatus a : list) {
                 if (a.getStatus().equals(AttendanceStatusPossibilities.INTERESTED)) {
@@ -98,9 +117,13 @@ public class SimpleAttendanceService implements AttendanceService {
     }
 
     @Override
-    public List<ApplicationUser> getUsersAttendingEvent(Event event) throws ServiceException {
+    public List<ApplicationUser> getUsersAttendingEvent(Integer eventId) throws ServiceException , NotFoundException{
         try {
-            List<AttendanceStatus> list = attendanceRepository.getByEvent(event);
+            Optional<Event> eventFound= eventRepository.findById(eventId);
+            if(!eventFound.isPresent()){
+                throw new NotFoundException("event not found");
+            }
+            List<AttendanceStatus> list = attendanceRepository.getByEvent(eventFound.get());
             List<ApplicationUser> users = new ArrayList<>();
             for (AttendanceStatus a : list) {
                 if(a.getStatus().equals(AttendanceStatusPossibilities.ATTENDING)){
@@ -112,9 +135,13 @@ public class SimpleAttendanceService implements AttendanceService {
         }    }
 
     @Override
-    public List<ApplicationUser> getUsersInterestedInEvent(Event event) throws ServiceException {
+    public List<ApplicationUser> getUsersInterestedInEvent(Integer eventId) throws ServiceException, NotFoundException {
         try {
-            List<AttendanceStatus> list = attendanceRepository.getByEvent(event);
+            Optional<Event> eventFound= eventRepository.findById(eventId);
+            if(!eventFound.isPresent()){
+                throw new NotFoundException("event not found");
+            }
+            List<AttendanceStatus> list = attendanceRepository.getByEvent(eventFound.get());
             List<ApplicationUser> users = new ArrayList<>();
             for (AttendanceStatus a : list) {
                 if(a.getStatus().equals(AttendanceStatusPossibilities.INTERESTED)){
@@ -126,9 +153,13 @@ public class SimpleAttendanceService implements AttendanceService {
         }     }
 
     @Override
-    public List<ApplicationUser> getUsersDecliningEvent(Event event) throws ServiceException {
+    public List<ApplicationUser> getUsersDecliningEvent(Integer eventId) throws ServiceException, NotFoundException {
         try {
-            List<AttendanceStatus> list = attendanceRepository.getByEvent(event);
+            Optional<Event> eventFound= eventRepository.findById(eventId);
+            if(!eventFound.isPresent()){
+                throw new NotFoundException("event not found");
+            }
+            List<AttendanceStatus> list = attendanceRepository.getByEvent(eventFound.get());
             List<ApplicationUser> users = new ArrayList<>();
             for (AttendanceStatus a : list) {
                 if(a.getStatus().equals(AttendanceStatusPossibilities.DECLINED)){

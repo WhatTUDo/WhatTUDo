@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service;
 import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatus;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import org.aspectj.weaver.ast.Not;
 import org.hibernate.service.spi.ServiceException;
 
 import java.util.List;
@@ -35,12 +37,12 @@ public interface AttendanceService {
      */
     List<Event> getEventByUser(ApplicationUser user) throws ServiceException;
 
-     List<Event> getEventUserIsAttending(ApplicationUser user) throws ServiceException;
+     List<Event> getEventUserIsAttending(Integer userId) throws ServiceException, NotFoundException;
 
-     List<Event> getEventUserIsInterested(ApplicationUser user) throws ServiceException;
+     List<Event> getEventUserIsInterested(Integer userId) throws ServiceException, NotFoundException;
 
-    List<ApplicationUser> getUsersAttendingEvent(Event event) throws ServiceException;
+    List<ApplicationUser> getUsersAttendingEvent(Integer eventId) throws ServiceException, NotFoundException;
 
-    List<ApplicationUser> getUsersInterestedInEvent(Event event) throws ServiceException;
-    List<ApplicationUser> getUsersDecliningEvent(Event event) throws ServiceException;
+    List<ApplicationUser> getUsersInterestedInEvent(Integer eventId) throws ServiceException, NotFoundException;
+    List<ApplicationUser> getUsersDecliningEvent(Integer eventId) throws ServiceException, NotFoundException;
 }

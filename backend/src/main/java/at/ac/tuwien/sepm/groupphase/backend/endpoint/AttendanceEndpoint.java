@@ -40,6 +40,7 @@ public class AttendanceEndpoint {
     @PostMapping
     @ApiOperation(value = "Create attendance", authorizations = {@Authorization(value = "apiKey")})
     public StatusDto create(@RequestBody StatusDto statusDto){
+        log.info("create status");
         try {
             return statusMapper.applicationStatusToStatusDto(attendanceService.create(statusMapper.statusDtoToApplicationStatus(statusDto)));
         }catch (ServiceException e){
@@ -50,11 +51,12 @@ public class AttendanceEndpoint {
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
-    @GetMapping(value = "/getAttendees")
-    @ApiOperation(value = "Create attendance", authorizations = {@Authorization(value = "apiKey")})
-    public List<LoggedInUserDto> getUsersAttendingEvent(@PathVariable EventDto eventDto){
+    @GetMapping(value = "/getAttendees/{id}")
+    @ApiOperation(value = "get attendance", authorizations = {@Authorization(value = "apiKey")})
+    public List<LoggedInUserDto> getUsersAttendingEvent(@PathVariable(value = "id") Integer eventId){
+        log.info("get attendees");
         try{
-            return userMapper.applicationUserToUserDtoList(attendanceService.getUsersAttendingEvent(eventMapper.eventDtoToEvent(eventDto)));
+            return userMapper.applicationUserToUserDtoList(attendanceService.getUsersAttendingEvent(eventId));
 
         }
         catch (ServiceException e){

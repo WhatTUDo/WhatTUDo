@@ -124,6 +124,10 @@ public class AttendanceServiceTest {
         Event returnedEvent = attendanceService.getEventByUser(user).get(0);
         assert (returnedEvent.getId() != null && returnedEvent.getId() != 0);
 
+        StatusDto statusDto = mapper.applicationStatusToStatusDto(new AttendanceStatus(user, event, AttendanceStatusPossibilities.ATTENDING));
+
+        System.out.println(statusDto);
+
 
 
     }
