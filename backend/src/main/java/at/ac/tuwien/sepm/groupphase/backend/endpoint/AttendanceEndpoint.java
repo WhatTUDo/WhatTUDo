@@ -50,13 +50,45 @@ public class AttendanceEndpoint {
 
     @PreAuthorize("permitAll()")
     @CrossOrigin
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/getAttendees/{id}")
     @ApiOperation(value = "get attendance", authorizations = {@Authorization(value = "apiKey")})
     public List<LoggedInUserDto> getUsersAttendingEvent(@PathVariable(value = "id") Integer eventId){
-        log.info("get attendees");
+        log.info("get attendees of event with id {}", eventId);
         try{
             return userMapper.applicationUserToUserDtoList(attendanceService.getUsersAttendingEvent(eventId));
+
+        }
+        catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/getInterested/{id}")
+    @ApiOperation(value = "get interested", authorizations = {@Authorization(value = "apiKey")})
+    public List<LoggedInUserDto> getUsersInterestedInEvent(@PathVariable(value = "id") Integer eventId){
+        log.info("get interested users of event with id {}", eventId);
+        try{
+            return userMapper.applicationUserToUserDtoList(attendanceService.getUsersInterestedInEvent(eventId));
+
+        }
+        catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/getDeclined/{id}")
+    @ApiOperation(value = "get declined", authorizations = {@Authorization(value = "apiKey")})
+    public List<LoggedInUserDto> getUsersDecliningEvent(@PathVariable(value = "id") Integer eventId){
+        log.info("get users who declined event with id {}", eventId);
+        try{
+            return userMapper.applicationUserToUserDtoList(attendanceService.getUsersDecliningEvent(eventId));
 
         }
         catch (ServiceException e){
