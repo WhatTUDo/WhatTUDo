@@ -51,7 +51,7 @@ public class OrganizationEndpoint {
             organizationMapper.mapCalendars(organization, organizationEntity);
             return organizationMapper.organizationToOrganizationDto(organizationService.update(organizationEntity));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -99,9 +99,27 @@ public class OrganizationEndpoint {
         try {
             return organizationMapper.organizationToOrganizationDto(organizationService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    @DeleteMapping(value = "/{id}")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Delete Organization", authorizations = {@Authorization(value = "apiKey")})
+    public Integer deleteOrga(@PathVariable(value = "id") Integer id) {
+        try {
+            return this.organizationService.delete(id);
+        }
+        catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+        catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
         }
     }
 

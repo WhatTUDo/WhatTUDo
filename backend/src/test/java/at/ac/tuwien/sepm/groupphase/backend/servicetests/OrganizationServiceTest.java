@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class OrganizationServiceTest {
 
     @Autowired
-    OrganizationService service;
+    OrganizationService organizationService;
     @Autowired
     OrganizationRepository organizationRepository;
     @Autowired
@@ -44,7 +44,7 @@ public class OrganizationServiceTest {
         Organization organization = organizationRepository.save(new Organization("Test Organization Service 1"));
         Organization updatedOrganization = new Organization("Updated Name");
         updatedOrganization.setId(organization.getId());
-        Organization returnedOrganization = service.update(updatedOrganization);
+        Organization returnedOrganization = organizationService.update(updatedOrganization);
         assertEquals(updatedOrganization.getName(), returnedOrganization.getName());
         assertEquals(returnedOrganization.getId(), organization.getId());
         organization.setId(2);
@@ -55,7 +55,7 @@ public class OrganizationServiceTest {
     public void edit_nonSavedOrganization_shouldThrow_NotFoundException() {
         Organization updatedOrganization = new Organization("UpdatedTestName");
         updatedOrganization.setId(3);
-        assertThrows(NotFoundException.class, () -> service.update(updatedOrganization));
+        assertThrows(NotFoundException.class, () -> organizationService.update(updatedOrganization));
     }
 
     @Test
@@ -63,7 +63,35 @@ public class OrganizationServiceTest {
         Organization organization = organizationRepository.save(new Organization("Test Organization Service 2"));
         Organization updatedOrganization = new Organization("");
         updatedOrganization.setId(organization.getId());
-        assertThrows(ValidationException.class, () -> service.update(updatedOrganization));
+        assertThrows(ValidationException.class, () -> organizationService.update(updatedOrganization));
+    }
+
+    @Test
+    public void deleteOrganization_OrganizationShouldBeDeleted() {
+        Organization organization = organizationRepository.save(new Organization("Delete Test"));
+        organizationService.delete(organization.getId());
+
+        assertThrows(NotFoundException.class, () -> organizationService.findById(organization.getId()));
+
+    }
+
+    @Test
+    public void removeCalendarsWhenDeletingOrganization_calendarsShouldNotBeAssociatedWithDeletedOrganization() {
+        Organization organization = organizationRepository.save(new Organization("Delete Test"));
+
+        Calendar calendar = new Calendar("Test Cal", new ArrayList<Organization>());
+        List<Calendar> calendarList = new ArrayList<>();
+        calendarList.add(calendar);
+        organizationService.addCalendars(organization, calendarList);
+
+        assertNotEquals(0, organization.getCalendars().size());
+
+        organizationService.delete(organization.getId());
+
+        //TODO: Revisit this once the connection between Calendar and Organization is properly realized. Not yet testable.
+
+        assertThrows(NotFoundException.class, () -> organizationService.findById(organization.getId()));
+
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -78,7 +106,7 @@ public class OrganizationServiceTest {
 
         // Test
         Organization organization2 = organizationRepository.save(new Organization("Orga 2"));
-        service.addCalendars(organization2, Collections.singleton(calendar));
+        organizationService.addCalendars(organization2, Collections.singleton(calendar));
 
         assertIterableEquals(Collections.singleton(calendar), organizationRepository.findById(organization2.getId()).get().getCalendars());
         assertIterableEquals(List.of(organization1, organization2), calendarRepository.findById(calendar.getId()).get().getOrganizations());
@@ -97,7 +125,7 @@ public class OrganizationServiceTest {
         organizationRepository.saveAll(List.of(organization1, organization2));
 
         // Test
-        service.removeCalendars(organization2, Collections.singleton(calendar));
+        organizationService.removeCalendars(organization2, Collections.singleton(calendar));
 
         assertIterableEquals(Collections.emptyList(), organizationRepository.findById(organization2.getId()).get().getCalendars());
         assertIterableEquals(List.of(organization1), calendarRepository.findById(calendar.getId()).get().getOrganizations());

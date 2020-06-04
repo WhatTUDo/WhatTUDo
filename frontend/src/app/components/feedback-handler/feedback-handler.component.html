@@ -1,0 +1,13 @@
+<div class="feedback-container {{getState()}}" id="feedback-container" [@makeVisible] = "getVisibility() ? 'visible' : 'invisible'">
+  <div class="feedback-inner">
+    <div class="float-right dismissButton" (click)="onDismiss()">
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </div>
+    <p class="feedback-headline">
+      {{getHeader()}}
+    </p>
+    <p class="feedback-text">
+      {{getMessage()}}
+    </p>
+  </div>
+</div>

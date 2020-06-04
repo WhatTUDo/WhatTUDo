@@ -134,9 +134,7 @@ public class SimpleCalendarService implements CalendarService {
                 toDelete.setEvents(empty);
 
             }
-
             calendarRepository.delete(toDelete);
-
 
             publisher.publishEvent(new EventDeleteEvent(toDelete.getName()));
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
@@ -149,33 +147,52 @@ public class SimpleCalendarService implements CalendarService {
     @Override
     public Calendar update(Calendar calendar) {
         try {
-            Calendar toUpdate = this.findById(calendar.getId());
-
-            if (!(calendar.getName().isBlank()) || !(calendar.getName().equals((this.findById(calendar.getId())).getName()))) {
-                toUpdate.setName(calendar.getName());
-            }
-            toUpdate.setOrganizations(calendar.getOrganizations());
             validator.validateUpdateCalendar(calendar);
 
-
-            /**   List<Calendar> thiscal = new ArrayList<Calendar>();
-             thiscal.add(calendar);
-             for(Organisation o : calendar.getOrganisations()){
-             List<Calendar> cal;
-             cal = o.getCalendars();
-             if(!(cal.contains(calendar))) {
-             cal.add(calendar);
-             }
-             organisationService.addCalendars(o,thiscal);
-             }
-             Calendar result =  calendarRepository.save(this.findById(calendar.getId()));
-             **/
-
-            Calendar savedCalendar = calendarRepository.save(toUpdate);
+            Calendar savedCalendar = calendarRepository.save(calendar);
             publisher.publishEvent(new EventCreateEvent(savedCalendar.getName()));
             return savedCalendar;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
+        }
+        catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
+        }
+        catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        }
+    }
+
+    public Calendar updateOrganizationsWithList(Calendar calendar, List<Organization> organizations) {
+        try {
+            //remove calendar from all orgs it is associated, and save
+            Optional<Calendar> currentCalendar = calendarRepository.findById(calendar.getId());
+            if (currentCalendar.isPresent()) {
+                List<Organization> savedOrgs = currentCalendar.get().getOrganizations();
+                savedOrgs.forEach( org -> {
+                    org.getCalendars().removeIf(cal -> cal.getId().equals(calendar.getId()));
+                });
+                organizationRepository.saveAll(savedOrgs);
+            }
+            //add calendar to all organisations, remove first to avoid double entries.
+            organizations.forEach(org -> {
+                org.getCalendars().removeIf(cal -> cal.getId().equals(calendar.getId()));
+                org.getCalendars().add(calendar);
+            });
+
+            //save organizations to ensure data correctness. Save & return calendar.
+            organizationRepository.saveAll(organizations);
+            calendar.setOrganizations(new ArrayList<>(organizations));
+            Calendar savedCalendar = calendarRepository.save(calendar);
+            return savedCalendar;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage());
+        }
+        catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
         }
     }
 }

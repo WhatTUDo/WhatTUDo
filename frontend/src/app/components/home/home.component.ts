@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
+import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
 
 @Component({
   selector: 'app-home',
@@ -9,8 +10,10 @@ import {AuthService} from '../../services/auth.service';
 export class HomeComponent implements OnInit {
 
   currentTime: string;
+  showError: boolean = false;
 
-  constructor(public authService: AuthService) { }
+  constructor(public authService: AuthService,
+              ) { }
 
   ngOnInit() {
     this.updateDatetime();
@@ -22,4 +25,21 @@ export class HomeComponent implements OnInit {
     this.currentTime = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
   }
 
+  async toggleFeedback(stateNr: number) {
+    switch (stateNr) {
+      case 0:
+        FeedbackHandlerComponent.displaySuccess("Success!", "You look good today!")
+        break;
+      case 1:
+        FeedbackHandlerComponent.displayWarning("Warning!", "Better be careful now!");
+        break;
+      case 2:
+        FeedbackHandlerComponent.displayError("Error!", "Oh no! The squirrels have escaped!");
+        break;
+      default:
+        break;
+    }
+    this.showError = !this.showError;
+
+  }
 }

@@ -1,13 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {CalendarService} from '../../services/calendar.service';
 import {Calendar} from '../../dtos/calendar';
 import {CalendarRepresentation} from '../../dtos/calendar-representation';
-import { Router} from '@angular/router';
-import {Observable} from 'rxjs';
-
-
-import {CalendarFormComponent} from '../calendar-form/calendar-form.component';
+import {Router} from '@angular/router';
+import {faChevronLeft, faCog, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {OrganizationService} from '../../services/organization.service';
 import {Organization} from '../../dtos/organization';
 
@@ -18,10 +15,10 @@ import {Organization} from '../../dtos/organization';
   styleUrls: ['./calendar-list.component.scss']
 })
 export class CalendarListComponent implements OnInit {
-  list : Calendar[] = [];
-  list2 : CalendarRepresentation[] = [];
-  mapCalOrg  = new Map<number, Organization[]>();
-  searchForm = new FormGroup( {
+  list: Calendar[] = [];
+  list2: CalendarRepresentation[] = [];
+  mapCalOrg = new Map<number, Organization[]>();
+  searchForm = new FormGroup({
     name: new FormControl('')
   });
 
@@ -30,20 +27,20 @@ export class CalendarListComponent implements OnInit {
     private calendarService: CalendarService,
     private router: Router,
     private organizationService: OrganizationService) {
- this.getAllCalendars();
+    this.getAllCalendars();
   }
 
 
   getAllCalendars() {
     this.calendarService.getAllCalendars().subscribe((list) => {
-        this.list   = list;
+        this.list = list;
         this.list2 = [];
 
-        for(let e of list){
-          let listOrg : Organization[] = [];
-          for(let a of e.organizationIds){
-            this.organizationService.getById(a).subscribe((organization:Organization)=>{
-                if(organization != null){
+        for (let e of list) {
+          let listOrg: Organization[] = [];
+          for (let a of e.organizationIds) {
+            this.organizationService.getById(a).subscribe((organization: Organization) => {
+                if (organization != null) {
                   listOrg.push(organization);
                 }
               },
@@ -51,7 +48,7 @@ export class CalendarListComponent implements OnInit {
                 console.warn(err);
               })
           }
-          this.mapCalOrg.set(e.id,listOrg );
+          this.mapCalOrg.set(e.id, listOrg);
           this.list2.push(new CalendarRepresentation(e.id, e.name, listOrg));
         }
       },
@@ -64,18 +61,17 @@ export class CalendarListComponent implements OnInit {
   }
 
 
-
-  onSelectCalendar(calendarRep: CalendarRepresentation){
+  onSelectCalendar(calendarRep: CalendarRepresentation) {
     this.router.navigate(['calendar/', calendarRep.id]);
 
   }
 
-  onSelectEditCalendar(calendarRep: CalendarRepresentation){
+  onSelectEditCalendar(calendarRep: CalendarRepresentation) {
     this.router.navigate(['/form/calendar', calendarRep.id]);
   }
 
 
-  onSelectOrganization(organization: Organization){
+  onSelectOrganization(organization: Organization) {
     this.router.navigate(['organization/', organization.id]);
   }
 
@@ -83,22 +79,23 @@ export class CalendarListComponent implements OnInit {
     let formValue = this.searchForm.value;
     let validationIsPassed = this.validateFormInput(formValue);
     if (validationIsPassed) {
-        // submit to service
+      // submit to service
       console.log("search");
-      this.calendarService.searchCalendars(formValue.name ).subscribe((list) => {
-         this.list   = list;
-         this.list2 = [];
-         for(let e of list){
-           let listOrg : Organization[] = [];
-           for(let a of e.organizationIds){
-             this.organizationService.getById(a).subscribe((organization:Organization)=>{ listOrg.push(organization);
-             });
-           }
-           this.mapCalOrg.set(e.id, listOrg);
-           this.list2.push(new CalendarRepresentation(e.id, e.name, listOrg));
-         }
+      this.calendarService.searchCalendars(formValue.name).subscribe((list) => {
+          this.list = list;
+          this.list2 = [];
+          for (let e of list) {
+            let listOrg: Organization[] = [];
+            for (let a of e.organizationIds) {
+              this.organizationService.getById(a).subscribe((organization: Organization) => {
+                listOrg.push(organization);
+              });
+            }
+            this.mapCalOrg.set(e.id, listOrg);
+            this.list2.push(new CalendarRepresentation(e.id, e.name, listOrg));
+          }
 
-         },
+        },
         err => {
           alert(err.message);
         });
@@ -128,9 +125,11 @@ export class CalendarListComponent implements OnInit {
     return true;
   }
 
-   add(name: string, eventIds: number[], organizationIds: number[]) {
+  add(name: string, eventIds: number[], organizationIds: number[]) {
     name = name.trim();
-    if (!name) { return; }
+    if (!name) {
+      return;
+    }
     this.calendarService.addCalendar({name, eventIds, organizationIds} as Calendar)
       .subscribe(newcalendar => {
         this.list2.push(new CalendarRepresentation(newcalendar.id, newcalendar.name, this.mapCalOrg.get(newcalendar.id)));
@@ -141,11 +140,14 @@ export class CalendarListComponent implements OnInit {
 
   delete(id: number): void {
 
-  this.calendarService.deleteCalendar({id} as Calendar) .subscribe(()=> {
-         this.getAllCalendars();
+    this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
+      this.getAllCalendars();
     });
-}
+  }
 
+  faChevronLeft = faChevronLeft;
+  faTimesCircle = faTimesCircle;
+  faCog = faCog;
 }
 
 

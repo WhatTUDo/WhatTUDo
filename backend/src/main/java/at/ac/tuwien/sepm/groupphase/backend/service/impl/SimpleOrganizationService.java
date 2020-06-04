@@ -94,6 +94,23 @@ public class SimpleOrganizationService implements OrganizationService {
     }
 
     @Override
+    public Integer delete(Integer organisationID) throws ServiceException, NotFoundException {
+        try {
+            Organization organizationToDelete = this.findById(organisationID);
+            List<Calendar> calendarsToRemove = organizationToDelete.getCalendars();
+            this.removeCalendars(organizationToDelete, calendarsToRemove);
+            organizationRepository.delete(organizationToDelete);
+            return organisationID;
+        }
+        catch (NotFoundException e) {
+            throw new NotFoundException(e.getMessage(), e);
+        }
+        catch (ServiceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
     public Organization addCalendars(Organization organization, Collection<Calendar> calendars) {
         try {
             calendars.forEach(it -> it.getOrganizations().add(organization));
@@ -133,5 +150,8 @@ public class SimpleOrganizationService implements OrganizationService {
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
+    }
+
+    public void test() {
     }
 }

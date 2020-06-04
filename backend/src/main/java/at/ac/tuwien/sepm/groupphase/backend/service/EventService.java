@@ -77,6 +77,7 @@ public interface EventService {
      */
     Event update(Event event) throws NotFoundException, ServiceException, ValidationException;
 
+
     /**
      * Add labels to an event.
      *
@@ -96,5 +97,8 @@ public interface EventService {
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
      */
     Event removeLabels(Event event, Collection<Label> labels);
+
+    List<Event> getByCalendarId(Integer id) throws ServiceException;
+
 
 }

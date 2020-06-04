@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TestCalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
@@ -12,6 +13,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -48,7 +50,7 @@ public class CalendarEndpoint {
         try {
             return calendarMapper.calendarToCalendarDto(calendarService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
 
@@ -59,7 +61,7 @@ public class CalendarEndpoint {
         try {
             return calendarMapper.calendarsToCalendarDtos(calendarService.findAll());
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
 
@@ -84,7 +86,7 @@ public class CalendarEndpoint {
             List<CalendarDto> calendarDtos = new ArrayList<>();
             fromCalendars.forEach(calendar -> calendarDtos.add(calendarMapper.calendarToCalendarDto(calendar)));
             if (calendarDtos.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing was found");
+                throw new ResponseStatusException(HttpStatus.OK, "Nothing was found"); //FIXME return empty array?
             }
             return calendarDtos;
         } catch (ServiceException e) {
@@ -94,15 +96,14 @@ public class CalendarEndpoint {
 
     }
 
-
-    //@PreAuthorize("hasPermission('MOD')")
+   // @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
     public CalendarDto create(@RequestBody CalendarDto calendar) {
         try {
-            List<Integer> eventsShouldBeEmpty = new ArrayList<Integer>();
+            List<Integer> eventsShouldBeEmpty = new ArrayList<>();
             calendar.setEventIds(eventsShouldBeEmpty);
             Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
             return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
@@ -126,11 +127,11 @@ public class CalendarEndpoint {
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
         }
     }
 
-    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
+//    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
     @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
@@ -143,6 +144,25 @@ public class CalendarEndpoint {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @CrossOrigin
+    @PutMapping(value = "/organizations")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update Associated Organizations of a given Calendar!")
+    public CalendarDto updateOrganizationsForCalendar(@RequestBody CalendarDto calendarDto) {
+        try {
+            Calendar calendar = calendarMapper.calendarDtoToCalendar(calendarDto);
+            List<Organization> updatedOrganizationList = calendar.getOrganizations();
+            return calendarMapper.calendarToCalendarDto(calendarService.updateOrganizationsWithList(calendar, updatedOrganizationList));
+
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 }

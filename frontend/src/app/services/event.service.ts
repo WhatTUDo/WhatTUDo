@@ -24,6 +24,11 @@ export class EventService {
     return this.httpClient.delete(this.eventBaseUri + '/' + event);
   }
 
+  getEventsByCalendarId(id: number): Observable<Array<CalendarEvent>> {
+    console.log("Load Multiple Events by Calendar id");
+    return this.httpClient.get<Array<CalendarEvent>>(this.eventBaseUri + '/calendarId/' + id);
+  }
+
 
   getAllLabels(): Observable<Label[]> {
 

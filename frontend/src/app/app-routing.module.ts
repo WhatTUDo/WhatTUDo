@@ -17,6 +17,7 @@ import {OrganizationComponent} from "./components/organization/organization.comp
 import {UserFormComponent} from './components/user-form/user-form.component';
 
 import {CalendarFormComponent} from './components/calendar-form/calendar-form.component';
+import {OrganizationListComponent} from "./components/organization-list/organization-list.component";
 
 
 const routes: Routes = [
@@ -27,9 +28,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'organization/:id', component: OrganizationComponent},
-  {path: 'calendar-list', component: CalendarListComponent},
-  {path: 'calendar/:id', component: CalendarComponent},
-
+  {path: 'organization-list', component: OrganizationListComponent},
   {path: 'form/event', component: EventFormComponent},
   {path: 'form/event/:id', component: EventFormComponent},
   {path: 'form/organization', component: OrganizationFormComponent},

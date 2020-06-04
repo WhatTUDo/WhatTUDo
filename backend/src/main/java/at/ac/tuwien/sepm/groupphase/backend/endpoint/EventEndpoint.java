@@ -60,7 +60,7 @@ public class EventEndpoint {
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
         }
     }
 
@@ -100,7 +100,7 @@ public class EventEndpoint {
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
 
@@ -111,7 +111,7 @@ public class EventEndpoint {
         try {
             return eventMapper.eventToEventDto(eventService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
         }
     }
 
@@ -127,6 +127,25 @@ public class EventEndpoint {
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping(value = "/calendarId/{id}")
+    @ApiOperation(value = "Get Calendar Events", authorizations = {@Authorization(value = "apiKey")})
+    public List<EventDto> getEventsByCalendarId(@PathVariable("id") Integer id){
+        log.info("getEventsByCalendarId");
+        try {
+            List<Event> events = eventService.getByCalendarId(id);
+            List<EventDto> eventDtos = new ArrayList<>();
+            events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
+            return eventDtos;
+        }catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }

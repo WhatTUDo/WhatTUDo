@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Calendar} from '../../dtos/calendar';
 import {ActivatedRoute} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
-import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from "@fortawesome/free-solid-svg-icons";
+import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from '@fortawesome/free-solid-svg-icons';
 import {CalendarEvent} from '../../dtos/calendar-event';
 import {EventService} from '../../services/event.service';
 
@@ -25,30 +25,41 @@ export class CalendarComponent implements OnInit {
   viewBeginningAtTime = 8 * (60 * 60);
   viewEndingAtRow = 64;
   viewEndingAtTime = 24 * (60 * 60) - 1;
+  viewMinRows = 8;
 
   viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
   viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
 
-  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
+  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
+
+  faChevronUp = faChevronUp;
+  faChevronDown = faChevronDown;
+  faChevronLeft = faChevronLeft;
+  faChevronRight = faChevronRight;
 
   constructor(
     private eventService: EventService,
     private calendarService: CalendarService,
     private route: ActivatedRoute,
   ) {
+    this.id = parseInt(this.route.snapshot.paramMap.get('id'));
+    this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) =>{
+      this.events = events;
+      this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+    });
+    this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
+      this.calendar = calendar;
+    }, err => {
+      console.warn(err);
+    });
 
   }
 
   ngOnInit(): void {
-    this.id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
-      this.calendar = calendar;
-      this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
-    }, err => {
-      console.warn(err);
-    });
+
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
+
 
     setInterval(_ => {
       Array.from(document.getElementsByClassName('calendar-event'))
@@ -58,12 +69,12 @@ export class CalendarComponent implements OnInit {
           // @ts-ignore
           if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
             // @ts-ignore
-            time.innerText = '…'
+            time.innerText = '…';
             // @ts-ignore
             name.innerText = '…';
           }
-        })
-    }, 500)
+        });
+    }, 500);
   }
 
   /**
@@ -72,40 +83,45 @@ export class CalendarComponent implements OnInit {
    * @param to: End date of week
    */
   loadEventsForWeek(from: Date, to: Date) {
-    for (let eventId of this.calendar.eventIds) {
-      this.eventService.getEvent(eventId).subscribe((event: CalendarEvent) => {
-        let startDate = new Date(event.startDateTime);
-        let endDate = new Date(event.endDateTime);
-        event.startDateTime = startDate;
-        event.endDateTime = endDate;
-        this.events.push(event);
-      }, error => {
-        console.warn("Event does not exist");
-      })
-    }
+    // for (const eventId of this.calendar.eventIds) {
+    //   this.eventService.getEvent(eventId).subscribe((event: CalendarEvent) => {
+    //     const startDate = new Date(event.startDateTime);
+    //     const endDate = new Date(event.endDateTime);
+    //     event.startDateTime = startDate;
+    //     event.endDateTime = endDate;
+    //     this.events.push(event);
+    //   }, error => {
+    //     console.warn('Event does not exist');
+    //   });
+    // }
+    this.events.forEach(event => {
+      let startDate = new Date(event.startDateTime);
+      let endDate = new Date(event.endDateTime);
+
+      event.startDateTime = startDate;
+      event.endDateTime = endDate;
+    });
     this.displayingWeek.forEach((day: Date) => {
-      let keyISOString = this.getMidnight(day).toISOString();
+      const keyISOString = this.getMidnight(day).toISOString();
       this.eventsOfTheWeek.set(keyISOString, this.events.filter(event => {
-        let isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
-        let isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
+        const isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
+        const isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
         return isAfterMidnight && isBeforeEndOfDay;
       }));
     });
-
-    this.events = [];
   }
 
   getWeek(offset = 0) {
     const offsetWeeks = Math.round(offset / 7);
-    let currentWeekDates = [];
-    let today = this.getToday();
+    const currentWeekDates = [];
+    const today = this.getToday();
 
-    let beginOfWeek = new Date(today);
+    const beginOfWeek = new Date(today);
     // % is remainder and not mod in js. Therefore -1%7=-1. This is a workaround.
     const weekOffset = (today.getDay() - 1 + 7) % 7;
     beginOfWeek.setDate(beginOfWeek.getDate() - weekOffset);
 
-    let date = new Date(beginOfWeek);
+    const date = new Date(beginOfWeek);
     date.setDate(date.getDate() + offsetWeeks * 7);
     for (let i = 0; i <= 6; i++) {
       currentWeekDates.push(new Date(date));
@@ -115,9 +131,9 @@ export class CalendarComponent implements OnInit {
   }
 
   getDate(offset = 0) {
-    let date = this.getToday();
+    const date = this.getToday();
     date.setDate(date.getDate() + offset);
-    return date
+    return date;
   }
 
   addOneWeek() {
@@ -147,7 +163,7 @@ export class CalendarComponent implements OnInit {
   }
 
   getToday() {
-    let today = new Date(Date.now());
+    const today = new Date(Date.now());
     today.setHours(0, 0, 0, 0);
     return today;
   }
@@ -161,9 +177,16 @@ export class CalendarComponent implements OnInit {
     const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
 
     // Calendar View should starts at a time like 8 AM and ends at 23:59PM or even later.
-    const startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow)
-    const endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow)
+    let startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow);
+    let endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow);
 
+    if (endRow - startRow < this.viewMinRows) {
+      const delta = this.viewMinRows - (endRow - startRow);
+      const endRowOffset = delta + endRow > this.viewEndingAtRow ? this.viewEndingAtRow - endRow : delta;
+      const startRowOffset = delta - endRowOffset;
+      startRow += startRowOffset;
+      endRow += endRowOffset;
+    }
     return `${startRow}/${endRow}`
   }
 
@@ -176,13 +199,13 @@ export class CalendarComponent implements OnInit {
   }
 
   getMidnight(date: Date) {
-    let midnight = new Date(date);
+    const midnight = new Date(date);
     midnight.setHours(0, 0, 0, 0);
-    return midnight
+    return midnight;
   }
 
   getEndOfDay(date: Date) {
-    let endOfDay = new Date(date);
+    const endOfDay = new Date(date);
     endOfDay.setHours(23, 59, 50);
     return endOfDay;
   }
@@ -191,23 +214,17 @@ export class CalendarComponent implements OnInit {
     let string = event.startDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric'
-    }).replace(":00", "")
-    string += ' - '
+    }).replace(':00', '');
+    string += ' - ';
     string += event.endDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric'
-    }).replace(":00", "")
-    return string
+    }).replace(':00', '');
+    return string;
   }
 
   public redirectToDetail(id: number) {
-    console.log("You Clicked: ", id);
-    window.location.replace("/event/" + id);
+    console.log('You Clicked: ', id);
+    window.location.replace('/event/' + id);
   }
-
-
-  faChevronUp = faChevronUp;
-  faChevronDown = faChevronDown;
-  faChevronLeft = faChevronLeft;
-  faChevronRight = faChevronRight;
 }
