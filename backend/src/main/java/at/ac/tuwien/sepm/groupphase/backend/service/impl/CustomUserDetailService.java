@@ -1,10 +1,12 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import at.ac.tuwien.sepm.groupphase.backend.events.user.UserCreateEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.user.UserPasswordChangeEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.user.UserUpdateEvent;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationMembership;
+import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationRole;
+import at.ac.tuwien.sepm.groupphase.backend.events.user.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
@@ -28,6 +30,7 @@ import java.util.Optional;
 public class CustomUserDetailService implements UserService {
     private final ApplicationEventPublisher publisher;
     private final UserRepository userRepository;
+    private final OrganizationRepository organizationRepository;
     private final PasswordEncoder passwordEncoder;
     private final Validator validator;
 
@@ -96,6 +99,43 @@ public class CustomUserDetailService implements UserService {
             foundUser.get().setPassword(encodedNewPassword);
             ApplicationUser savedUser = userRepository.save(foundUser.get());
             publisher.publishEvent(new UserPasswordChangeEvent(savedUser.getUsername()));
+            return savedUser;
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public ApplicationUser updateRoleInOrga(ApplicationUser user, Organization organization, OrganizationRole organizationRole) {
+        try {
+            Organization dbOrga = organizationRepository.findById(organization.getId()).orElseThrow(() -> new IllegalArgumentException("Organization does not exist"));
+            ApplicationUser dbUser = userRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("User does not exist"));
+
+            OrganizationMembership userMembership = new OrganizationMembership(dbOrga, dbUser, organizationRole);
+            dbOrga.getMemberships().add(userMembership);
+            dbUser.getMemberships().add(userMembership);
+
+            organizationRepository.save(dbOrga);
+            ApplicationUser savedUser = userRepository.save(dbUser);
+            publisher.publishEvent(new UserRoleChangeEvent(savedUser.getUsername(), userMembership.getOrganization(), userMembership.getRole()));
+            return savedUser;
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public ApplicationUser removeFromOrga(ApplicationUser user, Organization organization) {
+        try {
+            Organization dbOrga = organizationRepository.findById(organization.getId()).orElseThrow(() -> new IllegalArgumentException("Organization does not exist"));
+            ApplicationUser dbUser = userRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("User does not exist"));
+
+            dbOrga.getMemberships().removeIf(it -> it.getUser().equals(dbUser));
+            dbUser.getMemberships().removeIf(it -> it.getOrganization().equals(dbOrga));
+
+            organizationRepository.save(dbOrga);
+            ApplicationUser savedUser = userRepository.save(dbUser);
+            publisher.publishEvent(new UserRoleRemoveEvent(savedUser.getUsername(), dbOrga));
             return savedUser;
         } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
