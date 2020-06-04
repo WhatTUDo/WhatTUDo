@@ -30,14 +30,12 @@ public class AttendanceRepositoryTest {
     @Autowired
     EventRepository eventRepository;
 
-    //TODO: fill with real testdata
-
     @Test
     public void repoBasics() {
-        ApplicationUser user = userRepository.save(new ApplicationUser("Herbert der erste Tester", "testmail@supertest.com", "superpasswort"));
-        Organization organization = organizationRepository.save(new Organization("BesterTestnameEver"));
-        Calendar calendar = calendarRepository.save(new Calendar("Erstbester Calendar", Collections.singletonList(organization)));
-        Event event = eventRepository.save(new Event("Erstbester Testname", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
+        ApplicationUser user = userRepository.save(new ApplicationUser("Herbert Gutmann", "testmail@supertest.com", "superpasswort"));
+        Organization organization = organizationRepository.save(new Organization("Lesezirkel Algebra"));
+        Calendar calendar = calendarRepository.save(new Calendar("LeseEvents", Collections.singletonList(organization)));
+        Event event = eventRepository.save(new Event("Große Lesenacht", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
         assertThrows(InvalidDataAccessApiUsageException.class, () -> attendanceRepository.save(null));
       //FIXME:  assertThrows(NullPointerException.class, () -> attendanceRepository.save(new AttendanceStatus(null,null,null)));
         AttendanceStatus attendance = new AttendanceStatus(user, event, AttendanceStatusPossibilities.ATTENDING);
@@ -45,10 +43,10 @@ public class AttendanceRepositoryTest {
 
     @Test
     public void attendanceBasics() {
-        ApplicationUser user = userRepository.save(new ApplicationUser("Hubert der zweite Tester", "testmail@supertestbro.com", "superpasswort2"));
-        Organization organization = organizationRepository.save(new Organization("BesterTestnameEver"));
-        Calendar calendar = calendarRepository.save(new Calendar("Erstbester Calendar", Collections.singletonList(organization)));
-        Event event = eventRepository.save(new Event("Erstbester Testname", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
+        ApplicationUser user = userRepository.save(new ApplicationUser("Martina Bestfrau", "testmail@supertestbro.com", "1236541"));
+        Organization organization = organizationRepository.save(new Organization("GewichtheberInnen TU Wien"));
+        Calendar calendar = calendarRepository.save(new Calendar("Diet", Collections.singletonList(organization)));
+        Event event = eventRepository.save(new Event("Massephase", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
         AttendanceStatus attendance = new AttendanceStatus(user, event, AttendanceStatusPossibilities.ATTENDING);
         assertEquals(event,attendance.getEvent());
         assertEquals(user,attendance.getUser());

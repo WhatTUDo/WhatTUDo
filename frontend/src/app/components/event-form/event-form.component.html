@@ -3,70 +3,140 @@
   <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
 </div>
-<form [formGroup]="reactiveEventForm" class="grid-one-third">
-  <div>
-    <h2>New Event</h2>
-    <div class="event-form-container">
-      <div class="event-form">
-        <div class="event-form-input">
-          <input type="hidden" formControlName="id" name="id" [(ngModel)]="event.id">
-          <!-- FIXME: Stop using formControlName due to deprecation with use of ngModel.
-                I don't know other elegant way to 2-way bind the data with form fields other than ngModel.
-          -->
-          <div class="form-row calendar">
-            <label for="event.calendarId">Calendar</label>
-            <select class="form-control" formControlName="calendarId" id="event.calendarId">
-              <option *ngFor="let cal of editableCalendars" value="{{cal.id}}">{{cal.name}}</option>
-            </select>
-          </div>
-          <div class="form-row event-time">
-            <div>
-              <label for="event.startDate">Start</label>
-              <input type="datetime-local"
-                     class="form-control" formControlName="startDate" id="event.startDate"
-                     placeholder="Start …" [(ngModel)]="event.startDateTime">
-            </div>
-            <div>-</div>
-            <div>
-              <label for="event.endDate">End</label>
-              <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
-                     placeholder="End …" [(ngModel)]="event.endDateTime">
-            </div>
-          </div>
-          <label for="event.name">Name</label>
-          <input type="text" class="form-control event-name form-row" formControlName="name" id="event.name"
-                 placeholder="Event Name …" [(ngModel)]="event.name">
+<div>
+  <h2> New Event</h2>
+  <div class="row">
+    <div class="col-md-8">
+      <h4>Event Details</h4>
+      <p>Please note that fields marked with * are <b>required fields</b>. </p>
+      <div class="form-group">
 
-          <label for="event.description">Description</label>
-          <input type="text" class="form-control form-row" formControlName="description" id="event.description"
-                 placeholder="Description …" value="Description not yet implemented">
-          <!--          FIXME: [(ngModel)]="event.description"-->
+        <label for="event.calendarId">Calendar: * </label>
+        <select class="form-control" id="event.calendarId" [(ngModel)]="event.calendarId">
+          <option *ngFor="let cal of editableCalendars" value="{{cal.id}}">{{cal.name}}</option>
+        </select>
+        <hr>
+
+        <label for="event.name">Name: *</label>
+        <input type="text" class="form-control" id="event.name" [(ngModel)]="event.name">
+        <hr>
+
+        <label for="event.description">Description:</label>
+        <textarea type="text" class="form-control" id="event.description" [(ngModel)]="event.description">
+        </textarea>
+        <hr>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <mat-form-field>
+              <mat-label for="event.startDateTime">Start Date & Time</mat-label>
+              <input id="event.startDateTime" matInput [ngxMatDatetimePicker]="startDateTimePicker" [(ngModel)]="event.startDateTime">
+              <mat-datepicker-toggle matSuffix [for]="startDateTimePicker"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker
+                #startDateTimePicker
+                [showSeconds]="this.pickerConfig.showSeconds"
+                [stepHour]="this.pickerConfig.stepHour"
+                [stepMinute]="this.pickerConfig.stepMinute"
+              ></ngx-mat-datetime-picker>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-6">
+            <mat-form-field>
+              <mat-label for="event.endDateTime">End Date & Time</mat-label>
+              <input id="event.endDateTime" matInput [ngxMatDatetimePicker]="endDateTimePicker" [(ngModel)]="event.endDateTime">
+              <mat-datepicker-toggle matSuffix [for]="endDateTimePicker"></mat-datepicker-toggle>
+              <ngx-mat-datetime-picker
+                #endDateTimePicker
+                [showSeconds]="this.pickerConfig.showSeconds"
+                [stepHour]="this.pickerConfig.stepHour"
+                [stepMinute]="this.pickerConfig.stepMinute"
+              ></ngx-mat-datetime-picker>
+            </mat-form-field>
+          </div>
         </div>
+        <hr>
 
-        <button class="submit-button button-clickable full-width-form-button no-hover-enlarge event-form-submit"
-                (click)="onSubmit()">Submit
-        </button>
+        <label for="label-picker">Labels: *</label>
+            <input type="hidden" id="labels" name="labels" value="123">
+            <div id="label-picker" style="background-color: var(--shadow); border-radius: 4pt; padding: 1em; height: 150px">
+              I am a label picker.
+            </div>
       </div>
-    </div>
-  </div>
-  <div>
-    <h2>Details</h2>
-    <h3>Labels</h3>
-    <label for="label-picker">Labels</label>
-    <input type="hidden" id="labels" name="labels" value="123">
-    <div id="label-picker" style="background-color: var(--shadow); border-radius: 4pt; padding: 1em; height: 150px">
-      I am a label picker.
-    </div>
+      <hr>
 
-    <label for="location-picker">Location</label>
-    <input type="hidden" id="location" name="location" formControlName="location" [(ngModel)]="event.location">
-    <div id="location-picker">
-      <app-event-location (locationSaved)="saveLocationToEvent($event)" [location]="event.location"></app-event-location>
+      <label for="location-picker">Location</label>
+      <input type="hidden" id="location" name="location" formControlName="location" [(ngModel)]="event.location">
+      <div id="location-picker">
+        <app-event-location (locationSaved)="saveLocationToEvent($event)" [location]="event.location"></app-event-location>
+      </div>
+      <hr>
+
+      <button class="button-green clickable btn-lg" (click)="onSubmit()">Submit</button>
+    </div>
+    <div class="col-md-4">
+      <h4>Suggestions</h4>
+          <p>The application will deliver smart recommendations as you complete the event entry. <a href="">Learn More. </a>
     </div>
   </div>
-  <div>
-    <h2>Suggestions</h2>
-    <p>The application will deliver smart recommendations as you complete the event entry. <a href="">Learn More. </a>
-    </p>
-  </div>
-</form>
+</div>
+
+
+<!--<form [formGroup]="reactiveEventForm" class="grid-one-third">-->
+<!--  <div>-->
+<!--    <h2>New Event</h2>-->
+<!--    <div class="event-form-container">-->
+<!--      <div class="event-form">-->
+<!--        <div class="event-form-input">-->
+<!--          <input type="hidden" formControlName="id" name="id" [(ngModel)]="event.id">-->
+<!--                I don't know other elegant way to 2-way bind the data with form fields other than ngModel.-->
+<!--          &ndash;&gt;-->
+<!--          <div class="form-row calendar">-->
+<!--            <label for="event.calendarId">Calendar</label>-->
+<!--            <select class="form-control" formControlName="calendarId" id="event.calendarId">-->
+<!--              <option *ngFor="let cal of editableCalendars" value="{{cal.id}}">{{cal.name}}</option>-->
+<!--            </select>-->
+<!--          </div>-->
+<!--          <div class="form-row event-time">-->
+<!--              <mat-form-field>-->
+<!--                <mat-label>Start Date & Time </mat-label>-->
+
+<!--                <input matInput [ngxMatDatetimePicker]="startDateTimePicker" [(ngModel)]="event.startDateTime">-->
+<!--                <mat-datepicker-toggle matSuffix [for]="startDateTimePicker"></mat-datepicker-toggle>-->
+<!--                <ngx-mat-datetime-picker #startDateTimePicker></ngx-mat-datetime-picker>-->
+<!--              </mat-form-field>-->
+
+<!--              <label for="event.endDate">End</label>-->
+<!--              <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"-->
+<!--                     placeholder="End …" [(ngModel)]="event.endDateTime">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <label for="event.name">Name</label>-->
+<!--          <input type="text" class="form-control event-name form-row" formControlName="name" id="event.name"-->
+<!--                 placeholder="Event Name …" [(ngModel)]="event.name">-->
+
+<!--          <label for="event.description">Description</label>-->
+<!--          <input type="text" class="form-control form-row" id="event.description"-->
+<!--                 placeholder="Description …" value="Description not yet implemented">-->
+<!--        </div>-->
+
+<!--        <button class="submit-button button-clickable full-width-form-button no-hover-enlarge event-form-submit"-->
+<!--                (click)="onSubmit()">Submit-->
+<!--        </button>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  <div>-->
+<!--    <h2>Details</h2>-->
+<!--    <h3>Labels</h3>-->
+<!--    <label for="label-picker">Labels</label>-->
+<!--    <input type="hidden" id="labels" name="labels" value="123">-->
+<!--    <div id="label-picker" style="background-color: var(&#45;&#45;shadow); border-radius: 4pt; padding: 1em; height: 150px">-->
+<!--      I am a label picker.-->
+<!--    </div>-->
+
+
+<!--  </div>-->
+<!--  <div>-->
+<!--    <h2>Suggestions</h2>-->
+<!--    <p>The application will deliver smart recommendations as you complete the event entry. <a href="">Learn More. </a>-->
+<!--    </p>-->
+<!--  </div>-->
