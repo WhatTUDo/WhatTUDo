@@ -8,6 +8,8 @@ import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
+import {MatDatetimepickerModule} from "@mat-datetimepicker/core";
+import {NgxMatDatetimePickerModule, NgxMatDateAdapter} from "@angular-material-components/datetime-picker";
 
 @Component({
   selector: 'app-event-form',
@@ -19,6 +21,7 @@ export class EventFormComponent implements OnInit {
 
   isUpdate: Boolean = false;
   showFeedback: Boolean = false;
+
   event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
   reactiveEventForm = new FormGroup({
     id: new FormControl(''),
@@ -30,7 +33,10 @@ export class EventFormComponent implements OnInit {
     labels: new FormControl('')
   });
 
-  constructor(private eventService: EventService, private calendarService: CalendarService, private route: ActivatedRoute) {
+  constructor(
+    private eventService: EventService,
+    private calendarService: CalendarService,
+    private route: ActivatedRoute) {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id) {
       this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {

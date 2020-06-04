@@ -20,14 +20,14 @@
             </select>
           </div>
           <div class="form-row event-time">
-            <div>
-              <label for="event.startDate">Start</label>
-              <input type="datetime-local"
-                     class="form-control" formControlName="startDate" id="event.startDate"
-                     placeholder="Start …" [(ngModel)]="event.startDateTime">
-            </div>
-            <div>-</div>
-            <div>
+              <mat-form-field>
+                <mat-label>Start Date & Time </mat-label>
+
+                <input matInput [ngxMatDatetimePicker]="startDateTimePicker" [(ngModel)]="event.startDateTime">
+                <mat-datepicker-toggle matSuffix [for]="startDateTimePicker"></mat-datepicker-toggle>
+                <ngx-mat-datetime-picker #startDateTimePicker></ngx-mat-datetime-picker>
+              </mat-form-field>
+
               <label for="event.endDate">End</label>
               <input type="datetime-local" class="form-control" formControlName="endDate" id="event.endDate"
                      placeholder="End …" [(ngModel)]="event.endDateTime">
@@ -38,7 +38,7 @@
                  placeholder="Event Name …" [(ngModel)]="event.name">
 
           <label for="event.description">Description</label>
-          <input type="text" class="form-control form-row" formControlName="description" id="event.description"
+          <input type="text" class="form-control form-row" id="event.description"
                  placeholder="Description …" value="Description not yet implemented">
           <!--          FIXME: [(ngModel)]="event.description"-->
         </div>
@@ -48,7 +48,6 @@
         </button>
       </div>
     </div>
-  </div>
   <div>
     <h2>Details</h2>
     <h3>Labels</h3>
@@ -69,4 +68,3 @@
     <p>The application will deliver smart recommendations as you complete the event entry. <a href="">Learn More. </a>
     </p>
   </div>
-</form>
