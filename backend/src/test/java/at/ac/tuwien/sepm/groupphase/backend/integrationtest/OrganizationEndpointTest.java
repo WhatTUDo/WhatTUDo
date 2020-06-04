@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.server.ResponseStatusException;
@@ -52,7 +53,8 @@ public class OrganizationEndpointTest {
     @Test
     public void edit_nonSavedOrganization_shouldThrow_ResponseStatusException() {
         List<Integer> calendars = Collections.emptyList();
-        OrganizationDto organizationDto = new OrganizationDto(15, "", calendars);
+        OrganizationDto organizationDto = new OrganizationDto(200000, "newFalseName", calendars);
+        OrganizationDto returnedOrganization = endpoint.editOrganization(organizationDto);
         assertThrows(ResponseStatusException.class, () -> endpoint.editOrganization(organizationDto));
     }
 
@@ -63,6 +65,7 @@ public class OrganizationEndpointTest {
         Organization organization = organizationRepository.save(new Organization("Test Organization 2"));
         List<Integer> calendars = Collections.emptyList();
         OrganizationDto organizationDto = new OrganizationDto(organization.getId(), "", calendars);
+        OrganizationDto returnedOrganization = endpoint.editOrganization(organizationDto);
         assertThrows(ResponseStatusException.class, () -> endpoint.editOrganization(organizationDto));
 
     }

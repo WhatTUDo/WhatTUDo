@@ -7,6 +7,7 @@ import {EventService} from "../../services/event.service";
 import {ActivatedRoute} from "@angular/router";
 
 import {faChevronLeft, faExternalLinkSquareAlt, faTag} from "@fortawesome/free-solid-svg-icons";
+import {AttendanceStatusService} from '../../services/attendance-status.service';
 
 @Component({
   selector: 'app-event',
@@ -16,13 +17,14 @@ import {faChevronLeft, faExternalLinkSquareAlt, faTag} from "@fortawesome/free-s
 export class EventComponent implements OnInit {
 
   constructor(private eventService: EventService,
+              private attendanceStatusService: AttendanceStatusService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
   }
 
-  public calendarEvent: CalendarEvent
-  public eventTimeString: string = "Event Time"
+  public calendarEvent: CalendarEvent;
+  public eventTimeString: string = "Event Time";
   public participants: any;
 
 

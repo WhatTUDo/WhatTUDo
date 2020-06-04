@@ -34,8 +34,8 @@ public class OrganizationRepositoryTest {
     }
 
     @Test
-    public void calendarBasics() {
-        Organization orga = organizationRepository.save(new Organization("Test Name"));
+    public void organizationBasics() {
+        Organization orga = organizationRepository.save(new Organization("Test Organization 1"));
         Calendar cal = calendarRepository.save(new Calendar("Calendar", Collections.singletonList(orga)));
         orga.getCalendars().add(cal);
         assertAll(

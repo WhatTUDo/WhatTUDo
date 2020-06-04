@@ -15,12 +15,8 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class ApplicationUser implements CustomUserDetails {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+@EqualsAndHashCode(callSuper = true)
+public class ApplicationUser extends BaseEntity implements CustomUserDetails {
     @NonNull
     @Column(name = "name")
     private String name;
@@ -41,6 +37,9 @@ public class ApplicationUser implements CustomUserDetails {
     @Column(name = "is_sysadmin")
     private boolean isSysAdmin = false;
 
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<AttendanceStatus> attendanceStatuses;
     /**
      * Infers the User Roles (authorities) from the admin status and the memberships
      * @return a list of granted authorities
