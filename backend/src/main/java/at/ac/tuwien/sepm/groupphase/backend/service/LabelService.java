@@ -70,5 +70,15 @@ public interface LabelService {
     Label update(Label label);
 
 
+    /**
+     * Find all labels for an event id.
+     *
+     * @param id id of the event entry.
+     * @return the label list
+     * @throws org.hibernate.service.spi.ServiceException                       if something goes wrong during data processing.
+     * @throws at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException if no event with this id is saved in database
+     */
+    List<Label> findByEventId(int id);
+
 
 }

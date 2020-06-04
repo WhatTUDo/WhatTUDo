@@ -5,6 +5,7 @@ import {CalendarEvent} from "../dtos/calendar-event";
 import {HttpClient} from "@angular/common/http";
 import {Globals} from "../global/globals";
 import {EventComment} from "../dtos/event-comment";
+import {Label} from "../dtos/label";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import {EventComment} from "../dtos/event-comment";
 export class EventService {
 
   private eventBaseUri: string = this.globals.backendUri + 'events';
+  private labelBaseUri: string = this.globals.backendUri + 'labels';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
@@ -22,6 +24,29 @@ export class EventService {
     return this.httpClient.delete(this.eventBaseUri + '/' + event);
   }
 
+
+  getAllLabels(): Observable<Label[]> {
+
+    console.log('Get all labels');
+    return this.httpClient.get<Array<Label>>(this.labelBaseUri);
+  }
+
+  getEventLabels(id : number): Observable<Label[]> {
+
+    console.log('Get event labels');
+    return this.httpClient.get<Array<Label>>(this.eventBaseUri + '/' + id + '/' + 'labels');
+  }
+
+  addLabels(id : number, labels : number[]) {
+
+   console.log('add  labels');
+    return this.httpClient.put<Event>(this.eventBaseUri + '/' + id + '/' + 'labels', {
+      params: {
+        labelId: '1'
+      }});
+
+
+  }
 
   getMultiplEvents(name: string, from: Date, to: Date): Observable<Array<CalendarEvent>> {
     console.log("Load Multiple events: ");
@@ -92,6 +117,7 @@ export class EventService {
   postVote(isUpvote: boolean, commentID: number, userID: number) {
 
   }
+
 
   /**
    * Posts Attendance to a specific event to Server

@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LabelDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.LabelMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
@@ -42,6 +44,7 @@ public class EventEndpoint {
     private final EventService eventService;
     private final EventMapper eventMapper;
     private final LabelService labelService;
+    private final LabelMapper labelMapper;
 
 
     @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
@@ -143,4 +146,24 @@ public class EventEndpoint {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
+
+
+    @Transactional
+    @GetMapping(value = "/{id}/labels")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get Labels by Id", authorizations = {@Authorization(value = "apiKey")})
+    public List<LabelDto> getLabelsById(@PathVariable(value = "id") int id) {
+            try {
+
+                List<LabelDto> results = new ArrayList<LabelDto>();
+
+                (labelService.findByEventId(id)).forEach(it -> results.add(labelMapper.labelToLabelDto(it)));
+
+
+                return results;
+            } catch (NotFoundException e) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            }
+   }
 }

@@ -1,7 +1,8 @@
 export class Label {
   constructor(
     id: number,
-    public name: string
+    public name: string,
+    events: Array<Event>
   ) {
 
   }

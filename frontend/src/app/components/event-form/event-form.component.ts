@@ -53,6 +53,8 @@ export class EventFormComponent implements OnInit {
       this.event.startDateTime = new Date(formValue.startDate);
       this.event.endDateTime = new Date(formValue.endDate);
       this.event.calendarId = formValue.calendarId;
+      this.event.labels = formValue.labels;
+
 
       // submit to eventService
       if (this.isUpdate) {
@@ -65,9 +67,12 @@ export class EventFormComponent implements OnInit {
             alert("Error: " + err.error.message);
           });
       } else {
+
         this.eventService.postEvent(this.event).subscribe(response => {
             console.log("Saved event: " + response);
             console.log(response);
+
+            this.eventService.addLabels(1, [1]);
           },
           err => {
             console.warn(err);

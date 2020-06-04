@@ -128,4 +128,25 @@ public class SimpleLabelService implements LabelService {
         }
     }
 
+    @Override
+    public List<Label> findByEventId(int id){
+
+        List<Label> result = new ArrayList<Label>();
+
+        Optional<Event> found = eventRepository.findById(id);
+
+        if(found.isPresent()) {
+            Event finditslabels = found.get();
+
+
+            labelRepository.findAll().forEach(it -> {if((it.getEvents().contains(finditslabels)))
+                result.add(it);});
+        }
+
+        else throw new NotFoundException();
+
+        return result;
+
+    }
+
 }

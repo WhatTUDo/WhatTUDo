@@ -22,6 +22,11 @@
           <fa-icon [icon]="faTag"></fa-icon>&ensp;{{label.name}}
         </div>
       </div>
+      <div id="label-container2">
+        <div class="label-item" *ngFor="let label of this.labels">
+          <fa-icon [icon]="faTag"></fa-icon>&ensp;{{label.name}}
+        </div>
+      </div>
       <div>
         <div class="participation-status grid-one-third no-gap">
           <div class="participation-status-item">
