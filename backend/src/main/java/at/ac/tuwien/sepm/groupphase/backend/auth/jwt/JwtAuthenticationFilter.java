@@ -4,8 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.UserLoginDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,16 +17,13 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.invoke.MethodHandles;
-import java.util.Collection;
 
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
     private final AuthenticationManager authenticationManager;
     private final JwtTokenizer jwtTokenizer;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, SecurityProperties securityProperties,
-                                   JwtTokenizer jwtTokenizer) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, SecurityProperties securityProperties, JwtTokenizer jwtTokenizer) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenizer = jwtTokenizer;
         setFilterProcessesUrl(securityProperties.getLoginUri());
@@ -35,7 +31,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     @Transactional
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    public Authentication attemptAuthentication(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws AuthenticationException {
         try {
             UserLoginDto user = new ObjectMapper().readValue(request.getInputStream(), UserLoginDto.class);
             //Compares the user with CustomUserDetailService#loadUserByUsername and check if the credentials are correct
@@ -57,7 +56,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     ) throws IOException {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.getWriter().write(failed.getMessage());
-        LOGGER.debug("Invalid authentication attempt: {}", failed.getMessage());
+        log.debug("Invalid authentication attempt: {}", failed.getMessage());
     }
 
 
@@ -70,9 +69,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Authentication authResult
     ) throws IOException {
         ApplicationUser user = ((ApplicationUser) authResult.getPrincipal());
-
-        Collection<String> authorities = user.getAuthorityStrings();
-        response.getWriter().write(jwtTokenizer.getAuthToken(user.getUsername(), authorities));
-        LOGGER.info("Successfully authenticated user {}", user.getUsername());
+        response.getWriter().write(jwtTokenizer.getAuthToken(user.getUsername(), user.getAuthorityStrings()));
+        log.info("Successfully authenticated user {}", user.getUsername());
     }
 }

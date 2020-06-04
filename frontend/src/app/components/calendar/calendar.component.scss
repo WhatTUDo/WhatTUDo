@@ -101,6 +101,8 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
   border-left: 4pt solid $blue;
   background-color: transparentize($blue, 0.75);
 
+  cursor: pointer;
+
   position: relative;
 
   margin-left: -2pt;
@@ -110,7 +112,7 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
   .calendar-event-time {
     color: $gray;
     font-size: 8pt;
-    margin-bottom: -2pt;
+    margin-bottom: 2pt;
   }
 
   .calendar-event-name {

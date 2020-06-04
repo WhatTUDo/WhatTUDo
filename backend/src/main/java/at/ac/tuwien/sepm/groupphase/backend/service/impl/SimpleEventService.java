@@ -6,7 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventDeleteEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.event.EventFindEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.event.EventUpdateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
@@ -43,8 +43,8 @@ public class SimpleEventService implements EventService {
             } else {
                 throw new ValidationException("Id is not defined");
             }
-            publisher.publishEvent(new EventDeleteEvent(event.getName()));
             eventRepository.delete(event);
+            publisher.publishEvent(new EventDeleteEvent(event.getName()));
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ValidationException(e.getMessage());
         } catch (PersistenceException e) {
@@ -56,96 +56,68 @@ public class SimpleEventService implements EventService {
     public Event save(Event event) {
         validator.validateNewEvent(event);
         try {
-            publisher.publishEvent(new EventCreateEvent(event.getName()));
-            return eventRepository.save(event);
+            Event createdEvent = eventRepository.save(event);
+            publisher.publishEvent(new EventCreateEvent(createdEvent.getName()));
+            return createdEvent;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    //FIXME: add NotFoundException wenn leer zurückkommt?
+    @Override
+    public List<Event> findByName(String name) {
+        try {
+            return eventRepository.findAllByNameContains(name);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Event findById(int id) {
+        try {
+            Optional<Event> found = eventRepository.findById(id);
+            if (found.isPresent()) {
+                return found.get();
+            } else {
+                throw new NotFoundException("No event found with id " + id);
+            }
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Event> findForDates(LocalDateTime start, LocalDateTime end) {
+        try {
+            validator.validateMultipleEventsQuery(start, end);
+            List<Event> foundEvents = eventRepository.findAllByStartDateTimeBetween(start, end);
+            if (foundEvents.size() == 0) {
+                throw new NotFoundException("Could not find any events between the specified dates: " + start.toString() + ", " + end.toString());
+            }
+            return foundEvents;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
 
     @Override
-    public List<Event> findByName(String name){
-        try{
-            return  eventRepository.findAllByNameContains(name);
-        }
-        catch (PersistenceException e){
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
-    // FIXME: catch PersistenceException, throw ServiceException
-    @Override
-    public Event findById(int id) {
-        Optional<Event> found = eventRepository.findById(id);
-        if (found.isPresent()) {
-            Event event = found.get();
-            publisher.publishEvent(new EventFindEvent(event.getName()));
-            return event;
-        } else {
-            throw new NotFoundException("No event found with id " + id);
-        }
-    }
-
-    //FIXME: catch validationException throw new validationException redundant? same für NotfoundException
-    @Override
-    public List<Event> findForDates(LocalDateTime start, LocalDateTime end) {
-        try {
-            validator.validateMultipleEventsQuery(null, start, end);
-            List<Event> foundEvents = eventRepository.findAllByStartDateTimeBetween(start, end);
-            if (foundEvents.size() == 0) {
-                throw new NotFoundException("Could not find any events between the specified dates: " +  start.toString() + ", " + end.toString());
-            }
-            return foundEvents;
-        }
-        catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage(), e);
-        }
-        catch (ValidationException e) {
-            throw new ValidationException(e.getMessage());
-        }
-        catch (NotFoundException e) {
-            throw new NotFoundException(e.getMessage(), e);
-        }
-    }
-
-    // TODO: Cleanup class and replace log with event publisher
-    // TODO: extract validation into validator class.
-    @Override
     public Event update(Event event) {
-        log.info("Service update event {}", event);
         try {
-
-
             Optional<Event> found = eventRepository.findById(event.getId());
             if (found.isPresent()) {
-
-
-                publisher.publishEvent(new EventCreateEvent(event.getName()));
-
-
-            if((event.getName().isBlank())) {
-                throw new ValidationException("name can't be blank!");
-            }
-
-            if((event.getStartDateTime().getYear() < 2020)){
-                throw new ValidationException("start date not valid");
-            }
-
-            if(!(event.getStartDateTime().isBefore(event.getEndDateTime()))){
-                throw new ValidationException("start date can't be before end date!");
-            }
-
-           return eventRepository.save(event);
-            }
-
-            else {
+                validator.validateUpdateEvent(event);
+                Event savedEvent = eventRepository.save(event);
+                publisher.publishEvent(new EventUpdateEvent(savedEvent.getName()));
+                return savedEvent;
+            } else {
                 throw new NotFoundException("No event found with id " + event.getId());
             }
-
-        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e){
+        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ValidationException(e.getMessage());
-        } catch (PersistenceException e){
-            throw new ServiceException(e.getMessage(),e);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
         }
     }
 

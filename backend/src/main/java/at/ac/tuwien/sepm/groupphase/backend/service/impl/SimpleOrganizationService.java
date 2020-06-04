@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarAddEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarRemoveEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationEditEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,22 +35,28 @@ public class SimpleOrganizationService implements OrganizationService {
     private final CalendarRepository calendarRepository;
     private final Validator validator;
 
-    //FIXME: catch persistance throw service
+
     @Override
     public Collection<Organization> getAll() {
-        return organizationRepository.findAll();
+        try {
+            return organizationRepository.findAll();
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
     }
 
-    //FIXME: catch persistance throw service
+
     @Override
     public Organization findById(int id) {
-        Optional<Organization> found = organizationRepository.findById(id);
-        if (found.isPresent()) {
-            Organization organization = found.get();
-            //TODO  publisher.publishEvent(new EventFindEvent(organization.getName()));
-            return organization;
-        } else {
-            throw new NotFoundException("No organization found with id " + id);
+        try {
+            Optional<Organization> found = organizationRepository.findById(id);
+            if (found.isPresent()) {
+                return found.get();
+            } else {
+                throw new NotFoundException("No organization found with id " + id);
+            }
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
         }
     }
 
@@ -65,18 +74,16 @@ public class SimpleOrganizationService implements OrganizationService {
 
     @Override
     public Organization update(Organization organization) {
-
-        log.info("Service update organization {}", organization);
         validator.validateUpdateOrganization(organization);
-
         try {
             Optional<Organization> found = organizationRepository.findById(organization.getId());
             if (found.isPresent()) {
-                publisher.publishEvent(new OrganizationEditEvent(organization.getName()));
                 Organization orgInDataBase = found.get();
                 orgInDataBase.setName(organization.getName());
                 orgInDataBase.setCalendars(organization.getCalendars());
-                return organizationRepository.save(orgInDataBase);
+                Organization savedOrga = organizationRepository.save(orgInDataBase);
+                publisher.publishEvent(new OrganizationEditEvent(savedOrga.getName()));
+                return savedOrga;
             } else {
                 throw new NotFoundException("No organization found with id " + organization.getId());
             }
@@ -88,13 +95,14 @@ public class SimpleOrganizationService implements OrganizationService {
 
     @Override
     public Organization addCalendars(Organization organization, Collection<Calendar> calendars) {
-        log.info("Adding calendars {} to organization {}", calendars, organization);
         try {
             calendars.forEach(it -> it.getOrganizations().add(organization));
             calendarRepository.saveAll(calendars);
 
             organization.getCalendars().addAll(calendars);
-            return organizationRepository.save(organization);
+            Organization savedOrga = organizationRepository.save(organization);
+            publisher.publishEvent(new OrganizationCalendarAddEvent(savedOrga.getName(), calendars.stream().map(Calendar::getName).collect(Collectors.toList())));
+            return savedOrga;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
@@ -114,13 +122,14 @@ public class SimpleOrganizationService implements OrganizationService {
 
 
     public Organization removeCalendars(Organization organization, Collection<Calendar> calendars) {
-        log.info("Removing calendars {} from organization {}", calendars, organization);
         try {
             calendars.forEach(it -> it.getOrganizations().remove(organization));
             calendarRepository.saveAll(calendars);
 
             organization.getCalendars().removeAll(calendars);
-            return organizationRepository.save(organization);
+            Organization savedOrga = organizationRepository.save(organization);
+            publisher.publishEvent(new OrganizationCalendarRemoveEvent(savedOrga.getName(), calendars.stream().map(Calendar::getName).collect(Collectors.toList())));
+            return savedOrga;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }

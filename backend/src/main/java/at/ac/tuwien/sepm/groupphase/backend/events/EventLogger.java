@@ -12,6 +12,6 @@ import org.springframework.stereotype.Service;
 public class EventLogger {
     @EventListener
     public void logEvent(CustomEvent event) {
-        log.trace(event.toString());
+        log.debug(event.getMessage());
     }
 }

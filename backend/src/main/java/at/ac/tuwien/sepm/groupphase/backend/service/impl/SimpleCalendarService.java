@@ -14,6 +14,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Hibernate;
@@ -37,6 +38,7 @@ public class SimpleCalendarService implements CalendarService {
     private final EventRepository eventRepository;
     private final OrganizationRepository organizationRepository;
     private final OrganizationService organizationService;
+    private final Validator validator;
 
 
     @Override
@@ -53,24 +55,21 @@ public class SimpleCalendarService implements CalendarService {
             } else {
                 throw new NotFoundException("No event found with id " + id);
             }
-        }
-        catch (PersistenceException e) {
-            throw new ServiceException(e.getMessage());
-        }
-    }
-
-    //FIXME: lt. interface throws NotFoundException. wird nicht nur eine leere liste übergeben falls nix matched?
-    @Override
-    public List<Calendar> findByName(String name) throws ServiceException {
-        try {
-            List<Calendar> calendars = calendarRepository.findAllByNameContains(name);
-            return calendars;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
     }
 
-    //FIXME: lt. Interface throws NotFoundException
+    @Override
+    public List<Calendar> findByName(String name) throws ServiceException {
+        try {
+            return calendarRepository.findAllByNameContains(name);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    //FIXME: return calendarRepository.findAll
     @Override
     public List<Calendar> findAll() {
         try {
@@ -87,14 +86,11 @@ public class SimpleCalendarService implements CalendarService {
         }
     }
 
-    //FIXME: validation missing?
     @Override
     public Calendar save(Calendar calendar) {
         try {
+            validator.validateNewCalendar(calendar);
             Calendar result = calendarRepository.save(calendar);
-            if (calendar.getOrganizations() == null) {
-                throw new ServiceException("Could not find Organizations for Calendar");
-            }
             for (Organization o : calendar.getOrganizations()) {
                 List<Calendar> cal;
                 cal = o.getCalendars();
@@ -102,7 +98,7 @@ public class SimpleCalendarService implements CalendarService {
                 o.setCalendars(cal);
                 organizationRepository.save(o);
             }
-            publisher.publishEvent(new EventCreateEvent(calendar.getName()));
+            publisher.publishEvent(new EventCreateEvent(result.getName()));
             return result;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -117,35 +113,32 @@ public class SimpleCalendarService implements CalendarService {
             } else {
                 throw new ValidationException("Id is not defined");
             }
-            publisher.publishEvent(new EventDeleteEvent(this.findById(id).getName()));
 
             Calendar toDelete = this.findById(id);
             List<Organization> olist = toDelete.getOrganizations();
 
-            try {
-                olist.forEach(it -> it.getCalendars().remove(toDelete));
-                organizationRepository.saveAll(olist);
 
-                toDelete.getOrganizations().removeAll(olist);
+            olist.forEach(it -> it.getCalendars().remove(toDelete));
+            organizationRepository.saveAll(olist);
 
-                if(this.findById(id).getEvents() != null){
+            toDelete.getOrganizations().removeAll(olist);
 
-                    for(Event e : toDelete.getEvents()){
+            if (this.findById(id).getEvents() != null) {
 
-                        eventRepository.delete(e);
-                    }
+                for (Event e : toDelete.getEvents()) {
 
-                    List<Event> empty = new ArrayList<Event>();
-                    toDelete.setEvents(empty);
-
+                    eventRepository.delete(e);
                 }
 
-                calendarRepository.delete(toDelete);
+                List<Event> empty = new ArrayList<Event>();
+                toDelete.setEvents(empty);
 
-            } catch (PersistenceException e) {
-                throw new ServiceException(e.getMessage(), e);
             }
 
+            calendarRepository.delete(toDelete);
+
+
+            publisher.publishEvent(new EventDeleteEvent(toDelete.getName()));
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ValidationException(e.getMessage());
         } catch (PersistenceException e) {
@@ -153,37 +146,34 @@ public class SimpleCalendarService implements CalendarService {
         }
     }
 
-    //FIXME: validation?
     @Override
     public Calendar update(Calendar calendar) {
         try {
-
             Calendar toUpdate = this.findById(calendar.getId());
 
-            if(!(calendar.getName().isBlank()) || !(calendar.getName().equals((this.findById(calendar.getId())).getName()))){
-               toUpdate.setName(calendar.getName());
-                }
-
+            if (!(calendar.getName().isBlank()) || !(calendar.getName().equals((this.findById(calendar.getId())).getName()))) {
+                toUpdate.setName(calendar.getName());
+            }
             toUpdate.setOrganizations(calendar.getOrganizations());
+            validator.validateUpdateCalendar(calendar);
 
 
             /**   List<Calendar> thiscal = new ArrayList<Calendar>();
-                thiscal.add(calendar);
-                 for(Organisation o : calendar.getOrganisations()){
+             thiscal.add(calendar);
+             for(Organisation o : calendar.getOrganisations()){
+             List<Calendar> cal;
+             cal = o.getCalendars();
+             if(!(cal.contains(calendar))) {
+             cal.add(calendar);
+             }
+             organisationService.addCalendars(o,thiscal);
+             }
+             Calendar result =  calendarRepository.save(this.findById(calendar.getId()));
+             **/
 
-                 List<Calendar> cal;
-                 cal = o.getCalendars();
-                 if(!(cal.contains(calendar))) {
-                     cal.add(calendar);
-                 }
-                 organisationService.addCalendars(o,thiscal);
-
-                 }**/
-
-              //  Calendar result =  calendarRepository.save(this.findById(calendar.getId()));
-
-            publisher.publishEvent(new EventCreateEvent(calendar.getName()));
-            return calendarRepository.save(toUpdate);
+            Calendar savedCalendar = calendarRepository.save(toUpdate);
+            publisher.publishEvent(new EventCreateEvent(savedCalendar.getName()));
+            return savedCalendar;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }

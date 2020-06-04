@@ -2,9 +2,11 @@ package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import org.hibernate.service.spi.ServiceException;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Collection;
 
 public interface OrganizationService {
@@ -13,43 +15,40 @@ public interface OrganizationService {
      * Find all organizations in db.
      *
      * @return all organizations
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
      */
-    Collection<Organization> getAll();
+    Collection<Organization> getAll() throws ServiceException;
 
     /**
      * Find a single organization by id.
      *
      * @param id id of organization to be found.
      * @return the organization entry with the specified id.
-     * @throws org.hibernate.service.spi.ServiceException                       will be thrown if something goes wrong during data processing.
-     * @throws at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException if no organization with id is in db.
+     * @throws ServiceException  is thrown if something goes wrong during data processing.
+     * @throws NotFoundException is thrown if no organization with id can be found in db.
      */
-    Organization findById(int id);
+    Organization findById(int id) throws ServiceException, NotFoundException;
 
     /**
      * Create new organization and save into db.
      *
-     * @param organization - to be created and saved into db.
+     * @param organization organization to be saved into db.
      * @return the created organization
-     * @throws org.hibernate.service.spi.ServiceException                    will be thrown if something goes wrong during data processing.
-     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException if:
-     *                                                                       - name is blank;
-     *                                                                       - an organization with this id already exists
-     *                                                                       - an organization with this name already exists
+     * @throws ServiceException    is thrown if something goes wrong during data processing.
+     * @throws ValidationException is thrown if the Organization Entity does not pass validation.
      */
-    Organization create(Organization organization);
+    Organization create(Organization organization) throws ServiceException, ValidationException;
 
     /**
      * Update a saved organization with new values
      *
      * @param organization to be updated into database with the new values.
      * @return the updated organization.
-     * @throws org.hibernate.service.spi.ServiceException                       will be thrown if something goes wrong during data processing.
-     * @throws at.ac.tuwien.sepm.groupphase.backend.util.ValidationException    will be thrown if name is blank.
-     * @throws at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException if no organization with this id is save in db.
+     * @throws ServiceException    is thrown if something goes wrong during data processing.
+     * @throws ValidationException is thrown if the Organization Entity does not pass validation.
+     * @throws NotFoundException   is thrown if no organization can be found in db.
      */
-    Organization update(Organization organization);
+    Organization update(Organization organization) throws ServiceException, ValidationException, NotFoundException;
 
     /**
      * Add calendars to a organization.
@@ -57,9 +56,9 @@ public interface OrganizationService {
      * @param organization - to add the calendars to
      * @param calendars    to be added to this organization
      * @return the updated organization
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
      */
-    Organization addCalendars(Organization organization, Collection<Calendar> calendars);
+    Organization addCalendars(Organization organization, Collection<Calendar> calendars) throws ServiceException;
 
     /**
      * Remove calendars from an organization.
@@ -67,17 +66,17 @@ public interface OrganizationService {
      * @param organization - to remove the calendars from
      * @param calendars    to be removed from this organization
      * @return the updated organization
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
      */
-    Organization removeCalendars(Organization organization, Collection<Calendar> calendars);
+    Organization removeCalendars(Organization organization, Collection<Calendar> calendars) throws ServiceException;
 
     /**
      * Find organizations by name
      *
      * @param name name (or part of a name) for which a search will be performed.
      * @return List of organization entities that match the search-name
-     * @throws org.hibernate.service.spi.ServiceException if something goes wrong during data processing.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
      */
-    List<Organization> findByName(String name);
+    List<Organization> findByName(String name) throws ServiceException;
 
 }

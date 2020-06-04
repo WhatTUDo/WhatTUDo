@@ -105,7 +105,7 @@ a {
     column-gap: 4rem;
 
     &.scroll > * {
-      height: 500pt;
+      //height: 500pt;
       overflow-y: scroll;
 
       h2 {
@@ -161,7 +161,7 @@ a {
   }
 }
 
-.button-clickable {
+button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -185,6 +185,17 @@ a {
 
     &.no-hover-enlarge:hover {
       opacity: 0.75;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.25;
+
+    @media (hover: hover) {
+      transform: none !important;
+      opacity: 0.25 !important;
     }
   }
 
@@ -323,5 +334,16 @@ iframe {
     button {
       border-bottom-right-radius: 0;
     }
+  }
+}
+
+.title-icon-button-combo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .icon-button {
+    font-size: 32pt;
+    color: var(--secondary);
   }
 }
