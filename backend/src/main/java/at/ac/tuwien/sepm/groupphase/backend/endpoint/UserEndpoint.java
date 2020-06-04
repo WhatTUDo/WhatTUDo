@@ -91,7 +91,7 @@ public class UserEndpoint {
     }
 
     @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')")
-    @PutMapping("/{userId}/roles")
+    @DeleteMapping("/{userId}/roles")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("update user")
