@@ -45,7 +45,6 @@ public class OrganizationEndpoint {
     @ApiOperation(value = "Edit organization", authorizations = {@Authorization(value = "apiKey")})
     public OrganizationDto editOrganization(@RequestBody OrganizationDto organization) {
         try {
-            // Organization organizationEntity = organizationMapper.organizationDtoToOrganization(organization);
             Organization organizationEntity = organizationService.findById(organization.getId());
             organizationEntity.setName(organization.getName());
             organizationMapper.mapCalendars(organization, organizationEntity);

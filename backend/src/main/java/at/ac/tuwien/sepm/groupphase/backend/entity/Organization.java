@@ -13,12 +13,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Organization {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+@EqualsAndHashCode(callSuper = true)
+public class Organization extends BaseEntity {
     @NonNull
     @Column(unique = true, nullable = false)
     private String name;

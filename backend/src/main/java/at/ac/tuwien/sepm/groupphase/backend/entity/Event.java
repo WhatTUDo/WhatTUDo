@@ -16,13 +16,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@AllArgsConstructor
-public class Event {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+@EqualsAndHashCode(callSuper = true)
+public class Event extends BaseEntity {
     @NonNull
     @Column(nullable = false)
     private String name;
@@ -45,5 +40,10 @@ public class Event {
     @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToMany(mappedBy = "events")
     private List<Label> labels;
+
+
+    @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
+    private List<AttendanceStatus> attendanceStatuses;
+
 }
 
