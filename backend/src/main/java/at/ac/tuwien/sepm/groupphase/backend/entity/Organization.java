@@ -13,18 +13,14 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Organization {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+@EqualsAndHashCode(callSuper = true)
+public class Organization extends BaseEntity {
     @NonNull
     @Column(unique = true, nullable = false)
     private String name;
 
     @ToString.Exclude
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "organization_calendar",
         joinColumns = @JoinColumn(name = "organization_id"),

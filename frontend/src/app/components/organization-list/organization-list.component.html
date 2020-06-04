@@ -1,20 +1,30 @@
-<h1>Organizations</h1>
-
-<div class="btn-group">
-  <button class="clickable button-green btn-lg" (click)="onClickedAddNew()">
-    Add New
-  </button>
+<div class="contextual-control">
+  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
 </div>
-<div class="list-group">
-  <div class="list-group-item" *ngFor="let org of this.organizations">
-    <div class="col">
-      <h4>{{org.name}}</h4>
-      <p>Active Members: {{20 + org.id}}</p>
-      <p>Upcoming Events: 0</p>
+
+<div class="centered-two-third">
+  <div class="title-icon-button-combo">
+  <h2>Organizations</h2>
+    <div class="icon-button clickable no-hover-enlarge no-shadow">
+      <fa-icon [icon]="faPlus" (click)="onClickedAddNew()"></fa-icon>
     </div>
-    <div class="btn-group">
-      <button class="clickable button-yellow btn-lg" (click)="onClickedEdit(org.id)">Edit</button>
-      <button class="clickable button-red btn-lg" (click)="onClickedDelete(org.id)">Delete</button>
+  </div>
+  <div class="">
+    <div class="organization" *ngFor="let org of this.organizations" (click)="redirectToOrganization(org.id)">
+      <div class="organization-details">
+        <div class="organization-name">{{org.name}}</div>
+        <div>Active Members: {{20 + org.id}}</div>
+        <div>Upcoming Events: 0</div>
+      </div>
+      <div class="organization-buttons">
+        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faCog" (click)="onClickedEdit(org.id)">
+          Edit Calendar
+        </fa-icon>
+        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faTimesCircle" (click)="onClickedDelete(org.id)">
+          Remove Calendar
+        </fa-icon>
+      </div>
     </div>
   </div>
 </div>

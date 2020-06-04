@@ -14,13 +14,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@AllArgsConstructor
-public class Event {
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+@EqualsAndHashCode(callSuper = true)
+public class Event extends BaseEntity {
     @NonNull
     @Column(nullable = false)
     private String name;

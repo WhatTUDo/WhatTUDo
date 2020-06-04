@@ -66,7 +66,7 @@ export class OrganizationComponent implements OnInit {
 
   addCalendar(calId: number) {
     console.log('Cal ID' + calId);
-    this.organizationService.addCalToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
+    this.organizationService.addCalendarToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
       this.organization = organization;
       this.calendarService.getCalendarById(calId).subscribe((cal: Calendar) => {
         this.organizationCalendars.push(cal);
@@ -82,7 +82,7 @@ export class OrganizationComponent implements OnInit {
   }
 
   removeCalendar(calId: number) {
-    this.organizationService.removeCalToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
+    this.organizationService.removeCalendarToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
       this.organization = organization;
       this.organizationCalendars = this.organizationCalendars.filter((cal: Calendar) => {
         return cal.id != calId

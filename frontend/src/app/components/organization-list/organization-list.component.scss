@@ -1,10 +1,6 @@
 @import "../../../var.scss";
 
-form {
-  margin: 16pt 0;
-}
-
-.calendar {
+.organization {
   display: flex;
   flex-wrap: nowrap;
   align-items: center;
@@ -12,17 +8,17 @@ form {
   width: 100%;
   margin-bottom: 16pt;
 
-  .calendar-details {
+  .organization-details {
     width: 100%;
     color: var(--text);
 
-    .calendar-name {
+    .organization-name {
       font-weight: $f-bold;
       font-size: 24pt;
     }
   }
 
-  .calendar-buttons {
+  .organization-buttons {
     margin-left: auto;
     display: flex;
     align-items: center;
