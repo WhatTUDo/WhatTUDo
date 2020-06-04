@@ -1,40 +1,49 @@
+<app-feedback-handler></app-feedback-handler>
 <div class="contextual-control">
   <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
   <span *ngIf="calendar">Calendar: {{calendar.name}}</span>
 </div>
-<div class="grid-one-third" *ngIf="calendar">
+<div class="centered-two-third" *ngIf="calendar">
   <div>
     <h2>Update Calendar</h2>
+    <h3>Calendar Information</h3>
     <div class="form-group">
-<!--      <label for="calendar.organizationIds">Organization</label>-->
-<!--        <select id="calendar.organizationIds" class="form-control" [(ngModel)]="calendar.organizationIds[0]">-->
-<!--          <option *ngFor="let org of this.organizations" value="{{org.id}}">{{org.name}}</option>-->
-<!--        </select>-->
-        <label for="calendar.name">Name</label>
-        <input class="form-control " id="calendar.name"  placeholder="name" [(ngModel)]="calendar.name">
-        <button class="update button-clickable button-solid no-hover-enlarge no-shadow" title="Update calendar"
+      <!--      <label for="calendar.organizationIds">Organization</label>-->
+      <!--        <select id="calendar.organizationIds" class="form-control" [(ngModel)]="calendar.organizationIds[0]">-->
+      <!--          <option *ngFor="let org of this.organizations" value="{{org.id}}">{{org.name}}</option>-->
+      <!--        </select>-->
+      <label for="calendar.name">Name</label>
+      <input class="form-control " id="calendar.name" placeholder="name" [(ngModel)]="calendar.name">
+
+    </div>
+    <div class="form-group">
+      <label for="calendar.description">Description: </label>
+      <textarea class="form-control" id="calendar.description" name="calendar.description" rows="10">Description not yet implemented. </textarea>
+    </div>
+    <h3>Organizations</h3>
+    <div class="organization-list">
+      <p>You can select one or more Organizations if you are at least a Member in any of them. </p>
+      <div class="form-container">
+        <div class="mat-select-container">
+          <mat-form-field appearance="outline" style="width: 100%;">
+            <mat-label>Organizations</mat-label>
+            <mat-select multiple id="organization-select" [(ngModel)]="calendar.organizationIds"
+                        [compareWith]="compare">
+              <mat-option *ngFor="let org of this.organizations" [(value)]="org.id">
+                {{org.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <button class="update button-clickable always-black full-width-form-button no-hover-enlarge no-shadow"
+                title="Update calendar"
                 (click)="onSubmit()">
           Submit
         </button>
-    </div>
-  </div>
-  <div>
-    <h2>Organizations</h2>
-    <div class="organization-list">
-      <div class="organization" *ngFor="let org of this.organizations">
-        <input type="checkbox" name="this.organizations[]">
-        <div class="organization-details">
-          <a href="/organization/{{org.id}}">
-            <div class="organization-name clickable no-shadow no-hover-enlarge">{{org.name}}</div>
-          </a>
-        </div>
-        <div class="calendar-organizations-buttons">yy<
-        </div>
       </div>
     </div>
-    <div style="width: 66%; text-align: center; margin: 0 auto; font-style: italic">
-      You can add or remove this calendar to your organization on the organization page.
-    </div>
+
+
   </div>
 </div>

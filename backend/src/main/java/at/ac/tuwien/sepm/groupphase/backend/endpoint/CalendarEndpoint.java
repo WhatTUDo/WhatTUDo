@@ -13,6 +13,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -132,7 +133,7 @@ public class CalendarEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
+//    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
     @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
@@ -145,6 +146,25 @@ public class CalendarEndpoint {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @CrossOrigin
+    @PutMapping(value = "/organizations")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update Associated Organizations of a given Calendar!")
+    public CalendarDto updateOrganizationsForCalendar(@RequestBody CalendarDto calendarDto) {
+        try {
+            Calendar calendar = calendarMapper.calendarDtoToCalendar(calendarDto);
+            List<Organization> updatedOrganizationList = calendar.getOrganizations();
+            return calendarMapper.calendarToCalendarDto(calendarService.updateOrganizationsWithList(calendar, updatedOrganizationList));
+
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 }
