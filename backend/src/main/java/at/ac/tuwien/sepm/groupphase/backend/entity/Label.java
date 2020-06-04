@@ -2,12 +2,14 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.*;
 import org.hibernate.annotations.Cascade;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
-import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -15,7 +17,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Calendar {
+@AllArgsConstructor
+public class Label {
     @Id
     @Column
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,15 +28,14 @@ public class Calendar {
     @Column(nullable = false)
     private String name;
 
-    @NonNull
-    @ToString.Exclude
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
-    @ManyToMany(mappedBy = "calendars", fetch = FetchType.EAGER)
-    @Size(min = 1)
-    private List<Organization> organizations;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "calendar", cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = {CascadeType.MERGE})
+    @JoinTable(
+        name = "label_event",
+        joinColumns = @JoinColumn(name = "label_id"),
+        inverseJoinColumns = @JoinColumn(name = "event_id")
+    )
     private List<Event> events = new ArrayList<>();
 
 }

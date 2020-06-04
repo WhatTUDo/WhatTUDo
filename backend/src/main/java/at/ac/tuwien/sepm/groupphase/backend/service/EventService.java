@@ -1,9 +1,13 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import org.hibernate.criterion.Example;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 public interface EventService {
@@ -76,5 +80,25 @@ public interface EventService {
      *                                                                          - startDateTime is after endDateTime;
      */
     Event update(Event event);
+
+    /**
+     * Add labels to an event.
+     *
+     * @param event - to add the labels to
+     * @param labels  to be added to this event
+     * @return the updated event
+     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     */
+    Event addLabels(Event event, Collection<Label> labels);
+
+    /**
+     * Remove labels from an event.
+     *
+     * @param event - to remove the labels from
+     * @param labels    to be removed from this event
+     * @return the updated event
+     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     */
+    Event removeLabels(Event event, Collection<Label> labels);
 
 }

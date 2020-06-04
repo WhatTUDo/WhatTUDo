@@ -1,10 +1,15 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
+import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +23,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -35,6 +43,7 @@ public class EventEndpoint {
     static final String BASE_URL = "/events";
     private final EventService eventService;
     private final EventMapper eventMapper;
+    private final LabelService labelService;
 
 
     @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
@@ -54,7 +63,7 @@ public class EventEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#event, 'MEMBER')")
+    //@PreAuthorize("hasPermission(#event, 'MEMBER')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -117,6 +126,22 @@ public class EventEndpoint {
             return eventMapper.eventToEventDto(eventService.update(eventEntity));
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    //@PreAuthorize("hasPermission(#eventDto, 'MOD')")
+    @Transactional
+    @PutMapping(value = "/{id}/labels")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Add Labels to an Event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto addLabelToEvent(@PathVariable(value = "id") Integer eventId, @RequestParam(value = "labelId") List<Integer> labelIds) {
+        try {
+            Collection<Label> labels = labelIds.stream().map(labelService::findById).collect(Collectors.toList());
+            Event event = eventService.addLabels(eventService.findById(eventId), labels);
+            return eventMapper.eventToEventDto(event);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
