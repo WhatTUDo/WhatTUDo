@@ -15,12 +15,8 @@ import java.util.*;
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class ApplicationUser implements CustomUserDetails {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+@EqualsAndHashCode(callSuper = true)
+public class ApplicationUser extends BaseEntity implements CustomUserDetails {
     @NonNull
     @Column(name = "name")
     private String name;
