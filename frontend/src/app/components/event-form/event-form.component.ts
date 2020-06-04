@@ -8,6 +8,8 @@ import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
+import {MatDatetimepickerModule} from "@mat-datetimepicker/core";
+import {NgxMatDatetimePickerModule, NgxMatDateAdapter} from "@angular-material-components/datetime-picker";
 
 @Component({
   selector: 'app-event-form',
@@ -19,6 +21,14 @@ export class EventFormComponent implements OnInit {
 
   isUpdate: Boolean = false;
   showFeedback: Boolean = false;
+
+  pickerConfig: any = {
+    showSeconds: 0,
+    stepHour: 1,
+    stepMinute: 5
+
+  }
+
   event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
   reactiveEventForm = new FormGroup({
     id: new FormControl(''),
@@ -30,7 +40,10 @@ export class EventFormComponent implements OnInit {
     labels: new FormControl('')
   });
 
-  constructor(private eventService: EventService, private calendarService: CalendarService, private route: ActivatedRoute) {
+  constructor(
+    private eventService: EventService,
+    private calendarService: CalendarService,
+    private route: ActivatedRoute) {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id) {
       this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
@@ -47,14 +60,8 @@ export class EventFormComponent implements OnInit {
   }
 
   onSubmit() {
-    let formValue = this.reactiveEventForm.value;
-    let validationIsPassed = this.validateFormInput(formValue);
+    let validationIsPassed = this.validateFormInput(this.event);
     if (validationIsPassed) {
-      this.event.name = formValue.name;
-      this.event.startDateTime = new Date(formValue.startDate);
-      this.event.endDateTime = new Date(formValue.endDate);
-      this.event.calendarId = formValue.calendarId;
-
       // submit to eventService
       if (this.isUpdate) {
         this.eventService.putEvent(this.event).subscribe(response => {
@@ -83,24 +90,24 @@ export class EventFormComponent implements OnInit {
 
   /**
    *
-   * @param formValue
+   * @param event
    * returns true/false depending on whether validation succeeds.
    */
-  validateFormInput(formValue: any) {
+  validateFormInput(event: CalendarEvent) {
     let errors: Array<Error> = new Array<Error>();
-    if (!formValue.name || formValue.name == "") {
+    if (!event.name || event.name == "") {
       errors.push(new Error("Name cannot be null or empty!"));
     }
-    if (!formValue.startDate || formValue.startDate == "") {
+    if (!event.startDateTime) {
       errors.push(new Error("A start date and time must be specified!"));
     }
-    if (!formValue.endDate || formValue.endDate == "") {
+    if (!event.endDateTime) {
       errors.push(new Error("An end date and time must be specified!"));
     }
     if (!this.event.location) {
       errors.push(new Error("A location must be specified!"));
     }
-    if (!formValue.calendarId) {
+    if (!event.calendarId) {
       errors.push(new Error("A event must belongs to a calendar."));
     }
 

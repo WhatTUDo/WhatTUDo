@@ -30,8 +30,15 @@ import { OrganizationListComponent } from './components/organization-list/organi
 import { FeedbackHandlerComponent } from './components/feedback-handler/feedback-handler.component';
 import {MatSelectModule} from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
-
-
+import {MatDatetimepickerModule, MatNativeDatetimeModule} from "@mat-datetimepicker/core";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatInputModule} from "@angular/material/input";
+import {
+  NgxMatDateAdapter,
+  NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule
+} from "@angular-material-components/datetime-picker";
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
@@ -67,7 +74,14 @@ import { MatSliderModule } from '@angular/material/slider';
     FormsModule,
     FontAwesomeModule,
     MatSelectModule,
-    MatSliderModule
+    MatSliderModule,
+    MatDatepickerModule,
+    MatDatetimepickerModule,
+    MatNativeDatetimeModule,
+    MatInputModule,
+    NgxMatDatetimePickerModule,
+    NgxMatNativeDateModule,
+    MatTableModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
