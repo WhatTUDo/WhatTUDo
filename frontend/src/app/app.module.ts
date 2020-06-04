@@ -38,6 +38,7 @@ import {
   NgxMatDatetimePickerModule,
   NgxMatNativeDateModule
 } from "@angular-material-components/datetime-picker";
+import {MatTableModule} from "@angular/material/table";
 
 
 @NgModule({
@@ -79,7 +80,8 @@ import {
     MatNativeDatetimeModule,
     MatInputModule,
     NgxMatDatetimePickerModule,
-    NgxMatNativeDateModule
+    NgxMatNativeDateModule,
+    MatTableModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
