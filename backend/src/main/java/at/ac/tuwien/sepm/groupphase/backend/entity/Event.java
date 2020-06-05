@@ -41,7 +41,6 @@ public class Event extends BaseEntity {
     @ManyToMany(mappedBy = "events")
     private List<Label> labels;
 
-
     @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
     private List<AttendanceStatus> attendanceStatuses;
 

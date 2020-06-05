@@ -27,13 +27,21 @@ public class SimpleEventCollisionService implements EventCollisionService {
         List<Label> collidingEventLabels = collidingEvent.getLabels();
 
         for (Label label : newEventLabels) {
-            if (collidingEventLabels.contains(label)) labelScore++;
+            if (collidingEventLabels.contains(label)) labelScore += 2;
         }
 
         return labelScore;
     }
 
     private Integer compareDates(Event newEvent, Event collidingEvent) {
-        return 0;
+        Integer dateScore = 0;
+
+        //TODO: Come up with a good idea here.
+
+        return dateScore;
+    }
+
+    private Double getEventOverlap(Event eventA, Event eventB) {
+        return 0.0;
     }
 }

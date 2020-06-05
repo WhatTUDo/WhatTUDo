@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,5 +25,6 @@ public class EventCollision {
     @NonNull
     private int collisionScore;
 
-
+    @NonNull
+    private String message;
 }
