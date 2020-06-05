@@ -1,0 +1,13 @@
+@import "../var.scss";
+
+app-feedback-handler {
+  position: fixed;
+  bottom: 0;
+
+  width: 100%;
+
+  @media screen and (min-width: $mobile-breakpoint) {
+    bottom: 0;
+    padding: 16pt;
+  }
+}
