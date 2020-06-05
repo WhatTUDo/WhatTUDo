@@ -1,3 +1,5 @@
+@import "../../../var.scss";
+
 .feedback-container {
   border-radius: 5px;
   background-color: #90ee90;
@@ -10,22 +12,22 @@
 
 .feedback-neutral {
   border: 1px solid grey;
-  background-color: rgba(149, 149, 149, 1)
+  background-color: $gray
 }
 
 .feedback-success {
   border: 1px solid green;
-  background-color: rgba(144, 238, 144, 1);
+  background-color: $green
 }
 
 .feedback-warning {
   border: 1px solid #7b7b05;
-  background-color: rgba(222, 194, 20, 1);
+  background-color: $yellow
 }
 
 .feedback-error {
   border: 1px solid darkred;
-  background-color: rgba(252, 125, 121, 1);
+  background-color: $red;
 }
 
 .feedback-inner {

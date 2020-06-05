@@ -6,7 +6,9 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,6 +37,11 @@ public class Event extends BaseEntity {
     private Calendar calendar;
 
     @ToString.Exclude
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @ManyToMany(mappedBy = "events")
+    private List<Label> labels;
+
+
     @OneToMany(mappedBy = "event",cascade = CascadeType.ALL)
     private List<AttendanceStatus> attendanceStatuses;
 

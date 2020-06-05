@@ -62,6 +62,8 @@ export class EventFormComponent implements OnInit {
   onSubmit() {
     let validationIsPassed = this.validateFormInput(this.event);
     if (validationIsPassed) {
+
+
       // submit to eventService
       if (this.isUpdate) {
         this.eventService.putEvent(this.event).subscribe(response => {
@@ -75,10 +77,13 @@ export class EventFormComponent implements OnInit {
             FeedbackHandlerComponent.displayError("Error", err.error.message);
           });
       } else {
+
         this.eventService.postEvent(this.event).subscribe(response => {
             console.log("Saved event: " + response);
             FeedbackHandlerComponent.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
+
+            this.eventService.addLabels(1, [1]);
           },
           err => {
             console.warn(err);

@@ -13,7 +13,7 @@
   <div class="">
     <div class="organization" *ngFor="let org of this.organizations" (click)="redirectToOrganization(org.id)">
       <div class="organization-details">
-        <div class="organization-name">{{org.name}}</div>
+        <div class="organization-name clickable no-shadow no-hover-enlarge">{{org.name}}</div>
         <div>Active Members: {{20 + org.id}}</div>
         <div>Upcoming Events: 0</div>
       </div>

@@ -26,6 +26,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,9 +96,6 @@ public class CalendarEndpoint {
 
     }
 
-
-
-
    // @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
@@ -116,7 +114,7 @@ public class CalendarEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
+   // @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")

@@ -1,11 +1,15 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventDeleteEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventUpdateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +31,7 @@ import java.util.*;
 public class SimpleEventService implements EventService {
     private final ApplicationEventPublisher publisher;
     private final EventRepository eventRepository;
+    private final LabelRepository labelRepository;
     private final Validator validator;
 
 
@@ -117,6 +122,34 @@ public class SimpleEventService implements EventService {
     }
 
     @Override
+    public Event addLabels(Event event, Collection<Label> labels) {
+        log.info("Adding labels {} to event {}", labels, event);
+        try {
+            labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
+            labelRepository.saveAll(labels);
+
+            event.getLabels().addAll(labels);
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Event removeLabels(Event event, Collection<Label> labels) {
+        log.info("Removing labels {} from event {}", labels, event);
+        try {
+            labels.forEach(it -> {it.getEvents().remove(event);});
+            labelRepository.saveAll(labels);
+
+            event.getLabels().removeAll(labels);
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+
     public List<Event> getByCalendarId(Integer id) throws ServiceException {
         try{
         return eventRepository.findByCalendarId(id);
@@ -124,6 +157,5 @@ public class SimpleEventService implements EventService {
             throw new ServiceException(e.getMessage(),e);
         }
     }
-
 
 }

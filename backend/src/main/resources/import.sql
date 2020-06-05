@@ -80,3 +80,12 @@ VALUES (1, '2020-05-26 18:00:00', 'Grillparty der FS Architektur', '2020-05-26 1
        (5, '2020-06-02 21:00:00', 'Seminar zum ES-Tut', '2020-06-02 19:30:00', 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
        (6, '2020-05-29 15:00:00', 'Tutorium zum Thema Studienabschluss', '2020-05-25 14:00:00', 5, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
+INSERT INTO LABEL (ID, NAME)
+VALUES (1, 'Schnitzelparty');
+
+INSERT INTO LABEL_EVENT (LABEL_ID, EVENT_ID)
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (1, 4);
+

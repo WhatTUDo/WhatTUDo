@@ -4,6 +4,7 @@ import {CalendarEvent} from "../../dtos/calendar-event";
 import {Location} from "../../dtos/location";
 import {Label} from "../../dtos/label";
 import {EventService} from "../../services/event.service";
+import {LabelService} from "../../services/label.service";
 import {ActivatedRoute} from "@angular/router";
 
 import {faChevronLeft, faExternalLinkSquareAlt, faTag} from "@fortawesome/free-solid-svg-icons";
@@ -16,11 +17,16 @@ import {AttendanceStatusService} from '../../services/attendance-status.service'
 })
 export class EventComponent implements OnInit {
 
-  constructor(private eventService: EventService,
+
+id: number;
+labels: Array<Label>;
+
+  constructor(private eventService: EventService, private labelService: LabelService,
               private attendanceStatusService: AttendanceStatusService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
+
   }
 
   public calendarEvent: CalendarEvent;
@@ -29,6 +35,11 @@ export class EventComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+    this.id = parseInt(this.route.snapshot.paramMap.get('id'));
+
+    this.getEventLabels(this.id);
+
   }
 
   /**
@@ -135,13 +146,29 @@ export class EventComponent implements OnInit {
   }
 
   private getLabels() {
-    let label1 = new Label(null, "Party");
-    let label2 = new Label(null, "Festl");
+
+   let label1 = new Label(null, "Party", null);
+    let label2 = new Label(null, "Festl", null);
     let array = new Array<Label>();
+
     array.push(label1, label2);
 
     return array;
   }
+
+getAllLabels(){
+
+   this.eventService.getAllLabels().subscribe( labels => {
+      this.labels = labels;
+   })
+}
+
+getEventLabels(id : number){
+
+   this.eventService.getEventLabels(this.id).subscribe( labels => {
+      this.labels = labels;
+   })
+}
 
   faChevronLeft = faChevronLeft;
   faTag = faTag
