@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.EventCollision;
 import org.hibernate.service.spi.ServiceException;
 
 import javax.validation.ValidationException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventCollisionService {
@@ -22,4 +23,7 @@ public interface EventCollisionService {
      * @throws ValidationException is thrown if the Event entity does not pass validation.
      */
      List<EventCollision> getEventCollisions(Event event) throws ServiceException, ValidationException;
+
+
+     List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, List<EventCollision> eventCollisions) throws ServiceException, ValidationException;
 }
