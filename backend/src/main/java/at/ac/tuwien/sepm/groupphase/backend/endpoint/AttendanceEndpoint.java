@@ -60,7 +60,6 @@ public class AttendanceEndpoint {
         log.info("get attendees of event with id {}", eventId);
         try {
             return userMapper.applicationUserToUserDtoList(attendanceService.getUsersAttendingEvent(eventId));
-
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {

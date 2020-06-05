@@ -5,7 +5,7 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 @Component({
   selector: 'app-feedback-handler',
   templateUrl: './feedback-handler.component.html',
-  styleUrls: ['./feedback-handler.component.css'],
+  styleUrls: ['./feedback-handler.component.scss'],
   animations: [
     trigger("makeVisible", [
       state('visible', style({
@@ -70,6 +70,10 @@ export class FeedbackHandlerComponent implements OnInit {
 
   static displayError(header, message) {
     this.displayMessage(header, message, State.Error)
+  }
+
+  static displayServerError(error) {
+    this.displayError("Server Error: " + error.status, error.message);
   }
 
   private static displayMessage(header: String, message: String, state: State = State.Neutral) {
