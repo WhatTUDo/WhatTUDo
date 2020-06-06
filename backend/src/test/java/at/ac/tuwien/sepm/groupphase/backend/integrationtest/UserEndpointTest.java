@@ -45,33 +45,6 @@ public class UserEndpointTest {
 //        assertNotEquals(userDto.getPassword(), savedUserDto.getPassword());
 
     }
-    @WithMockUser(username = "user1")
-    @Test
-    public void updateUser(){
-
-        IncomingUserDto userDto = new IncomingUserDto(null, "user1", "testy@test.com", "hunter2");
-
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
-
-        assertNotNull(savedUserDto);
-        assertEquals(userDto.getName(), savedUserDto.getName());
-
-        LoggedInUserDto userDto1 = new LoggedInUserDto(savedUserDto.getId(), "user2", null);
-
-        LoggedInUserDto updateUser = userEndpoint.updateUser(userDto1);
-
-        assertEquals(userDto1.getName(), updateUser.getName());
-
-
-         userDto1 = new LoggedInUserDto(savedUserDto.getId(), null, "user43@test.com");
-
-        updateUser = userEndpoint.updateUser(userDto1);
-
-        assertEquals(savedUserDto.getId(), updateUser.getId());
-        assertEquals(userDto1.getEmail(), updateUser.getEmail());
-
-
-    }
 
 
 
