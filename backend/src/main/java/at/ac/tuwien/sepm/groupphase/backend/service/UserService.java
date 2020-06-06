@@ -46,4 +46,6 @@ public interface UserService extends UserDetailsService {
     ApplicationUser updateRoleInOrga(ApplicationUser user, Organization organization, OrganizationRole organizationRole);
 
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
+
+    Integer getUserId(String name);
 }

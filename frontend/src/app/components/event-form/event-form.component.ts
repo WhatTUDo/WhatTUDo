@@ -6,8 +6,8 @@ import {EventService} from "../../services/event.service";
 import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
-import {faChevronLeft, faCircle, faCheckCircle, faTag} from "@fortawesome/free-solid-svg-icons";
-import {FeedbackService} from "../../services/feedback.service";
+import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
+import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
 import {MatDatetimepickerModule} from "@mat-datetimepicker/core";
 import {NgxMatDatetimePickerModule, NgxMatDateAdapter} from "@angular-material-components/datetime-picker";
 
@@ -43,7 +43,6 @@ export class EventFormComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private calendarService: CalendarService,
-    private feedbackService: FeedbackService,
     private route: ActivatedRoute) {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -68,27 +67,27 @@ export class EventFormComponent implements OnInit {
       // submit to eventService
       if (this.isUpdate) {
         this.eventService.putEvent(this.event).subscribe(response => {
-            this.feedbackService.displaySuccess("Updated Event!", response.toString());
+            FeedbackHandlerComponent.displaySuccess("Updated Event!", response.toString());
             console.log("Updated event: " + response);
-            this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
+            FeedbackHandlerComponent.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
           },
           err => {
             console.warn(err);
-            this.feedbackService.displayError("Error", err.error.message);
+            FeedbackHandlerComponent.displayError("Error", err.error.message);
           });
       } else {
 
         this.eventService.postEvent(this.event).subscribe(response => {
             console.log("Saved event: " + response);
-            this.feedbackService.displaySuccess("Saved Event", "You saved a new Event!");
+            FeedbackHandlerComponent.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
 
             this.eventService.addLabels(1, [1]);
           },
           err => {
             console.warn(err);
-            this.feedbackService.displayError("Error", err.error.message);
+            FeedbackHandlerComponent.displayError("Error", err.error.message);
           });
       }
     }
@@ -124,7 +123,7 @@ export class EventFormComponent implements OnInit {
         errorMessage += error.message + " ";
       }
       this.showFeedback = true;
-      this.feedbackService.displayError("Validation Error(s)", errorMessage);
+      FeedbackHandlerComponent.displayError("Validation Error(s)", errorMessage);
       return false;
     }
     return true;
@@ -145,8 +144,4 @@ export class EventFormComponent implements OnInit {
   }
 
   faChevronLeft = faChevronLeft;
-  faTag = faTag;
-  faCircle = faCircle;
-  faCheckCircle = faCheckCircle;
-
 }
