@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.EventCollision;
 import org.hibernate.service.spi.ServiceException;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
@@ -22,8 +24,8 @@ public interface EventCollisionService {
      * @throws ServiceException is thrown when something goes wrong during calculation.
      * @throws ValidationException is thrown if the Event entity does not pass validation.
      */
-     List<EventCollision> getEventCollisions(Event event) throws ServiceException, ValidationException;
+    List<EventCollision> getEventCollisions(Event event, Integer scoreThreshold, Long additionalTimespan) throws ServiceException, ValidationException;
 
 
-     List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, List<EventCollision> eventCollisions) throws ServiceException, ValidationException;
+    List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, List<EventCollision> eventCollisions) throws ServiceException, ValidationException;
 }
