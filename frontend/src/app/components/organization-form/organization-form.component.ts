@@ -36,7 +36,6 @@ export class OrganizationFormComponent implements OnInit {
     }
   }
 
-  // TODO: add calendars/remove calendars (need fetch all Calendars for that) + actual alert thingy
   onSubmit(name: string) {
     this.organization.name = name.trim();
     if (!name) {
