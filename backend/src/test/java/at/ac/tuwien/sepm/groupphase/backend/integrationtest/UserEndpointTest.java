@@ -32,7 +32,7 @@ public class UserEndpointTest {
     PasswordEncoder passwordEncoder;
 
 
-
+    @WithMockUser
     @Test
     public void saveNewUser_shouldReturn_UserDto_withEncodedPassword() {
         IncomingUserDto userDto = new IncomingUserDto(0, "Test", "testy@test.com", "hunter2");
@@ -45,7 +45,7 @@ public class UserEndpointTest {
 //        assertNotEquals(userDto.getPassword(), savedUserDto.getPassword());
 
     }
-    @WithMockUser(username = "user1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "user1")
     @Test
     public void updateUser(){
 
