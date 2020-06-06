@@ -7,12 +7,18 @@ import at.ac.tuwien.sepm.groupphase.backend.service.EventCollisionService;
 import org.hibernate.service.spi.ServiceException;
 
 import javax.validation.ValidationException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class SimpleEventCollisionService implements EventCollisionService {
 
     @Override
     public List<EventCollision> getEventCollisions(Event event) throws ServiceException, ValidationException {
+        return null;
+    }
+
+    @Override
+    public List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, List<EventCollision> eventCollisions) throws ServiceException, ValidationException {
         return null;
     }
 

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -31,6 +32,7 @@ public class UserEndpointTest {
     PasswordEncoder passwordEncoder;
 
 
+
     @Test
     public void saveNewUser_shouldReturn_UserDto_withEncodedPassword() {
         IncomingUserDto userDto = new IncomingUserDto(0, "Test", "testy@test.com", "hunter2");
@@ -43,9 +45,10 @@ public class UserEndpointTest {
 //        assertNotEquals(userDto.getPassword(), savedUserDto.getPassword());
 
     }
-
+    @WithMockUser(username = "user1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void updateUser(){
+
         IncomingUserDto userDto = new IncomingUserDto(null, "user1", "testy@test.com", "hunter2");
 
         LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
@@ -66,19 +69,6 @@ public class UserEndpointTest {
 
         assertEquals(savedUserDto.getId(), updateUser.getId());
         assertEquals(userDto1.getEmail(), updateUser.getEmail());
-
-
-    }
-
-    @Test
-    public void changePassword(){
-        IncomingUserDto userDto = new IncomingUserDto(null, "changePasswordUser", "changepass@test.com", "hunter3");
-
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
-
-        LoggedInUserDto changePasswordUserDto =  userPasswordEndpoint.changeUserPassword(new ChangePasswordDto(savedUserDto.getName(),savedUserDto.getEmail(), "hunter3", "hunter4"));
-
-//        assertTrue(passwordEncoder.matches("hunter4", changePasswordUserDto()));
 
 
     }
