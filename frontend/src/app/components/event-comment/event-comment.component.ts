@@ -13,8 +13,8 @@ export class EventCommentComponent implements OnInit {
 
   @Input() comment: EventComment;
 
-  public author: string
-  public rating: number
+  public author: string;
+  public rating: number;
 
   constructor(eventService: EventService) {
   }

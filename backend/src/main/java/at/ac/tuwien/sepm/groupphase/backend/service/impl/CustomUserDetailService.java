@@ -141,4 +141,13 @@ public class CustomUserDetailService implements UserService {
             throw new ServiceException(e.getMessage());
         }
     }
+
+    @Override
+    public Integer getUserId(String name) {
+        Optional<ApplicationUser> found =userRepository.findByName(name);
+        if(!found.isPresent()){
+            throw new NotFoundException("user not found");
+        }
+        return found.get().getId();
+    }
 }
