@@ -40,7 +40,7 @@ export class OrganizationFormComponent implements OnInit {
   onSubmit(name: string) {
     this.organization.name = name.trim();
     if (!name) {
-      return
+      return;
     }
     if (this.organization.id) {
       this.updateOrganization(name);
