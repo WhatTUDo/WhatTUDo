@@ -9,6 +9,8 @@ import {ActivatedRoute} from "@angular/router";
 
 import {faChevronLeft, faExternalLinkSquareAlt, faTag} from "@fortawesome/free-solid-svg-icons";
 import {AttendanceStatusService} from '../../services/attendance-status.service';
+import {AuthService} from '../../services/auth.service';
+import {AttendanceDto} from '../../dtos/AttendanceDto';
 
 @Component({
   selector: 'app-event',
@@ -19,13 +21,21 @@ export class EventComponent implements OnInit {
 
 
 id: number;
+user: number;
 labels: Array<Label>;
 
+
   constructor(private eventService: EventService, private labelService: LabelService,
-              private attendanceStatusService: AttendanceStatusService,
+              private attendanceStatusService: AttendanceStatusService,private authService:AuthService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
+    this.authService.getUserId().subscribe((userid:number) =>{
+      this.user= userid;
+    }, err => {
+      console.warn(err);
+    });
+
 
   }
 
@@ -35,7 +45,6 @@ labels: Array<Label>;
 
 
   ngOnInit(): void {
-
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
 
     this.getEventLabels(this.id);
@@ -58,7 +67,7 @@ labels: Array<Label>;
       this.eventTimeString = this.getEventTimeString();
     }, err => {
       alert(err.message);
-    });
+  });
   }
 
   public getEventTimeString() {
@@ -93,12 +102,29 @@ labels: Array<Label>;
   public participate(status: number) {
     switch (status) {
       case 0:
+        console.log(this.user);
+        console.log(this.id);
+        this.attendanceStatusService.create(new AttendanceDto(this.user, this.id, 0)).subscribe((attendance) =>{
+          console.log(attendance);
+        },err => {
+          alert(err.message);}
+          );
         console.log("You declined!");
         break;
       case 1:
+        this.attendanceStatusService.create(new AttendanceDto(this.user, this.id, 1)).subscribe((attendance) =>{
+          console.log(attendance);
+        },err => {
+          alert(err.message);}
+      );
         console.log("You are attending!");
         break;
       case 2:
+        this.attendanceStatusService.create(new AttendanceDto(this.user, this.id, 2 )).subscribe((attendance) =>{
+            console.log(attendance);
+          },err => {
+            alert(err.message);}
+        );
         console.log("You are interested!");
         break;
       default:
@@ -169,6 +195,7 @@ getEventLabels(id : number){
       this.labels = labels;
    })
 }
+
 
   faChevronLeft = faChevronLeft;
   faTag = faTag

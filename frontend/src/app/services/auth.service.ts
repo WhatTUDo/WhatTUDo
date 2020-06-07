@@ -77,4 +77,8 @@ export class AuthService {
     return date;
   }
 
+  getUserId(): Observable<number>{
+    return this.httpClient.get<number>(this.globals.backendUri+"users/user");
+  }
+
 }

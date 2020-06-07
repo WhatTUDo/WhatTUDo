@@ -9,13 +9,13 @@ import {Observable} from 'rxjs';
 })
 export class AttendanceStatusService {
 
-  private  attendanceUri: string = this.globals.backendUri + 'attendance';
+  private  attendanceUri: string = this.globals.backendUri +  'attendance';
 
   constructor(private httpClient: HttpClient,private globals: Globals) { }
 
   /**POST: add a new attendance status*/
   create(attendanceStatus: AttendanceDto): Observable<AttendanceDto>{
-    return this.httpClient.post<AttendanceDto>(this.attendanceUri + '/', attendanceStatus);
+    return this.httpClient.post<AttendanceDto>(this.attendanceUri+ '/', attendanceStatus);
   }
 
 }
