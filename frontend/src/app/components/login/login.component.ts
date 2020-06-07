@@ -50,17 +50,6 @@ export class LoginComponent implements OnInit {
       () => {
         console.log('Successfully logged in user: ' + authRequest.username);
         this.router.navigate(['/']);
-      },
-      error => {
-        console.log('Could not log in due to:');
-        FeedbackHandlerComponent.displayServerError(error);
-        // this.error = true;
-        // if (typeof error.error === 'object') {
-        //   this.errorMessage = error.error.error;
-        // } else {
-        //   this.errorMessage = error.error;
-        // }
-        // alert(this.errorMessage);
       }
     );
   }
