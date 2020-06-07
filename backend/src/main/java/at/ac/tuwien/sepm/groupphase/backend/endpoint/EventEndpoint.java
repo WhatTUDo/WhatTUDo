@@ -12,6 +12,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
+import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,7 @@ public class EventEndpoint {
     private final EventService eventService;
     private final EventMapper eventMapper;
     private final LabelService labelService;
+    private final UserService userService;
     private final LabelMapper labelMapper;
 
 
@@ -138,14 +140,14 @@ public class EventEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/calendarId/{id}")
     @ApiOperation(value = "Get Calendar Events", authorizations = {@Authorization(value = "apiKey")})
-    public List<EventDto> getEventsByCalendarId(@PathVariable("id") Integer id){
+    public List<EventDto> getEventsByCalendarId(@PathVariable("id") Integer id) {
         log.info("getEventsByCalendarId");
         try {
             List<Event> events = eventService.getByCalendarId(id);
             List<EventDto> eventDtos = new ArrayList<>();
             events.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
             return eventDtos;
-        }catch (ServiceException e){
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
@@ -173,16 +175,35 @@ public class EventEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Get Labels by Id", authorizations = {@Authorization(value = "apiKey")})
     public List<LabelDto> getLabelsById(@PathVariable(value = "id") int id) {
-            try {
+        try {
 
-                List<LabelDto> results = new ArrayList<LabelDto>();
+            List<LabelDto> results = new ArrayList<LabelDto>();
 
-                (labelService.findByEventId(id)).forEach(it -> results.add(labelMapper.labelToLabelDto(it)));
+            (labelService.findByEventId(id)).forEach(it -> results.add(labelMapper.labelToLabelDto(it)));
 
 
-                return results;
-            } catch (NotFoundException e) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-            }
-   }
+            return results;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping
+    @ApiOperation(value = "Get recommended Event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto getRecommendedEvent(@RequestParam("id") Integer userId) {
+        log.info("get recommended event for user");
+
+        try {
+            Event recommendedEvent = userService.getRecommendedEvent(userId);
+            return eventMapper.eventToEventDto(recommendedEvent);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
 }

@@ -1,13 +1,13 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
-import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationMembership;
-import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationRole;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.events.user.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
+import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
+import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
@@ -22,7 +22,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Service
@@ -31,6 +34,9 @@ public class CustomUserDetailService implements UserService {
     private final ApplicationEventPublisher publisher;
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
+    private final AttendanceService attendanceService;
+    private final LabelService labelService;
+    private final LabelRepository labelRepository;
     private final PasswordEncoder passwordEncoder;
     private final Validator validator;
 
@@ -140,5 +146,38 @@ public class CustomUserDetailService implements UserService {
         } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
         }
+    }
+
+    //TODO: try catch
+    @Override
+    public Event getRecommendedEvent(Integer userId) {
+        List<Event> events = attendanceService.getEventUserIsAttending(userId);
+        events.addAll(attendanceService.getEventUserIsInterested(userId));
+        int[] labels = new int[labelService.getAll().size() + 1];
+
+        events.forEach(event -> {
+            List<Label> eventLabels = event.getLabels();
+            eventLabels.forEach(label -> {
+                labels[label.getId()]++;
+            });
+        });
+
+        for (int i = 0; i < labels.length; i++) {
+            int maxAt = 0;
+            for (int j = 0; j < labels.length; j++) {
+                maxAt = labels[j] > labels[maxAt] ? j : maxAt;
+            }
+
+            if (labels[maxAt] != 0) {
+                List<Event> possibleEvents = labelRepository.getOne(labelService.findById(maxAt).getId()).getEvents();
+                for (Event e : possibleEvents
+                ) {
+                    if (e.getStartDateTime().isAfter(LocalDateTime.now())) {
+                        return e;
+                    }
+                }
+            }
+        }
+        throw new NotFoundException("No recommendable event found");
     }
 }
