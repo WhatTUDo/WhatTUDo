@@ -55,7 +55,8 @@ public class SimpleEventCollisionService implements EventCollisionService {
 
     private Integer getCollisionScore(Event newEvent, Event collidingEvent) {
         Integer score = 0;
-        score += this.compareLabels(newEvent, collidingEvent);
+        //Fixme: Needs to be re-activated once the Lazy Init Bug in DB is fixed.
+        //score += this.compareLabels(newEvent, collidingEvent);
         score += this.compareDates(newEvent, collidingEvent);
         return score;
     }
