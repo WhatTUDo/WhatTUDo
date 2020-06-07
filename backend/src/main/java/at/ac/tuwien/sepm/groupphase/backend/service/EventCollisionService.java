@@ -27,5 +27,5 @@ public interface EventCollisionService {
     List<EventCollision> getEventCollisions(Event event, Integer scoreThreshold, Long additionalTimespan) throws ServiceException, ValidationException;
 
 
-    List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, List<EventCollision> eventCollisions) throws ServiceException, ValidationException;
+    List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, Integer initialScore) throws ServiceException, ValidationException;
 }
