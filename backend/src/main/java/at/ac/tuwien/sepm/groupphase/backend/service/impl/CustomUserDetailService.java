@@ -148,36 +148,41 @@ public class CustomUserDetailService implements UserService {
         }
     }
 
-    //TODO: try catch
     @Override
     public Event getRecommendedEvent(Integer userId) {
-        List<Event> events = attendanceService.getEventUserIsAttending(userId);
-        events.addAll(attendanceService.getEventUserIsInterested(userId));
-        int[] labels = new int[labelService.getAll().size() + 1];
+        try {
+            List<Event> events = attendanceService.getEventUserIsAttending(userId);
+            events.addAll(attendanceService.getEventUserIsInterested(userId));
+            int[] labels = new int[labelService.getAll().size() + 1];
 
-        events.forEach(event -> {
-            List<Label> eventLabels = event.getLabels();
-            eventLabels.forEach(label -> {
-                labels[label.getId()]++;
+            events.forEach(event -> {
+                List<Label> eventLabels = event.getLabels();
+                eventLabels.forEach(label -> {
+                    labels[label.getId()]++;
+                });
             });
-        });
 
-        for (int i = 0; i < labels.length; i++) {
-            int maxAt = 0;
-            for (int j = 0; j < labels.length; j++) {
-                maxAt = labels[j] > labels[maxAt] ? j : maxAt;
-            }
+            for (int i = 0; i < labels.length; i++) {
+                int maxAt = 0;
+                for (int j = 0; j < labels.length; j++) {
+                    maxAt = labels[j] > labels[maxAt] ? j : maxAt;
+                }
 
-            if (labels[maxAt] != 0) {
-                List<Event> possibleEvents = labelRepository.getOne(labelService.findById(maxAt).getId()).getEvents();
-                for (Event e : possibleEvents
-                ) {
-                    if (e.getStartDateTime().isAfter(LocalDateTime.now())) {
-                        return e;
+                if (labels[maxAt] != 0) {
+                    List<Event> possibleEvents = labelRepository.getOne(labelService.findById(maxAt).getId()).getEvents();
+                    //FIXME: make the next 6 lines into one line (possibleEvents.forEach(e -> {})
+                    for (Event e : possibleEvents
+                    ) {
+                        if (e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))) {
+
+                            return e;
+                        }
                     }
                 }
             }
+            throw new NotFoundException("No recommendable event found");
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
         }
-        throw new NotFoundException("No recommendable event found");
     }
 }

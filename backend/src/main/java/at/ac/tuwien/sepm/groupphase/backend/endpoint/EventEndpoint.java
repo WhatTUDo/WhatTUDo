@@ -188,6 +188,7 @@ public class EventEndpoint {
         }
     }
 
+  /*
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -202,8 +203,9 @@ public class EventEndpoint {
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage());
         }
     }
+    */
 
 }
