@@ -105,4 +105,17 @@ public class EventCollisionTest {
         ApplicationUser user = userRepository.save(new ApplicationUser("Dorian", "grazie@gmx.com", "pwdsuperstrong"));
 
     }
+
+    @Test
+    public void getListOfRecommendations(){
+        Calendar calendar = calendarRepository.save(new Calendar("Calendar 1", Collections.singletonList(organization)));
+        Event event = eventRepository.save(new Event("Event 1", LocalDateTime.of(2021,6,8,14,0), LocalDateTime.of(2021,6,8,16,0),calendar));
+        Event eventColliding = eventRepository.save(new Event("Event 2", LocalDateTime.of(2021,6,8,13,0), LocalDateTime.of(2021,6,8,16,0),calendar));
+        Event eventNextWeek = eventRepository.save(new Event("Event 3", LocalDateTime.of(2021,6,15,13,0), LocalDateTime.of(2021,6,15,15,0),calendar));
+        Event eventNextDay = eventRepository.save(new Event("Event 4", LocalDateTime.of(2021,6,9,15,0), LocalDateTime.of(2021,6,9,16,0),calendar));
+        List<LocalDateTime[]> rec = eventCollisionService.getAlternativeDateSuggestions(event, 3 );
+        System.out.println(rec);
+
+    }
+
 }

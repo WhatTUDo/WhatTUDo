@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventCollisionService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
@@ -18,6 +19,8 @@ import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -27,11 +30,11 @@ public class SimpleEventCollisionService implements EventCollisionService {
     private final EventService eventService;
 
     private final LabelService labelService;
-    List<EventCollision> eventCollisions = new ArrayList<>();
 
     @Override
     public List<EventCollision> getEventCollisions(Event event, Integer scoreThreshold, Long additionalTimespan) throws ServiceException, ValidationException {
         try {
+            List<EventCollision> eventCollisions = new ArrayList<>();
             LocalDateTime start = event.getStartDateTime().minusHours(additionalTimespan);
             LocalDateTime end = event.getEndDateTime().plusHours(additionalTimespan);
             List<Event> events = this.eventService.findForDates(start, end); // get all Dates with a possible overlap.
@@ -148,53 +151,78 @@ public class SimpleEventCollisionService implements EventCollisionService {
 
     @Override
     public List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, Integer initialScore) throws ServiceException, ValidationException {
-        List<LocalDateTime[]> rec = new ArrayList<>();
+        Map<LocalDateTime[], Integer> rec = new HashMap<>();
         Event help = new Event(event.getName(), event.getStartDateTime(), event.getEndDateTime(), event.getCalendar());
+        List<EventCollision> eventCollisions = new ArrayList<>();
+        List<EventCollision> worseCase = new ArrayList<>();
         for (int i = 1; i < 4; i++) {
             help.setStartDateTime(event.getStartDateTime().plusDays(i));
             help.setEndDateTime(event.getEndDateTime().plusDays(i));
-            if (getEventCollisions(help, initialScore, 12L).isEmpty()) {
-                rec.add(new LocalDateTime[]{help.getStartDateTime(), help.getEndDateTime()});
-            }
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
             help.setStartDateTime(event.getStartDateTime().minusDays(i));
             help.setStartDateTime(event.getEndDateTime().minusDays(i));
-            if (getEventCollisions(help, initialScore, 12L).isEmpty()) {
-                rec.add(new LocalDateTime[]{help.getStartDateTime(), help.getEndDateTime()});
-            }
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+
         }
 
         for (int i = 1; i < 3; i++) {
             help.setStartDateTime(event.getStartDateTime().plusWeeks(i));
             help.setEndDateTime(event.getEndDateTime().plusWeeks(i));
-            if (getEventCollisions(help, initialScore, 12L).isEmpty()) {
-                rec.add(new LocalDateTime[]{help.getStartDateTime(), help.getEndDateTime()});
-            }
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+
             help.setStartDateTime(event.getStartDateTime().minusWeeks(i));
             help.setStartDateTime(event.getEndDateTime().minusWeeks(i));
-            if (getEventCollisions(help, initialScore, 12L).isEmpty()) {
-                rec.add(new LocalDateTime[]{help.getStartDateTime(), help.getEndDateTime()});
-            }
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+
         }
 
         for (int i = 1; i < 3; i++) {
             help.setStartDateTime(event.getStartDateTime().plusHours(i));
             help.setEndDateTime(event.getEndDateTime().plusHours(i));
-            if (getEventCollisions(help, initialScore, 12L).isEmpty()) {
-                rec.add(new LocalDateTime[]{help.getStartDateTime(), help.getEndDateTime()});
-            }
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+
             help.setStartDateTime(event.getStartDateTime().minusHours(i));
             help.setStartDateTime(event.getEndDateTime().minusHours(i));
-            if (getEventCollisions(help, initialScore, 12L).isEmpty()) {
-                rec.add(new LocalDateTime[]{help.getStartDateTime(), help.getEndDateTime()});
-            }
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+
         }
-        for (EventCollision e:eventCollisions) {
-            if(e.getCollisionScore() < 2){
-                rec.add(new LocalDateTime[]{e.getEvent().getStartDateTime(), e.getEvent().getEndDateTime()});
-            }
-        }
-        return rec;
+
+
+
+        return filterBestRecommendations(rec);
     }
 
 
+     public Map<LocalDateTime[], Integer> recommendationLookup( List<EventCollision> eventCollisions,Event solution,  Map<LocalDateTime[], Integer> rec ){
+         if (eventCollisions.isEmpty()) {
+             rec.put(new LocalDateTime[]{solution.getStartDateTime(), solution.getEndDateTime()}, 0);
+         }else{
+             EventCollision max = eventCollisions.stream().max(Comparator.comparing(e->e.getCollisionScore())).get();
+             rec.put(new LocalDateTime[]{max.getEvent().getStartDateTime(), max.getEvent().getEndDateTime()}, max.getCollisionScore());
+         }
+         return rec;
+     }
+
+     public List<LocalDateTime[]> filterBestRecommendations(Map<LocalDateTime[], Integer> rec){
+        List<LocalDateTime[]> best= rec.entrySet().stream()
+            .filter(x->x.getValue() == 0)
+            .map(map->map.getKey())
+            .collect(Collectors.toList());
+
+         rec.values().removeIf(value -> value == 0);
+
+         Integer min = Collections.min(rec.values());
+
+
+        List<LocalDateTime[]> good=  rec.entrySet().stream()
+            .filter(x->x.getValue() == min)
+            .map(map->map.getKey())
+            .collect(Collectors.toList());
+
+
+
+
+         return Stream.concat(best.stream(), good.stream())
+             .collect(Collectors.toList());
+     }
 }
