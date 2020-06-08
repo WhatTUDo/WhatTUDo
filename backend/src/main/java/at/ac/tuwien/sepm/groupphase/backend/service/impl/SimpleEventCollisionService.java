@@ -204,25 +204,22 @@ public class SimpleEventCollisionService implements EventCollisionService {
      }
 
      public List<LocalDateTime[]> filterBestRecommendations(Map<LocalDateTime[], Integer> rec){
-        List<LocalDateTime[]> best= rec.entrySet().stream()
-            .filter(x->x.getValue() == 0)
-            .map(map->map.getKey())
-            .collect(Collectors.toList());
+        List<LocalDateTime[]> best= filterMap(rec, 0);
 
          rec.values().removeIf(value -> value == 0);
 
          Integer min = Collections.min(rec.values());
 
-
-        List<LocalDateTime[]> good=  rec.entrySet().stream()
-            .filter(x->x.getValue() == min)
-            .map(map->map.getKey())
-            .collect(Collectors.toList());
-
-
-
+        List<LocalDateTime[]> good=  filterMap(rec, min);
 
          return Stream.concat(best.stream(), good.stream())
+             .collect(Collectors.toList());
+     }
+
+     public List<LocalDateTime[]> filterMap(Map<LocalDateTime[], Integer> rec, int min){
+       return   rec.entrySet().stream()
+             .filter(x->x.getValue() == min)
+             .map(map->map.getKey())
              .collect(Collectors.toList());
      }
 }
