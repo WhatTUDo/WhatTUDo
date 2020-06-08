@@ -158,68 +158,66 @@ public class SimpleEventCollisionService implements EventCollisionService {
         for (int i = 1; i < 4; i++) {
             help.setStartDateTime(event.getStartDateTime().plusDays(i));
             help.setEndDateTime(event.getEndDateTime().plusDays(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
             help.setStartDateTime(event.getStartDateTime().minusDays(i));
             help.setStartDateTime(event.getEndDateTime().minusDays(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
 
         }
 
         for (int i = 1; i < 3; i++) {
             help.setStartDateTime(event.getStartDateTime().plusWeeks(i));
             help.setEndDateTime(event.getEndDateTime().plusWeeks(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
 
             help.setStartDateTime(event.getStartDateTime().minusWeeks(i));
             help.setStartDateTime(event.getEndDateTime().minusWeeks(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
 
         }
 
         for (int i = 1; i < 3; i++) {
             help.setStartDateTime(event.getStartDateTime().plusHours(i));
             help.setEndDateTime(event.getEndDateTime().plusHours(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
 
             help.setStartDateTime(event.getStartDateTime().minusHours(i));
             help.setStartDateTime(event.getEndDateTime().minusHours(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec );
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
 
         }
-
-
 
         return filterBestRecommendations(rec);
     }
 
 
-     public Map<LocalDateTime[], Integer> recommendationLookup( List<EventCollision> eventCollisions,Event solution,  Map<LocalDateTime[], Integer> rec ){
-         if (eventCollisions.isEmpty()) {
-             rec.put(new LocalDateTime[]{solution.getStartDateTime(), solution.getEndDateTime()}, 0);
-         }else{
-             EventCollision max = eventCollisions.stream().max(Comparator.comparing(e->e.getCollisionScore())).get();
-             rec.put(new LocalDateTime[]{max.getEvent().getStartDateTime(), max.getEvent().getEndDateTime()}, max.getCollisionScore());
-         }
-         return rec;
-     }
+    public Map<LocalDateTime[], Integer> recommendationLookup(List<EventCollision> eventCollisions, Event solution, Map<LocalDateTime[], Integer> rec) {
+        if (eventCollisions.isEmpty()) {
+            rec.put(new LocalDateTime[]{solution.getStartDateTime(), solution.getEndDateTime()}, 0);
+        } else {
+            EventCollision max = eventCollisions.stream().max(Comparator.comparing(e -> e.getCollisionScore())).get();
+            rec.put(new LocalDateTime[]{max.getEvent().getStartDateTime(), max.getEvent().getEndDateTime()}, max.getCollisionScore());
+        }
+        return rec;
+    }
 
-     public List<LocalDateTime[]> filterBestRecommendations(Map<LocalDateTime[], Integer> rec){
-        List<LocalDateTime[]> best= filterMap(rec, 0);
+    public List<LocalDateTime[]> filterBestRecommendations(Map<LocalDateTime[], Integer> rec) {
+        List<LocalDateTime[]> best = filterMap(rec, 0);
 
-         rec.values().removeIf(value -> value == 0);
+        rec.values().removeIf(value -> value == 0);
 
-         Integer min = Collections.min(rec.values());
+        Integer min = Collections.min(rec.values());
 
-        List<LocalDateTime[]> good=  filterMap(rec, min);
+        List<LocalDateTime[]> good = filterMap(rec, min);
 
-         return Stream.concat(best.stream(), good.stream())
-             .collect(Collectors.toList());
-     }
+        return Stream.concat(best.stream(), good.stream())
+            .collect(Collectors.toList());
+    }
 
-     public List<LocalDateTime[]> filterMap(Map<LocalDateTime[], Integer> rec, int min){
-       return   rec.entrySet().stream()
-             .filter(x->x.getValue() == min)
-             .map(map->map.getKey())
-             .collect(Collectors.toList());
-     }
+    public List<LocalDateTime[]> filterMap(Map<LocalDateTime[], Integer> rec, int min) {
+        return rec.entrySet().stream()
+            .filter(x -> x.getValue() == min)
+            .map(map -> map.getKey())
+            .collect(Collectors.toList());
+    }
 }
