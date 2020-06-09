@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -89,6 +91,7 @@ public class SimpleEventService implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public List<Event> findForDates(LocalDateTime start, LocalDateTime end) {
         try {
             validator.validateMultipleEventsQuery(start, end);
@@ -127,7 +130,13 @@ public class SimpleEventService implements EventService {
         try {
             labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
             labelRepository.saveAll(labels);
-            event.getLabels().addAll(labels);
+            if (event.getLabels() != null) {
+                event.getLabels().addAll(labels);
+            }
+            else {
+                List<Label> labelList = new ArrayList<>(labels);
+                event.setLabels(labelList);
+            }
             return eventRepository.save(event);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);

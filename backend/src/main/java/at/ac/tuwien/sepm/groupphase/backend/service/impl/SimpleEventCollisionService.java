@@ -57,8 +57,7 @@ public class SimpleEventCollisionService implements EventCollisionService {
 
     private Integer getCollisionScore(Event newEvent, Event collidingEvent) {
         Integer score = 0;
-        //Fixme: Needs to be re-activated once the Lazy Init Bug in DB is fixed.
-        //score += this.compareLabels(newEvent, collidingEvent);
+        score += this.compareLabels(newEvent, collidingEvent);
         score += this.compareDates(newEvent, collidingEvent);
         return score;
     }
@@ -70,7 +69,9 @@ public class SimpleEventCollisionService implements EventCollisionService {
         List<Label> collidingEventLabels = labelService.findByEventId(collidingEvent.getId());
 
         for (Label label : newEventLabels) {
-            if (collidingEventLabels.contains(label)) labelScore += 2;
+            for (Label collidingLabel : collidingEventLabels) {
+                if (collidingLabel.getId().equals(label.getId())) labelScore += 2;
+            }
         }
 
         return labelScore;
