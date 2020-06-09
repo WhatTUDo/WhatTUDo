@@ -178,7 +178,7 @@ public class CustomUserDetailService implements UserService {
                             return e;
                         }
                     }
-                }
+                } else throw new NotFoundException("No recommendable event found");
             }
             throw new NotFoundException("No recommendable event found");
         } catch (PersistenceException | IllegalArgumentException e) {
