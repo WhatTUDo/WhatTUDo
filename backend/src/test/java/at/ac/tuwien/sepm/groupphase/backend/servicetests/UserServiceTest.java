@@ -2,9 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.servicetests;
 
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
-import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
 import at.ac.tuwien.sepm.groupphase.backend.service.impl.CustomUserDetailService;
 import org.junit.jupiter.api.Test;
@@ -34,6 +32,10 @@ public class UserServiceTest {
     CalendarRepository calendarRepository;
     @Autowired
     AttendanceRepository attendanceRepository;
+    @Autowired
+    LabelRepository labelRepository;
+    @Autowired
+    EventRepository eventRepository;
 
     @Autowired
     CustomUserDetailService userService;
@@ -62,15 +64,15 @@ public class UserServiceTest {
         List<Label> labels1 = new ArrayList<>();
         List<Label> labels2 = new ArrayList<>();
         List<Label> labels3 = new ArrayList<>();
-        Label label1 = new Label("TestLabel1");
-        Label label2 = new Label("TestLabel2");
+        Label label1 = labelRepository.save(new Label("TestLabel1"));
+        Label label2 = labelRepository.save(new Label("TestLabel2"));
         labels1.add(label1);
         labels2.add(label1);
         labels2.add(label2);
         labels3.add(label1);
-        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
+        Event event1 = eventRepository.save(new Event("Test Event 1", LocalDateTime.of(2021,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar));
         event1.setLabels(labels1);
-        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021,1,2,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
+        Event event2 = eventRepository.save(new Event("Test  Event 2", LocalDateTime.of(2021,1,2,15,30),LocalDateTime.of(2020,1,1,16,0),calendar));
         event2.setLabels(labels2);
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user,event1,AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user,event2,AttendanceStatusPossibilities.INTERESTED));
