@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -109,12 +110,17 @@ public class EventCollisionTest {
     @Test
     public void getListOfRecommendations(){
         Calendar calendar = calendarRepository.save(new Calendar("Calendar 1", Collections.singletonList(organization)));
-        Event event = eventRepository.save(new Event("Event 1", LocalDateTime.of(2021,6,8,14,0), LocalDateTime.of(2021,6,8,16,0),calendar));
-        Event eventColliding = eventRepository.save(new Event("Event 2", LocalDateTime.of(2021,6,8,13,0), LocalDateTime.of(2021,6,8,16,0),calendar));
-        Event eventNextWeek = eventRepository.save(new Event("Event 3", LocalDateTime.of(2021,6,15,13,0), LocalDateTime.of(2021,6,15,15,0),calendar));
-        Event eventNextDay = eventRepository.save(new Event("Event 4", LocalDateTime.of(2021,6,9,15,0), LocalDateTime.of(2021,6,9,16,0),calendar));
-        List<LocalDateTime[]> rec = eventCollisionService.getAlternativeDateSuggestions(event, 3 );
-        System.out.println(rec);
+        Event event1 = eventRepository.save(new Event("Adventskatzenkalender", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
+        Event eventNextDay = eventRepository.save(new Event("Event 3", LocalDateTime.of(2021,1,2,15,30), LocalDateTime.of(2021,1,2,16,0),calendar));
+        Event eventNextHour = eventRepository.save(new Event("Event 4", LocalDateTime.of(2021,1,1,16,0), LocalDateTime.of(2021,1,1,17,30),calendar));
+        Event eventNextDay1 = eventRepository.save(new Event("Event 5",LocalDateTime.of(2021,1,1,15,30), LocalDateTime.of(2021,1,1,15,35),calendar ));
+        Event eventNext2Weeks = eventRepository.save(new Event("Event 6", LocalDateTime.of(2021,1,15,15,30), LocalDateTime.of(2021,1,15,15,35),calendar ));
+        Event eventToTest = new Event("Adventskatzenkalender2", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        List<LocalDateTime[]> rec = eventCollisionService.getAlternativeDateSuggestions(eventToTest, 2 );
+//        for (LocalDateTime[] l: rec) {
+//            System.out.println(Arrays.toString(l));
+//        }
+        assertEquals(18, rec.size());
 
     }
 

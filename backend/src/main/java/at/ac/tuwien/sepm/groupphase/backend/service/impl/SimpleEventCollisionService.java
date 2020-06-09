@@ -42,7 +42,7 @@ public class SimpleEventCollisionService implements EventCollisionService {
             for (Event collidingEvent : events) {
                 if (!collidingEvent.getId().equals(event)) {
                     Integer score = this.getCollisionScore(event, collidingEvent);
-                    if (score > scoreThreshold) {
+                    if (score >= scoreThreshold) {
                         eventCollisions.add(new EventCollision(event, score, "Found a collision!"));
                     }
                 }
@@ -80,11 +80,13 @@ public class SimpleEventCollisionService implements EventCollisionService {
         LocalDateTime startA = newEvent.getStartDateTime();
         LocalDateTime endA = newEvent.getEndDateTime();
         LocalDateTime startB = collidingEvent.getStartDateTime();
-        LocalDateTime endB = collidingEvent.getStartDateTime();
-
+        LocalDateTime endB = collidingEvent.getEndDateTime();
         //Case 0: No Overlap
         if (isBeforeOrEqual(endA, startB)) {
             return 0;
+        }
+        else if(isAfterOrEqual(startA, endB)){
+             return 0;
         }
         //case 1: Overlap A before B
         else if (isBeforeOrEqual(startA, startB) && isAfterOrEqual(endA, startB)) {
@@ -153,16 +155,14 @@ public class SimpleEventCollisionService implements EventCollisionService {
     public List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, Integer initialScore) throws ServiceException, ValidationException {
         Map<LocalDateTime[], Integer> rec = new HashMap<>();
         Event help = new Event(event.getName(), event.getStartDateTime(), event.getEndDateTime(), event.getCalendar());
-        List<EventCollision> eventCollisions = new ArrayList<>();
-        List<EventCollision> worseCase = new ArrayList<>();
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < 7; i++) {
             help.setStartDateTime(event.getStartDateTime().plusDays(i));
             help.setEndDateTime(event.getEndDateTime().plusDays(i));
             recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
-            help.setStartDateTime(event.getStartDateTime().minusDays(i));
-            help.setStartDateTime(event.getEndDateTime().minusDays(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
 
+            help.setStartDateTime(event.getStartDateTime().minusDays(i));
+            help.setEndDateTime(event.getEndDateTime().minusDays(i));
+            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
         }
 
         for (int i = 1; i < 3; i++) {
@@ -171,19 +171,23 @@ public class SimpleEventCollisionService implements EventCollisionService {
             recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
 
             help.setStartDateTime(event.getStartDateTime().minusWeeks(i));
-            help.setStartDateTime(event.getEndDateTime().minusWeeks(i));
+            help.setEndDateTime(event.getEndDateTime().minusWeeks(i));
             recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
-
         }
 
         for (int i = 1; i < 3; i++) {
-            help.setStartDateTime(event.getStartDateTime().plusHours(i));
-            help.setEndDateTime(event.getEndDateTime().plusHours(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+            if(event.getStartDateTime().getHour() < 22){
+                help.setStartDateTime(event.getStartDateTime().plusHours(i));
+                help.setEndDateTime(event.getEndDateTime().plusHours(i));
+                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+            }
 
+            if(event.getStartDateTime().getHour() > 8){
             help.setStartDateTime(event.getStartDateTime().minusHours(i));
-            help.setStartDateTime(event.getEndDateTime().minusHours(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+            help.setEndDateTime(event.getEndDateTime().minusHours(i));
+                System.out.println(help.getStartDateTime() +" "+ help.getStartDateTime());
+
+                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);}
 
         }
 
@@ -205,13 +209,16 @@ public class SimpleEventCollisionService implements EventCollisionService {
         List<LocalDateTime[]> best = filterMap(rec, 0);
 
         rec.values().removeIf(value -> value == 0);
-
+        if(rec.isEmpty()){
+            return best;
+        }
         Integer min = Collections.min(rec.values());
 
         List<LocalDateTime[]> good = filterMap(rec, min);
 
         return Stream.concat(best.stream(), good.stream())
             .collect(Collectors.toList());
+
     }
 
     public List<LocalDateTime[]> filterMap(Map<LocalDateTime[], Integer> rec, int min) {
