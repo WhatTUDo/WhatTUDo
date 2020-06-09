@@ -178,7 +178,8 @@ public class CustomUserDetailService implements UserService {
                 }
 
                 if (labels[maxAt] != 0) {
-                    List<Event> possibleEvents = labelRepository.getOne(labelService.findById(maxAt).getId()).getEvents();
+                    List<Event> possibleEvents = labelService.findById(maxAt).getEvents();
+                   // List<Event> possibleEvents = labelRepository.getOne(labelService.findById(maxAt).getId()).getEvents();
                     //FIXME: make the next 6 lines into one line (possibleEvents.forEach(e -> {})
                     for (Event e : possibleEvents
                     ) {
