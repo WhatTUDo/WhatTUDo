@@ -1,12 +1,14 @@
 package at.ac.tuwien.sepm.groupphase.backend.servicetests;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventCollisionService;
+import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
 import org.junit.Before;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,9 @@ public class EventCollisionTest {
 
     @Autowired
     AttendanceService attendanceService;
+
+    @Autowired
+    EventService eventService;
 
     @Autowired
     EventRepository eventRepository;
@@ -104,7 +109,29 @@ public class EventCollisionTest {
     public void saveEvents_createEventWithCollidingLabels_CheckForCollisions_ShouldReturnCollisionList() {
         Calendar calendar = calendarRepository.save(new Calendar("Katzenkalenderreleases", Collections.singletonList(organization)));
         ApplicationUser user = userRepository.save(new ApplicationUser("Dorian", "grazie@gmx.com", "pwdsuperstrong"));
+        Event event1 = new Event("Adventskatzenkalender", LocalDateTime.of(2021, 1, 1, 12, 30), LocalDateTime.of(2021, 1, 1, 14, 0), calendar);
+        Event eventToTest = new Event("Adventskatzenkalender2", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
 
+        eventRepository.save(event1);
+        Label label1 = labelService.save(new Label(0, "Test1", new ArrayList<>()));
+        Label label2 = labelService.save(new Label(0, "Test2", new ArrayList<>()));
+        Label label3 = labelService.save(new Label(0, "Test3", new ArrayList<>()));
+
+        List<Label> labelList = new ArrayList<>();
+        labelList.add(label1);
+        labelList.add(label2);
+
+        List<Label> newLabelList = new ArrayList<>();
+        newLabelList.add(label1);
+        newLabelList.add(label2);
+        newLabelList.add(label3);
+        eventToTest.setLabels(newLabelList);
+        //two label collisions --> Should be enough for threshold.
+
+        eventService.addLabels(event1, labelList);
+
+        List<EventCollision> eventCollisions = eventCollisionService.getEventCollisions(eventToTest, 3, 12L);
+        assertEquals(1, eventCollisions.size());
     }
 
     @Test

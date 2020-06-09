@@ -127,7 +127,6 @@ public class SimpleEventService implements EventService {
         try {
             labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
             labelRepository.saveAll(labels);
-
             event.getLabels().addAll(labels);
             return eventRepository.save(event);
         } catch (PersistenceException e) {
