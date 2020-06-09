@@ -45,7 +45,6 @@ public class EventEndpoint {
     private final EventService eventService;
     private final EventMapper eventMapper;
     private final LabelService labelService;
-    private final UserService userService;
     private final LabelMapper labelMapper;
 
 
@@ -188,24 +187,5 @@ public class EventEndpoint {
         }
     }
 
-  /*
-    @PreAuthorize("permitAll()")
-    @CrossOrigin
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping
-    @ApiOperation(value = "Get recommended Event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto getRecommendedEvent(@RequestParam("id") Integer userId) {
-        log.info("get recommended event for user");
-
-        try {
-            Event recommendedEvent = userService.getRecommendedEvent(userId);
-            return eventMapper.eventToEventDto(recommendedEvent);
-        } catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
-        } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage());
-        }
-    }
-    */
 
 }

@@ -9,6 +9,8 @@ import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.Optional;
+
 public interface UserService extends UserDetailsService {
 
     /**
@@ -50,5 +52,5 @@ public interface UserService extends UserDetailsService {
 
     Integer getUserId(String name);
 
-    Event getRecommendedEvent(Integer userId);
+    Optional<Event> getRecommendedEvent(Integer userId);
 }

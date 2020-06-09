@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table
 @Data
-public class AttendanceStatus<Attendance> {
+public class AttendanceStatus {
 
     @Id
     @Column

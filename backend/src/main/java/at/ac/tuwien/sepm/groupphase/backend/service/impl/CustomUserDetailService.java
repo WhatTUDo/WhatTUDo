@@ -150,15 +150,15 @@ public class CustomUserDetailService implements UserService {
 
     @Override
     public Integer getUserId(String name) {
-        Optional<ApplicationUser> found =userRepository.findByName(name);
-        if(!found.isPresent()){
+        Optional<ApplicationUser> found = userRepository.findByName(name);
+        if (!found.isPresent()) {
             throw new NotFoundException("user not found");
         }
         return found.get().getId();
     }
 
     @Override
-    public Event getRecommendedEvent(Integer userId) {
+    public Optional<Event> getRecommendedEvent(Integer userId) {
         try {
             List<Event> events = attendanceService.getEventUserIsAttending(userId);
             events.addAll(attendanceService.getEventUserIsInterested(userId));
@@ -179,20 +179,13 @@ public class CustomUserDetailService implements UserService {
 
                 if (labels[maxAt] != 0) {
                     List<Event> possibleEvents = labelService.findById(maxAt).getEvents();
-                   // List<Event> possibleEvents = labelRepository.getOne(labelService.findById(maxAt).getId()).getEvents();
-                    //FIXME: make the next 6 lines into one line (possibleEvents.forEach(e -> {})
-                    for (Event e : possibleEvents
-                    ) {
-                        if (e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))) {
+                    return possibleEvents.stream().filter(e -> e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))).findAny();
 
-                            return e;
-                        }
-                    }
-                } else throw new NotFoundException("No recommendable event found");
+                }
             }
-            throw new NotFoundException("No recommendable event found");
         } catch (PersistenceException | IllegalArgumentException e) {
-            throw new ServiceException(e.getMessage());
+            throw new ServiceException(e.getMessage(), e);
         }
+        throw new NotFoundException("No recommendable event found");
     }
 }
