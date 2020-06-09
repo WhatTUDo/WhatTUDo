@@ -67,30 +67,13 @@ export class EventComponent implements OnInit {
       this.calendarEvent.location = location;
       this.calendarEvent.description = 'yololo';
       this.participants = this.getParticipants();
-      this.eventTimeString = this.getEventTimeString();
     }, err => {
       alert(err.message);
     });
   }
 
-  public getEventTimeString() {
-    const startDateTime: Date = new Date(this.calendarEvent.startDateTime);
-    const endDateTime: Date = new Date(this.calendarEvent.endDateTime);
-    const endsOnTheSameDay = (startDateTime.toDateString() == endDateTime.toDateString());
-    let string = startDateTime.toLocaleTimeString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(':00', '');
-    string += ' - ';
-    string += endDateTime.toLocaleTimeString('en-US', {
-      month: endsOnTheSameDay ? undefined : 'short',
-      day: endsOnTheSameDay ? undefined : 'numeric',
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(':00', '');
-    return string;
+  public getEventDateAndTimeString() {
+    return this.eventService.getEventDateAndTimeString(this.calendarEvent);
   }
 
   private deleteEvent() {

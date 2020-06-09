@@ -139,4 +139,24 @@ export class EventService {
     let searchURI = this.globals.openStreetMapsUri + '?q=' + encodeURI(searchTerm) + '&format=json&addressdetails=1';
     return this.httpClient.get<any>(searchURI);
   }
+
+  public getEventDateAndTimeString(event: CalendarEvent) {
+    const startDateTime: Date = new Date(event.startDateTime);
+    const endDateTime: Date = new Date(event.endDateTime);
+    const endsOnTheSameDay = (startDateTime.toDateString() == endDateTime.toDateString())
+    let string = startDateTime.toLocaleTimeString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    string += ' - '
+    string += endDateTime.toLocaleTimeString('en-US', {
+      month: endsOnTheSameDay ? undefined : 'short',
+      day: endsOnTheSameDay ? undefined : 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    return string
+  }
 }
