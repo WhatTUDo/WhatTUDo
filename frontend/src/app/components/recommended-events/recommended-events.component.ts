@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {EventService} from "../../services/event.service";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-recommended-events',
@@ -11,10 +12,12 @@ export class RecommendedEventsComponent implements OnInit {
 
   recommendedEvents: CalendarEvent[];
 
-  constructor(private eventService: EventService) {
+  constructor(private eventService: EventService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
+    console.log(`Hey! I am user ${this.authService.getUserId()}`)
     const startDate = new Date(2000, 1, 1);
     const endDate = new Date(2022, 1, 1);
     this.eventService.getMultiplEvents("",
@@ -29,23 +32,7 @@ export class RecommendedEventsComponent implements OnInit {
     window.location.replace(`event/${id}`)
   }
 
-  public getEventTimeString(event: CalendarEvent) {
-    const startDateTime: Date = new Date(event.startDateTime);
-    const endDateTime: Date = new Date(event.endDateTime);
-    const endsOnTheSameDay = (startDateTime.toDateString() == endDateTime.toDateString())
-    let string = startDateTime.toLocaleTimeString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(":00", "")
-    string += ' - '
-    string += endDateTime.toLocaleTimeString('en-US', {
-      month: endsOnTheSameDay ? undefined : 'short',
-      day: endsOnTheSameDay ? undefined : 'numeric',
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(":00", "")
-    return string
+  public getEventDateAndTimeString(event: CalendarEvent) {
+    return this.eventService.getEventDateAndTimeString(event);
   }
 }
