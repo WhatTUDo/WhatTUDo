@@ -41,7 +41,6 @@ public class EventCollisionEndpoint {
 
         try {
             List<EventCollision> eventCollisions = this.eventCollisionService.getEventCollisions(eventMapper.eventDtoToEvent(eventDto), 3, 12L);
-            List<LocalDateTime[]> dateSuggestions = this.eventCollisionService.getAlternativeDateSuggestions(eventMapper.eventDtoToEvent(eventDto), 10);
             return null;
         }
         catch (ServiceException e) {
