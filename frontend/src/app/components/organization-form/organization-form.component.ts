@@ -54,10 +54,7 @@ export class OrganizationFormComponent implements OnInit {
         this.organization = organization;
         console.log('Organization ' + organization.name + ' created successfully.');
         window.location.replace("/organization/" + this.organization.id);
-      },
-        error => {
-          alert("Could not create organization: " + error.error.message);
-        });
+      });
   }
 
 

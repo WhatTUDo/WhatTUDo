@@ -149,6 +149,15 @@ public class CustomUserDetailService implements UserService {
     }
 
     @Override
+    public Integer getUserId(String name) {
+        Optional<ApplicationUser> found =userRepository.findByName(name);
+        if(!found.isPresent()){
+            throw new NotFoundException("user not found");
+        }
+        return found.get().getId();
+    }
+
+    @Override
     public Event getRecommendedEvent(Integer userId) {
         try {
             List<Event> events = attendanceService.getEventUserIsAttending(userId);

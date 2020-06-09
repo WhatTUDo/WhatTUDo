@@ -48,5 +48,7 @@ public interface UserService extends UserDetailsService {
 
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 
+    Integer getUserId(String name);
+
     Event getRecommendedEvent(Integer userId);
 }

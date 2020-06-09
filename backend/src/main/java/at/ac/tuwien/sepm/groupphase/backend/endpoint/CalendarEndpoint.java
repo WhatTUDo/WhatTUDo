@@ -18,6 +18,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.ast.Or;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -28,7 +29,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Slf4j
@@ -70,33 +73,37 @@ public class CalendarEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
     @ApiOperation(value = "Get calendars with name")
-    public List<CalendarDto> searchCalendarCombo(@RequestParam(value = "name") String name) {
+    public List<CalendarDto> searchCalendarCombo(@RequestParam(value = "name")  String name) {
+        log.info("GET" + BASE_URL + "search {}", name);
         try {
             List<Calendar> fromCalendars = calendarService.findByName(name);
-            List<Organization> fromOrganizations = organizationService.findByName(name);
+            List<Organization> fromOrganisations = organizationService.findByName(name);
             List<Event> fromEvents = eventService.findByName(name);
-            for (Organization o : fromOrganizations) {
+            Set<Calendar> calendars = new HashSet<>();
+            calendars.addAll(fromCalendars);
+            for (Organization o : fromOrganisations) {
                 if (!o.getCalendars().isEmpty()) {
-                    fromCalendars.addAll(o.getCalendars());
+                    calendars.addAll(o.getCalendars());
                 }
             }
             for (Event e : fromEvents) {
-                fromCalendars.add(e.getCalendar());
+                calendars.add(e.getCalendar());
             }
             List<CalendarDto> calendarDtos = new ArrayList<>();
-            fromCalendars.forEach(calendar -> calendarDtos.add(calendarMapper.calendarToCalendarDto(calendar)));
+            calendars.forEach(calendar -> calendarDtos.add(calendarMapper.calendarToCalendarDto(calendar)));
             if (calendarDtos.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.OK, "Nothing was found"); //FIXME return empty array?
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing was found");
             }
             return calendarDtos;
+
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), e);
         }
 
-
     }
 
-   // @PreAuthorize("hasPermission(#calendar, 'MOD')")
+
+    // @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
