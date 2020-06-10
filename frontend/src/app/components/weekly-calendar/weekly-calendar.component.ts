@@ -19,21 +19,19 @@ export class WeeklyCalendarComponent implements OnInit {
   displayingWeek: Date[]; // Starts at a monday.
   offset = 0;
 
-  /**
-   * Change view… variables to configure:
-   *  * when the start and end of the grid represents.
-   *  * number of rows.
-   *  * min row count for an event so that there's place for text.
-   */
+  /** Change view… variables to configure: */
+  /** number of rows. */
   viewBeginningAtRow = 1;
-  viewBeginningAtTime = 8 * (60 * 60);
   viewEndingAtRow = 64;
-  viewEndingAtTime = 24 * (60 * 60) - 1;
-  viewMinRows = 8;
-
-  viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
   viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
 
+  /** when the start and end of the grid represents. */
+  viewBeginningAtTime = 8 * (60 * 60);
+  viewEndingAtTime = 24 * (60 * 60) - 1;
+  viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
+
+  /** min row count for an event so that there's place for text. */
+  viewMinRows = 8;
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
 
@@ -73,6 +71,7 @@ export class WeeklyCalendarComponent implements OnInit {
    * @param from: Start date of week
    * @param to: End date of week
    */
+  //FIXME: Handle multi-day events correctly, mapping the event to EVERY DAY.
   loadEventsForWeek(from: Date, to: Date) {
     this.eventService.getMultiplEvents(null, from, to).subscribe((events: Array<CalendarEvent>) => {
       events.forEach(event => {
@@ -173,6 +172,7 @@ export class WeeklyCalendarComponent implements OnInit {
    * Change this.view… variables to configure behavior.
    * @param event
    */
+  //FIXME: Handle multi-day events correctly.
   getDisplayRows(event: CalendarEvent) {
     const startSecond = this.getSecondOffsetFromMidnight(event.startDateTime);
     const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
@@ -190,6 +190,11 @@ export class WeeklyCalendarComponent implements OnInit {
     return `${startRow}/${endRow}`
   }
 
+  /**
+   * A helper function to do the calculation of the number of row.
+   * Mapping sec from interval [viewBeginningAtTime, viewEndingAtTime] to [viewBeginningAtRow, viewEndingAtRow]
+   * @param sec Time in day in seconds after midnight.
+   */
   private calcRow(sec) {
     return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
   }
