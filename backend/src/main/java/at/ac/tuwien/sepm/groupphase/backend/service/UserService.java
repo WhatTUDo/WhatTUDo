@@ -52,5 +52,13 @@ public interface UserService extends UserDetailsService {
 
     Integer getUserId(String name);
 
-    Optional<Event> getRecommendedEvent(Integer userId);
+    /**
+     * gets a recommended event for a user based on labels of
+     * previous events the user has attended or was interested in
+     *
+     * @param userId id of the loggedIn user
+     * @return Event if a recommendation can be made, otherwise an Optional.empty()
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    Optional<Event> getRecommendedEvent(Integer userId) throws ServiceException;
 }

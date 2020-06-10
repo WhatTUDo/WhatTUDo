@@ -11,6 +11,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationRole;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
+import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.security.PermitAll;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,6 +40,7 @@ import java.util.Optional;
 public class UserEndpoint {
     static final String BASE_URL = "/users";
     private final UserService userService;
+    private final EventService eventService;
     private final UserMapper userMapper;
     private final EventMapper eventMapper;
     private final UserRepository userRepository;
@@ -53,11 +56,9 @@ public class UserEndpoint {
             ApplicationUser newUser = userService.saveNewUser(userMapper.userDtoToApplicationUser(user));
 
             return userMapper.applicationUserToUserDto(newUser);
-        }
-        catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
-        }
-        catch (ValidationException e) {
+        } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         }
     }
@@ -67,14 +68,14 @@ public class UserEndpoint {
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("update user")
-    public LoggedInUserDto updateUser(@RequestBody LoggedInUserDto userDto){
+    public LoggedInUserDto updateUser(@RequestBody LoggedInUserDto userDto) {
         try {
             return userMapper.applicationUserToUserDto(userService.updateUser(userMapper.loggedInUserDtoToApplicationUser(userDto)));
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-        }catch (NotFoundException e){
+        } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.OK, e.getMessage()); //FIXME return empty array?
         }
     }
@@ -91,11 +92,11 @@ public class UserEndpoint {
                 organizationRepository.findById(orgaId).orElseThrow(() -> new NotFoundException("Organization not found")),
                 OrganizationRole.valueOf(role)
             ));
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-        } catch (NotFoundException e){
+        } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
@@ -111,11 +112,11 @@ public class UserEndpoint {
                 userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found")),
                 organizationRepository.findById(orgaId).orElseThrow(() -> new NotFoundException("Organization not found"))
             ));
-        } catch (ServiceException e){
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
-        } catch (ValidationException e){
+        } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-        } catch (NotFoundException e){
+        } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
@@ -123,11 +124,11 @@ public class UserEndpoint {
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping("/user")
-    public Integer getUserId(){
+    public Integer getUserId() {
         log.info("get user id");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if ((authentication instanceof AnonymousAuthenticationToken)) {
-           throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,"some message");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "some message");
         }
         String currentUserName = authentication.getName();
         return userService.getUserId(currentUserName);
@@ -137,22 +138,27 @@ public class UserEndpoint {
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/recommendedEvent")
+    @GetMapping(value = "/recommendedEvent/{id}")
     @ApiOperation(value = "Get recommended Event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto getRecommendedEvent(@RequestParam("id") Integer userId) {
+    public EventDto getRecommendedEvent(@PathVariable(value = "id") Integer userId) {
         log.info("get recommended event for user");
 
         try {
             Optional<Event> recommendedEvent = userService.getRecommendedEvent(userId);
-            if(recommendedEvent.isPresent()) {
+            if (recommendedEvent.isPresent()) {
                 return eventMapper.eventToEventDto(recommendedEvent.get());
             } else {
-                throw new NotFoundException("No recommendable event fount");
+                Optional<Event> events = eventService.findForDates(LocalDateTime.now(), LocalDateTime.now().plusDays(30)).stream().findAny();
+                if (events.isPresent()) {
+                    return eventMapper.eventToEventDto(events.get());
+                } else {
+                    throw new ResponseStatusException(HttpStatus.OK, "No recommendable events found");
+                }
             }
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
         }
     }
 

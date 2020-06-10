@@ -151,7 +151,7 @@ public class CustomUserDetailService implements UserService {
     @Override
     public Integer getUserId(String name) {
         Optional<ApplicationUser> found = userRepository.findByName(name);
-        if (!found.isPresent()) {
+        if (found.isEmpty()) {
             throw new NotFoundException("user not found");
         }
         return found.get().getId();
@@ -186,6 +186,6 @@ public class CustomUserDetailService implements UserService {
         } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage(), e);
         }
-        throw new NotFoundException("No recommendable event found");
+        return Optional.empty();
     }
 }

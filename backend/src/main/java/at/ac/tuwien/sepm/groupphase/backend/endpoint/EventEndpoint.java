@@ -12,7 +12,6 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
-import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -176,7 +175,7 @@ public class EventEndpoint {
     public List<LabelDto> getLabelsById(@PathVariable(value = "id") int id) {
         try {
 
-            List<LabelDto> results = new ArrayList<LabelDto>();
+            List<LabelDto> results = new ArrayList<>();
 
             (labelService.findByEventId(id)).forEach(it -> results.add(labelMapper.labelToLabelDto(it)));
 
