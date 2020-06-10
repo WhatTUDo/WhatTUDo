@@ -38,7 +38,7 @@ public class EventCollisionEndpoint {
     @ApiOperation(value = "Get Event Collisions and Date Recommendations", authorizations = {@Authorization(value = "apiKey")})
     public CollisionResponseDto getEventCollisions(@RequestBody EventDto eventDto) {
         log.info("Get Event Collisions");
-
+        //TODO: this.
         try {
             List<EventCollision> eventCollisions = this.eventCollisionService.getEventCollisions(eventMapper.eventDtoToEvent(eventDto), 3, 12L);
             return null;
