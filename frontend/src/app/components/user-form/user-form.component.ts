@@ -83,7 +83,7 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
   }
 
   emailUpdated(event: Event) {
-    @ts-ignore
+    // @ts-ignore
     this.user.email = event.target.value;
   }
 }
