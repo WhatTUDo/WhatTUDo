@@ -30,8 +30,8 @@ export class EventComponent implements OnInit {
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
-    this.authService.getUserId().subscribe((userid: number) => {
-      this.user = userid;
+    this.authService.getUser().subscribe((loggedUser) => {
+      this.user = loggedUser.id;
     }, err => {
       console.warn(err);
     });

@@ -5,6 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
 import * as jwt_decode from 'jwt-decode';
 import {Globals} from '../global/globals';
+import {UserDto} from '../dtos/UserDto';
 
 @Injectable({
   providedIn: 'root'
@@ -77,8 +78,8 @@ export class AuthService {
     return date;
   }
 
-  getUserId(): Observable<number>{
-    return this.httpClient.get<number>(this.globals.backendUri+"users/user");
+  getUser(): Observable<UserDto>{
+    return this.httpClient.get<UserDto>(this.globals.backendUri+"users/user");
   }
 
 }

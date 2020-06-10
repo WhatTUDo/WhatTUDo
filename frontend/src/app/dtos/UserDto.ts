@@ -1,8 +1,8 @@
 export class UserDto {
   constructor(
-    id: number,
-    name: string,
-    email: string
+   public id: number,
+    public name: string,
+   public email: string
   ) {
   }
 }

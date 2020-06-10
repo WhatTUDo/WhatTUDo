@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.security.PermitAll;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -121,17 +122,17 @@ public class UserEndpoint {
         }
     }
 
+
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping("/user")
-    public Integer getUserId() {
-        log.info("get user id");
+    public LoggedInUserDto getLoggedUser() {
+        log.info("get current user");
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if ((authentication instanceof AnonymousAuthenticationToken)) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "some message");
         }
-        String currentUserName = authentication.getName();
-        return userService.getUserId(currentUserName);
+        return userMapper.applicationUserToUserDto(userService.getUserByName(authentication.getName()));
     }
 
 

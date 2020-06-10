@@ -50,7 +50,8 @@ public interface UserService extends UserDetailsService {
 
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 
-    Integer getUserId(String name);
+
+     ApplicationUser getUserByName(String name);
 
     /**
      * gets a recommended event for a user based on labels of

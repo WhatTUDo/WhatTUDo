@@ -17,7 +17,6 @@ export class RecommendedEventsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(`Hey! I am user ${this.authService.getUserId()}`)
     const startDate = new Date(2000, 1, 1);
     const endDate = new Date(2022, 1, 1);
     this.eventService.getMultiplEvents("",
