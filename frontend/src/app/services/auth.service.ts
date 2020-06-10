@@ -6,6 +6,7 @@ import {tap} from 'rxjs/operators';
 import * as jwt_decode from 'jwt-decode';
 import {Globals} from '../global/globals';
 import {UserDto} from '../dtos/UserDto';
+import {Organization} from '../dtos/organization';
 
 @Injectable({
   providedIn: 'root'
@@ -81,5 +82,11 @@ export class AuthService {
   getUser(): Observable<UserDto>{
     return this.httpClient.get<UserDto>(this.globals.backendUri+"users/user");
   }
+
+  getUserOrganization(userId:number): Observable<Organization>{
+    return this.httpClient.get<Organization>(this.globals.backendUri+"users/organizations/"+userId);
+  }
+
+
 
 }
