@@ -145,7 +145,7 @@ export class EventService {
    * If the event ends on the same day, the end date will be omitted, so that the date is only printed on time.
    * @param event with correct startDateTime and endDateTime.
    */
-  getEventDateAndTimeString(event: CalendarEvent) {
+  public getEventDateAndTimeString(event: CalendarEvent) {
     const startDateTime: Date = new Date(event.startDateTime);
     const endDateTime: Date = new Date(event.endDateTime);
     const endsOnTheSameDay = (startDateTime.toDateString() == endDateTime.toDateString())
@@ -170,7 +170,7 @@ export class EventService {
    * Used if the date is denoted already.
    * @param event
    */
-  getDisplayTimeString(event: CalendarEvent) {
+  public getDisplayTimeString(event: CalendarEvent) {
     let string = event.startDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric'

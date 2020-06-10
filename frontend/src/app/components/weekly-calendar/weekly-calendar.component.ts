@@ -19,6 +19,12 @@ export class WeeklyCalendarComponent implements OnInit {
   displayingWeek: Date[]; // Starts at a monday.
   offset = 0;
 
+  /**
+   * Change view… variables to configure:
+   *  * when the start and end of the grid represents.
+   *  * number of rows.
+   *  * min row count for an event so that there's place for text.
+   */
   viewBeginningAtRow = 1;
   viewBeginningAtTime = 8 * (60 * 60);
   viewEndingAtRow = 64;
@@ -162,11 +168,15 @@ export class WeeklyCalendarComponent implements OnInit {
     return this.getToday().toDateString() == date.toDateString();
   }
 
+  /**
+   * Generate the CSS grid numbers for displaying the event at the right time.
+   * Change this.view… variables to configure behavior.
+   * @param event
+   */
   getDisplayRows(event: CalendarEvent) {
     const startSecond = this.getSecondOffsetFromMidnight(event.startDateTime);
     const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
 
-    // Calendar View should starts at a time like 8 AM and ends at 23:59PM or even later.
     let startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow);
     let endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow);
 
@@ -201,7 +211,7 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   getDisplayTimeString(event: CalendarEvent) {
-    this.eventService.getDisplayTimeString(event);
+    return this.eventService.getDisplayTimeString(event);
   }
 
   public redirectToDetail(id: number) {
