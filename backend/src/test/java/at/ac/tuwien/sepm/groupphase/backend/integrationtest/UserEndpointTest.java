@@ -75,44 +75,7 @@ public class UserEndpointTest {
 
     }
 
-    @Test
-    public void updateUser() {
-        IncomingUserDto userDto = new IncomingUserDto(null, "user1", "testy@test.com", "hunter2");
-
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
-
-        assertNotNull(savedUserDto);
-        assertEquals(userDto.getName(), savedUserDto.getName());
-
-        LoggedInUserDto userDto1 = new LoggedInUserDto(savedUserDto.getId(), "user2", null);
-
-        LoggedInUserDto updateUser = userEndpoint.updateUser(userDto1);
-
-        assertEquals(userDto1.getName(), updateUser.getName());
-
-
-        userDto1 = new LoggedInUserDto(savedUserDto.getId(), null, "user43@test.com");
-
-        updateUser = userEndpoint.updateUser(userDto1);
-
-        assertEquals(savedUserDto.getId(), updateUser.getId());
-        assertEquals(userDto1.getEmail(), updateUser.getEmail());
-
-
-    }
-
-    @Test
-    public void changePassword() {
-        IncomingUserDto userDto = new IncomingUserDto(null, "changePasswordUser", "changepass@test.com", "hunter3");
-
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
-
-        LoggedInUserDto changePasswordUserDto = userPasswordEndpoint.changeUserPassword(new ChangePasswordDto(savedUserDto.getName(), savedUserDto.getEmail(), "hunter3", "hunter4"));
-
-//        assertTrue(passwordEncoder.matches("hunter4", changePasswordUserDto()));
-
-
-    }
+    
 
     @WithMockUser
     @Test
