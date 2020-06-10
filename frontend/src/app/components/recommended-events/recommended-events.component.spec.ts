@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { RecommendedEventsComponent } from './recommended-events.component';
+import {RecommendedEventsComponent} from './recommended-events.component';
 
 describe('RecommendedEventsComponent', () => {
   let component: RecommendedEventsComponent;
@@ -8,9 +8,9 @@ describe('RecommendedEventsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ RecommendedEventsComponent ]
+      declarations: [RecommendedEventsComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

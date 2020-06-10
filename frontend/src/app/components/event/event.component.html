@@ -1,7 +1,7 @@
 <div *ngIf="this.calendarEvent">
   <div class="contextual-control">
-    <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
-    [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+    <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+      [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
     <span>Event: {{this.calendarEvent.name}}</span>
   </div>
   <div class="grid-one-third scroll">
@@ -18,7 +18,7 @@
     <div class="details-stack">
       <h2>Details</h2>
       <div id="label-container">
-        <div class="label-item" *ngFor="let label of this.labels">
+        <div *ngFor="let label of this.labels" class="label-item">
           <fa-icon [icon]="faTag"></fa-icon>&ensp;{{label.name}}
         </div>
       </div>
@@ -38,9 +38,9 @@
           </div>
         </div>
         <div class="participation-button-container grid-one-third no-gap">
-          <button class="button-blue btn-lg" (click)="participate(1)">Attend</button>
-          <button class="button-yellow btn-lg" (click)="participate(2)">Interested</button>
-          <button class="button-red btn-lg" (click)="participate(0)">Decline</button>
+          <button (click)="participate(1)" class="button-blue btn-lg">Attend</button>
+          <button (click)="participate(2)" class="button-yellow btn-lg">Interested</button>
+          <button (click)="participate(0)" class="button-red btn-lg">Decline</button>
         </div>
       </div>
       <div class="organization-info">
@@ -71,7 +71,7 @@
           Leave a comment
         </label>
         <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"></textarea>
-        <button class="full-width-form-button no-hover-enlarge btn-lg" (click)="addComment()">Send
+        <button (click)="addComment()" class="full-width-form-button no-hover-enlarge btn-lg">Send
         </button>
       </div>
     </div>

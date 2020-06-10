@@ -16,6 +16,8 @@ export class UserComponent implements OnInit {
   user: User;
   // userRoleInOrganizations: OrganizationMemberOrSomething[];
   userInOrganizations: Organization[];
+  faChevronLeft = faChevronLeft;
+  faSignOutAlt = faSignOutAlt;
 
   constructor(private authService: AuthService,
               private userService: UserService,
@@ -47,7 +49,4 @@ export class UserComponent implements OnInit {
   getGravatarLink(email, size) {
     return this.userService.getGravatarLink(email, size);
   }
-
-  faChevronLeft = faChevronLeft;
-  faSignOutAlt = faSignOutAlt;
 }

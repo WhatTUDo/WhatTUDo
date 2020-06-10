@@ -14,6 +14,7 @@ export class UserRegistrationComponent implements OnInit {
   user: User = new User(null, null, null);
   password: string;
   gravatarLink: string;
+  faChevronLeft = faChevronLeft;
 
   constructor(private userService: UserService,
               private router: Router) {
@@ -26,8 +27,6 @@ export class UserRegistrationComponent implements OnInit {
   emailUpdated() {
     this.gravatarLink = this.userService.getGravatarLink(this.user.email, 256);
   }
-
-  faChevronLeft = faChevronLeft;
 
   onSubmit() {
     this.userService.postUser(this.user).subscribe((user: User) => {

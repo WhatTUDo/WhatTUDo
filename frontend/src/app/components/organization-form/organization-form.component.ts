@@ -13,6 +13,7 @@ export class OrganizationFormComponent implements OnInit {
 
   organization: Organization;
   isUpdate: boolean;
+  faChevronLeft = faChevronLeft;
 
   constructor(private organizationService: OrganizationService,
               private route: ActivatedRoute,
@@ -53,7 +54,6 @@ export class OrganizationFormComponent implements OnInit {
       });
   }
 
-
   updateOrganization(name: string) {
     this.organizationService.putOrganization(this.organization)
       .subscribe(organization => {
@@ -65,6 +65,4 @@ export class OrganizationFormComponent implements OnInit {
           alert("Could not update organization: " + error.error.message);
         });
   }
-
-  faChevronLeft = faChevronLeft;
 }

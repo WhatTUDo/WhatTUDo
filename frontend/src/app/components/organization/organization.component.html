@@ -1,9 +1,9 @@
 <div class="contextual-control">
-  <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span *ngIf="organization">Team: {{organization.name}}</span>
 </div>
-<div class="grid-one-third" *ngIf="organization">
+<div *ngIf="organization" class="grid-one-third">
   <div>
     <h2>This Team</h2>
     <div class="organization-info">
@@ -20,9 +20,9 @@
     <p></p>
     <div class="organization-action-container">
       <a href="/form/organization/{{organization.id}}">
-      <div class="organization-action clickable no-hover-enlarge no-shadow">
-        Edit team
-      </div>
+        <div class="organization-action clickable no-hover-enlarge no-shadow">
+          Edit team
+        </div>
       </a>
       <div class="organization-action dangerous clickable no-hover-enlarge no-shadow">
         Dissolve team
@@ -38,7 +38,7 @@
     </div>
 
     <div class="organization-member-list">
-      <div class="organization-member" *ngFor="let member of organizationMembers">
+      <div *ngFor="let member of organizationMembers" class="organization-member">
         <img alt="" class="avatar avatar-small" src="https://picsum.photos/256/256/">
         <div class="organization-member-details">
           <div class="organization-member-name">@{{member.username}}</div>
@@ -58,32 +58,34 @@
   <div>
     <div class="title-icon-button-combo">
       <h2>Calendars</h2>
-      <div class="icon-button clickable no-hover-enlarge no-shadow" (click)="calendarAddExpanded = !calendarAddExpanded">
+      <div (click)="calendarAddExpanded = !calendarAddExpanded"
+           class="icon-button clickable no-hover-enlarge no-shadow">
         <fa-icon *ngIf="!calendarAddExpanded" [icon]="faPlus"></fa-icon>
         <fa-icon *ngIf="calendarAddExpanded" [icon]="faTimes"></fa-icon>
       </div>
     </div>
-    <div class="add-calendar-selector" *ngIf="calendarAddExpanded">
+    <div *ngIf="calendarAddExpanded" class="add-calendar-selector">
       <label for="event.calendarId">Calendar</label>
       <div class="input-button-combo">
-        <select #selectCalenderId class="form-control" id="event.calendarId"
-                [ngModel]="selectCalendar(+selectCalenderId.value)">
-          <option *ngFor="let cal of editableCalendars" value="{{cal.id}}"
-                  [disabled]="organization.calendarIds.includes(cal.id)">{{cal.name}}</option>
+        <select #selectCalenderId [ngModel]="selectCalendar(+selectCalenderId.value)" class="form-control"
+                id="event.calendarId">
+          <option *ngFor="let cal of editableCalendars" [disabled]="organization.calendarIds.includes(cal.id)"
+                  value="{{cal.id}}">{{cal.name}}</option>
         </select>
-        <button class="button-solid no-hover-enlarge" (click)="onSubmitAddCalendar(pickedCalendarId)"
-                [disabled]="!pickedCalendarId">Submit
+        <button (click)="onSubmitAddCalendar(pickedCalendarId)" [disabled]="!pickedCalendarId"
+                class="button-solid no-hover-enlarge">Submit
         </button>
       </div>
     </div>
     <div>
       <div *ngFor="let cal of organizationCalendars"
            class="organization-calendar">
-        <div class="organization-calendar-details clickable no-hover-enlarge no-shadow" routerLink="/calendar/{{cal.id}}">
+        <div class="organization-calendar-details clickable no-hover-enlarge no-shadow"
+             routerLink="/calendar/{{cal.id}}">
           <div class="organization-calendar-name">{{cal.name}}</div>
         </div>
         <div class="organization-calendar-buttons">
-          <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faTimesCircle" (click)="removeCalendar(cal.id)">
+          <fa-icon (click)="removeCalendar(cal.id)" [icon]="faTimesCircle" class="clickable no-hover-enlarge no-shadow">
             Remove Calendar
           </fa-icon>
         </div>

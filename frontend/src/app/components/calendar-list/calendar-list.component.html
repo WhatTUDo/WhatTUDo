@@ -5,13 +5,13 @@
 <div class="centered-two-third">
   <h2>Event</h2>
 
-  <form class="form input-button-combo" [formGroup]="searchForm" (keyup.enter)="onSubmit()">
+  <form (keyup.enter)="onSubmit()" [formGroup]="searchForm" class="form input-button-combo">
     <label for="calendar.name"></label>
-    <input type="text" class="form-control" formControlName="name" id="calendar.name" placeholder="Search...">
-    <button type="submit" class="button-solid no-hover-enlarge">Filter</button>
+    <input class="form-control" formControlName="name" id="calendar.name" placeholder="Search..." type="text">
+    <button class="button-solid no-hover-enlarge" type="submit">Filter</button>
   </form>
   <div>
-    <div class="calendar" *ngFor="let cal of list2">
+    <div *ngFor="let cal of list2" class="calendar">
       <div class="calendar-details">
         <div routerLink="/calendar/{{cal.id}}">
           <div class="calendar-name clickable no-shadow no-hover-enlarge">{{cal.name}}</div>
@@ -23,10 +23,10 @@
         </div>
       </div>
       <div class="calendar-buttons">
-        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faCog" routerLink="/form/calendar/{{cal.id}}">
+        <fa-icon [icon]="faCog" class="clickable no-hover-enlarge no-shadow" routerLink="/form/calendar/{{cal.id}}">
           Edit Calendar
         </fa-icon>
-        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faTimesCircle" (click)="delete(cal.id)">
+        <fa-icon (click)="delete(cal.id)" [icon]="faTimesCircle" class="clickable no-hover-enlarge no-shadow">
           Remove Calendar
         </fa-icon>
       </div>
@@ -38,9 +38,9 @@
       Name
     </label>
     <div class="input-button-combo">
-      <input id="calendarName" #calendarName>
-      <button class="button-solid no-hover-enlarge"
-              (click)="add(calendarName.value, [], [1]); calendarName.value=''">
+      <input #calendarName id="calendarName">
+      <button (click)="add(calendarName.value, [], [1]); calendarName.value=''"
+              class="button-solid no-hover-enlarge">
         Create
       </button>
     </div>

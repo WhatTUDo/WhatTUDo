@@ -36,6 +36,7 @@ export class EventFormComponent implements OnInit {
     location: new FormControl(''),
     labels: new FormControl('')
   });
+  faChevronLeft = faChevronLeft;
 
   constructor(
     private eventService: EventService,
@@ -144,8 +145,6 @@ export class EventFormComponent implements OnInit {
       this.editableCalendars = calendars;
     }) //FIXME: Make me to fetch only editable calendars.
   }
-
-  faChevronLeft = faChevronLeft;
 
 
 }

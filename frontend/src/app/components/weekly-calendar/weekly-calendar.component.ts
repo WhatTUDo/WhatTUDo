@@ -34,6 +34,10 @@ export class WeeklyCalendarComponent implements OnInit {
   viewMinRows = 8;
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
+  faChevronUp = faChevronUp;
+  faChevronDown = faChevronDown;
+  faChevronLeft = faChevronLeft;
+  faChevronRight = faChevronRight;
 
   constructor(
     private eventService: EventService
@@ -151,12 +155,6 @@ export class WeeklyCalendarComponent implements OnInit {
     this.updateOffsettedDates();
   }
 
-  private updateOffsettedDates() {
-    this.displayingDate = this.getDate(this.offset);
-    this.displayingWeek = this.getWeek(this.offset);
-    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
-  }
-
   getToday() {
     let today = new Date(Date.now());
     today.setHours(0, 0, 0, 0);
@@ -190,15 +188,6 @@ export class WeeklyCalendarComponent implements OnInit {
     return `${startRow}/${endRow}`
   }
 
-  /**
-   * A helper function to do the calculation of the number of row.
-   * Mapping sec from interval [viewBeginningAtTime, viewEndingAtTime] to [viewBeginningAtRow, viewEndingAtRow]
-   * @param sec Time in day in seconds after midnight.
-   */
-  private calcRow(sec) {
-    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
-  }
-
   getSecondOffsetFromMidnight(date: Date) {
     return date.getSeconds() + (60 * date.getMinutes()) + (60 * 60 * date.getHours());
   }
@@ -219,8 +208,18 @@ export class WeeklyCalendarComponent implements OnInit {
     return this.eventService.getDisplayTimeString(event);
   }
 
-  faChevronUp = faChevronUp;
-  faChevronDown = faChevronDown;
-  faChevronLeft = faChevronLeft;
-  faChevronRight = faChevronRight;
+  private updateOffsettedDates() {
+    this.displayingDate = this.getDate(this.offset);
+    this.displayingWeek = this.getWeek(this.offset);
+    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+  }
+
+  /**
+   * A helper function to do the calculation of the number of row.
+   * Mapping sec from interval [viewBeginningAtTime, viewEndingAtTime] to [viewBeginningAtRow, viewEndingAtRow]
+   * @param sec Time in day in seconds after midnight.
+   */
+  private calcRow(sec) {
+    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
+  }
 }

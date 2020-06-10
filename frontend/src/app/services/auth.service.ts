@@ -63,6 +63,11 @@ export class AuthService {
     return 'UNDEFINED';
   }
 
+  getUser(): Observable<User> | null {
+    if (this.isLoggedIn()) return this.httpClient.get<User>(this.globals.backendUri + "users/user");
+    else return null;
+  }
+
   private setToken(authResponse: string) {
     localStorage.setItem('authToken', authResponse);
   }
@@ -77,10 +82,5 @@ export class AuthService {
     const date = new Date(0);
     date.setUTCSeconds(decoded.exp);
     return date;
-  }
-
-  getUser(): Observable<User> | null{
-    if (this.isLoggedIn()) return this.httpClient.get<User>(this.globals.backendUri+"users/user");
-    else return null;
   }
 }

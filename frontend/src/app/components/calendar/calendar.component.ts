@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Calendar} from '../../dtos/calendar';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
 import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faPlus} from '@fortawesome/free-solid-svg-icons';
 import {CalendarEvent} from '../../dtos/calendar-event';
@@ -44,7 +44,7 @@ export class CalendarComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) =>{
+    this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) => {
       this.events = events;
       this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     });
@@ -157,12 +157,6 @@ export class CalendarComponent implements OnInit {
     this.updateOffsettedDates();
   }
 
-  private updateOffsettedDates() {
-    this.displayingDate = this.getDate(this.offset);
-    this.displayingWeek = this.getWeek(this.offset);
-    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
-  }
-
   getToday() {
     const today = new Date(Date.now());
     today.setHours(0, 0, 0, 0);
@@ -191,10 +185,6 @@ export class CalendarComponent implements OnInit {
     return `${startRow}/${endRow}`
   }
 
-  private calcRow(sec) {
-    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
-  }
-
   getSecondOffsetFromMidnight(date: Date) {
     return date.getSeconds() + (60 * date.getMinutes()) + (60 * 60 * date.getHours());
   }
@@ -213,5 +203,19 @@ export class CalendarComponent implements OnInit {
 
   getDisplayTimeString(event: CalendarEvent) {
     this.eventService.getDisplayTimeString(event);
+  }
+
+  redirectToAddEvent(id: number) {
+    location.replace(`/form/event?calendarId=${id}`);
+  }
+
+  private updateOffsettedDates() {
+    this.displayingDate = this.getDate(this.offset);
+    this.displayingWeek = this.getWeek(this.offset);
+    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+  }
+
+  private calcRow(sec) {
+    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
   }
 }

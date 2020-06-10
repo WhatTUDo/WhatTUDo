@@ -36,19 +36,20 @@ export class EventService {
     return this.httpClient.get<Array<Label>>(this.labelBaseUri);
   }
 
-  getEventLabels(id : number): Observable<Label[]> {
+  getEventLabels(id: number): Observable<Label[]> {
 
     console.log('Get event labels');
     return this.httpClient.get<Array<Label>>(this.eventBaseUri + '/' + id + '/' + 'labels');
   }
 
-  addLabels(id : number, labels : number[]) {
+  addLabels(id: number, labels: number[]) {
 
-   console.log('add  labels');
+    console.log('add  labels');
     return this.httpClient.put<Event>(this.eventBaseUri + '/' + id + '/' + 'labels', {
       params: {
         labelId: '1'
-      }});
+      }
+    });
 
 
   }
@@ -68,7 +69,7 @@ export class EventService {
    */
   getEvent(id: number): Observable<CalendarEvent> {
     console.log("Load Event with ID", id);
-     return this.httpClient.get<CalendarEvent>(this.eventBaseUri + '/' + id);
+    return this.httpClient.get<CalendarEvent>(this.eventBaseUri + '/' + id);
     // return null;
   }
 

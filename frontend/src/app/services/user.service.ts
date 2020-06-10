@@ -58,7 +58,7 @@ export class UserService {
     return `https://www.gravatar.com/avatar/${gravatarHash}?s=${Math.trunc(size)}&d=identicon`;
   }
 
-  getUserOrganization(userId:number): Observable<Organization[]>{
-    return this.httpClient.get<Organization[]>(this.globals.backendUri+"users/organizations/"+userId);
+  getUserOrganization(userId: number): Observable<Organization[]> {
+    return this.httpClient.get<Organization[]>(this.globals.backendUri + "users/organizations/" + userId);
   }
 }

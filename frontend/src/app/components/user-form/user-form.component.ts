@@ -17,6 +17,7 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
   changePwdForm: FormGroup;
 
   user: User;
+  faChevronLeft = faChevronLeft;
 
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
@@ -81,10 +82,8 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
     this.cd.detectChanges();
   }
 
-  emailUpdated(event: KeyboardEvent) {
-    // @ts-ignore
+  emailUpdated(event: Event) {
+    @ts-ignore
     this.user.email = event.target.value;
   }
-
-  faChevronLeft = faChevronLeft;
 }

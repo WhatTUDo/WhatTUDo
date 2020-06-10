@@ -1,5 +1,5 @@
 <div class="contextual-control">
-  <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span>New User{{user.name ? ": " + user.name : ''}}</span>
 </div>
@@ -15,43 +15,43 @@
   </div>
   <form #userRegistrationForm="ngForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="username" class="control-label">Username</label>
+      <label class="control-label" for="username">Username</label>
       <div>
-        <input type="text" [(ngModel)]="user.name" class="form-control" autocomplete="username"
-               required maxlength="255" id="username" name="username" #username="ngModel">
-        <div class="jasmine-errored" [hidden]="username.valid || username.pristine">
+        <input #username="ngModel" [(ngModel)]="user.name" autocomplete="username" class="form-control"
+               id="username" maxlength="255" name="username" required type="text">
+        <div [hidden]="username.valid || username.pristine" class="jasmine-errored">
           <small class="form-text text-warning">This username is too long!</small>
         </div>
       </div>
     </div>
     <div class="form-group">
-      <label for="email" class="control-label">Email</label>
+      <label class="control-label" for="email">Email</label>
       <div>
-        <input type="email" [(ngModel)]="user.email" class="form-control" autocomplete="email" id="email"
-               email (change)="emailUpdated()" name="email" #email="ngModel">
-        <div class="jasmine-errored" [hidden]="email.valid || email.pristine">
+        <input #email="ngModel" (change)="emailUpdated()" [(ngModel)]="user.email" autocomplete="email" class="form-control"
+               email id="email" name="email" type="email">
+        <div [hidden]="email.valid || email.pristine" class="jasmine-errored">
           <small class="form-text text-warning">Please enter a valid email!
           </small>
         </div>
       </div>
       <div class="form-group">
-        <label for="password" class="control-label">Password</label>
+        <label class="control-label" for="password">Password</label>
         <div>
-          <input type="password" [(ngModel)]="password" class="form-control" autocomplete="new-password"
-                 minlength="8" required passwordrules="minlength: 8;" id="password"
-                 name="password" #passwordField="ngModel">
-          <div class="jasmine-errored" [hidden]="passwordField.valid || passwordField.pristine">
-            <small class="form-text text-warning" *ngIf="passwordField.hasError('required')">
+          <input #passwordField="ngModel" [(ngModel)]="password" autocomplete="new-password" class="form-control"
+                 id="password" minlength="8" name="password" passwordrules="minlength: 8;"
+                 required type="password">
+          <div [hidden]="passwordField.valid || passwordField.pristine" class="jasmine-errored">
+            <small *ngIf="passwordField.hasError('required')" class="form-text text-warning">
               Please enter your password!
             </small>
-            <small class="form-text text-warning" *ngIf="passwordField.hasError('minlength')">
+            <small *ngIf="passwordField.hasError('minlength')" class="form-text text-warning">
               Please make your password longer!
             </small>
           </div>
         </div>
       </div>
       <div>
-        <button class="button-green" type="submit" [disabled]="!userRegistrationForm.valid">Create Account</button>
+        <button [disabled]="!userRegistrationForm.valid" class="button-green" type="submit">Create Account</button>
       </div>
     </div>
   </form>

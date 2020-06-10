@@ -11,6 +11,11 @@ import {faChevronLeft, faCog, faPlus, faTimes, faTimesCircle} from "@fortawesome
 export class OrganizationListComponent implements OnInit {
 
   organizations: Array<Organization>
+  faChevronLeft = faChevronLeft;
+  faCog = faCog;
+  faTimesCircle = faTimesCircle;
+  faTimes = faTimes;
+  faPlus = faPlus;
 
   constructor(
     private organizationService: OrganizationService) {
@@ -19,15 +24,6 @@ export class OrganizationListComponent implements OnInit {
   ngOnInit(): void {
 
     this.getOrganizations();
-  }
-
-  private getOrganizations() {
-    this.organizationService.getAll().subscribe(organizations => {
-        this.organizations = organizations;
-      },
-      error => {
-        console.warn(error);
-      })
   }
 
   onClickedEdit(id: number) {
@@ -44,10 +40,13 @@ export class OrganizationListComponent implements OnInit {
     });
   }
 
-  faChevronLeft = faChevronLeft;
-  faCog = faCog;
-  faTimesCircle = faTimesCircle;
-  faTimes = faTimes;
-  faPlus = faPlus;
+  private getOrganizations() {
+    this.organizationService.getAll().subscribe(organizations => {
+        this.organizations = organizations;
+      },
+      error => {
+        console.warn(error);
+      })
+  }
 
 }

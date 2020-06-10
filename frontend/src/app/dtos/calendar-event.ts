@@ -13,7 +13,6 @@ export class CalendarEvent {
     public labels: Array<Label>,
     public comments: Array<EventComment>,
     public calendarId?: number,
-
   ) {
   }
 

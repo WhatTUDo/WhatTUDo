@@ -24,12 +24,12 @@ import {CalendarListComponent} from './components/calendar-list/calendar-list.co
 import {OrganizationFormComponent} from './components/organization-form/organization-form.component';
 import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from './components/organization/organization.component';
-import { UserFormComponent } from './components/user-form/user-form.component';
-import { CalendarFormComponent } from './components/calendar-form/calendar-form.component';
-import { OrganizationListComponent } from './components/organization-list/organization-list.component';
-import { FeedbackHandlerComponent } from './components/feedback-handler/feedback-handler.component';
+import {UserFormComponent} from './components/user-form/user-form.component';
+import {CalendarFormComponent} from './components/calendar-form/calendar-form.component';
+import {OrganizationListComponent} from './components/organization-list/organization-list.component';
+import {FeedbackHandlerComponent} from './components/feedback-handler/feedback-handler.component';
 import {MatSelectModule} from '@angular/material/select';
-import { MatSliderModule } from '@angular/material/slider';
+import {MatSliderModule} from '@angular/material/slider';
 import {MatDatetimepickerModule, MatNativeDatetimeModule} from "@mat-datetimepicker/core";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatInputModule} from "@angular/material/input";
@@ -39,11 +39,10 @@ import {
   NgxMatNativeDateModule
 } from "@angular-material-components/datetime-picker";
 import {MatTableModule} from "@angular/material/table";
-import { RecommendedEventsComponent } from './components/recommended-events/recommended-events.component';
-import { UserRegistrationComponent } from './components/user-registration/user-registration.component';
+import {RecommendedEventsComponent} from './components/recommended-events/recommended-events.component';
+import {UserRegistrationComponent} from './components/user-registration/user-registration.component';
 import {OverlayModule} from "@angular/cdk/overlay";
-import { ExplanationComponent } from './components/explanation/explanation.component';
-
+import {ExplanationComponent} from './components/explanation/explanation.component';
 
 
 @NgModule({
