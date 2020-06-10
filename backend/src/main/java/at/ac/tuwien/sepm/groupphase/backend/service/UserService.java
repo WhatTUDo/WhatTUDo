@@ -1,12 +1,15 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationRole;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
@@ -48,4 +51,6 @@ public interface UserService extends UserDetailsService {
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 
     Integer getUserId(String name);
+
+    Optional<Event> getRecommendedEvent(Integer userId);
 }

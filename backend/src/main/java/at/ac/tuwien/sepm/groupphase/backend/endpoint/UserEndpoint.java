@@ -1,9 +1,12 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.IncomingUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.UserMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationRole;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
@@ -11,6 +14,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
@@ -25,6 +29,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.security.PermitAll;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -34,6 +39,7 @@ public class UserEndpoint {
     static final String BASE_URL = "/users";
     private final UserService userService;
     private final UserMapper userMapper;
+    private final EventMapper eventMapper;
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
 
@@ -126,5 +132,29 @@ public class UserEndpoint {
         String currentUserName = authentication.getName();
         return userService.getUserId(currentUserName);
     }
+
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/recommendedEvent")
+    @ApiOperation(value = "Get recommended Event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto getRecommendedEvent(@RequestParam("id") Integer userId) {
+        log.info("get recommended event for user");
+
+        try {
+            Optional<Event> recommendedEvent = userService.getRecommendedEvent(userId);
+            if(recommendedEvent.isPresent()) {
+                return eventMapper.eventToEventDto(recommendedEvent.get());
+            } else {
+                throw new NotFoundException("No recommendable event fount");
+            }
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.OK, e.getMessage());
+        }
+    }
+
 
 }

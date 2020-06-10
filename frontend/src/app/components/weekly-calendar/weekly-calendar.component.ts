@@ -196,7 +196,7 @@ export class WeeklyCalendarComponent implements OnInit {
 
   getEndOfDay(date: Date) {
     let endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 50);
+    endOfDay.setHours(23, 59, 59);
     return endOfDay;
   }
 

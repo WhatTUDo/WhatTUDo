@@ -1,17 +1,18 @@
-<div>
-  <h2>{{isUpdate?"Update":"Create"}} Organization</h2>
-  <div>
-
+<div class="contextual-control">
+  <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+  <span *ngIf="organization&&isUpdate">Edit Team: {{organization.name}}</span>
+  <span *ngIf="organization&&!isUpdate">New Team{{organization.name?": "+organization.name:''}}</span>
+</div>
+<div class="centered-two-third" *ngIf="organization">
+  <h2>{{isUpdate ? "Edit" : "Create"}} Organization</h2>
+  <div class="form-group">
+    <label for="organization.name">
+      Name:
+    </label>
+    <input type=text class="form-control" id="organization.name" [(ngModel)]="organization.name" #organizationName>
+    <button class="submit-button clickable button-green btn-lg"
+            (click)="onSubmit(organizationName.value)">Submit
+    </button>
   </div>
-        <div class="form-group">
-          <label for="organization.name">
-            Name:
-          </label>
-          <input type=text class="form-control" id="organization.name" [(ngModel)]="organization.name" #organizationName>
-        <button class="submit-button clickable button-green btn-lg"
-                (click)="onSubmit(organizationName.value)">Submit
-        </button>
-        </div>
-
-
 </div>
