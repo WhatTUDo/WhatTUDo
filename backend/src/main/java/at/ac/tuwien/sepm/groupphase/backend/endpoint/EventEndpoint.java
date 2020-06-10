@@ -65,7 +65,7 @@ public class EventEndpoint {
         }
     }
 
-    //@PreAuthorize("hasPermission(#event, 'MEMBER')")
+    @PreAuthorize("hasPermission(#event, 'MEMBER')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
