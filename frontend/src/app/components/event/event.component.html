@@ -18,11 +18,6 @@
     <div class="details-stack">
       <h2>Details</h2>
       <div id="label-container">
-        <div class="label-item" *ngFor="let label of this.calendarEvent.labels">
-          <fa-icon [icon]="faTag"></fa-icon>&ensp;{{label.name}}
-        </div>
-      </div>
-      <div id="label-container2">
         <div class="label-item" *ngFor="let label of this.labels">
           <fa-icon [icon]="faTag"></fa-icon>&ensp;{{label.name}}
         </div>
