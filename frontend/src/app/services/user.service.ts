@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {User} from "../dtos/user";
 import md5 from "md5";
+import {Organization} from "../dtos/organization";
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,10 @@ export class UserService {
     if (!email) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
     const gravatarHash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${gravatarHash}?s=${Math.trunc(size)}&d=identicon`;
+  }
+
+  getUserOrganization(userId:number): Observable<Organization>{
+    return this.httpClient.get<Organization>(this.globals.backendUri+"users/organizations/"+userId);
   }
 
   //

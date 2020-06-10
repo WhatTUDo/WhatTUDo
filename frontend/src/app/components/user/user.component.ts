@@ -22,14 +22,18 @@ export class UserComponent implements OnInit {
   constructor(private authService: AuthService,
               private userService: UserService,
               private router: Router) {
-    this.authService.getUser().subscribe((user: User) => {
-      if (!user) {
-        this.router.navigate(['/login']);
-      }
-      console.log(user);
-      this.user = user;
-      }
-    );
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe((user: User) => {
+          if (!user) {
+            this.router.navigate(['/login']);
+          }
+          console.log(user);
+          this.user = user;
+        }
+      );
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   ngOnInit(): void {

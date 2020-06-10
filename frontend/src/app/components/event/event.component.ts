@@ -22,7 +22,7 @@ export class EventComponent implements OnInit {
 
 
   id: number;
-  user: User;
+  user: User = null;
   labels: Array<Label>;
 
 
@@ -31,17 +31,15 @@ export class EventComponent implements OnInit {
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
-    this.authService.getUser().subscribe((user) => {
-      this.user = user;
-    }, err => {
-      console.warn(err);
-    });
-
-
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe((user) => {
+        this.user = user;
+      });
+    }
   }
 
   public calendarEvent: CalendarEvent;
-   participants: any = {
+  participants: any = {
     'attending': [],
     'interested': [],
     'declined': []

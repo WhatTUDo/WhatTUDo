@@ -37,6 +37,7 @@ export class MessageComponent implements OnInit {
    * Returns true if the authenticated user is an admin
    */
   isAdmin(): boolean {
+    if (this.authService.isLoggedIn()) return false;
     return this.authService.getUserRole() === 'ADMIN';
   }
 

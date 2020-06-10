@@ -10,14 +10,16 @@ import {UserService} from "../../services/user.service";
 })
 export class HeaderComponent implements OnInit {
 
-  userEmail: string = '';
+  userEmail: string = null;
 
   constructor(public authService: AuthService,
               private userService: UserService
   ) {
+    if (this.authService.isLoggedIn()) {
     this.authService.getUser().subscribe((user) => {
       this.userEmail = user.email;
     })
+    }
   }
 
   ngOnInit() {

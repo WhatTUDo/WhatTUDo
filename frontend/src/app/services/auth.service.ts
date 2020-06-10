@@ -79,14 +79,8 @@ export class AuthService {
     return date;
   }
 
-  getUser(): Observable<User>{
-    return this.httpClient.get<User>(this.globals.backendUri+"users/user");
+  getUser(): Observable<User> | null{
+    if (this.isLoggedIn()) return this.httpClient.get<User>(this.globals.backendUri+"users/user");
+    else return null;
   }
-
-  getUserOrganization(userId:number): Observable<Organization>{
-    return this.httpClient.get<Organization>(this.globals.backendUri+"users/organizations/"+userId);
-  }
-
-
-
 }
