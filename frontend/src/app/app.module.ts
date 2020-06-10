@@ -40,6 +40,7 @@ import {
 } from "@angular-material-components/datetime-picker";
 import {MatTableModule} from "@angular/material/table";
 import { RecommendedEventsComponent } from './components/recommended-events/recommended-events.component';
+import { RegisterComponent } from './components/register/register.component';
 import {OverlayModule} from "@angular/cdk/overlay";
 import { ExplanationComponent } from './components/explanation/explanation.component';
 
@@ -68,7 +69,8 @@ import { ExplanationComponent } from './components/explanation/explanation.compo
     OrganizationListComponent,
     FeedbackHandlerComponent,
     RecommendedEventsComponent,
-    ExplanationComponent
+    ExplanationComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

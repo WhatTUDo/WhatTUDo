@@ -11,6 +11,7 @@ import {faChevronLeft, faExternalLinkSquareAlt, faTag} from '@fortawesome/free-s
 import {AttendanceStatusService} from '../../services/attendance-status.service';
 import {AuthService} from '../../services/auth.service';
 import {AttendanceDto} from '../../dtos/AttendanceDto';
+import {User} from "../../dtos/user";
 
 @Component({
   selector: 'app-event',
@@ -21,7 +22,7 @@ export class EventComponent implements OnInit {
 
 
   id: number;
-  user: number;
+  user: User;
   labels: Array<Label>;
 
 
@@ -30,8 +31,8 @@ export class EventComponent implements OnInit {
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
-    this.authService.getUser().subscribe((loggedUser) => {
-      this.user = loggedUser.id;
+    this.authService.getUser().subscribe((user) => {
+      this.user = user;
     }, err => {
       console.warn(err);
     });
@@ -40,7 +41,6 @@ export class EventComponent implements OnInit {
   }
 
   public calendarEvent: CalendarEvent;
-  public eventTimeString: string = 'Event Time';
    participants: any = {
     'attending': [],
     'interested': [],
@@ -90,7 +90,7 @@ export class EventComponent implements OnInit {
       case 0:
         console.log(this.user);
         console.log(this.id);
-        this.attendanceStatusService.create(new AttendanceDto(this.user, this.id, 0)).subscribe((attendance) => {
+        this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 0)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
           }, err => {
@@ -100,7 +100,7 @@ export class EventComponent implements OnInit {
         console.log('You declined!');
         break;
       case 1:
-        this.attendanceStatusService.create(new AttendanceDto(this.user, this.id, 1)).subscribe((attendance) => {
+        this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 1)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
           }, err => {
@@ -111,7 +111,7 @@ export class EventComponent implements OnInit {
         console.log('You are attending!');
         break;
       case 2:
-        this.attendanceStatusService.create(new AttendanceDto(this.user, this.id, 2)).subscribe((attendance) => {
+        this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 2)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
           }, err => {
