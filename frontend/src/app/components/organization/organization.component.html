@@ -79,7 +79,7 @@
     <div>
       <div *ngFor="let cal of organizationCalendars"
            class="organization-calendar">
-        <div class="organization-calendar-details clickable no-hover-enlarge no-shadow" (click)="goToCalendar(cal.id)">
+        <div class="organization-calendar-details clickable no-hover-enlarge no-shadow" routerLink="/calendar/{{cal.id}}">
           <div class="organization-calendar-name">{{cal.name}}</div>
         </div>
         <div class="organization-calendar-buttons">

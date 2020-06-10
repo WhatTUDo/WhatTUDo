@@ -53,13 +53,11 @@ export class EventService {
 
   }
 
-  getMultiplEvents(name: string, from: Date, to: Date): Observable<Array<CalendarEvent>> {
-    console.log("Load Multiple events: ");
-    let uriEncodedName = encodeURI(name);
+  getMultipleEvents(from: Date, to: Date): Observable<Array<CalendarEvent>> {
     let uriEncodedStartDate = encodeURI(from.toISOString());
     let uriEncodedEndDate = encodeURI(to.toISOString());
 
-    let url = this.eventBaseUri + "?name=" + uriEncodedName + "&from=" + uriEncodedStartDate + "&to=" + uriEncodedEndDate;
+    let url = this.eventBaseUri + "?from=" + uriEncodedStartDate + "&to=" + uriEncodedEndDate;
     return this.httpClient.get<Array<CalendarEvent>>(url);
 
   }

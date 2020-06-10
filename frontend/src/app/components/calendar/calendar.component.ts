@@ -214,13 +214,4 @@ export class CalendarComponent implements OnInit {
   getDisplayTimeString(event: CalendarEvent) {
     this.eventService.getDisplayTimeString(event);
   }
-
-  redirectToDetail(id: number) {
-    console.log('You Clicked: ', id);
-    window.location.replace(`/event/${id}`);
-  }
-
-  redirectToEventForm(calendarId: number){
-    window.location.replace(`/form/event?calendarId=${calendarId}`);
-  }
 }

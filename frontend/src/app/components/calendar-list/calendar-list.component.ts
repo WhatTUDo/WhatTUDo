@@ -60,21 +60,6 @@ export class CalendarListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-
-  onSelectCalendar(calendarRep: CalendarRepresentation) {
-    this.router.navigate(['calendar/', calendarRep.id]);
-
-  }
-
-  onSelectEditCalendar(calendarRep: CalendarRepresentation) {
-    this.router.navigate(['/form/calendar', calendarRep.id]);
-  }
-
-
-  onSelectOrganization(organization: Organization) {
-    this.router.navigate(['organization/', organization.id]);
-  }
-
   onSubmit() {
     let formValue = this.searchForm.value;
     let validationIsPassed = this.validateFormInput(formValue);

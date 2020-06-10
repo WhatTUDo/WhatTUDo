@@ -7,18 +7,18 @@
   <div class="title-icon-button-combo">
   <h2>Organizations</h2>
     <div class="icon-button clickable no-hover-enlarge no-shadow">
-      <fa-icon [icon]="faPlus" (click)="onClickedAddNew()"></fa-icon>
+      <fa-icon [icon]="faPlus" routerLink="/form/organization"></fa-icon>
     </div>
   </div>
   <div class="">
     <div class="organization" *ngFor="let org of this.organizations">
-      <div class="organization-details clickable no-hover-enlarge no-shadow" (click)="redirectToOrganization(org.id)">
+      <div class="organization-details clickable no-hover-enlarge no-shadow" routerLink='/organization/{{org.id}}'>
         <div class="organization-name clickable no-shadow no-hover-enlarge">{{org.name}}</div>
         <div>Active Members: {{20 + org.id}}</div>
         <div>Upcoming Events: 0</div>
       </div>
       <div class="organization-buttons">
-        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faCog" (click)="onClickedEdit(org.id)">
+        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faCog" routerLink="/form/organization/{{org.id}}" >
           Edit Calendar
         </fa-icon>
         <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faTimesCircle" (click)="onClickedDelete(org.id)">

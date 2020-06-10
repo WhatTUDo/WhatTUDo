@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Organization} from '../../dtos/organization';
 import {OrganizationService} from '../../services/organization.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -15,7 +15,8 @@ export class OrganizationFormComponent implements OnInit {
   isUpdate: boolean;
 
   constructor(private organizationService: OrganizationService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -48,7 +49,7 @@ export class OrganizationFormComponent implements OnInit {
       .subscribe(organization => {
         this.organization = organization;
         console.log('Organization ' + organization.name + ' created successfully.');
-        window.location.replace("/organization/" + this.organization.id);
+        this.router.navigate(["/organization/" + this.organization.id]);
       });
   }
 
@@ -58,7 +59,7 @@ export class OrganizationFormComponent implements OnInit {
       .subscribe(organization => {
           this.organization = organization;
           console.log('Organization ' + organization.name + ' updated successfully.');
-          window.location.replace("/organization/" + this.organization.id);
+          this.router.navigate(["/organization/" + this.organization.id]);
         },
         error => {
           alert("Could not update organization: " + error.error.message);

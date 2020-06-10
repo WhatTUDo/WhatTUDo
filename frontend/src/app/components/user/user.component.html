@@ -1,5 +1,6 @@
 <div class="contextual-control">
-  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
+  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
   <span *ngIf="user">User: {{user.name}}</span>
 </div>
 <div class="centered-one-third" *ngIf="user">
@@ -13,11 +14,12 @@
       </div>
     </div>
     <div class="user-organization-list">
-      <div class="user-organization" *ngFor="let org of userInOrganizations">
+      <div class="user-organization clickable no-hover-enlarge no-shadow" *ngFor="let org of userInOrganizations"
+           routerLink="/organization/{{org.id}}">
         <img alt="" class="avatar avatar-small" src="https://picsum.photos/256/256/">
         <div class="user-organization-details">
           <div class="user-organization-name">{{org.name}}</div>
-<!--          <div class="user-organization-role">{{org.role}}</div>-->
+          <!--          <div class="user-organization-role">{{org.role}}</div>-->
         </div>
         <div class="clickable no-hover-enlarge no-shadow user-exit-organization-button">
           <fa-icon [icon]="faSignOutAlt"></fa-icon>

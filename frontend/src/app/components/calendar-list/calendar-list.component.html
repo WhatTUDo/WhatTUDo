@@ -11,23 +11,22 @@
     <button type="submit" class="button-solid no-hover-enlarge">Filter</button>
   </form>
   <div>
-    <div class="calendar" *ngFor="let el of list2">
+    <div class="calendar" *ngFor="let cal of list2">
       <div class="calendar-details">
-        <a (click)="onSelectCalendar(el)">
-          <div class="calendar-name clickable no-shadow no-hover-enlarge">{{el.name}}</div>
-        </a>
+        <div routerLink="/calendar/{{cal.id}}">
+          <div class="calendar-name clickable no-shadow no-hover-enlarge">{{cal.name}}</div>
+        </div>
         <div>
-          <a (click)=onSelectOrganization(a)
-             *ngFor="let a of el.organization">
-            <div class="clickable no-shadow no-hover-enlarge">{{a.name}}</div>
-          </a>
+          <div *ngFor="let org of cal.organization" routerLink="/organization/{{org.id}}">
+            <div class="clickable no-shadow no-hover-enlarge">{{org.name}}</div>
+          </div>
         </div>
       </div>
       <div class="calendar-buttons">
-        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faCog" (click)="onSelectEditCalendar(el)">
+        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faCog" routerLink="/form/calendar/{{cal.id}}">
           Edit Calendar
         </fa-icon>
-        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faTimesCircle" (click)="delete(el.id)">
+        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faTimesCircle" (click)="delete(cal.id)">
           Remove Calendar
         </fa-icon>
       </div>

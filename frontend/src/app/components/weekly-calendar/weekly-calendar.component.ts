@@ -73,7 +73,7 @@ export class WeeklyCalendarComponent implements OnInit {
    */
   //FIXME: Handle multi-day events correctly, mapping the event to EVERY DAY.
   loadEventsForWeek(from: Date, to: Date) {
-    this.eventService.getMultiplEvents(null, from, to).subscribe((events: Array<CalendarEvent>) => {
+    this.eventService.getMultipleEvents(from, to).subscribe((events: Array<CalendarEvent>) => {
       events.forEach(event => {
         let startDate = new Date(event.startDateTime)
         let endDate = new Date(event.endDateTime);
@@ -218,12 +218,6 @@ export class WeeklyCalendarComponent implements OnInit {
   getDisplayTimeString(event: CalendarEvent) {
     return this.eventService.getDisplayTimeString(event);
   }
-
-  public redirectToDetail(id: number) {
-    console.log("You Clicked: ", id);
-    window.location.replace("/event/" + id);
-  }
-
 
   faChevronUp = faChevronUp;
   faChevronDown = faChevronDown;

@@ -50,7 +50,7 @@
 
   <div *ngFor="let date of this.displayingWeek.slice(0,5)" class="calendar-day-swim-lane">
     <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())" class="calendar-event"
-         [style.grid-row]="getDisplayRows(event)" (click)="redirectToDetail(event.id)">
+         [style.grid-row]="getDisplayRows(event)" routerLink="/event/{{event.id}}">
       <div class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
       <div class="calendar-event-name">{{event.name}}</div>
     </div>
@@ -58,7 +58,7 @@
   <div class="calendar-day-swim-lane weekend-lane-container">
     <div class="weekend-sat">
       <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[5].toISOString())" class="calendar-event "
-           [style.grid-row]="getDisplayRows(event)" (click)="redirectToDetail(event.id)">
+           [style.grid-row]="getDisplayRows(event)" routerLink="/event/{{event.id}}">
         <div class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
         <div class="calendar-event-name">{{event.name}}</div>
       </div>
@@ -66,7 +66,7 @@
     <div class="weekend-sun">
       <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[6].toISOString())"
            class="calendar-event weekend-sun"
-           [style.grid-row]="getDisplayRows(event)" (click)="redirectToDetail(event.id)">
+           [style.grid-row]="getDisplayRows(event)" routerLink="/event/{{event.id}}">
         <div class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
         <div class="calendar-event-name">{{event.name}}</div>
       </div>

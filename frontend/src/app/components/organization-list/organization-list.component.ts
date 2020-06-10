@@ -44,14 +44,6 @@ export class OrganizationListComponent implements OnInit {
     });
   }
 
-  onClickedAddNew() {
-    window.location.replace("/form/organization");
-  }
-
-  redirectToOrganization(id: number) {
-    window.location.replace("/organization/" + id);
-  }
-
   faChevronLeft = faChevronLeft;
   faCog = faCog;
   faTimesCircle = faTimesCircle;
