@@ -13,5 +13,5 @@ import java.util.List;
 public class CollisionResponseDto {
 
     private List<EventCollisionDto> eventCollisions;
-    private List<LocalDateTime> dateSuggestions;
+    private List<LocalDateTime[]> dateSuggestions;
 }
