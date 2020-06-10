@@ -156,6 +156,10 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
     display: none;
   }
 
+  &.mobile button {
+    margin: 0 auto;
+  }
+
   @media screen and (min-width: $mobile-breakpoint) {
     &.desktop {
       display: grid;
@@ -166,3 +170,17 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
     }
   }
 }
+
+.title-icon-button-combo {
+  &.desktop {
+    display: none;
+  }
+
+  @media screen and (min-width: $mobile-breakpoint) {
+    &.desktop {
+      display: flex;
+    }
+  }
+}
+
+

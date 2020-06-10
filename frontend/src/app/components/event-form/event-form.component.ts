@@ -54,6 +54,10 @@ export class EventFormComponent implements OnInit {
         }
       });
     }
+    const calendarId = +this.route.snapshot.queryParamMap?.get('calendarId');
+    if (calendarId) {
+      this.event.calendarId = calendarId;
+    }
     this.getAllEditableCalendars()
   }
 

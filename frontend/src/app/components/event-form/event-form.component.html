@@ -3,7 +3,7 @@
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
 </div>
 <div>
-  <h2> New Event</h2>
+  <h2>New Event</h2>
   <div class="row">
     <div class="col-md-8">
       <h4>Event Details</h4>
@@ -12,7 +12,8 @@
 
         <label for="event.calendarId">Calendar: * </label>
         <select class="form-control" id="event.calendarId" [(ngModel)]="event.calendarId">
-          <option *ngFor="let cal of editableCalendars" value="{{cal.id}}">{{cal.name}}</option>
+          <option *ngFor="let cal of editableCalendars" value="{{cal.id}}"
+                  [selected]="cal.id === event.calendarId">{{cal.name}}</option>
         </select>
         <hr>
 

@@ -3,14 +3,20 @@
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span *ngIf="calendar">Calendar: {{calendar.name}}</span>
 </div>
-<div id="weekly-cal-heading" class="heading">
+<div class="title-icon-button-combo desktop">
+  <h2 id="weekly-cal-heading" class="heading">
   <span id="weekly-cal-month">
     {{displayingWeek[3].toLocaleString('en-US', {month: 'long'})}}
   </span>
-  <span id="weekly-cal-year">
+    <span id="weekly-cal-year">
     {{displayingWeek[3].getFullYear()}}
   </span>
+  </h2>
+  <div class="icon-button clickable no-hover-enlarge no-shadow" (click)="redirectToEventForm(calendar.id)">
+    <fa-icon [icon]="faPlus"></fa-icon>
+  </div>
 </div>
+
 <div>
   <div class="calendar-navigation desktop" (click)="minusOneWeek()">
     <fa-icon [icon]="faChevronUp">Last week</fa-icon>
@@ -34,6 +40,10 @@
         <div class="calendar-event-name" *ngIf="event != null">{{event.name}}</div>
       </div>
     </div>
+
+    <button class="button-solid small-button" (click)="redirectToEventForm(calendar.id)">
+      Add Event
+    </button>
   </div>
 
   <div class="grid-one-sixth calendar desktop">

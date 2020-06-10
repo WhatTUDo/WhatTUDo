@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Calendar} from '../../dtos/calendar';
 import {ActivatedRoute} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
-import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from '@fortawesome/free-solid-svg-icons';
+import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faPlus} from '@fortawesome/free-solid-svg-icons';
 import {CalendarEvent} from '../../dtos/calendar-event';
 import {EventService} from '../../services/event.service';
 
@@ -36,6 +36,7 @@ export class CalendarComponent implements OnInit {
   faChevronDown = faChevronDown;
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
+  faPlus = faPlus;
 
   constructor(
     private eventService: EventService,
@@ -216,6 +217,10 @@ export class CalendarComponent implements OnInit {
 
   redirectToDetail(id: number) {
     console.log('You Clicked: ', id);
-    window.location.replace('/event/' + id);
+    window.location.replace(`/event/${id}`);
+  }
+
+  redirectToEventForm(calendarId: number){
+    window.location.replace(`/form/event?calendarId=${calendarId}`);
   }
 }
