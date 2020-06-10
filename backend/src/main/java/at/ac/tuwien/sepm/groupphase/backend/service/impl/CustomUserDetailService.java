@@ -23,8 +23,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
@@ -150,12 +152,31 @@ public class CustomUserDetailService implements UserService {
 
 
     @Override
-    public ApplicationUser getUserByName(String name){
-        Optional<ApplicationUser> found = userRepository.findByName(name);
+    public ApplicationUser getUserByName(String name) throws ServiceException {
+   try {   Optional<ApplicationUser> found = userRepository.findByName(name);
         if (found.isEmpty()) {
             throw new NotFoundException("user not found");
         }
         return found.get();
+   }catch (PersistenceException | IllegalArgumentException e){
+       throw new ServiceException(e.getMessage());
+   }
+    }
+
+    @Override
+    public List<Organization> getUserOrganizations(Integer userId) throws ServiceException {
+        try {
+            ApplicationUser applicationUser = userRepository.getOne(userId);
+            Set<OrganizationMembership> organizationMemberships = applicationUser.getMemberships();
+            List<Organization> organizations = new ArrayList<>();
+            for (OrganizationMembership o : organizationMemberships) {
+                organizations.add(o.getOrganization());
+            }
+            return organizations;
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+
     }
 
     @Override

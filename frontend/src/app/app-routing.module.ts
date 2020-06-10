@@ -18,6 +18,7 @@ import {UserFormComponent} from './components/user-form/user-form.component';
 
 import {CalendarFormComponent} from './components/calendar-form/calendar-form.component';
 import {OrganizationListComponent} from "./components/organization-list/organization-list.component";
+import {ExplanationComponent} from "./components/explanation/explanation.component";
 
 
 const routes: Routes = [
@@ -37,7 +38,7 @@ const routes: Routes = [
   {path: 'form/user/:id', component: UserFormComponent}, //edit existing user
   {path: 'form/calendar', component: CalendarFormComponent},
   {path: 'form/calendar/:id', component: CalendarFormComponent},
-
+  {path: 'explanation/:pageName', component: ExplanationComponent},
 
   {path: 'user', component: UserComponent},
 

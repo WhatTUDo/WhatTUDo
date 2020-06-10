@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
@@ -51,7 +52,9 @@ public interface UserService extends UserDetailsService {
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 
 
-     ApplicationUser getUserByName(String name);
+     ApplicationUser getUserByName(String name) throws ServiceException;
+
+     List<Organization> getUserOrganizations(Integer userId) throws ServiceException;
 
     /**
      * gets a recommended event for a user based on labels of

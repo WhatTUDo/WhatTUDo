@@ -1,0 +1,53 @@
+
+<div class="text-container">
+  <h1>Explanation</h1>
+
+  <h2>Event Collisions</h2>
+
+  <h3>General Idea</h3>
+  <p>
+    When creating a new Event, the platform automatically cross-checks whether there are collisions with other Events.
+    If collisions are detected, and are found to be significant, the User is notified on the Event Form page. In addition,
+    a list of recommended alternative dates are presented, for which fewer Event Collisions occur.
+  </p>
+  <hr>
+
+  <h3>Event Collision Algorithm</h3>
+  <p>
+    The platform uses a heuristic algorithm to determine a) the severity of a potential Event Collision and b) possible
+    alternative dates for the Event. <br>
+    First, all Events from all Calendars within a certain timespan (default value: 12h before the new Event begins and 12h
+    after it ends) are queried. Then, a Collision Score (CS) for each queried Event is calculated. This score is based on
+    the number of Event Labels that the new Event has in common with each queried Event. <br>
+    Afterwards, the Events are compared regarding their start and end times. The greater the overlap between the new Event
+    and each queried Event, the greater their CS is. <br>
+    Finally, once an Event Collision's CS meets a certain threshold, the Event Collision is returned to the User and displayed.
+  </p>
+  <hr>
+  <h3>Alternative Date Suggestion Algorithm</h3>
+  <p>
+    Listing every possible Event Collision might give the User additional information. However, without a clear indication
+    which dates are more suitable for a new Event, a Event Collision list alone is not sufficient. Therefore, the platform
+    will try to suggest better (e.g., ones with fewer Collisions) start and end dates for the new Event. <br>
+    Based on the new Event, alternative dates are given to the Event Collision algorithm tentatively. If the CS of the new
+    Event decreases (or reaches the optimal value 0), the new suggestion is saved. <br>
+    The algorithm tries to find alternative dates by:
+  </p>
+  <ul>
+    <li>
+      <p>Changing the day of the week </p>
+    </li>
+    <li>
+      <p>Changing the week while keeping the same day</p>
+    </li>
+    <li>
+      <p>Changing the Event's start time. </p>
+    </li>
+  </ul>
+  <p>
+    For each date suggestion, measures are taken so that unhelpful suggestions are discarded (e.g., starting an Event too late or
+    too early).
+  </p>
+  <hr>
+
+</div>

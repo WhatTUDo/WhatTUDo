@@ -8,11 +8,10 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.IncomingUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
-import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
+import io.swagger.models.auth.In;
 import org.hibernate.event.service.spi.EventListenerRegistrationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,10 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,6 +55,11 @@ public class UserEndpointTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    OrganizationRepository organizationRepository;
+
 
     @WithMockUser
     @Test
@@ -74,44 +75,23 @@ public class UserEndpointTest {
 
     }
 
+
+
+
+    @WithMockUser
     @Test
-    public void updateUser() {
-        IncomingUserDto userDto = new IncomingUserDto(null, "user1", "testy@test.com", "hunter2");
+    @Transactional
+    public void getUserOrganizations(){
+        Organization organization = organizationRepository.save(new Organization("organization test"));
+        ApplicationUser user = userRepository.save(new ApplicationUser( "user", "user@test.at", "usertest"));
+        Set<OrganizationMembership> organizationMembershipSet = new HashSet<>();
+        organizationMembershipSet.add(new OrganizationMembership(organization, user, OrganizationRole.MEMBER));
+        user.setMemberships(organizationMembershipSet);
+        userRepository.save(user);
 
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
-
-        assertNotNull(savedUserDto);
-        assertEquals(userDto.getName(), savedUserDto.getName());
-
-        LoggedInUserDto userDto1 = new LoggedInUserDto(savedUserDto.getId(), "user2", null);
-
-        LoggedInUserDto updateUser = userEndpoint.updateUser(userDto1);
-
-        assertEquals(userDto1.getName(), updateUser.getName());
-
-
-        userDto1 = new LoggedInUserDto(savedUserDto.getId(), null, "user43@test.com");
-
-        updateUser = userEndpoint.updateUser(userDto1);
-
-        assertEquals(savedUserDto.getId(), updateUser.getId());
-        assertEquals(userDto1.getEmail(), updateUser.getEmail());
-
-
+        assertEquals(organization.getName(), userEndpoint.getOrganizationOfUser(user.getId()).get(0).getName());
     }
 
-    @Test
-    public void changePassword() {
-        IncomingUserDto userDto = new IncomingUserDto(null, "changePasswordUser", "changepass@test.com", "hunter3");
-
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
-
-        LoggedInUserDto changePasswordUserDto = userPasswordEndpoint.changeUserPassword(new ChangePasswordDto(savedUserDto.getName(), savedUserDto.getEmail(), "hunter3", "hunter4"));
-
-//        assertTrue(passwordEncoder.matches("hunter4", changePasswordUserDto()));
-
-
-    }
 
     @Test
     @Transactional

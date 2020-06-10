@@ -27,5 +27,20 @@ public interface EventCollisionService {
     List<EventCollision> getEventCollisions(Event event, Integer scoreThreshold, Long additionalTimespan) throws ServiceException, ValidationException;
 
 
-    List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, Integer initialScore) throws ServiceException, ValidationException;
+    /**
+     * Generates start and end dates. Starts with checking the same time up to 6 days after or before initial date of event.
+     * Checks if new dates cause collisions by calling getEventCollision. Afterwards calls recommendationLookup
+     * and first the method checks if new dates cause no collision and saves new start, end and 0 as collision score to map rec.
+     * Second the method recommendationLookup check checks if new date causes collision it adds the max value of score caused with
+     * colliding event to map rec.
+     * Afterwards it checks same time but up to 2 weeks after or before the initial date and calls getEventCollision and recommendationLookup.
+     * In the end it checks same date as initial date of event but different time. It checks up to 2 hours earlier or later.
+     * In the end method filterBestRecommendations is called. The method adds to suggestion list the dates that cause no collision(0 score).
+     * Afterwards it gets the minimal collision score from map rec (ignoring 0 scores) and adds them to suggestion list.
+     * @param event Event entity for which suggestions should be generated
+     * @param initialScore minimal collision score event causes.
+     * @return list of suggestions with start and end time.
+     * @throws ServiceException in case no suggestion are found.
+     */
+    List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, Integer initialScore) throws ServiceException;
 }

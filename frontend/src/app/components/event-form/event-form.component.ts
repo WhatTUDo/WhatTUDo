@@ -8,8 +8,6 @@ import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {FeedbackService} from "../../services/feedback.service";
-import {MatDatetimepickerModule} from "@mat-datetimepicker/core";
-import {NgxMatDatetimePickerModule, NgxMatDateAdapter} from "@angular-material-components/datetime-picker";
 
 @Component({
   selector: 'app-event-form',
@@ -26,7 +24,6 @@ export class EventFormComponent implements OnInit {
     showSeconds: 0,
     stepHour: 1,
     stepMinute: 5
-
   }
 
   event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
