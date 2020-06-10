@@ -39,6 +39,7 @@ import {
   NgxMatNativeDateModule
 } from "@angular-material-components/datetime-picker";
 import {MatTableModule} from "@angular/material/table";
+import { RecommendedEventsComponent } from './components/recommended-events/recommended-events.component';
 
 
 @NgModule({
@@ -62,7 +63,8 @@ import {MatTableModule} from "@angular/material/table";
     OrganizationComponent,
     UserFormComponent,
     OrganizationListComponent,
-    FeedbackHandlerComponent
+    FeedbackHandlerComponent,
+    RecommendedEventsComponent
   ],
   imports: [
     BrowserModule,
