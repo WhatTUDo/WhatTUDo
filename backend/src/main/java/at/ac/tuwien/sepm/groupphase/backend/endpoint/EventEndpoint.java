@@ -176,7 +176,7 @@ public class EventEndpoint {
     public List<LabelDto> getLabelsById(@PathVariable(value = "id") int id) {
         try {
 
-            List<LabelDto> results = new ArrayList<LabelDto>();
+            List<LabelDto> results = new ArrayList<>();
 
             (labelService.findByEventId(id)).forEach(it -> results.add(labelMapper.labelToLabelDto(it)));
 
