@@ -140,7 +140,12 @@ export class EventService {
     return this.httpClient.get<any>(searchURI);
   }
 
-  public getEventDateAndTimeString(event: CalendarEvent) {
+  /**
+   * A helper method to generate a concise and human-readable date and time string.
+   * If the event ends on the same day, the end date will be omitted, so that the date is only printed on time.
+   * @param event with correct startDateTime and endDateTime.
+   */
+  getEventDateAndTimeString(event: CalendarEvent) {
     const startDateTime: Date = new Date(event.startDateTime);
     const endDateTime: Date = new Date(event.endDateTime);
     const endsOnTheSameDay = (startDateTime.toDateString() == endDateTime.toDateString())
@@ -154,6 +159,24 @@ export class EventService {
     string += endDateTime.toLocaleTimeString('en-US', {
       month: endsOnTheSameDay ? undefined : 'short',
       day: endsOnTheSameDay ? undefined : 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    return string
+  }
+
+  /**
+   * Similar to the method above, but only time is printed.
+   * Used if the date is denoted already.
+   * @param event
+   */
+  getDisplayTimeString(event: CalendarEvent) {
+    let string = event.startDateTime.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+    string += ' - '
+    string += event.endDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
