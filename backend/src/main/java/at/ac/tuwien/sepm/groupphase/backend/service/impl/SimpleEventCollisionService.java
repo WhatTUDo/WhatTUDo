@@ -186,12 +186,12 @@ public class SimpleEventCollisionService implements EventCollisionService {
             if(event.getStartDateTime().getHour() > 8){
             help.setStartDateTime(event.getStartDateTime().minusHours(i));
             help.setEndDateTime(event.getEndDateTime().minusHours(i));
-                System.out.println(help.getStartDateTime() +" "+ help.getStartDateTime());
-
                 recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);}
 
         }
-
+        if(rec.isEmpty()){
+            throw new ServiceException("Unfortunately we couldn't find any suggestions.");
+        }
         return filterBestRecommendations(rec);
     }
 
