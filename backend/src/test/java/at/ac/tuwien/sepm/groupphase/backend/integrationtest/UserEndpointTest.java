@@ -8,11 +8,10 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.IncomingUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
-import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
+import io.swagger.models.auth.In;
 import org.hibernate.event.service.spi.EventListenerRegistrationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,10 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,6 +54,11 @@ public class UserEndpointTest {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    OrganizationRepository organizationRepository;
 
 
     @WithMockUser
@@ -112,6 +113,21 @@ public class UserEndpointTest {
 
 
     }
+
+    @WithMockUser
+    @Test
+    @Transactional
+    public void getUserOrganizations(){
+        Organization organization = organizationRepository.save(new Organization("organization test"));
+        ApplicationUser user = userRepository.save(new ApplicationUser( "user", "user@test.at", "usertest"));
+        Set<OrganizationMembership> organizationMembershipSet = new HashSet<>();
+        organizationMembershipSet.add(new OrganizationMembership(organization, user, OrganizationRole.MEMBER));
+        user.setMemberships(organizationMembershipSet);
+        userRepository.save(user);
+
+        assertEquals(organization.getName(), userEndpoint.getOrganizationOfUser(user.getId()).get(0).getName());
+    }
+
 
     @Test
     @Transactional
