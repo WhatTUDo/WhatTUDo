@@ -22,7 +22,8 @@
     <a class="nav-link clickable no-hover-enlarge no-shadow" *ngIf="authService.isLoggedIn()" routerLink="/" (click)="authService.logoutUser()">
       <fa-icon [icon]="faSignOutAlt">Logout</fa-icon>
     </a>
-    <img *ngIf="authService.isLoggedIn()" class="avatar avatar-small" alt="" src="{{getGravatarLink(userEmail, 128)}}">
+    <img *ngIf="authService.isLoggedIn()" routerLink="/user"  class="avatar avatar-small clickable no-hover-enlarge no-shadow"
+         alt="" src="{{getGravatarLink(userEmail, 128)}}">
     <div *ngIf="!authService.isLoggedIn()" class="sign-in-avatar avatar avatar-small clickable no-hover-enlarge no-shadow" routerLink="/login" >
       <fa-icon [icon]="faSignInAlt">Login</fa-icon>
     </div>

@@ -1,8 +1,8 @@
 <div class="contextual-control">
   <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
-  <span>User: {{user.name}}</span>
+  <span *ngIf="user">User: {{user.name}}</span>
 </div>
-<div class="centered-one-third">
+<div class="centered-one-third" *ngIf="user">
   <div>
     <h2>You</h2>
     <div class="user-info">
@@ -13,11 +13,11 @@
       </div>
     </div>
     <div class="user-organization-list">
-      <div class="user-organization" *ngFor="let role of userRoleInOrganizations">
+      <div class="user-organization" *ngFor="let org of userInOrganizations">
         <img alt="" class="avatar avatar-small" src="https://picsum.photos/256/256/">
         <div class="user-organization-details">
-          <div class="user-organization-name">{{role.organizationName}}</div>
-          <div class="user-organization-role">{{role.role}}</div>
+          <div class="user-organization-name">{{org.name}}</div>
+<!--          <div class="user-organization-role">{{org.role}}</div>-->
         </div>
         <div class="clickable no-hover-enlarge no-shadow user-exit-organization-button">
           <fa-icon [icon]="faSignOutAlt"></fa-icon>

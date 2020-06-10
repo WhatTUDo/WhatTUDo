@@ -13,42 +13,46 @@
       href="https://en.gravatar.com" target="_blank">Gravatar</a>.
     </div>
   </div>
-  <div class="form-group">
-    <label for="username" class="control-label">Username</label>
-    <div>
-      <input type="text" [(ngModel)]="user.name" class="form-control" autocomplete="username"
-             id="username">
-      <!--            <div *ngIf="updateForm.controls.username.errors" class="jasmine-errored">-->
-      <!--              <small class="form-text text-warning"-->
-      <!--                     *ngIf="updateForm.controls.username.errors.maxLength">This username is too long!-->
-      <!--              </small>-->
-      <!--            </div>-->
+  <form #userRegistrationForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="username" class="control-label">Username</label>
+      <div>
+        <input type="text" [(ngModel)]="user.name" class="form-control" autocomplete="username"
+               required maxlength="255" id="username" name="username" #username="ngModel">
+        <div class="jasmine-errored" [hidden]="username.valid || username.pristine">
+          <small class="form-text text-warning">This username is too long!</small>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="email" class="control-label">Email</label>
-    <div>
-      <input type="email" [(ngModel)]="user.email" class="form-control" autocomplete="email" id="email"
-             (change)="emailUpdated()">
-      <!--            <div *ngIf="updateForm.controls.email.errors" class="jasmine-errored">-->
-      <!--              <small class="form-text text-warning"-->
-      <!--                     *ngIf="updateForm.controls.email.errors.pattern">Please enter a valid email!-->
-      <!--              </small>-->
+    <div class="form-group">
+      <label for="email" class="control-label">Email</label>
+      <div>
+        <input type="email" [(ngModel)]="user.email" class="form-control" autocomplete="email" id="email"
+               email (change)="emailUpdated()" name="email" #email="ngModel">
+        <div class="jasmine-errored" [hidden]="email.valid || email.pristine">
+          <small class="form-text text-warning">Please enter a valid email!
+          </small>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password" class="control-label">Password</label>
+        <div>
+          <input type="password" [(ngModel)]="password" class="form-control" autocomplete="new-password"
+                 minlength="8" required passwordrules="minlength: 8;" id="password"
+                 name="password" #passwordField="ngModel">
+          <div class="jasmine-errored" [hidden]="passwordField.valid || passwordField.pristine">
+            <small class="form-text text-warning" *ngIf="passwordField.hasError('required')">
+              Please enter your password!
+            </small>
+            <small class="form-text text-warning" *ngIf="passwordField.hasError('minlength')">
+              Please make your password longer!
+            </small>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button class="button-green" type="submit" [disabled]="!userRegistrationForm.valid">Create Account</button>
+      </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label for="password" class="control-label">Password</label>
-    <div>
-      <input type="password" [(ngModel)]="password" class="form-control" autocomplete="new-password"
-             passwordrules="minlength: 8;" id="password">
-      <!--            <div *ngIf="changePwdForm.controls.newPassword.errors" class="jasmine-errored">-->
-      <!--              <small class="form-text text-warning"-->
-      <!--                     *ngIf="changePwdForm.controls.newPassword.errors.required">Please enter your new Password!-->
-      <!--              </small>-->
-      <!--            </div>-->
-    </div>
-  </div>
-  <div>
-    <button class="button-green">Create Account</button>
-  </div>
+  </form>
 </div>

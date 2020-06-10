@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {User} from "../../dtos/user";
 import {UserService} from "../../services/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-registration',
@@ -14,7 +15,8 @@ export class UserRegistrationComponent implements OnInit {
   password: string;
   gravatarLink: string;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -27,4 +29,9 @@ export class UserRegistrationComponent implements OnInit {
 
   faChevronLeft = faChevronLeft;
 
+  onSubmit() {
+    this.userService.postUser(this.user).subscribe((user: User) => {
+      this.router.navigate(['/user'])
+    })
+  }
 }
