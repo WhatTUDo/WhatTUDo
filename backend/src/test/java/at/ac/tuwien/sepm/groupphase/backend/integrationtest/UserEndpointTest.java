@@ -75,7 +75,8 @@ public class UserEndpointTest {
 
     }
 
-    
+
+
 
     @WithMockUser
     @Test
