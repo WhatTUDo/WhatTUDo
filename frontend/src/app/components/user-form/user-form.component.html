@@ -1,11 +1,18 @@
-<div class="centered-two-third">
+<div class="contextual-control">
+  <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+  <span *ngIf="user&&user.name">Edit User: {{user.name}}</span>
+</div>
+<div class="centered-one-third" *ngIf="user">
   <h2>Edit User</h2>
   <form [formGroup]="updateForm" (ngSubmit)="update()">
     <div>
       <div class="avatar-container">
         <img alt="" class="avatar avatar-medium" src="{{getGravatarLink(user.email, 256)}}">
       </div>
-      <div class="avatar-description">You can change your profile picture using <a href="https://en.gravatar.com">Gravatar</a>.</div>
+      <div class="avatar-description">You can change your profile picture using
+        <a href="https://en.gravatar.com" target="_blank">Gravatar</a>.
+      </div>
     </div>
 
     <div>
