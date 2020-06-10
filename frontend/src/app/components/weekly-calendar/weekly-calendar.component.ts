@@ -200,17 +200,8 @@ export class WeeklyCalendarComponent implements OnInit {
     return endOfDay;
   }
 
-  public getDisplayTimeString(event: CalendarEvent) {
-    let string = event.startDateTime.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(":00", "")
-    string += ' - '
-    string += event.endDateTime.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(":00", "")
-    return string
+  getDisplayTimeString(event: CalendarEvent) {
+    this.eventService.getDisplayTimeString(event);
   }
 
   public redirectToDetail(id: number) {

@@ -1,0 +1,40 @@
+@import "../../../var.scss";
+
+.promo-event-list{
+  padding: 0 4pt;
+}
+
+.promo-event {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  background-color: var(--shadow);
+  border-radius: $rounded-radius;
+  padding: 8pt;
+
+  width: 100%;
+  margin-bottom: 8pt;
+
+  .promo-event-details {
+    width: 100%;
+    color: var(--text);
+
+    .promo-event-name {
+      font-weight: $f-bold;
+      font-size: 24pt;
+    }
+  }
+
+  .promo-event-buttons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    * {
+      font-size: 16pt;
+      margin-left: 4pt;
+    }
+  }
+}

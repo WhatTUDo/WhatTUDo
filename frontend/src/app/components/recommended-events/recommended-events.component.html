@@ -1,0 +1,11 @@
+<div class="promo-event-list">
+  <div class="promo-event" *ngFor="let event of recommendedEvents">
+    <div class="promo-event-details clickable no-hover-enlarge no-shadow" (click)="redirectToEvent(event.id)">
+      <div class="promo-event-time">{{getEventDateAndTimeString(event)}}</div>
+      <div class="promo-event-name">{{event.name}}</div>
+    </div>
+    <!--    <div class="promo-event-buttons">-->
+    <!--    </div>-->
+    <!-- TODO: Expand and collapse events.-->
+  </div>
+</div>
