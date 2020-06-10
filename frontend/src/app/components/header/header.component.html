@@ -15,13 +15,16 @@
         <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/organization-list" routerLinkActive="active">Organizations</a>
       </li>
     </ul>
-    <ul class="navbar-nav mr-5" id="avatar avatar-medium">
-      <a class="nav-link" *ngIf="!authService.isLoggedIn()" routerLink="/login" routerLinkActive="active">
-        <fa-icon [icon]="faSignInAlt">Login</fa-icon>
-      </a>
-      <a class="nav-link" *ngIf="authService.isLoggedIn()" routerLink="/" (click)="authService.logoutUser()">
-        <fa-icon [icon]="faSignOutAlt">Logout</fa-icon>
-      </a>
-    </ul>
+
+    <a class="nav-link clickable no-hover-enlarge no-shadow" *ngIf="authService.isLoggedIn()" routerLink="/user">
+      <fa-icon [icon]="faCog">Logout</fa-icon>
+    </a>
+    <a class="nav-link clickable no-hover-enlarge no-shadow" *ngIf="authService.isLoggedIn()" routerLink="/" (click)="authService.logoutUser()">
+      <fa-icon [icon]="faSignOutAlt">Logout</fa-icon>
+    </a>
+    <img *ngIf="authService.isLoggedIn()" class="avatar avatar-small" alt="" src="{{getGravatarLink(userEmail, 128)}}">
+    <div *ngIf="!authService.isLoggedIn()" class="sign-in-avatar avatar avatar-small clickable no-hover-enlarge no-shadow" routerLink="/login" >
+      <fa-icon [icon]="faSignInAlt">Login</fa-icon>
+    </div>
   </div>
 </nav>

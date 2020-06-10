@@ -10,3 +10,16 @@ nav {
     font-size: 2rem;
   }
 }
+
+.sign-in-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: var(--text);
+
+  fa-icon {
+    color: var(--background);
+    font-size: 16pt;
+  }
+}

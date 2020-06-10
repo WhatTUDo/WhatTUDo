@@ -3,7 +3,7 @@ import {Globals} from '../global/globals';
 import {HttpClient} from '@angular/common/http';
 import {AttendanceDto} from '../dtos/AttendanceDto';
 import {Observable} from 'rxjs';
-import {UserDto} from '../dtos/UserDto';
+import {User} from '../dtos/user';
 
 @Injectable({
   providedIn: 'root'

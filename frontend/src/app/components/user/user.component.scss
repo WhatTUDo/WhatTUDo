@@ -20,10 +20,14 @@
     justify-self: flex-end;
     flex-grow: 1;
 
-    .username {
-      text-align: right;
+    .name {
       font-weight: $f-bold;
       font-size: 32pt;
+    }
+
+    .email {
+      color: var(--secondary);
+      font-size: 16pt;
     }
   }
 }

@@ -34,9 +34,18 @@
           </small>
         </div>
       </div>
-      <button type="button" (click)="loginUser()" class="button-green small-button">Login
-      </button>
     </form>
+    <div class="login-buttons">
+      <button type="button" class="button-solid small-button" disabled>
+        Reset Password
+      </button>
+      <button type="button" (click)="redirectToRegistration()" class="button-solid small-button">
+        Register
+      </button>
+      <button type="button" (click)="loginUser()" class="button-green small-button">
+        Login
+      </button>
+    </div>
 
   </div>
 </div>

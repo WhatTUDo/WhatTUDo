@@ -1,6 +1,9 @@
 import {AfterContentChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from "@angular/router";
+import {UserService} from "../../services/user.service";
+import {User} from "../../dtos/user";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-user-form',
@@ -11,7 +14,12 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
   updateForm: FormGroup;
   changePwdForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private cd: ChangeDetectorRef,
+  user: User;
+
+  constructor(private formBuilder: FormBuilder,
+              private userService: UserService,
+              private authService: AuthService,
+              private cd: ChangeDetectorRef,
               private route: ActivatedRoute) {
     this.updateForm = this.formBuilder.group(
       {
@@ -26,6 +34,16 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
         newPassword: new FormControl('', Validators.required)
       }
     );
+    const id = +this.route.snapshot.paramMap.get('id');
+    // if (id) {
+    //   this.userService.getById(id).subscribe((user: User) => {
+    //     this.user = user;
+    //   });
+    // } else {
+    this.authService.getUser().subscribe((user: User) => {
+      this.user = user;
+    });
+    // }
   }
 
   ngOnInit(): void {
@@ -48,9 +66,15 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
     this.changePwdForm.reset();
   }
 
+  getGravatarLink(email, size) {
+    return this.userService.getGravatarLink(email, size);
+  }
+
   ngAfterContentChecked() {
     this.cd.detectChanges();
   }
 
-
+  emailUpdated(event: KeyboardEvent) {
+    this.user.email = event.target.value;
+  }
 }

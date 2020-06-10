@@ -1,7 +1,18 @@
 @import "../../../var.scss";
 
-.user-action-container {
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
+.avatar-description {
+  text-align: center;
+
+  margin-top: 8pt;
+}
+
+.user-action-container {
   .user-action {
     display: inline-flex;
     text-transform: uppercase;
