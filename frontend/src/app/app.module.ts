@@ -40,6 +40,9 @@ import {
 } from "@angular-material-components/datetime-picker";
 import {MatTableModule} from "@angular/material/table";
 import { RecommendedEventsComponent } from './components/recommended-events/recommended-events.component';
+import {OverlayModule} from "@angular/cdk/overlay";
+import { ExplanationComponent } from './components/explanation/explanation.component';
+
 
 
 @NgModule({
@@ -64,7 +67,8 @@ import { RecommendedEventsComponent } from './components/recommended-events/reco
     UserFormComponent,
     OrganizationListComponent,
     FeedbackHandlerComponent,
-    RecommendedEventsComponent
+    RecommendedEventsComponent,
+    ExplanationComponent
   ],
   imports: [
     BrowserModule,
@@ -83,7 +87,8 @@ import { RecommendedEventsComponent } from './components/recommended-events/reco
     MatInputModule,
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule,
-    MatTableModule
+    MatTableModule,
+    OverlayModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
