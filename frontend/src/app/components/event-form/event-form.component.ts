@@ -24,7 +24,6 @@ export class EventFormComponent implements OnInit {
     showSeconds: 0,
     stepHour: 1,
     stepMinute: 5
-
   }
 
   event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
