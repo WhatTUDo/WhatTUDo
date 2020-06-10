@@ -30,7 +30,8 @@
           <div class="col-sm-6">
             <mat-form-field>
               <mat-label for="event.startDateTime">Start Date & Time</mat-label>
-              <input [(ngModel)]="event.startDateTime" [ngxMatDatetimePicker]="startDateTimePicker" id="event.startDateTime"
+              <input [(ngModel)]="event.startDateTime" [ngxMatDatetimePicker]="startDateTimePicker"
+                     id="event.startDateTime"
                      matInput>
               <mat-datepicker-toggle [for]="startDateTimePicker" matSuffix></mat-datepicker-toggle>
               <ngx-mat-datetime-picker

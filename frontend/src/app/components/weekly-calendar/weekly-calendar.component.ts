@@ -75,7 +75,6 @@ export class WeeklyCalendarComponent implements OnInit {
    * @param from: Start date of week
    * @param to: End date of week
    */
-  //FIXME: Handle multi-day events correctly, mapping the event to EVERY DAY.
   loadEventsForWeek(from: Date, to: Date) {
     this.eventService.getMultipleEvents(from, to).subscribe((events: Array<CalendarEvent>) => {
       events.forEach(event => {
@@ -88,19 +87,12 @@ export class WeeklyCalendarComponent implements OnInit {
       this.displayingWeek.forEach((day: Date) => {
         let keyISOString = this.getMidnight(day).toISOString()
         this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
-          let isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
+          let isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
           let isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
           return isAfterMidnight && isBeforeEndOfDay;
         }));
       })
-    }, error => {
-      if (error.status != 404) {
-        alert("Error while loading events: " + error.message);
-      } else {
-        alert("No events found!");
-      }
     });
-
   }
 
   updateDatetime() {
@@ -168,12 +160,14 @@ export class WeeklyCalendarComponent implements OnInit {
   /**
    * Generate the CSS grid numbers for displaying the event at the right time.
    * Change this.view… variables to configure behavior.
-   * @param event
+   * @param event to display
+   * @param forDate the displayed date
    */
-  //FIXME: Handle multi-day events correctly.
-  getDisplayRows(event: CalendarEvent) {
-    const startSecond = this.getSecondOffsetFromMidnight(event.startDateTime);
-    const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
+  getDisplayRows(event: CalendarEvent, forDate: Date) {
+    const startsOnToday = this.isOnSameDay(event.startDateTime, forDate);
+    const endsOnToday = this.isOnSameDay(event.endDateTime, forDate);
+    const startSecond = startsOnToday ? this.getSecondOffsetFromMidnight(event.startDateTime) : 0;
+    const endSecond = endsOnToday ? this.getSecondOffsetFromMidnight(event.endDateTime) : 24 * 60 * 60;
 
     let startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow);
     let endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow);
@@ -186,6 +180,10 @@ export class WeeklyCalendarComponent implements OnInit {
       endRow += endRowOffset;
     }
     return `${startRow}/${endRow}`
+  }
+
+  isOnSameDay(date1: Date, date2: Date) {
+    return date1.toDateString() === date2.toDateString();
   }
 
   getSecondOffsetFromMidnight(date: Date) {

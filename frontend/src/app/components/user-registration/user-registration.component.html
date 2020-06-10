@@ -27,7 +27,8 @@
     <div class="form-group">
       <label class="control-label" for="email">Email</label>
       <div>
-        <input #email="ngModel" (change)="emailUpdated()" [(ngModel)]="user.email" autocomplete="email" class="form-control"
+        <input #email="ngModel" (change)="emailUpdated()" [(ngModel)]="user.email" autocomplete="email"
+               class="form-control"
                email id="email" name="email" type="email">
         <div [hidden]="email.valid || email.pristine" class="jasmine-errored">
           <small class="form-text text-warning">Please enter a valid email!

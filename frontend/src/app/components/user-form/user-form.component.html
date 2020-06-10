@@ -35,7 +35,8 @@
         <div class="form-group">
           <label class="control-label" for="email">Email</label>
           <div>
-            <input (change)="emailUpdated($event)" autocomplete="email" class="form-control" formControlName="email" id="email"
+            <input (change)="emailUpdated($event)" autocomplete="email" class="form-control" formControlName="email"
+                   id="email"
                    type="email">
             <div *ngIf="updateForm.controls.email.errors" class="jasmine-errored">
               <small *ngIf="updateForm.controls.email.errors.pattern"

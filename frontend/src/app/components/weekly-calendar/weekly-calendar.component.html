@@ -24,7 +24,8 @@
   </div>
 
   <div class="calendar-day-swim-lane">
-    <div *ngFor="let event of this.eventsOfTheWeek.get(displayingDate.toISOString())" [style.grid-row]="getDisplayRows(event)"
+    <div *ngFor="let event of this.eventsOfTheWeek.get(displayingDate.toISOString())"
+         [style.grid-row]="getDisplayRows(event, displayingDate)"
          class="calendar-event">
       <div *ngIf="event != null" class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
       <div *ngIf="event != null" class="calendar-event-name">{{event.name}}</div>
@@ -49,7 +50,8 @@
   </div>
 
   <div *ngFor="let date of this.displayingWeek.slice(0,5)" class="calendar-day-swim-lane">
-    <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())" [style.grid-row]="getDisplayRows(event)"
+    <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())"
+         [style.grid-row]="getDisplayRows(event, date)"
          class="calendar-event" routerLink="/event/{{event.id}}">
       <div class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
       <div class="calendar-event-name">{{event.name}}</div>
@@ -57,7 +59,8 @@
   </div>
   <div class="calendar-day-swim-lane weekend-lane-container">
     <div class="weekend-sat">
-      <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[5].toISOString())" [style.grid-row]="getDisplayRows(event)"
+      <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[5].toISOString())"
+           [style.grid-row]="getDisplayRows(event, displayingWeek[5])"
            class="calendar-event " routerLink="/event/{{event.id}}">
         <div class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
         <div class="calendar-event-name">{{event.name}}</div>
@@ -65,7 +68,7 @@
     </div>
     <div class="weekend-sun">
       <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[6].toISOString())"
-           [style.grid-row]="getDisplayRows(event)"
+           [style.grid-row]="getDisplayRows(event, displayingWeek[6])"
            class="calendar-event weekend-sun" routerLink="/event/{{event.id}}">
         <div class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
         <div class="calendar-event-name">{{event.name}}</div>

@@ -9,17 +9,22 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a *ngIf="authService.isLoggedIn()" class="nav-link" routerLink="/calendar-list" routerLinkActive="active">Calendars</a>
+        <a *ngIf="authService.isLoggedIn()" class="nav-link" routerLink="/calendar-list" routerLinkActive="active">
+          Calendars
+        </a>
       </li>
       <li class="nav-item">
-        <a *ngIf="authService.isLoggedIn()" class="nav-link" routerLink="/organization-list" routerLinkActive="active">Organizations</a>
+        <a *ngIf="authService.isLoggedIn()" class="nav-link" routerLink="/organization-list" routerLinkActive="active">
+          Organizations
+        </a>
       </li>
     </ul>
 
     <a *ngIf="authService.isLoggedIn()" class="nav-link clickable no-hover-enlarge no-shadow" routerLink="/user">
       <fa-icon [icon]="faCog">Logout</fa-icon>
     </a>
-    <a (click)="authService.logoutUser()" *ngIf="authService.isLoggedIn()" class="nav-link clickable no-hover-enlarge no-shadow"
+    <a (click)="authService.logoutUser()" *ngIf="authService.isLoggedIn()"
+       class="nav-link clickable no-hover-enlarge no-shadow"
        routerLink="/">
       <fa-icon [icon]="faSignOutAlt">Logout</fa-icon>
     </a>

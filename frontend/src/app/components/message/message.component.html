@@ -9,7 +9,8 @@
 <div class="mt-4 container">
 
   <div class="row p-2 mb-4">
-    <button *ngIf="isAdmin()" class="btn btn-secondary btn-sm mr-4" data-target=".create-message-modal" data-toggle="modal"
+    <button *ngIf="isAdmin()" class="btn btn-secondary btn-sm mr-4" data-target=".create-message-modal"
+            data-toggle="modal"
             type="button">Add message
     </button>
 
@@ -28,7 +29,8 @@
 
               <div class="form-group">
                 <label for="inputTitle">Title</label>
-                <input aria-describedby="titleHelp" class="form-control" formControlName="title" id="inputTitle" name="title"
+                <input aria-describedby="titleHelp" class="form-control" formControlName="title" id="inputTitle"
+                       name="title"
                        placeholder="Enter title" type="text">
                 <div *ngIf="submitted && messageForm.controls.title.errors" class="error">
                   <small *ngIf="messageForm.controls.title.errors.required" class="form-text text-warning">Your title is
@@ -39,7 +41,8 @@
 
               <div class="form-group">
                 <label for="inputSummary">Summary</label>
-                <textarea aria-describedby="summaryHelp" class="form-control" formControlName="summary" id="inputSummary" name="summary"
+                <textarea aria-describedby="summaryHelp" class="form-control" formControlName="summary"
+                          id="inputSummary" name="summary"
                           placeholder="Enter summary" rows="3"></textarea>
                 <div *ngIf="submitted && messageForm.controls.summary.errors" class="error">
                   <small *ngIf="messageForm.controls.summary.errors.required" class="form-text text-warning">Your
@@ -51,7 +54,8 @@
 
               <div class="form-group">
                 <label for="inputText">Text</label>
-                <textarea aria-describedby="textHelp" class="form-control" formControlName="text" id="inputText" name="text"
+                <textarea aria-describedby="textHelp" class="form-control" formControlName="text" id="inputText"
+                          name="text"
                           placeholder="Enter text" rows="6"></textarea>
                 <div *ngIf="submitted && messageForm.controls.text.errors" class="error">
                   <small *ngIf="messageForm.controls.text.errors.required" class="form-text text-warning">Your text is
@@ -83,13 +87,15 @@
           <h5 class="card-title">{{message.title}}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{message.publishedAt | date}}</h6>
           <p class="card-text">{{message.summary}}</p>
-          <button (click)="getMessageDetails(message.id)" [attr.data-target]="'.message-modal-'+message.id" class="btn btn-primary" data-toggle="modal"
+          <button (click)="getMessageDetails(message.id)" [attr.data-target]="'.message-modal-'+message.id"
+                  class="btn btn-primary" data-toggle="modal"
                   type="button">
             Details
           </button>
         </div>
 
-        <div [ngClass]="['modal', 'fade', 'message-modal-'+message.id]" aria-hidden="true" aria-labelledby="Message details modal"
+        <div [ngClass]="['modal', 'fade', 'message-modal-'+message.id]" aria-hidden="true"
+             aria-labelledby="Message details modal"
              role="dialog"
              tabindex="-1">
           <div class="modal-dialog modal-lg">
