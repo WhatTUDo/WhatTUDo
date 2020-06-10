@@ -80,7 +80,6 @@ public class UserEndpointTest {
 
     @WithMockUser
     @Test
-    @Transactional
     public void getUserOrganizations(){
         Organization organization = organizationRepository.save(new Organization("organization test"));
         ApplicationUser user = userRepository.save(new ApplicationUser( "user", "user@test.at", "usertest"));
