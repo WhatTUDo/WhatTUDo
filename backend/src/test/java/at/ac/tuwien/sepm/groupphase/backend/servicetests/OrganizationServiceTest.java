@@ -56,8 +56,9 @@ public class OrganizationServiceTest {
 
     @Test
     public void edit_nonSavedOrganization_shouldThrow_NotFoundException() {
+        Integer improbableId = 123456;
         Organization updatedOrganization = new Organization("UpdatedTestName");
-        updatedOrganization.setId(3);
+        updatedOrganization.setId(improbableId);
         assertThrows(NotFoundException.class, () -> organizationService.update(updatedOrganization));
     }
 

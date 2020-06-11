@@ -139,21 +139,7 @@ public class Validator {
         }
     }
 
-    private String createExceptionSummaryString(List<Exception> exceptions) {
-        String summaryString = "";
-        for (Exception exception : exceptions) {
-            summaryString += exception.getLocalizedMessage() + "\n ";
-        }
 
-        return summaryString;
-    }
-
-    private boolean emailIsValid(String emailString) {
-        String mailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        Pattern pattern = Pattern.compile(mailRegex);
-        Matcher matcher = pattern.matcher(emailString);
-        return matcher.matches();
-    }
 
     public void validateUpdateCalendar(Calendar calendar) {
         List<Exception> exceptions = new ArrayList<>();
@@ -198,15 +184,37 @@ public class Validator {
            if ((event.getStartDateTime().isBefore(LocalDateTime.now()))) {
             exceptions.add(new ValidationException("Start date must not be in the past"));
         }
-        NOTE: this.is not working. caused me a 422 though start was before end - probably only checks date not time
-        if (!(event.getEndDateTime().isBefore(event.getStartDateTime()))) {
+
+       **/
+//        NOTE: this.is not working. caused me a 422 though start was before end - probably only checks date not time
+        if (event.getStartDateTime().isAfter(event.getEndDateTime())) {
             exceptions.add(new ValidationException("Start date must be before end date"));
-        }**/
+        }
+
+        if (event.getStartDateTime().getYear() < 2020) {
+            exceptions.add(new ValidationException("Start Date cannot be before the year 2020!"));
+        }
+
+
         if (!exceptions.isEmpty()) {
             String summary = createExceptionSummaryString(exceptions);
             throw new ValidationException(summary);
         }
+    }
 
+    private String createExceptionSummaryString(List<Exception> exceptions) {
+        String summaryString = "";
+        for (Exception exception : exceptions) {
+            summaryString += exception.getLocalizedMessage() + "\n ";
+        }
 
+        return summaryString;
+    }
+
+    private boolean emailIsValid(String emailString) {
+        String mailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+        Pattern pattern = Pattern.compile(mailRegex);
+        Matcher matcher = pattern.matcher(emailString);
+        return matcher.matches();
     }
 }

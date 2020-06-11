@@ -104,7 +104,7 @@ public class OrganizationEndpoint {
         try {
             return organizationMapper.organizationToOrganizationDto(organizationService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e); //Fixed: No this should return a 404!
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }

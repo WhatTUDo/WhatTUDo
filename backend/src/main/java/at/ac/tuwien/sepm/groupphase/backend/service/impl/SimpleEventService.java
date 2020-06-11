@@ -99,11 +99,9 @@ public class SimpleEventService implements EventService {
     public List<Event> findForDates(LocalDateTime start, LocalDateTime end) {
         try {
             validator.validateMultipleEventsQuery(start, end);
-            List<Event> foundEvents = eventRepository.findAllByStartDateTimeBetween(start, end);
-            if (foundEvents.size() == 0) {
-                throw new NotFoundException("Could not find any events between the specified dates: " + start.toString() + ", " + end.toString());
-            }
-            return foundEvents;
+            List<Event> events = new ArrayList<>();
+            events = eventRepository.findAllByStartDateTimeBetween(start, end);
+            return events;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
