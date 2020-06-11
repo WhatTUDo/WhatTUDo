@@ -66,7 +66,8 @@ public class OrganizationEndpointTest {
     public void edit_withoutName_shouldThrow_ResponseStatusException() {
         Organization organization =(new Organization("Test Organization 1"));
         organization.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization 1"))).thenReturn(organization);        List<Integer> calendars = Collections.emptyList();
+        Mockito.when(organizationRepository.save( new Organization("Test Organization 1"))).thenReturn(organization);
+        List<Integer> calendars = Collections.emptyList();
         OrganizationDto organizationDto = new OrganizationDto(organization.getId(), "", calendars);
         assertThrows(ResponseStatusException.class, () -> endpoint.editOrganization(organizationDto));
 

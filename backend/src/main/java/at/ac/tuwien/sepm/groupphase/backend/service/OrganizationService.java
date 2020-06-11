@@ -1,5 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import org.hibernate.service.spi.ServiceException;
@@ -87,5 +88,13 @@ public interface OrganizationService {
      * @throws ServiceException is thrown if something goes wrong during data processing.
      */
     List<Organization> findByName(String name) throws ServiceException;
+
+    /**
+     * Find members of organization with id id.
+     * @param id id of organization whose members are returned
+     * @return list of members of organization with id id.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    List<ApplicationUser> getMembers(Integer id) throws ServiceException;
 
 }
