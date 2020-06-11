@@ -26,8 +26,8 @@
         </textarea>
         <hr>
 
-        <div class="row">
-          <div class="col-sm-6">
+        <div class="row mat-form-container">
+          <div class="col-sm-6 mat-datepicker-container">
             <mat-form-field>
               <mat-label for="event.startDateTime">Start Date & Time</mat-label>
               <input [(ngModel)]="event.startDateTime" [ngxMatDatetimePicker]="startDateTimePicker"
@@ -42,7 +42,7 @@
               ></ngx-mat-datetime-picker>
             </mat-form-field>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-6 mat-datepicker-container">
             <mat-form-field>
               <mat-label for="event.endDateTime">End Date & Time</mat-label>
               <input [(ngModel)]="event.endDateTime" [ngxMatDatetimePicker]="endDateTimePicker" id="event.endDateTime"

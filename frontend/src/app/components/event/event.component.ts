@@ -71,8 +71,6 @@ export class EventComponent implements OnInit {
         this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 0)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
-          }, err => {
-            alert(err.message);
           }
         );
         console.log('You declined!');
@@ -81,8 +79,6 @@ export class EventComponent implements OnInit {
         this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 1)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
-          }, err => {
-            alert(err.message);
           }
         );
 
@@ -92,8 +88,6 @@ export class EventComponent implements OnInit {
         this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 2)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
-          }, err => {
-            alert(err.message);
           }
         );
         console.log('You are interested!');
