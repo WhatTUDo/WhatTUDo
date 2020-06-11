@@ -64,11 +64,19 @@
 
         </div>
         <hr>
+        <label for="label-picker">Labels: </label>
+        <div *ngIf="labels">
+          <li *ngFor="let label2 of labelspicked">
 
-        <label for="label-picker">Labels: *</label>
-        <input id="labels" name="labels" type="hidden" value="123">
+            <label>selected:
+              <input [(ngModel)]="label2.name" placeholder="name"/><button (click)="onRemove(label2)"class="button-green clickable btn-lg">remove</button>
+            </label>
+          </li>
+        </div>
+
         <div id="label-picker" style="background-color: var(--shadow); border-radius: 4pt; padding: 1em; height: 150px">
-          I am a label picker.
+          <li *ngFor="let label of labels">{{label.name}}<button (click)="onSelect(label)"class="button-green clickable btn-lg">add</button></li>
+
         </div>
       </div>
       <hr>

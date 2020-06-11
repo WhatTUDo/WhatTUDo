@@ -42,13 +42,13 @@ export class EventService {
     return this.httpClient.get<Array<Label>>(this.eventBaseUri + '/' + id + '/' + 'labels');
   }
 
-  addLabels(id: number, labels: number[]) {
+  addLabels(id: number, labelselect: Array<Label>) {
 
     console.log('add  labels');
-    return this.httpClient.put<Event>(this.eventBaseUri + '/' + id + '/' + 'labels', {
-      params: {
-        labelId: '1'
-      }
+    console.log(id);
+    return this.httpClient.put<Event>(this.eventBaseUri + '/' + id + '/' + 'labels', labelselect)
+    .subscribe(response => {
+      console.log(response);
     });
 
 

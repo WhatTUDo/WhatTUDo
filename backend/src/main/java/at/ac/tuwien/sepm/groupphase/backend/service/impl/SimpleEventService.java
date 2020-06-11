@@ -145,6 +145,26 @@ public class SimpleEventService implements EventService {
         }
     }
 
+    @Override
+    public Event updateLabels(Event event, Collection<Label> labels) {
+        log.info("Adding labels {} to event {}", labels, event);
+        try {
+            removeLabels(event,event.getLabels());
+            labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
+            labelRepository.saveAll(labels);
+            if (event.getLabels() != null) {
+                event.getLabels().addAll(labels);
+            }
+            else {
+                List<Label> labelList = new ArrayList<>(labels);
+                event.setLabels(labelList);
+            }
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
     @Transactional
     @Override
     public Event removeLabels(Event event, Collection<Label> labels) {
