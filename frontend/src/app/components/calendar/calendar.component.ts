@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Calendar} from '../../dtos/calendar';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
-import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from '@fortawesome/free-solid-svg-icons';
+import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faPlus} from '@fortawesome/free-solid-svg-icons';
 import {CalendarEvent} from '../../dtos/calendar-event';
 import {EventService} from '../../services/event.service';
 
@@ -36,6 +36,7 @@ export class CalendarComponent implements OnInit {
   faChevronDown = faChevronDown;
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
+  faPlus = faPlus;
 
   constructor(
     private eventService: EventService,
@@ -43,7 +44,7 @@ export class CalendarComponent implements OnInit {
     private route: ActivatedRoute,
   ) {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
-    this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) =>{
+    this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) => {
       this.events = events;
       this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     });
@@ -104,7 +105,7 @@ export class CalendarComponent implements OnInit {
     this.displayingWeek.forEach((day: Date) => {
       const keyISOString = this.getMidnight(day).toISOString();
       this.eventsOfTheWeek.set(keyISOString, this.events.filter(event => {
-        const isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
+        const isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
         const isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
         return isAfterMidnight && isBeforeEndOfDay;
       }));
@@ -156,12 +157,6 @@ export class CalendarComponent implements OnInit {
     this.updateOffsettedDates();
   }
 
-  private updateOffsettedDates() {
-    this.displayingDate = this.getDate(this.offset);
-    this.displayingWeek = this.getWeek(this.offset);
-    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
-  }
-
   getToday() {
     const today = new Date(Date.now());
     today.setHours(0, 0, 0, 0);
@@ -172,11 +167,18 @@ export class CalendarComponent implements OnInit {
     return this.getToday().toDateString() == date.toDateString();
   }
 
-  getDisplayRows(event: CalendarEvent) {
-    const startSecond = this.getSecondOffsetFromMidnight(event.startDateTime);
-    const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
+  /**
+   * Generate the CSS grid numbers for displaying the event at the right time.
+   * Change this.view… variables to configure behavior.
+   * @param event to display
+   * @param forDate the displayed date
+   */
+  getDisplayRows(event: CalendarEvent, forDate: Date) {
+    const startsOnToday = this.isOnSameDay(event.startDateTime, forDate);
+    const endsOnToday = this.isOnSameDay(event.endDateTime, forDate);
+    const startSecond = startsOnToday ? this.getSecondOffsetFromMidnight(event.startDateTime) : 0;
+    const endSecond = endsOnToday ? this.getSecondOffsetFromMidnight(event.endDateTime) : 24 * 60 * 60;
 
-    // Calendar View should starts at a time like 8 AM and ends at 23:59PM or even later.
     let startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow);
     let endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow);
 
@@ -190,8 +192,8 @@ export class CalendarComponent implements OnInit {
     return `${startRow}/${endRow}`
   }
 
-  private calcRow(sec) {
-    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
+  isOnSameDay(date1: Date, date2: Date) {
+    return date1.toDateString() === date2.toDateString();
   }
 
   getSecondOffsetFromMidnight(date: Date) {
@@ -210,21 +212,21 @@ export class CalendarComponent implements OnInit {
     return endOfDay;
   }
 
-  public getDisplayTimeString(event: CalendarEvent) {
-    let string = event.startDateTime.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(':00', '');
-    string += ' - ';
-    string += event.endDateTime.toLocaleTimeString('en-US', {
-      hour: 'numeric',
-      minute: 'numeric'
-    }).replace(':00', '');
-    return string;
+  getDisplayTimeString(event: CalendarEvent) {
+    this.eventService.getDisplayTimeString(event);
   }
 
-  public redirectToDetail(id: number) {
-    console.log('You Clicked: ', id);
-    window.location.replace('/event/' + id);
+  redirectToAddEvent(id: number) {
+    location.replace(`/form/event?calendarId=${id}`);
+  }
+
+  private updateOffsettedDates() {
+    this.displayingDate = this.getDate(this.offset);
+    this.displayingWeek = this.getWeek(this.offset);
+    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+  }
+
+  private calcRow(sec) {
+    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
   }
 }

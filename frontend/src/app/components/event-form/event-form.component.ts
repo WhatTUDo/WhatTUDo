@@ -8,8 +8,6 @@ import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {FeedbackService} from "../../services/feedback.service";
-import {MatDatetimepickerModule} from "@mat-datetimepicker/core";
-import {NgxMatDatetimePickerModule, NgxMatDateAdapter} from "@angular-material-components/datetime-picker";
 
 @Component({
   selector: 'app-event-form',
@@ -26,7 +24,6 @@ export class EventFormComponent implements OnInit {
     showSeconds: 0,
     stepHour: 1,
     stepMinute: 5
-
   }
 
   event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
@@ -39,6 +36,7 @@ export class EventFormComponent implements OnInit {
     location: new FormControl(''),
     labels: new FormControl('')
   });
+  faChevronLeft = faChevronLeft;
 
   constructor(
     private eventService: EventService,
@@ -53,6 +51,10 @@ export class EventFormComponent implements OnInit {
           this.isUpdate = true;
         }
       });
+    }
+    const calendarId = +this.route.snapshot.queryParamMap?.get('calendarId');
+    if (calendarId) {
+      this.event.calendarId = calendarId;
     }
     this.getAllEditableCalendars()
   }
@@ -143,8 +145,6 @@ export class EventFormComponent implements OnInit {
       this.editableCalendars = calendars;
     }) //FIXME: Make me to fetch only editable calendars.
   }
-
-  faChevronLeft = faChevronLeft;
 
 
 }

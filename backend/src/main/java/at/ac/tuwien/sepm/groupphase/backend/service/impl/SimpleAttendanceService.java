@@ -9,6 +9,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
+import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,9 @@ public class SimpleAttendanceService implements AttendanceService {
     @Override
     public AttendanceStatus create(AttendanceStatus attendanceStatus) throws ServiceException {
         try {
+            if(attendanceStatus.getEvent().getEndDateTime().isBefore(LocalDateTime.now())){
+                throw new ValidationException("Sorry, this event is over!");
+            }
             List<AttendanceStatus> list = attendanceRepository.getByUser(attendanceStatus.getUser());
             if (!list.isEmpty()) {
                 for (AttendanceStatus a: list) {

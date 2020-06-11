@@ -16,9 +16,6 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   // After first submission attempt, form validation will start
   submitted: boolean = false;
-  // Error flag
-  error: boolean = false;
-  errorMessage: string = '';
 
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.formBuilder.group({
@@ -54,14 +51,6 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  /**
-   * Error flag will be deactivated, which clears the error message
-   */
-  vanishError() {
-    this.error = false;
-  }
-
   ngOnInit() {
   }
-
 }

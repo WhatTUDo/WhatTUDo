@@ -31,33 +31,13 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
 @Injectable()
 export class FeedbackHandlerComponent implements OnInit {
 
-  faTimes = faTimes;
-
   static header: String;
   static message: String;
   static state: State;
   static isVisible: Boolean;
+  faTimes = faTimes;
 
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
-  getVisibility() {
-    return FeedbackHandlerComponent.isVisible;
-  }
-
-  getState() {
-    return FeedbackHandlerComponent.state;
-  }
-
-  getHeader() {
-    return FeedbackHandlerComponent.header;
-  }
-
-  getMessage() {
-    return FeedbackHandlerComponent.message;
+  constructor() {
   }
 
   static displaySuccess(header, message) {
@@ -85,7 +65,26 @@ export class FeedbackHandlerComponent implements OnInit {
     console.log(header, message)
   }
 
-   onDismiss() {
+  ngOnInit(): void {
+  }
+
+  getVisibility() {
+    return FeedbackHandlerComponent.isVisible;
+  }
+
+  getState() {
+    return FeedbackHandlerComponent.state;
+  }
+
+  getHeader() {
+    return FeedbackHandlerComponent.header;
+  }
+
+  getMessage() {
+    return FeedbackHandlerComponent.message;
+  }
+
+  onDismiss() {
     FeedbackHandlerComponent.isVisible = !FeedbackHandlerComponent.isVisible;
     console.log("Dismiss");
   }

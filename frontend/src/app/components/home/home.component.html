@@ -2,21 +2,7 @@
 <div class="grid-one-third">
   <app-weekly-calendar class="grid-item-1-2"></app-weekly-calendar>
   <div>
-    <h2>Test Me</h2>
-
-    <div style="margin-bottom: 8pt">
-      <a href="/form/event">
-        <button class="button-solid btn-lg" [disabled]="!authService.isLoggedIn()">Add New Event</button>
-      </a>
-      <small *ngIf="!authService.isLoggedIn()">You have to log in before you can make modifications.</small>
-    </div>
-    <div style="margin-bottom: 8pt">
-      <a href="/organization/1">
-        <button class="button-solid btn-lg">Organization 1</button>
-      </a>
-      <button class="button-solid btn-lg" (click)="toggleFeedback(0)">Test Success</button>
-      <button class="button-solid btn-lg" (click)="toggleFeedback(1)">Test Warning</button>
-      <button class="button-solid btn-lg" (click)="toggleFeedback(2)">Test Error</button>
-    </div>
+    <h2>Events For You</h2>
+    <app-recommended-events></app-recommended-events>
   </div>
 </div>

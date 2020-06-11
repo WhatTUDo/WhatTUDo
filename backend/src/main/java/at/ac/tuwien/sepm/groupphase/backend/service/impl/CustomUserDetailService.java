@@ -1,13 +1,13 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
-import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationMembership;
-import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationRole;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.events.user.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
+import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
+import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
@@ -20,9 +20,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Service
@@ -31,6 +37,9 @@ public class CustomUserDetailService implements UserService {
     private final ApplicationEventPublisher publisher;
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
+    private final AttendanceService attendanceService;
+    private final LabelService labelService;
+    private final LabelRepository labelRepository;
     private final PasswordEncoder passwordEncoder;
     private final Validator validator;
 
@@ -142,12 +151,65 @@ public class CustomUserDetailService implements UserService {
         }
     }
 
+
     @Override
-    public Integer getUserId(String name) {
-        Optional<ApplicationUser> found =userRepository.findByName(name);
-        if(!found.isPresent()){
+    public ApplicationUser getUserByName(String name) throws ServiceException {
+   try {   Optional<ApplicationUser> found = userRepository.findByName(name);
+        if (found.isEmpty()) {
             throw new NotFoundException("user not found");
         }
-        return found.get().getId();
+        return found.get();
+   }catch (PersistenceException | IllegalArgumentException e){
+       throw new ServiceException(e.getMessage());
+   }
+    }
+
+    @Transactional
+    @Override
+    public List<Organization> getUserOrganizations(Integer userId) throws ServiceException {
+        try {
+            ApplicationUser applicationUser = userRepository.getOne(userId);
+            Set<OrganizationMembership> organizationMemberships = applicationUser.getMemberships();
+            List<Organization> organizations = new ArrayList<>();
+            for (OrganizationMembership o : organizationMemberships) {
+                organizations.add(o.getOrganization());
+            }
+            return organizations;
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public Optional<Event> getRecommendedEvent(Integer userId) {
+        try {
+            List<Event> events = attendanceService.getEventUserIsAttending(userId);
+            events.addAll(attendanceService.getEventUserIsInterested(userId));
+            int[] labels = new int[labelService.getAll().size() + 1];
+
+            events.forEach(event -> {
+                List<Label> eventLabels = event.getLabels();
+                eventLabels.forEach(label -> {
+                    labels[label.getId()]++;
+                });
+            });
+
+            for (int i = 0; i < labels.length; i++) {
+                int maxAt = 0;
+                for (int j = 0; j < labels.length; j++) {
+                    maxAt = labels[j] > labels[maxAt] ? j : maxAt;
+                }
+
+                if (labels[maxAt] != 0) {
+                    List<Event> possibleEvents = labelService.findById(maxAt).getEvents();
+                    return possibleEvents.stream().filter(e -> e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))).findAny();
+
+                }
+            }
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+        return Optional.empty();
     }
 }

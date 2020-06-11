@@ -1,12 +1,16 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationRole;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
@@ -47,5 +51,18 @@ public interface UserService extends UserDetailsService {
 
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 
-    Integer getUserId(String name);
+
+     ApplicationUser getUserByName(String name) throws ServiceException;
+
+     List<Organization> getUserOrganizations(Integer userId) throws ServiceException;
+
+    /**
+     * gets a recommended event for a user based on labels of
+     * previous events the user has attended or was interested in
+     *
+     * @param userId id of the loggedIn user
+     * @return Event if a recommendation can be made, otherwise an Optional.empty()
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    Optional<Event> getRecommendedEvent(Integer userId) throws ServiceException;
 }

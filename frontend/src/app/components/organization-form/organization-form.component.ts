@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Organization} from '../../dtos/organization';
 import {OrganizationService} from '../../services/organization.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-organization-form',
@@ -12,23 +13,19 @@ export class OrganizationFormComponent implements OnInit {
 
   organization: Organization;
   isUpdate: boolean;
-
+  faChevronLeft = faChevronLeft;
 
   constructor(private organizationService: OrganizationService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id) {
       this.organizationService.getById(id).subscribe((organization: Organization) => {
-        if (organization) {
-          this.organization = organization;
-          this.isUpdate = true;
-        } else {
-          this.organization = new Organization(null, "", []);
-          this.isUpdate = false;
-        }
+        this.organization = organization;
+        this.isUpdate = true;
       });
     } else {
       this.organization = new Organization(null, "", []);
@@ -36,7 +33,6 @@ export class OrganizationFormComponent implements OnInit {
     }
   }
 
-  // TODO: add calendars/remove calendars (need fetch all Calendars for that) + actual alert thingy
   onSubmit(name: string) {
     this.organization.name = name.trim();
     if (!name) {
@@ -54,22 +50,19 @@ export class OrganizationFormComponent implements OnInit {
       .subscribe(organization => {
         this.organization = organization;
         console.log('Organization ' + organization.name + ' created successfully.');
-        window.location.replace("/organization/" + this.organization.id);
+        this.router.navigate(["/organization/" + this.organization.id]);
       });
   }
-
 
   updateOrganization(name: string) {
     this.organizationService.putOrganization(this.organization)
       .subscribe(organization => {
-        this.organization = organization;
-        console.log('Organization ' + organization.name + ' updated successfully.');
-        window.location.replace("/organization/" + this.organization.id);
-      },
+          this.organization = organization;
+          console.log('Organization ' + organization.name + ' updated successfully.');
+          this.router.navigate(["/organization/" + this.organization.id]);
+        },
         error => {
           alert("Could not update organization: " + error.error.message);
         });
   }
-
-
 }
