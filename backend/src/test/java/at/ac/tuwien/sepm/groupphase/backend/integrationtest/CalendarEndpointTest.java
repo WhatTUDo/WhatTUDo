@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,12 +19,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -74,5 +77,17 @@ public class CalendarEndpointTest {
     }
 
 
+    @WithMockUser(username = "Person 1", authorities = {"MOD_2", "MEMBER_2"})
+    @Test
+    public void deleteCalendar_findCalendarWillReturnNotFound(){
+        Organization orga = new Organization("Test Organization");
+        orga.setId(2);
+        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
 
+        CalendarDto calendarDto = calendarEndpoint.create(new CalendarDto(2, "Delete", Collections.singletonList(orga.getId()), null));
+
+        calendarEndpoint.deleteCalendar(calendarDto.getId());
+
+        assertThrows(ResponseStatusException.class, () -> calendarEndpoint.getById(calendarDto.getId()));
+    }
 }
