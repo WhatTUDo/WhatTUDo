@@ -7,7 +7,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CalendarDto {
+@EqualsAndHashCode(callSuper = true)
+public class CalendarDto extends PermissionDto {
     private Integer id;
     private String name;
     private List<Integer> organizationIds;

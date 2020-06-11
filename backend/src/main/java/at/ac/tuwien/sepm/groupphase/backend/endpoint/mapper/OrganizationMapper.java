@@ -1,7 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
@@ -10,6 +12,9 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.transaction.Transactional;
 import java.util.stream.Collectors;
@@ -19,6 +24,7 @@ import java.util.stream.Collectors;
 public abstract class OrganizationMapper {
     @Autowired protected CalendarRepository calendarRepository;
     @Autowired protected OrganizationRepository organizationRepository;
+    @Autowired protected PermissionEvaluator permissionEvaluator;
 
     public abstract OrganizationDto organizationToOrganizationDto(Organization organization);
 
@@ -28,6 +34,13 @@ public abstract class OrganizationMapper {
             .orElseThrow(() -> new NotFoundException("This organization does not exist in the database"));
 
         organizationDto.setCalendarIds(orgEntity.getCalendars().stream().map(Calendar::getId).collect(Collectors.toList()));
+    }
+
+    @BeforeMapping
+    protected void mapPermissions(Organization organization, @MappingTarget OrganizationDto organizationDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        organizationDto.setCanEdit(permissionEvaluator.hasPermission(authentication, organization, "MOD"));
+        organizationDto.setCanDelete(permissionEvaluator.hasPermission(authentication, organization, "MOD"));
     }
 
     public abstract Organization organizationDtoToOrganization(OrganizationDto organizationDto);
