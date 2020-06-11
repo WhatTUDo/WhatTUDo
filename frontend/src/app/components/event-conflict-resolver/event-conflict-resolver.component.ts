@@ -1,6 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CollisionResponse} from "../../dtos/collision-response";
-import {EventCollision} from "../../dtos/event-collision";
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {faExclamationTriangle} from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
@@ -12,36 +11,20 @@ import {EventService} from "../../services/event.service";
 })
 export class EventConflictResolverComponent implements OnInit {
 
-  // @Input() event: CalendarEvent;
-  event = new CalendarEvent(null, 'Name 3', null,
-    new Date(2020, 5 , 16, 16),
-    new Date(2020, 5 , 16, 19), null, null, null, null);
-  duration: number;
+  @Input() event: CalendarEvent;
+  @Input() collisionResponse: CollisionResponse;
+  @Output() change: EventEmitter<Date[]> = new EventEmitter();
 
-  // @Input() collisionResponse: CollisionResponse;
-  collisionResponse: CollisionResponse = new CollisionResponse([
-    new EventCollision(
-      new CalendarEvent(null, 'Name 1', null,
-        new Date(2020, 5 , 16, 16),
-        new Date(2020, 5 , 16, 19), null, null, null, null),
-      0.9, 'Lolo'
-      )
-  ], [
-    new Date(2020, 5 , 17, 19),
-    new Date(2020, 5 , 22, 17),
-    new Date(2020, 5 , 19, 18, 30)
-  ]);
+  selectedDateIndex: number = null;
 
-  selectedResolvedEvent: CalendarEvent;
-
-  constructor(private eventService: EventService) { }
+  constructor(private eventService: EventService) {
+  }
 
   ngOnInit(): void {
-    this.duration = this.eventService.getDuration(this.event);
   }
 
   getSortedCollisionEvents() {
-    return this.collisionResponse.eventCollisions.sort((a, b) =>{
+    return this.collisionResponse.eventCollisions.sort((a, b) => {
       return a.collisionScore - b.collisionScore;
     }).map((a) => {
       return {...a.event, message: a.message};
@@ -49,12 +32,9 @@ export class EventConflictResolverComponent implements OnInit {
   }
 
   getEventListWithSuggestedDate() {
-    return this.collisionResponse.dateSuggestions.map((a)=>{
-      let sugEvent = new CalendarEvent(null, null, null, null, null,
+    return this.collisionResponse.dateSuggestions.map((a) => {
+      return new CalendarEvent(null, null, null, a[0], a[1],
         null, null, null, null);
-      sugEvent.startDateTime = a;
-      sugEvent.endDateTime = new Date(a.valueOf() + this.duration);
-      return sugEvent;
     })
   }
 
@@ -65,6 +45,10 @@ export class EventConflictResolverComponent implements OnInit {
   faExclamationTriangle = faExclamationTriangle;
 
   onSubmit() {
-    console.log(this.selectedResolvedEvent)
+    this.change.emit(this.collisionResponse.dateSuggestions[this.selectedDateIndex]);
+  }
+
+  onSelect(index: number) {
+    this.selectedDateIndex = index;
   }
 }

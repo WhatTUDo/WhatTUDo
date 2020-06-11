@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {FeedbackService} from "../../services/feedback.service";
+import {UserService} from "../../services/user.service";
 
 
 @Component({
@@ -11,13 +12,16 @@ import {FeedbackService} from "../../services/feedback.service";
 export class HomeComponent implements OnInit {
 
   currentTime: string;
+  userId: number;
+  recommendedEvents: Event[];
 
   constructor(public authService: AuthService,
-              public feedbackService: FeedbackService,
+              public userService: UserService,
   ) {
   }
 
   ngOnInit() {
+    this.loadRecommendedEvents();
     this.updateDatetime();
     setInterval(() => {
       this.updateDatetime();
@@ -27,5 +31,15 @@ export class HomeComponent implements OnInit {
   updateDatetime() {
     const date = new Date(Date.now());
     this.currentTime = date.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true})
+  }
+
+
+  loadRecommendedEvents(){
+    this.authService.getUser().subscribe((user)=>{
+      this.userId = user.id;
+      this.userService.getRecommendedEvent(user.id).subscribe((events: Event[])=>{
+        this.recommendedEvents = events;
+      })
+    })
   }
 }

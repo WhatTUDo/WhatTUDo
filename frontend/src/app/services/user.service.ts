@@ -61,4 +61,8 @@ export class UserService {
   getUserOrganization(userId: number): Observable<Organization[]> {
     return this.httpClient.get<Organization[]>(this.globals.backendUri + "users/organizations/" + userId);
   }
+
+  getRecommendedEvent(userId: number): Observable<Event[]> {
+    return this.httpClient.get<Event[]>(this.globals.backendUri + "users/recommendedEvent/" + userId);
+  }
 }

@@ -8,9 +8,9 @@
   <h4>Alternative Dates</h4>
   <form (ngSubmit)="onSubmit()" class="alternative-date-picker">
     <label *ngFor="let reducedEvent of getEventListWithSuggestedDate(); let i = index;">
-      <input type="radio" name="newEvent" [value]="reducedEvent.startDateTime.valueOf()" [checked]="i===0">
+      <input type="radio" name="newEvent" [value]="i" (click)="onSelect(i)" [checked]="i === selectedDateIndex">
       {{getEventDateAndTimeString(reducedEvent)}}
     </label>
-    <button type="submit" class="button-solid small-button">Update</button>
+    <button type="submit" class="button-solid small-button" [disabled]="selectedDateIndex === null">Update</button>
   </form>
 </div>
