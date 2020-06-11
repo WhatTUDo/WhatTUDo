@@ -194,12 +194,14 @@ public class Validator {
         if (event.getName().isBlank()) {
             exceptions.add(new ValidationException("Name must not be empty"));
         }
-        if ((event.getStartDateTime().isBefore(LocalDateTime.now()))) {
+      /**  please don't do this! you should be able to update a currently running event. (this is probably the most likely time for update)
+           if ((event.getStartDateTime().isBefore(LocalDateTime.now()))) {
             exceptions.add(new ValidationException("Start date must not be in the past"));
         }
-        if (!(event.getStartDateTime().isBefore(event.getEndDateTime()))) {
+        NOTE: this.is not working. caused me a 422 though start was before end - probably only checks date not time
+        if (!(event.getEndDateTime().isBefore(event.getStartDateTime()))) {
             exceptions.add(new ValidationException("Start date must be before end date"));
-        }
+        }**/
         if (!exceptions.isEmpty()) {
             String summary = createExceptionSummaryString(exceptions);
             throw new ValidationException(summary);

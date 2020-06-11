@@ -8,8 +8,10 @@
     <div>
       <h2>Event
 
-        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faChevronLeft" onclick="history.back()">
+
+        <fa-icon [icon]="faTag" class="clickable no-hover-enlarge no-shadow" routerLink="/form/event/{{this.id}}">
           Edit Event?
+
         </fa-icon></h2>
 
       <div class="event-promo-container" style="background-image: url(https://picsum.photos/800/1200/);">
