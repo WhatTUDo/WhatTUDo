@@ -24,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,16 @@ public class OrganizationEndpointTest {
     OrganizationEndpoint endpoint;
     @Mock
     OrganizationRepository organizationRepository;
+
+    @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
+    @Test
+    public void createNewOrganisation_shouldReturnNewOrganization() {
+        OrganizationDto organizationDto = new OrganizationDto(0, "test", new ArrayList<>());
+
+        OrganizationDto createdDto = endpoint.createOrganization(organizationDto);
+
+        assertEquals(organizationDto.getName(), createdDto.getName());
+    }
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
@@ -116,7 +127,6 @@ public class OrganizationEndpointTest {
         List<Integer> calendars = Collections.emptyList();
         OrganizationDto organizationDto = new OrganizationDto(organization.getId(), "", calendars);
         assertThrows(ResponseStatusException.class, () -> endpoint.editOrganization(organizationDto));
-
     }
 
 }
