@@ -103,7 +103,7 @@ public class CalendarEndpoint {
     }
 
 
-    // @PreAuthorize("hasPermission(#calendar, 'MOD')")
+    @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -121,7 +121,7 @@ public class CalendarEndpoint {
         }
     }
 
-   // @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
+    @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")
@@ -138,7 +138,7 @@ public class CalendarEndpoint {
         }
     }
 
-//    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
+    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
     @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
