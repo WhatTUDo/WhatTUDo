@@ -93,3 +93,26 @@ form {
   }
 }
 
+.mat-form-container {
+  background-color: $white;
+  border-radius: $rounded-radius;
+  //border: 2pt solid $black;
+
+  .mat-datepicker-container {
+    padding: 8pt;
+
+    mat-form-field {
+      font-family: inherit !important;
+
+      input {
+        background: transparent !important;
+      }
+    }
+  }
+
+  .always-black {
+    color: $black !important;
+    border-top: 2pt solid $black;
+    background-color: $white !important;
+  }
+}

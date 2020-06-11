@@ -91,11 +91,12 @@ public class UserEndpointTest {
         assertEquals(organization.getName(), userEndpoint.getOrganizationOfUser(user.getId()).get(0).getName());
     }
 
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
-        ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
+//        ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
+        ApplicationUser user = userService.getUserByName("Person 1");
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(new Organization())));
         List<Label> labels1 = new ArrayList<>();
         List<Label> labels2 = new ArrayList<>();
@@ -133,10 +134,11 @@ public class UserEndpointTest {
         assertEquals(recommendedEvent.getId(), event3.getId());
     }
 
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void ifNoRecommendableEvents_getRecommendedEvents_shouldReturn_anyEvent() {
-        ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
+        ApplicationUser user = userService.getUserByName("Person 1");
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(new Organization())));
         List<Label> labels1 = new ArrayList<>();
         List<Label> labels2 = new ArrayList<>();

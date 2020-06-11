@@ -188,7 +188,7 @@ public class UserEndpoint {
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
+            return null;
         }
     }
 
