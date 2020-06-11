@@ -202,6 +202,7 @@ export class WeeklyCalendarComponent implements OnInit {
     return endOfDay;
   }
 
+  // FIXME: Make it make sense for multiday events.
   getDisplayTimeString(event: CalendarEvent) {
     return this.eventService.getDisplayTimeString(event);
   }

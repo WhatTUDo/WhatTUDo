@@ -1,0 +1,16 @@
+<div class="suggestion-container">
+  <div class="heading-icon">
+    <fa-icon [icon]="faExclamationTriangle">Heads up!</fa-icon>
+  </div>
+
+  <h3>Similar events are planned for the same time.</h3>
+  <app-promo-event-list [eventList]="getSortedCollisionEvents()"></app-promo-event-list>
+  <h4>Alternative Dates</h4>
+  <form (ngSubmit)="onSubmit()" class="alternative-date-picker">
+    <label *ngFor="let reducedEvent of getEventListWithSuggestedDate(); let i = index;">
+      <input type="radio" name="newEvent" [value]="reducedEvent.startDateTime.valueOf()" [checked]="i===0">
+      {{getEventDateAndTimeString(reducedEvent)}}
+    </label>
+    <button type="submit" class="button-solid small-button">Update</button>
+  </form>
+</div>

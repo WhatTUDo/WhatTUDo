@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-explanation',
@@ -12,5 +13,7 @@ export class ExplanationComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
+  faChevronLeft = faChevronLeft;
 
 }

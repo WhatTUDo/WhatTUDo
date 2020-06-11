@@ -39,10 +39,11 @@ import {
   NgxMatNativeDateModule
 } from "@angular-material-components/datetime-picker";
 import {MatTableModule} from "@angular/material/table";
-import {RecommendedEventsComponent} from './components/recommended-events/recommended-events.component';
+import {PromoEventListComponent} from './components/promo-event-list/promo-event-list.component';
 import {UserRegistrationComponent} from './components/user-registration/user-registration.component';
 import {OverlayModule} from "@angular/cdk/overlay";
 import {ExplanationComponent} from './components/explanation/explanation.component';
+import { EventConflictResolverComponent } from './components/event-conflict-resolver/event-conflict-resolver.component';
 
 
 @NgModule({
@@ -67,9 +68,10 @@ import {ExplanationComponent} from './components/explanation/explanation.compone
     UserFormComponent,
     OrganizationListComponent,
     FeedbackHandlerComponent,
-    RecommendedEventsComponent,
+    PromoEventListComponent,
     ExplanationComponent,
-    UserRegistrationComponent
+    UserRegistrationComponent,
+    EventConflictResolverComponent
   ],
   imports: [
     BrowserModule,

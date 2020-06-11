@@ -181,4 +181,8 @@ export class EventService {
     }).replace(":00", "")
     return string
   }
+
+  public getDuration(event: CalendarEvent){
+    return event.endDateTime.valueOf() - event.startDateTime.valueOf();
+  }
 }

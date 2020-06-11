@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {RecommendedEventsComponent} from './recommended-events.component';
+import {PromoEventListComponent} from './promo-event-list.component';
 
 describe('RecommendedEventsComponent', () => {
-  let component: RecommendedEventsComponent;
-  let fixture: ComponentFixture<RecommendedEventsComponent>;
+  let component: PromoEventListComponent;
+  let fixture: ComponentFixture<PromoEventListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [RecommendedEventsComponent]
+      declarations: [PromoEventListComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RecommendedEventsComponent);
+    fixture = TestBed.createComponent(PromoEventListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -83,3 +83,13 @@ form {
   }
 }
 
+.suggestions-container {
+  box-sizing: border-box;
+
+  .suggestion-item {
+    padding: 4pt 8pt;
+    border-left: 4pt solid $yellow;
+    background-color: transparentize($yellow, 0.85);
+  }
+}
+

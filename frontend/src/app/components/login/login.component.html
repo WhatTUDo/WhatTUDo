@@ -2,7 +2,7 @@
   <div>
     <h2>Login</h2>
 
-    <form (ngSubmit)="loginUser()" [formGroup]="loginForm" class="form">
+    <form (ngSubmit)="loginUser()" (keyup.enter)="loginUser()" [formGroup]="loginForm" class="form">
       <div class="form-group">
         <label for="inputUsername">Username</label>
         <input aria-describedby="usernameHelp" autocomplete="username" class="form-control" formControlName="username"

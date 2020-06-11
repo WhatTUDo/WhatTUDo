@@ -1,0 +1,22 @@
+.suggestion-container{
+  padding: 4pt 0;
+}
+
+.heading-icon {
+  font-size: 16pt;
+}
+
+h3 {
+  margin-top: 4pt;
+}
+
+.alternative-date-picker {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 8pt;
+
+  label {
+    display: block;
+    width: 100%;
+  }
+}
