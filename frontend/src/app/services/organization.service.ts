@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {Organization} from '../dtos/organization';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Globals} from '../global/globals';
+import {User} from "../dtos/user";
 
 @Injectable({
   providedIn: 'root'
@@ -89,4 +90,12 @@ export class OrganizationService {
     })
   }
 
+  /**
+   * Get all members of an organization.
+   * @param organizationId
+   */
+  getMembers(organizationId: number): Observable<User[]> {
+    console.log(`Get members of organization ${organizationId}`);
+    return this.httpClient.get<User[]>(`${this.organizationBaseUri}/members/${organizationId}`);
+  }
 }

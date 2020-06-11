@@ -5,6 +5,8 @@ import {ActivatedRoute} from "@angular/router";
 import {OrganizationService} from "../../services/organization.service";
 import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
+import {User} from "../../dtos/user";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-organization',
@@ -15,11 +17,7 @@ export class OrganizationComponent implements OnInit {
 
   organization: Organization;
   organizationCalendars: Calendar[] = [];
-  // organizationMembers: OrganizationMemberOrSomething[];
-  organizationMembers = [
-    {username: "JaneDoe", role: "Admin"},
-    {username: "JohnyAppleseed", role: "Member"},
-  ]
+  organizationMembers: User[];
   editableCalendars: Calendar[];
   pickedCalendarId: number;
   calendarAddExpanded: boolean = false;
@@ -30,7 +28,9 @@ export class OrganizationComponent implements OnInit {
   faCog = faCog;
   faTimesCircle = faTimesCircle;
 
-  constructor(private organizationService: OrganizationService, private calendarService: CalendarService,
+  constructor(private organizationService: OrganizationService,
+              private calendarService: CalendarService,
+              private userService: UserService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadOrganization(id);
@@ -90,12 +90,15 @@ export class OrganizationComponent implements OnInit {
       for (let calID of organization.calendarIds) {
         this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
           this.organizationCalendars.push(cal);
-        }, err => {
-          alert(err.message);
+        })
+        this.organizationService.getMembers(organization.id).subscribe((users: User[])=>{
+          this.organizationMembers = users;
         })
       }
-    }, err => {
-      alert(err.message);
     })
+  }
+
+  getGravatarLink(email, size) {
+    return this.userService.getGravatarLink(email, size);
   }
 }
