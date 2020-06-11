@@ -47,8 +47,9 @@ public class EventEndpoint {
     private final LabelMapper labelMapper;
 
 
-    @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
+    //@PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
     @CrossOrigin
+    @Transactional
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
@@ -165,6 +166,23 @@ public class EventEndpoint {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
+
+    //@PreAuthorize("hasPermission(#eventDto, 'MOD')")
+    @Transactional
+    @DeleteMapping(value = "/{id}/labels")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Remove Labels from an Event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto removeLabelsFromEvent(@PathVariable(value = "id") Integer eventId, @RequestParam(value = "labelId") List<Integer> labelIds) {
+        try {
+            Collection<Label> labels = labelIds.stream().map(labelService::findById).collect(Collectors.toList());
+            Event event = eventService.removeLabels(eventService.findById(eventId), labels);
+            return eventMapper.eventToEventDto(event);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
 
 
     @Transactional

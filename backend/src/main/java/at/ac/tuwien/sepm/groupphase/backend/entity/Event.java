@@ -37,7 +37,7 @@ public class Event extends BaseEntity {
     private Calendar calendar;
 
     @ToString.Exclude
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     @ManyToMany(mappedBy = "events")
     private List<Label> labels;
 

@@ -6,7 +6,12 @@
   </div>
   <div class="grid-one-third scroll">
     <div>
-      <h2>Event</h2>
+      <h2>Event
+
+        <fa-icon class="clickable no-hover-enlarge no-shadow" [icon]="faChevronLeft" onclick="history.back()">
+          Edit Event?
+        </fa-icon></h2>
+
       <div class="event-promo-container" style="background-image: url(https://picsum.photos/800/1200/);">
         <div class="event-promo-details">
           <div class="event-time">{{this.eventTimeString}}</div>
@@ -18,16 +23,12 @@
     <div class="details-stack">
       <h2>Details</h2>
       <div id="label-container">
-        <div class="label-item" *ngFor="let label of this.calendarEvent.labels">
-          <fa-icon [icon]="faTag"></fa-icon>&ensp;{{label.name}}
-        </div>
-      </div>
-      <div id="label-container2">
         <div class="label-item" *ngFor="let label of this.labels">
           <fa-icon [icon]="faTag"></fa-icon>&ensp;{{label.name}}
         </div>
       </div>
       <div>
+
         <div class="participation-status grid-one-third no-gap">
           <div class="participation-status-item">
             <div class="participation-count">{{this.participants.attending.length}}</div>
