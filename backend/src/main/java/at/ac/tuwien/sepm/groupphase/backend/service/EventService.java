@@ -98,6 +98,16 @@ public interface EventService {
      */
     Event removeLabels(Event event, Collection<Label> labels);
 
+    /**
+     * Update labels from an event. Set those as the events labels
+     *
+     * @param event - to set the labels to
+     * @param labels    to be set for this event
+     * @return the updated event
+     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     */
+    Event updateLabels(Event event, Collection<Label> labels);
+
     List<Event> getByCalendarId(Integer id) throws ServiceException;
 
 

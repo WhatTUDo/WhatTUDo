@@ -8,6 +8,8 @@ import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {FeedbackService} from "../../services/feedback.service";
+import {Label} from '../../dtos/label';
+import {LabelService} from '../../services/label.service';
 
 @Component({
   selector: 'app-event-form',
@@ -17,6 +19,12 @@ import {FeedbackService} from "../../services/feedback.service";
 export class EventFormComponent implements OnInit {
   editableCalendars: Calendar[] = [];
 
+  labels: Array<Label>;
+  label: Label;
+  label2: Label;
+  ev_id: number;
+  labelspicked: Array<Label>;
+  selectedLabel: Label;
   isUpdate: Boolean = false;
   showFeedback: Boolean = false;
 
@@ -29,7 +37,6 @@ export class EventFormComponent implements OnInit {
   event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
   title: String = "NEW EVENT"
 
-
   reactiveEventForm = new FormGroup({
     id: new FormControl(''),
     calendarId: new FormControl(''),
@@ -37,7 +44,7 @@ export class EventFormComponent implements OnInit {
     startDate: new FormControl(''),
     endDate: new FormControl(''),
     location: new FormControl(''),
-    labels: new FormControl('')
+    labelspicked: new FormControl('')
   });
   faChevronLeft = faChevronLeft;
 
@@ -53,8 +60,13 @@ export class EventFormComponent implements OnInit {
           this.event = event;
           this.isUpdate = true;
           this.title = "UPDATE EVENT";
+          this.getEventLabels(id);
+          this.ev_id = id;
         }
       });
+    }
+    else {
+        this.labelspicked = [];
     }
     const calendarId = +this.route.snapshot.queryParamMap?.get('calendarId');
     if (calendarId) {
@@ -65,7 +77,7 @@ export class EventFormComponent implements OnInit {
 
   ngOnInit(): void {
 
-
+   this.getAllLabels();
   }
 
   getEvent(): void {
@@ -74,6 +86,39 @@ export class EventFormComponent implements OnInit {
       .subscribe(event => this.event = event);
   }
 
+  getAllLabels() {
+
+    this.eventService.getAllLabels().subscribe(labels => {
+      this.labels = labels;
+    });
+  }
+
+  getEventLabels(id: number) {
+
+      this.eventService.getEventLabels(id).subscribe(labelspicked => {
+      this.labelspicked = labelspicked;
+    });
+  }
+
+  initNewLabelsSelect() {
+
+    labelspicked => {
+      this.labelspicked = [];
+    };
+  }
+
+
+onSelect(label: Label): void {
+
+
+  this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
+  this.labelspicked.push(label);
+
+}
+
+onRemove(label: Label): void {
+  this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
+}
 
   onSubmit() {
     let validationIsPassed = this.validateFormInput(this.event);
@@ -87,6 +132,8 @@ export class EventFormComponent implements OnInit {
             console.log("Updated event: " + response);
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
+            this.eventService.addLabels(this.ev_id, this.labelspicked);
+
           },
           err => {
             console.warn(err);
@@ -99,7 +146,7 @@ export class EventFormComponent implements OnInit {
             this.feedbackService.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
 
-            this.eventService.addLabels(1, [1]);
+            this.eventService.addLabels(response.id, this.labelspicked);
           },
           err => {
             console.warn(err);
