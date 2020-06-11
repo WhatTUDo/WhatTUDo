@@ -88,6 +88,7 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
       justify-self: flex-end;
     }
   }
+
   @media screen and (min-width: $mobile-breakpoint) {
     border-left: $swim-land-border;
 

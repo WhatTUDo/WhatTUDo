@@ -21,6 +21,7 @@ export class CalendarFormComponent implements OnInit {
   calendar: Calendar;
 
   organizations: Array<Organization>;
+  faChevronLeft = faChevronLeft;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,7 +31,6 @@ export class CalendarFormComponent implements OnInit {
     private select: MatSelectModule
   ) {
   }
-
 
   ngOnInit(): void {
     this.getCalendar();
@@ -46,7 +46,7 @@ export class CalendarFormComponent implements OnInit {
   onSubmit(): void {
     if (this.validateFormData(this.calendar)) {
 
-      this.calendarService.editCalendar(this.calendar).subscribe( observable => {
+      this.calendarService.editCalendar(this.calendar).subscribe(observable => {
 
         console.log("Updated calendar: ", observable);
       }, error => {
@@ -68,12 +68,10 @@ export class CalendarFormComponent implements OnInit {
   }
 
   getOrganizations() {
-    this.organizationService.getAll().subscribe( organizations => {
+    this.organizationService.getAll().subscribe(organizations => {
       this.organizations = organizations;
     });
   }
-
-
 
   private validateFormData(calendar: any): boolean {
     let errors = [];
@@ -99,10 +97,8 @@ export class CalendarFormComponent implements OnInit {
   }
 
   private compare(id1: number, id2: number): boolean {
-    console.log("compared" + id1 + " with " +id2);
-    return id1 && id2 ? id1 === id2  : false;
+    console.log("compared" + id1 + " with " + id2);
+    return id1 && id2 ? id1 === id2 : false;
   }
-
-  faChevronLeft = faChevronLeft;
 
 }

@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {User} from "../dtos/user";
 import md5 from "md5";
+import {Organization} from "../dtos/organization";
 
 @Injectable({
   providedIn: 'root'
@@ -51,38 +52,13 @@ export class UserService {
   }
 
   getGravatarLink(email: String, size: number) {
+    // Return base64 of a 1x1px transparent gif if no email is given.
     if (!email) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
     const gravatarHash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${gravatarHash}?s=${Math.trunc(size)}&d=identicon`;
   }
 
-  //
-  // /**
-  //  * @param organizationId ID of organization where calendar should be added.
-  //  * @param calendarId ID of calendar to be added.
-  //  */
-  // addCalendarToOrga(organizationId: number, calendarId: number): Observable<any> {
-  //   console.log(`Add Calendar ${calendarId} to`, organizationId);
-  //   let params = new HttpParams();
-  //   params = params.set('calendarId', String(calendarId));
-  //   params = params.set('organizationId', String(organizationId));
-  //   console.log(params);
-  //   return this.httpClient.put(this.usersBaseUri + `/calendars`, {}, {
-  //     params: params
-  //   });
-  // }
-  //
-  // /**
-  //  * @param organizationId ID of organization where calendar should be added.
-  //  * @param calendarId ID of calendar to be added.
-  //  */
-  // removeCalendarToOrga(organizationId: number, calendarId: number): Observable<any> {
-  //   console.log(`Remove Calendar ${calendarId} to`, Organization);
-  //   let params = new HttpParams();
-  //   params = params.set('id', String(calendarId));
-  //   return this.httpClient.delete(this.usersBaseUri + `/${organizationId}/calendars`, {
-  //     params: params
-  //   })
-  // }
-
+  getUserOrganization(userId: number): Observable<Organization[]> {
+    return this.httpClient.get<Organization[]>(this.globals.backendUri + "users/organizations/" + userId);
+  }
 }

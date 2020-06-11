@@ -36,30 +36,29 @@ export class EventService {
     return this.httpClient.get<Array<Label>>(this.labelBaseUri);
   }
 
-  getEventLabels(id : number): Observable<Label[]> {
+  getEventLabels(id: number): Observable<Label[]> {
 
     console.log('Get event labels');
     return this.httpClient.get<Array<Label>>(this.eventBaseUri + '/' + id + '/' + 'labels');
   }
 
-  addLabels(id : number, labels : number[]) {
+  addLabels(id: number, labels: number[]) {
 
-   console.log('add  labels');
+    console.log('add  labels');
     return this.httpClient.put<Event>(this.eventBaseUri + '/' + id + '/' + 'labels', {
       params: {
         labelId: '1'
-      }});
+      }
+    });
 
 
   }
 
-  getMultiplEvents(name: string, from: Date, to: Date): Observable<Array<CalendarEvent>> {
-    console.log("Load Multiple events: ");
-    let uriEncodedName = encodeURI(name);
+  getMultipleEvents(from: Date, to: Date): Observable<Array<CalendarEvent>> {
     let uriEncodedStartDate = encodeURI(from.toISOString());
     let uriEncodedEndDate = encodeURI(to.toISOString());
 
-    let url = this.eventBaseUri + "?name=" + uriEncodedName + "&from=" + uriEncodedStartDate + "&to=" + uriEncodedEndDate;
+    let url = this.eventBaseUri + "?from=" + uriEncodedStartDate + "&to=" + uriEncodedEndDate;
     return this.httpClient.get<Array<CalendarEvent>>(url);
 
   }
@@ -70,7 +69,7 @@ export class EventService {
    */
   getEvent(id: number): Observable<CalendarEvent> {
     console.log("Load Event with ID", id);
-     return this.httpClient.get<CalendarEvent>(this.eventBaseUri + '/' + id);
+    return this.httpClient.get<CalendarEvent>(this.eventBaseUri + '/' + id);
     // return null;
   }
 

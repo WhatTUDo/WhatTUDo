@@ -34,6 +34,10 @@ export class WeeklyCalendarComponent implements OnInit {
   viewMinRows = 8;
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
+  faChevronUp = faChevronUp;
+  faChevronDown = faChevronDown;
+  faChevronLeft = faChevronLeft;
+  faChevronRight = faChevronRight;
 
   constructor(
     private eventService: EventService
@@ -71,9 +75,8 @@ export class WeeklyCalendarComponent implements OnInit {
    * @param from: Start date of week
    * @param to: End date of week
    */
-  //FIXME: Handle multi-day events correctly, mapping the event to EVERY DAY.
   loadEventsForWeek(from: Date, to: Date) {
-    this.eventService.getMultiplEvents(null, from, to).subscribe((events: Array<CalendarEvent>) => {
+    this.eventService.getMultipleEvents(from, to).subscribe((events: Array<CalendarEvent>) => {
       events.forEach(event => {
         let startDate = new Date(event.startDateTime)
         let endDate = new Date(event.endDateTime);
@@ -84,19 +87,12 @@ export class WeeklyCalendarComponent implements OnInit {
       this.displayingWeek.forEach((day: Date) => {
         let keyISOString = this.getMidnight(day).toISOString()
         this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
-          let isAfterMidnight = event.startDateTime.getTime() > this.getMidnight(day).getTime();
+          let isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
           let isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
           return isAfterMidnight && isBeforeEndOfDay;
         }));
       })
-    }, error => {
-      if (error.status != 404) {
-        alert("Error while loading events: " + error.message);
-      } else {
-        alert("No events found!");
-      }
     });
-
   }
 
   updateDatetime() {
@@ -151,12 +147,6 @@ export class WeeklyCalendarComponent implements OnInit {
     this.updateOffsettedDates();
   }
 
-  private updateOffsettedDates() {
-    this.displayingDate = this.getDate(this.offset);
-    this.displayingWeek = this.getWeek(this.offset);
-    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
-  }
-
   getToday() {
     let today = new Date(Date.now());
     today.setHours(0, 0, 0, 0);
@@ -170,12 +160,14 @@ export class WeeklyCalendarComponent implements OnInit {
   /**
    * Generate the CSS grid numbers for displaying the event at the right time.
    * Change this.view… variables to configure behavior.
-   * @param event
+   * @param event to display
+   * @param forDate the displayed date
    */
-  //FIXME: Handle multi-day events correctly.
-  getDisplayRows(event: CalendarEvent) {
-    const startSecond = this.getSecondOffsetFromMidnight(event.startDateTime);
-    const endSecond = this.getSecondOffsetFromMidnight(event.endDateTime);
+  getDisplayRows(event: CalendarEvent, forDate: Date) {
+    const startsOnToday = this.isOnSameDay(event.startDateTime, forDate);
+    const endsOnToday = this.isOnSameDay(event.endDateTime, forDate);
+    const startSecond = startsOnToday ? this.getSecondOffsetFromMidnight(event.startDateTime) : 0;
+    const endSecond = endsOnToday ? this.getSecondOffsetFromMidnight(event.endDateTime) : 24 * 60 * 60;
 
     let startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow);
     let endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow);
@@ -190,13 +182,8 @@ export class WeeklyCalendarComponent implements OnInit {
     return `${startRow}/${endRow}`
   }
 
-  /**
-   * A helper function to do the calculation of the number of row.
-   * Mapping sec from interval [viewBeginningAtTime, viewEndingAtTime] to [viewBeginningAtRow, viewEndingAtRow]
-   * @param sec Time in day in seconds after midnight.
-   */
-  private calcRow(sec) {
-    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
+  isOnSameDay(date1: Date, date2: Date) {
+    return date1.toDateString() === date2.toDateString();
   }
 
   getSecondOffsetFromMidnight(date: Date) {
@@ -219,14 +206,18 @@ export class WeeklyCalendarComponent implements OnInit {
     return this.eventService.getDisplayTimeString(event);
   }
 
-  public redirectToDetail(id: number) {
-    console.log("You Clicked: ", id);
-    window.location.replace("/event/" + id);
+  private updateOffsettedDates() {
+    this.displayingDate = this.getDate(this.offset);
+    this.displayingWeek = this.getWeek(this.offset);
+    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
   }
 
-
-  faChevronUp = faChevronUp;
-  faChevronDown = faChevronDown;
-  faChevronLeft = faChevronLeft;
-  faChevronRight = faChevronRight;
+  /**
+   * A helper function to do the calculation of the number of row.
+   * Mapping sec from interval [viewBeginningAtTime, viewEndingAtTime] to [viewBeginningAtRow, viewEndingAtRow]
+   * @param sec Time in day in seconds after midnight.
+   */
+  private calcRow(sec) {
+    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
+  }
 }

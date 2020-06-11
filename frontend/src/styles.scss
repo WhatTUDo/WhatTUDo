@@ -313,6 +313,7 @@ iframe {
   border-radius: 100%;
   user-select: none;
   -webkit-user-drag: none;
+  background-color: var(--shadow);
 
   &.avatar-small {
     height: 48pt;

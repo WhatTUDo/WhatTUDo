@@ -20,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
@@ -163,6 +164,7 @@ public class CustomUserDetailService implements UserService {
    }
     }
 
+    @Transactional
     @Override
     public List<Organization> getUserOrganizations(Integer userId) throws ServiceException {
         try {

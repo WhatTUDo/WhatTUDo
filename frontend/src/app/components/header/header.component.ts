@@ -10,14 +10,20 @@ import {UserService} from "../../services/user.service";
 })
 export class HeaderComponent implements OnInit {
 
-  userEmail: string = '';
+  userEmail: string = null;
+  faSignInAlt = faSignInAlt;
+  faSignOutAlt = faSignOutAlt;
+  faChevronDown = faChevronDown;
+  faCog = faCog;
 
   constructor(public authService: AuthService,
               private userService: UserService
   ) {
-    this.authService.getUser().subscribe((user) => {
-      this.userEmail = user.email;
-    })
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe((user) => {
+        this.userEmail = user.email;
+      })
+    }
   }
 
   ngOnInit() {
@@ -26,9 +32,4 @@ export class HeaderComponent implements OnInit {
   getGravatarLink(email, size) {
     return this.userService.getGravatarLink(email, size);
   }
-
-  faSignInAlt = faSignInAlt;
-  faSignOutAlt = faSignOutAlt;
-  faChevronDown = faChevronDown;
-  faCog = faCog;
 }

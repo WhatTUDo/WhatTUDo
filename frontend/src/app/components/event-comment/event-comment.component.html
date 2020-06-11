@@ -12,14 +12,14 @@
     </div>
   </div>
   <div class="comment-buttons">
-    <button class="button-green small-button icon-button" (click)="vote(true)">
+    <button (click)="vote(true)" class="button-green small-button icon-button">
       <fa-icon [icon]="faThumbsUp"></fa-icon>
     </button>
     <div class="rating-percentage">{{this.comment.rating * 100 + '%'}}</div>
-    <button class="button-red small-button icon-button" (click)="vote(false)">
+    <button (click)="vote(false)" class="button-red small-button icon-button">
       <fa-icon [icon]="faThumbsDown"></fa-icon>
     </button>
-    <button class="button-blue small-button icon-button response-button" (click)="respondButtonClicked()">
+    <button (click)="respondButtonClicked()" class="button-blue small-button icon-button response-button">
       <fa-icon [icon]="faReply"></fa-icon>
     </button>
   </div>

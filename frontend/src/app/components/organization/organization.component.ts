@@ -23,6 +23,12 @@ export class OrganizationComponent implements OnInit {
   editableCalendars: Calendar[];
   pickedCalendarId: number;
   calendarAddExpanded: boolean = false;
+  faChevronLeft = faChevronLeft;
+  faChevronRight = faChevronRight;
+  faPlus = faPlus;
+  faTimes = faTimes;
+  faCog = faCog;
+  faTimesCircle = faTimesCircle;
 
   constructor(private organizationService: OrganizationService, private calendarService: CalendarService,
               private route: ActivatedRoute) {
@@ -32,30 +38,6 @@ export class OrganizationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-  /**
-   * Loads Organization with ID from Service.
-   * @param id
-   */
-  private loadOrganization(id: number) {
-    this.organizationService.getById(id).subscribe((organization: Organization) => {
-      this.organization = organization;
-      for (let calID of organization.calendarIds) {
-        this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
-          this.organizationCalendars.push(cal);
-
-        }, err => {
-          alert(err.message);
-        })
-      }
-    }, err => {
-      alert(err.message);
-    })
-  }
-
-  goToCalendar(id: number) {
-    window.location.replace("/calendar/" + id);
   }
 
   onSubmitAddCalendar(calId: number) {
@@ -98,10 +80,22 @@ export class OrganizationComponent implements OnInit {
     }) //FIXME: Make me to fetch only editable calendars.
   }
 
-  faChevronLeft = faChevronLeft;
-  faChevronRight = faChevronRight;
-  faPlus = faPlus;
-  faTimes = faTimes;
-  faCog = faCog;
-  faTimesCircle = faTimesCircle;
+  /**
+   * Loads Organization with ID from Service.
+   * @param id
+   */
+  private loadOrganization(id: number) {
+    this.organizationService.getById(id).subscribe((organization: Organization) => {
+      this.organization = organization;
+      for (let calID of organization.calendarIds) {
+        this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
+          this.organizationCalendars.push(cal);
+        }, err => {
+          alert(err.message);
+        })
+      }
+    }, err => {
+      alert(err.message);
+    })
+  }
 }

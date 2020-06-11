@@ -4,6 +4,7 @@ import {AuthService} from "../../services/auth.service";
 import {User} from "../../dtos/user";
 import {Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
+import {Organization} from "../../dtos/organization";
 
 @Component({
   selector: 'app-user',
@@ -14,22 +15,27 @@ export class UserComponent implements OnInit {
 
   user: User;
   // userRoleInOrganizations: OrganizationMemberOrSomething[];
-  userRoleInOrganizations = [
-    {organizationName: "FS Winf", role: "Admin"},
-    {organizationName: "HTU", role: "Member"},
-  ]
+  userInOrganizations: Organization[];
+  faChevronLeft = faChevronLeft;
+  faSignOutAlt = faSignOutAlt;
 
   constructor(private authService: AuthService,
               private userService: UserService,
               private router: Router) {
-    this.authService.getUser().subscribe((user: User) => {
-      if (!user) {
-        this.router.navigate(['/login']);
-      }
-      console.log(user);
-      this.user = user;
-      }
-    );
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe((user: User) => {
+          if (!user) {
+            this.router.navigate(['/login']);
+          }
+          this.user = user;
+          this.userService.getUserOrganization(user.id).subscribe((organization: Organization[]) => {
+            this.userInOrganizations = organization;
+          })
+        }
+      );
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   ngOnInit(): void {
@@ -43,7 +49,4 @@ export class UserComponent implements OnInit {
   getGravatarLink(email, size) {
     return this.userService.getGravatarLink(email, size);
   }
-
-  faChevronLeft = faChevronLeft;
-  faSignOutAlt = faSignOutAlt;
 }

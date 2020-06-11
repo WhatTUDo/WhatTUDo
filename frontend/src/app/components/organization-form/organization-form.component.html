@@ -1,18 +1,18 @@
 <div class="contextual-control">
-  <span id="back-button" class="clickable no-hover-enlarge no-shadow" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span *ngIf="organization&&isUpdate">Edit Team: {{organization.name}}</span>
-  <span *ngIf="organization&&!isUpdate">New Team{{organization.name?": "+organization.name:''}}</span>
+  <span *ngIf="organization&&!isUpdate">New Team{{organization.name ? ": " + organization.name : ''}}</span>
 </div>
-<div class="centered-two-third" *ngIf="organization">
+<div *ngIf="organization" class="centered-two-third">
   <h2>{{isUpdate ? "Edit" : "Create"}} Organization</h2>
   <div class="form-group">
     <label for="organization.name">
       Name:
     </label>
-    <input type=text class="form-control" id="organization.name" [(ngModel)]="organization.name" #organizationName>
-    <button class="submit-button clickable button-green btn-lg"
-            (click)="onSubmit(organizationName.value)">Submit
+    <input #organizationName [(ngModel)]="organization.name" class="form-control" id="organization.name" type=text>
+    <button (click)="onSubmit(organizationName.value)"
+            class="submit-button clickable button-green btn-lg">Submit
     </button>
   </div>
 </div>

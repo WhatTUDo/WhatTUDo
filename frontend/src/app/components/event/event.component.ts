@@ -22,30 +22,29 @@ export class EventComponent implements OnInit {
 
 
   id: number;
-  user: User;
+  user: User = null;
   labels: Array<Label>;
-
+  public calendarEvent: CalendarEvent;
+  participants: any = {
+    'attending': [],
+    'interested': [],
+    'declined': []
+  };
+  faChevronLeft = faChevronLeft;
+  faTag = faTag;
+  faExternalLinkSquareAlt = faExternalLinkSquareAlt;
 
   constructor(private eventService: EventService, private labelService: LabelService,
               private attendanceStatusService: AttendanceStatusService, private authService: AuthService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
-    this.authService.getUser().subscribe((user) => {
-      this.user = user;
-    }, err => {
-      console.warn(err);
-    });
-
-
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe((user) => {
+        this.user = user;
+      });
+    }
   }
-
-  public calendarEvent: CalendarEvent;
-   participants: any = {
-    'attending': [],
-    'interested': [],
-    'declined': []
-  };
 
   ngOnInit(): void {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
@@ -54,36 +53,9 @@ export class EventComponent implements OnInit {
 
   }
 
-  /**
-   * Loads Event with ID from Service.
-   * @param id
-   */
-  private loadCalendarEvent(id: number) {
-    this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
-      this.calendarEvent = event;
-      let location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 12.1234, 13.9876);
-      this.calendarEvent.comments = this.getComments();
-      this.calendarEvent.labels = this.getLabels();
-      this.calendarEvent.location = location;
-      this.calendarEvent.description = 'yololo';
-      this.participants = this.getParticipants();
-    }, err => {
-      alert(err.message);
-    });
-  }
-
   public getEventDateAndTimeString() {
     return this.eventService.getEventDateAndTimeString(this.calendarEvent);
   }
-
-  private deleteEvent() {
-    this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
-      console.log('Event deleted');
-    }, error => {
-      // display Error.
-    });
-  }
-
 
   public participate(status: number) {
     switch (status) {
@@ -138,6 +110,46 @@ export class EventComponent implements OnInit {
     }
   }
 
+  getAllLabels() {
+
+    this.eventService.getAllLabels().subscribe(labels => {
+      this.labels = labels;
+    });
+  }
+
+  getEventLabels(id: number) {
+
+    this.eventService.getEventLabels(this.id).subscribe(labels => {
+      this.labels = labels;
+    });
+  }
+
+  /**
+   * Loads Event with ID from Service.
+   * @param id
+   */
+  private loadCalendarEvent(id: number) {
+    this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
+      this.calendarEvent = event;
+      let location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 12.1234, 13.9876);
+      this.calendarEvent.comments = this.getComments();
+      this.calendarEvent.labels = this.getLabels();
+      this.calendarEvent.location = location;
+      this.calendarEvent.description = 'yololo';
+      this.participants = this.getParticipants();
+    }, err => {
+      alert(err.message);
+    });
+  }
+
+  private deleteEvent() {
+    this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
+      console.log('Event deleted');
+    }, error => {
+      // display Error.
+    });
+  }
+
   private getParticipants() {
     this.attendanceStatusService.getUsersAttendingEvent(this.id).subscribe((users: any[]) => {
       this.participants.attending = users;
@@ -174,23 +186,4 @@ export class EventComponent implements OnInit {
 
     return array;
   }
-
-  getAllLabels() {
-
-    this.eventService.getAllLabels().subscribe(labels => {
-      this.labels = labels;
-    });
-  }
-
-  getEventLabels(id: number) {
-
-    this.eventService.getEventLabels(this.id).subscribe(labels => {
-      this.labels = labels;
-    });
-  }
-
-
-  faChevronLeft = faChevronLeft;
-  faTag = faTag;
-  faExternalLinkSquareAlt = faExternalLinkSquareAlt;
 }

@@ -1,8 +1,8 @@
 import {Organization} from './organization';
 
-export class CalendarRepresentation{
+export class CalendarRepresentation {
   constructor(
-    public id : number,
+    public id: number,
     public name ?: string,
     public organization ?: Organization[]
   ) {

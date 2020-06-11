@@ -27,6 +27,9 @@ export class EventFormComponent implements OnInit {
   }
 
   event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
+  title: String = "NEW EVENT"
+
+
   reactiveEventForm = new FormGroup({
     id: new FormControl(''),
     calendarId: new FormControl(''),
@@ -36,6 +39,7 @@ export class EventFormComponent implements OnInit {
     location: new FormControl(''),
     labels: new FormControl('')
   });
+  faChevronLeft = faChevronLeft;
 
   constructor(
     private eventService: EventService,
@@ -48,6 +52,7 @@ export class EventFormComponent implements OnInit {
         if (event) {
           this.event = event;
           this.isUpdate = true;
+          this.title = "UPDATE EVENT";
         }
       });
     }
@@ -59,7 +64,16 @@ export class EventFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+
   }
+
+  getEvent(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.eventService.getEvent(id)
+      .subscribe(event => this.event = event);
+  }
+
 
   onSubmit() {
     let validationIsPassed = this.validateFormInput(this.event);
@@ -144,8 +158,6 @@ export class EventFormComponent implements OnInit {
       this.editableCalendars = calendars;
     }) //FIXME: Make me to fetch only editable calendars.
   }
-
-  faChevronLeft = faChevronLeft;
 
 
 }

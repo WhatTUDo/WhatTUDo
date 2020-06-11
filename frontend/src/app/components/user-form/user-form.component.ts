@@ -1,9 +1,11 @@
 import {AfterContentChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dtos/user";
 import {AuthService} from "../../services/auth.service";
+import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
+import {FeedbackService} from "../../services/feedback.service";
 
 @Component({
   selector: 'app-user-form',
@@ -15,12 +17,15 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
   changePwdForm: FormGroup;
 
   user: User;
+  faChevronLeft = faChevronLeft;
 
   constructor(private formBuilder: FormBuilder,
               private userService: UserService,
               private authService: AuthService,
+              private feedbackService: FeedbackService,
               private cd: ChangeDetectorRef,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
     this.updateForm = this.formBuilder.group(
       {
         username: new FormControl('', Validators.max(255)),
@@ -40,10 +45,13 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
     //     this.user = user;
     //   });
     // } else {
-    this.authService.getUser().subscribe((user: User) => {
-      this.user = user;
-    });
-    // }
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe((user: User) => {
+        this.user = user;
+      });
+    } else {
+      this.feedbackService.displayError('Login Required.', 'You can only do this after you logged in.');
+    }
   }
 
   ngOnInit(): void {
@@ -74,7 +82,8 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
     this.cd.detectChanges();
   }
 
-  emailUpdated(event: KeyboardEvent) {
+  emailUpdated(event: Event) {
+    // @ts-ignore
     this.user.email = event.target.value;
   }
 }

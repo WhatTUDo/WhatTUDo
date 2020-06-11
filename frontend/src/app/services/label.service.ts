@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {AuthRequest} from "../dtos/auth-request";
 import {Observable} from "rxjs";
 import {CalendarEvent} from "../dtos/calendar-event";
@@ -12,10 +12,10 @@ import {EventComment} from "../dtos/event-comment";
 })
 export class LabelService {
 
-private labelBaseUri: string = this.globals.backendUri + 'labels';
+  private labelBaseUri: string = this.globals.backendUri + 'labels';
 
-constructor(private httpClient: HttpClient, private globals: Globals) {
-}
+  constructor(private httpClient: HttpClient, private globals: Globals) {
+  }
 
   getAll(): Observable<Label[]> {
 

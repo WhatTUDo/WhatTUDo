@@ -14,15 +14,18 @@ export class HomeComponent implements OnInit {
 
   constructor(public authService: AuthService,
               public feedbackService: FeedbackService,
-              ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.updateDatetime();
-    setInterval(()=>{this.updateDatetime();}, 1000);
+    setInterval(() => {
+      this.updateDatetime();
+    }, 1000);
   }
 
   updateDatetime() {
     const date = new Date(Date.now());
-    this.currentTime = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+    this.currentTime = date.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true})
   }
 }

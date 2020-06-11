@@ -21,7 +21,9 @@ export class CalendarListComponent implements OnInit {
   searchForm = new FormGroup({
     name: new FormControl('')
   });
-
+  faChevronLeft = faChevronLeft;
+  faTimesCircle = faTimesCircle;
+  faCog = faCog;
 
   constructor(
     private calendarService: CalendarService,
@@ -29,7 +31,6 @@ export class CalendarListComponent implements OnInit {
     private organizationService: OrganizationService) {
     this.getAllCalendars();
   }
-
 
   getAllCalendars() {
     this.calendarService.getAllCalendars().subscribe((list) => {
@@ -58,21 +59,6 @@ export class CalendarListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  }
-
-
-  onSelectCalendar(calendarRep: CalendarRepresentation) {
-    this.router.navigate(['calendar/', calendarRep.id]);
-
-  }
-
-  onSelectEditCalendar(calendarRep: CalendarRepresentation) {
-    this.router.navigate(['/form/calendar', calendarRep.id]);
-  }
-
-
-  onSelectOrganization(organization: Organization) {
-    this.router.navigate(['organization/', organization.id]);
   }
 
   onSubmit() {
@@ -137,17 +123,12 @@ export class CalendarListComponent implements OnInit {
       });
   }
 
-
   delete(id: number): void {
 
     this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
       this.getAllCalendars();
     });
   }
-
-  faChevronLeft = faChevronLeft;
-  faTimesCircle = faTimesCircle;
-  faCog = faCog;
 }
 
 
