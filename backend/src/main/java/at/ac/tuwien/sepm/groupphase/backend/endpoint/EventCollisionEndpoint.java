@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -40,16 +41,18 @@ public class EventCollisionEndpoint {
     @PostMapping
     @ApiOperation(value = "Get Event Collisions and Date Recommendations", authorizations = {@Authorization(value = "apiKey")})
     public CollisionResponseDto getEventCollisions(@RequestBody EventDto eventDto) {
-        log.info("Get Event Collisions");
-        //TODO: this.
+        Integer threshold = 3;
+        Long timespan = 12L;
+        log.info("Get Event Collisions with set CS threshold {} and additional timespan {}h", threshold, timespan);
         try {
-            List<EventCollision> eventCollisions = this.eventCollisionService.getEventCollisions(eventMapper.eventDtoToEvent(eventDto), 3, 12L);
-            if(eventCollisions.isEmpty()) {
-                throw new ResponseStatusException(HttpStatus.OK, "No collisions occurred");
+            List<EventCollision> eventCollisions = this.eventCollisionService.getEventCollisions(eventMapper.eventDtoToEvent(eventDto), threshold, timespan);
+            if (!eventCollisions.isEmpty()) {
+                EventCollision min = eventCollisions.stream().min(Comparator.comparing(e -> e.getCollisionScore())).get();
+                List<LocalDateTime[]> suggestions = this.eventCollisionService.getAlternativeDateSuggestions(eventMapper.eventDtoToEvent(eventDto), min.getCollisionScore());
+                return collisionResponseMapper.mapCollisionResponseDto(eventCollisions, suggestions);
             }
-            EventCollision min = eventCollisions.stream().min(Comparator.comparing(e -> e.getCollisionScore())).get();
-            List<LocalDateTime[]> suggestions = this.eventCollisionService.getAlternativeDateSuggestions(eventMapper.eventDtoToEvent(eventDto), min.getCollisionScore());
-            return collisionResponseMapper.mapCollisionResponseDto(eventCollisions, suggestions);
+            return collisionResponseMapper.mapCollisionResponseDto(eventCollisions, new ArrayList<>());
+
         }
         catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
