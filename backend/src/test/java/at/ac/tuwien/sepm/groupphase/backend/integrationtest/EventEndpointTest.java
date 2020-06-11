@@ -364,7 +364,7 @@ public class EventEndpointTest {
         assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
         assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
 
-        EventDto eventDtoChanges = new EventDto(returnedEvent.getId(), "Test2", LocalDateTime.of(2022, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar.getId() );
+        EventDto eventDtoChanges = new EventDto(returnedEvent.getId(), "Test2", LocalDateTime.of(2022, 1, 1, 17, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar.getId() );
 
        assertThrows(ResponseStatusException.class, () -> endpoint.editEvent(eventDtoChanges));
 
