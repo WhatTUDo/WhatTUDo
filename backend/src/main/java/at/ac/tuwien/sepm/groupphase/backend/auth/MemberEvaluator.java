@@ -2,14 +2,8 @@ package at.ac.tuwien.sepm.groupphase.backend.auth;
 
 import at.ac.tuwien.sepm.groupphase.backend.auth.authorities.AdminAuthority;
 import at.ac.tuwien.sepm.groupphase.backend.auth.authorities.MemberAuthority;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarCreateDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationRole;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.*;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
@@ -33,38 +27,61 @@ public class MemberEvaluator implements PermissionEvaluator {
 
     @Override
     public boolean hasPermission(Authentication authentication, Object targetDomainObject, Object permission) {
-        if (authentication.getAuthorities().contains(AdminAuthority.ADMIN)) {
-            return true;
+        if (authentication.getAuthorities().contains(AdminAuthority.ADMIN)) return true;
+
+        if (targetDomainObject instanceof BaseDto) {
+            return hasPermission(authentication, (BaseDto) targetDomainObject, permission);
+        } else if (targetDomainObject instanceof BaseEntity) {
+            return hasPermission(authentication, (BaseEntity) targetDomainObject, permission);
         } else {
-            if (targetDomainObject instanceof OrganizationDto) {
-                return evaluatePermission(authentication, organizationRepository.findById(((OrganizationDto) targetDomainObject).getId()).orElseThrow(NotFoundException::new), OrganizationRole.valueOf((String) permission));
-            } else if (targetDomainObject instanceof CalendarCreateDto) {
-                return evaluatePermission(authentication, organizationRepository.findById(((CalendarCreateDto) targetDomainObject).getOrgaId()).orElseThrow(NotFoundException::new), OrganizationRole.valueOf((String) permission));
-            } else if (targetDomainObject instanceof CalendarDto) {
-                return evaluatePermission(authentication, calendarRepository.findById(((CalendarDto) targetDomainObject).getId()).orElseThrow(NotFoundException::new), OrganizationRole.valueOf((String) permission));
-            } else if (targetDomainObject instanceof EventDto) {
-                return evaluatePermission(authentication, calendarRepository.findById(((EventDto) targetDomainObject).getCalendarId()).orElseThrow(NotFoundException::new), OrganizationRole.valueOf((String) permission));
-            }
+            return false;
+        }
+    }
+
+    public boolean hasPermission(Authentication authentication, BaseDto dto, Object permission) {
+        if (authentication.getAuthorities().contains(AdminAuthority.ADMIN)) return true;
+
+        if (dto instanceof OrganizationDto) {
+            return evaluatePermission(authentication, organizationRepository.findById(((OrganizationDto) dto).getId()).orElseThrow(NotFoundException::new), OrganizationRole.valueOf((String) permission));
+        } else if (dto instanceof CalendarCreateDto) {
+            return evaluatePermission(authentication, organizationRepository.findById(((CalendarCreateDto) dto).getOrgaId()).orElseThrow(NotFoundException::new), OrganizationRole.valueOf((String) permission));
+        } else if (dto instanceof CalendarDto) {
+            return evaluatePermission(authentication, calendarRepository.findById(((CalendarDto) dto).getId()).orElseThrow(NotFoundException::new), OrganizationRole.valueOf((String) permission));
+        } else if (dto instanceof EventDto) {
+            return evaluatePermission(authentication, calendarRepository.findById(((EventDto) dto).getCalendarId()).orElseThrow(NotFoundException::new), OrganizationRole.valueOf((String) permission));
+        } else {
+            return false;
+        }
+    }
+
+    public boolean hasPermission(Authentication authentication, BaseEntity entity, Object permission) {
+        if (authentication.getAuthorities().contains(AdminAuthority.ADMIN)) return true;
+
+        if (entity instanceof Organization) {
+            return evaluatePermission(authentication, (Organization) entity, OrganizationRole.valueOf((String) permission));
+        } else if (entity instanceof Calendar) {
+            return evaluatePermission(authentication, (Calendar) entity, OrganizationRole.valueOf((String) permission));
+        } else if (entity instanceof Event) {
+            return evaluatePermission(authentication, (Event) entity, OrganizationRole.valueOf((String) permission));
+        } else {
             return false;
         }
     }
 
     @Override
     public boolean hasPermission(Authentication authentication, Serializable targetId, String targetType, Object permission) {
-        if (authentication.getAuthorities().contains(AdminAuthority.ADMIN)) {
-            return true;
-        } else {
-            OrganizationRole role = OrganizationRole.valueOf((String) permission);
-            switch (targetType) {
-                case "ORGA":
-                    return evaluatePermission(authentication, organizationRepository.findById((Integer) targetId).orElseThrow(NotFoundException::new), role);
-                case "CAL":
-                    return evaluatePermission(authentication, calendarRepository.findById((Integer) targetId).orElseThrow(NotFoundException::new), role);
-                case "EVENT":
-                    return evaluatePermission(authentication, eventRepository.findById((Integer) targetId).orElseThrow(NotFoundException::new), role);
-            }
-            return false;
+        if (authentication.getAuthorities().contains(AdminAuthority.ADMIN)) return true;
+
+        OrganizationRole role = OrganizationRole.valueOf((String) permission);
+        switch (targetType) {
+            case "ORGA":
+                return evaluatePermission(authentication, organizationRepository.findById((Integer) targetId).orElseThrow(NotFoundException::new), role);
+            case "CAL":
+                return evaluatePermission(authentication, calendarRepository.findById((Integer) targetId).orElseThrow(NotFoundException::new), role);
+            case "EVENT":
+                return evaluatePermission(authentication, eventRepository.findById((Integer) targetId).orElseThrow(NotFoundException::new), role);
         }
+        return false;
     }
 
     boolean evaluatePermission(Authentication authentication, Organization organization, OrganizationRole role) {

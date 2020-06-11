@@ -37,14 +37,18 @@ public class SimpleEventService implements EventService {
     private final Validator validator;
 
 
+    @Transactional
     @Override
     public void delete(Event event) {
         try {
             if (event.getId() != null) {
-                this.findById(event.getId());
+               Event toDelete = this.findById(event.getId());
+               if(toDelete.getLabels().size() > 0)
+               removeLabels(toDelete, toDelete.getLabels());
             } else {
                 throw new ValidationException("Id is not defined");
             }
+
             eventRepository.delete(event);
             publisher.publishEvent(new EventDeleteEvent(event.getName()));
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
@@ -143,9 +147,10 @@ public class SimpleEventService implements EventService {
         }
     }
 
+    @Transactional
     @Override
     public Event removeLabels(Event event, Collection<Label> labels) {
-        log.info("Removing labels {} from event {}", labels, event);
+     //   log.info("Removing labels {} from event {}", labels, event);
         try {
             labels.forEach(it -> {it.getEvents().remove(event);});
             labelRepository.saveAll(labels);

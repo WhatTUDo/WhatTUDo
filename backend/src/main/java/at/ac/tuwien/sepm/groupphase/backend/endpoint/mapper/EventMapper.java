@@ -10,16 +10,27 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Mapper(componentModel = "spring")
 public abstract class EventMapper {
     @Autowired protected CalendarRepository calendarRepository;
+    @Autowired protected PermissionEvaluator permissionEvaluator;
 
     public abstract EventDto eventToEventDto(Event event);
 
     @BeforeMapping
     protected void mapCalendar(Event event, @MappingTarget EventDto eventDto) {
         eventDto.setCalendarId(event.getCalendar().getId());
+    }
+
+    @BeforeMapping
+    protected void mapPermissions(Event event, @MappingTarget EventDto eventDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        eventDto.setCanEdit(permissionEvaluator.hasPermission(authentication, event, "MEMBER"));
+        eventDto.setCanDelete(permissionEvaluator.hasPermission(authentication, event, "MEMBER"));
     }
 
     public abstract Event eventDtoToEvent(EventDto eventDto);

@@ -6,7 +6,14 @@
   </div>
   <div class="grid-one-third scroll">
     <div>
-      <h2>Event</h2>
+      <h2>Event
+
+
+        <fa-icon [icon]="faTag" class="clickable no-hover-enlarge no-shadow" routerLink="/form/event/{{this.id}}">
+          Edit Event?
+
+        </fa-icon></h2>
+
       <div class="event-promo-container" style="background-image: url(https://picsum.photos/800/1200/);">
         <div class="event-promo-details">
           <div class="event-time">{{this.getEventDateAndTimeString()}}</div>
@@ -23,6 +30,7 @@
         </div>
       </div>
       <div>
+
         <div class="participation-status grid-one-third no-gap">
           <div class="participation-status-item">
             <div class="participation-count">{{this.participants.attending.length}}</div>

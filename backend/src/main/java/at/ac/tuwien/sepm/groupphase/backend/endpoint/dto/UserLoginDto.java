@@ -2,12 +2,14 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserLoginDto {
+@EqualsAndHashCode(callSuper = true)
+public class UserLoginDto extends BaseDto {
     private String username;
     private String password;
 }

@@ -1,8 +1,10 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationMembership;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarAddEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarRemoveEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCreateEvent;
@@ -20,10 +22,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import javax.transaction.Transactional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -153,5 +153,21 @@ public class SimpleOrganizationService implements OrganizationService {
     }
 
     public void test() {
+    }
+
+    @Transactional
+    @Override
+    public List<ApplicationUser> getMembers(Integer id) throws ServiceException{
+      try {  Organization organization = organizationRepository.getOne(id);
+        Set<OrganizationMembership> organizationMembershipSet =organization.getMemberships();
+        List<ApplicationUser> members = new ArrayList<>();
+
+        for (OrganizationMembership o: organizationMembershipSet){
+            members.add(o.getUser());
+        }
+        return members;
+      } catch (PersistenceException | IllegalArgumentException e){
+          throw new ServiceException(e.getMessage());
+      }
     }
 }

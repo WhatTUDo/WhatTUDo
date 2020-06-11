@@ -1,12 +1,13 @@
 package at.ac.tuwien.sepm.groupphase.backend.servicetests;
 
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
@@ -37,6 +38,8 @@ public class OrganizationServiceTest {
     CalendarService calendarService;
     @Autowired
     CalendarRepository calendarRepository;
+    @Autowired
+    UserRepository userRepository;
 
 
     @Test
@@ -129,5 +132,21 @@ public class OrganizationServiceTest {
 
         assertIterableEquals(Collections.emptyList(), organizationRepository.findById(organization2.getId()).get().getCalendars());
         assertIterableEquals(List.of(organization1), calendarRepository.findById(calendar.getId()).get().getOrganizations());
+    }
+
+
+    @Test
+    public void getOrgMembers(){
+        Organization organization = organizationRepository.save(new Organization("Organization Members Test"));
+        ApplicationUser member1 =userRepository.save(new ApplicationUser("member1", "member1@org.at", "supersecret"));
+        ApplicationUser member2 = userRepository.save(new ApplicationUser("member2", "member2@org.at", "supersecret"));
+        Set<OrganizationMembership> organizationMemberships = new HashSet<>();
+        organizationMemberships.add(new OrganizationMembership(organization, member1, OrganizationRole.MEMBER));
+        organizationMemberships.add(new OrganizationMembership(organization, member2, OrganizationRole.MOD ));
+        organization.setMemberships(organizationMemberships);
+        organizationRepository.save(organization);
+
+        assertEquals(2, organizationService.getMembers(organization.getId()).size());
+
     }
 }
