@@ -12,6 +12,7 @@ import {AttendanceStatusService} from '../../services/attendance-status.service'
 import {AuthService} from '../../services/auth.service';
 import {AttendanceDto} from '../../dtos/AttendanceDto';
 import {User} from "../../dtos/user";
+import {FeedbackService} from "../../services/feedback.service";
 
 @Component({
   selector: 'app-event',
@@ -35,6 +36,7 @@ export class EventComponent implements OnInit {
   faExternalLinkSquareAlt = faExternalLinkSquareAlt;
 
   constructor(private eventService: EventService, private labelService: LabelService,
+              private feedbackService: FeedbackService,
               private attendanceStatusService: AttendanceStatusService, private authService: AuthService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
@@ -58,6 +60,10 @@ export class EventComponent implements OnInit {
   }
 
   public participate(status: number) {
+    if (!this.authService.isLoggedIn()) {
+      this.feedbackService.displayWarning(`Login Required.`, 'You can only do this after you logged in.');
+      return;
+    }
     switch (status) {
       case 0:
         console.log(this.user);

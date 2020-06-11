@@ -20,7 +20,10 @@
         <input #username="ngModel" [(ngModel)]="user.name" autocomplete="username" class="form-control"
                id="username" maxlength="255" name="username" required type="text">
         <div [hidden]="username.valid || username.pristine" class="jasmine-errored">
-          <small class="form-text text-warning">This username is too long!</small>
+          <small *ngIf="passwordField.hasError('required')"
+                 class="form-text text-warning">Please enter a username.</small>
+          <small *ngIf="passwordField.hasError('maxlength')"
+                 class="form-text text-warning">This username is too long.</small>
         </div>
       </div>
     </div>
@@ -31,7 +34,7 @@
                class="form-control"
                email id="email" name="email" type="email">
         <div [hidden]="email.valid || email.pristine" class="jasmine-errored">
-          <small class="form-text text-warning">Please enter a valid email!
+          <small class="form-text text-warning">Please enter a valid email.
           </small>
         </div>
       </div>
@@ -43,10 +46,10 @@
                  required type="password">
           <div [hidden]="passwordField.valid || passwordField.pristine" class="jasmine-errored">
             <small *ngIf="passwordField.hasError('required')" class="form-text text-warning">
-              Please enter your password!
+              Please enter your password.
             </small>
             <small *ngIf="passwordField.hasError('minlength')" class="form-text text-warning">
-              Please make your password longer!
+              Please make your password longer.
             </small>
           </div>
         </div>
