@@ -181,6 +181,7 @@ public class CustomUserDetailService implements UserService {
 
     }
 
+    @Transactional
     @Override
     public Optional<Event> getRecommendedEvent(Integer userId) {
         try {
