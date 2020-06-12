@@ -21,7 +21,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadRecommendedEvents();
+    if (this.authService.isLoggedIn()) {
+      this.loadRecommendedEvents();
+    }
     this.updateDatetime();
     setInterval(() => {
       this.updateDatetime();
