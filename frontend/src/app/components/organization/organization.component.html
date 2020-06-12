@@ -20,11 +20,11 @@
     <p></p>
     <div class="organization-action-container">
       <a href="/form/organization/{{organization.id}}">
-        <div class="organization-action clickable no-hover-enlarge no-shadow">
+        <div *ngIf="organization.canEdit" class="organization-action clickable no-hover-enlarge no-shadow">
           Edit team
         </div>
       </a>
-      <div class="organization-action dangerous clickable no-hover-enlarge no-shadow">
+      <div *ngIf="organization.canDelete" class="organization-action dangerous clickable no-hover-enlarge no-shadow">
         Dissolve team
       </div>
     </div>
@@ -42,7 +42,7 @@
         <img alt="" class="avatar avatar-small" src="{{getGravatarLink(member.email, 256)}}">
         <div class="organization-member-details">
           <div class="organization-member-name">{{member.name}}</div>
-<!--          <div class="organization-member-role">{{member.role}}</div>-->
+          <!--          <div class="organization-member-role">{{member.role}}</div>-->
         </div>
         <div class="organization-member-buttons">
           <div class="clickable no-hover-enlarge no-shadow organization-manage-member-button">
@@ -58,13 +58,14 @@
   <div>
     <div class="title-icon-button-combo">
       <h2>Calendars</h2>
-      <div (click)="calendarAddExpanded = !calendarAddExpanded"
+      <div *ngIf="organization.canEdit"
+           (click)="calendarAddExpanded = !calendarAddExpanded"
            class="icon-button clickable no-hover-enlarge no-shadow">
         <fa-icon *ngIf="!calendarAddExpanded" [icon]="faPlus"></fa-icon>
         <fa-icon *ngIf="calendarAddExpanded" [icon]="faTimes"></fa-icon>
       </div>
     </div>
-    <div *ngIf="calendarAddExpanded" class="add-calendar-selector">
+    <div *ngIf="organization.canEdit && calendarAddExpanded" class="add-calendar-selector">
       <label for="event.calendarId">Calendar</label>
       <div class="input-button-combo">
         <select #selectCalenderId [ngModel]="selectCalendar(+selectCalenderId.value)" class="form-control"
@@ -85,7 +86,8 @@
           <div class="organization-calendar-name">{{cal.name}}</div>
         </div>
         <div class="organization-calendar-buttons">
-          <fa-icon (click)="removeCalendar(cal.id)" [icon]="faTimesCircle" class="clickable no-hover-enlarge no-shadow">
+          <fa-icon *ngIf="organization.canEdit" (click)="removeCalendar(cal.id)" [icon]="faTimesCircle"
+                   class="clickable no-hover-enlarge no-shadow">
             Remove Calendar
           </fa-icon>
         </div>
