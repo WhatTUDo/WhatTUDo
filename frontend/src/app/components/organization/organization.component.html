@@ -33,7 +33,7 @@
     <div class="title-icon-button-combo">
       <h2>People</h2>
       <div class="icon-button clickable no-hover-enlarge no-shadow">
-        <fa-icon [icon]="faPlus"></fa-icon>
+        <fa-icon *ngIf="false" [icon]="faPlus"></fa-icon>
       </div>
     </div>
 
@@ -46,10 +46,10 @@
         </div>
         <div class="organization-member-buttons">
           <div class="clickable no-hover-enlarge no-shadow organization-manage-member-button">
-            <fa-icon [icon]="faCog"></fa-icon>
+            <fa-icon *ngIf="organization.canEdit" [icon]="faCog"></fa-icon>
           </div>
           <div class="clickable no-hover-enlarge no-shadow organization-kick-member-button">
-            <fa-icon [icon]="faTimesCircle"></fa-icon>
+            <fa-icon *ngIf="organization.canEdit" [icon]="faTimesCircle"></fa-icon>
           </div>
         </div>
       </div>

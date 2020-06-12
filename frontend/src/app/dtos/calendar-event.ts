@@ -13,30 +13,8 @@ export class CalendarEvent {
     public labels: Array<Label>,
     public comments: Array<EventComment>,
     public calendarId: number,
-    public canEdit: Boolean,
-    public canDelete: Boolean
+    public canEdit?: Boolean,
+    public canDelete?: Boolean
   ) {
-  }
-
-  isDuringDate(date: Date) {
-    date.setHours(0, 0, 0, 0);
-    const doesBeginsBeforeDate = this.startDateTime < date;
-
-    date.setHours(24, 0, 0, 0);
-    const doesEndsAfterDate = this.endDateTime > date;
-
-    return doesBeginsBeforeDate || doesEndsAfterDate;
-  }
-
-  doesBeginOnDate(date: Date) {
-    return this.isTheSameDate(this.startDateTime, date);
-  }
-
-  doesEndOnDate(date: Date) {
-    return this.isTheSameDate(this.endDateTime, date);
-  }
-
-  public isTheSameDate(date1: Date, date2: Date) {
-    return date1.toDateString() == date2.toDateString();
   }
 }
