@@ -34,12 +34,14 @@ export class HomeComponent implements OnInit {
   }
 
 
-  loadRecommendedEvents(){
-    this.authService.getUser().subscribe((user)=>{
-      this.userId = user.id;
-      this.userService.getRecommendedEvent(user.id).subscribe((events: Event[])=>{
-        this.recommendedEvents = events;
+  loadRecommendedEvents() {
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe((user) => {
+        this.userId = user.id;
+        this.userService.getRecommendedEvent(user.id).subscribe((events: Event[]) => {
+          this.recommendedEvents = events;
+        })
       })
-    })
+    }
   }
 }

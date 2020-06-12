@@ -10,22 +10,25 @@
     <button class="button-solid no-hover-enlarge" type="submit">Filter</button>
   </form>
   <div>
-    <div *ngFor="let cal of list2" class="calendar">
+    <div *ngFor="let cal of calendars" class="calendar">
       <div class="calendar-details">
         <div routerLink="/calendar/{{cal.id}}">
           <div class="calendar-name clickable no-shadow no-hover-enlarge">{{cal.name}}</div>
         </div>
         <div>
-          <div *ngFor="let org of cal.organization" routerLink="/organization/{{org.id}}">
-            <div class="clickable no-shadow no-hover-enlarge">{{org.name}}</div>
+          <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
+            <div *ngIf="organizationsMap.get(orgId)"
+                 class="clickable no-shadow no-hover-enlarge">{{organizationsMap.get(orgId).name}}</div>
           </div>
         </div>
       </div>
       <div class="calendar-buttons">
-        <fa-icon [icon]="faCog" class="clickable no-hover-enlarge no-shadow" routerLink="/form/calendar/{{cal.id}}">
+        <fa-icon *ngIf="cal.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
+                 routerLink="/form/calendar/{{cal.id}}">
           Edit Calendar
         </fa-icon>
-        <fa-icon (click)="delete(cal.id)" [icon]="faTimesCircle" class="clickable no-hover-enlarge no-shadow">
+        <fa-icon *ngIf="cal.canEdit" (click)="delete(cal.id)" [icon]="faTimesCircle"
+                 class="clickable no-hover-enlarge no-shadow">
           Remove Calendar
         </fa-icon>
       </div>

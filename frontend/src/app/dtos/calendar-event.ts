@@ -12,7 +12,9 @@ export class CalendarEvent {
     public location: Location,
     public labels: Array<Label>,
     public comments: Array<EventComment>,
-    public calendarId?: number,
+    public calendarId: number,
+    public canEdit: Boolean,
+    public canDelete: Boolean
   ) {
   }
 

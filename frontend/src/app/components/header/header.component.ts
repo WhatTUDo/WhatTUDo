@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   ) {
     if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user) => {
+        if (!user) this.authService.logoutUser();
         this.userEmail = user.email;
       })
     }
