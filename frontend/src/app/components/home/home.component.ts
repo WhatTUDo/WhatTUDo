@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {FeedbackService} from "../../services/feedback.service";
+import {UserService} from "../../services/user.service";
 
 
 @Component({
@@ -11,36 +12,38 @@ import {FeedbackService} from "../../services/feedback.service";
 export class HomeComponent implements OnInit {
 
   currentTime: string;
+  userId: number;
+  recommendedEvents: Event[];
 
   constructor(public authService: AuthService,
-              public feedbackService: FeedbackService,
-              ) { }
+              public userService: UserService,
+  ) {
+  }
 
   ngOnInit() {
+    if (this.authService.isLoggedIn()) {
+      this.loadRecommendedEvents();
+    }
     this.updateDatetime();
-    setInterval(_=>{this.updateDatetime();}, 1000);
+    setInterval(() => {
+      this.updateDatetime();
+    }, 1000);
   }
 
   updateDatetime() {
     const date = new Date(Date.now());
-    this.currentTime = date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+    this.currentTime = date.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true})
   }
 
 
-  async toggleFeedback(stateNr: number) {
-    switch (stateNr) {
-      case 0:
-        this.feedbackService.displaySuccess("Success!", "You look good today!")
-        break;
-      case 1:
-        this.feedbackService.displayWarning("Warning!", "Better be careful now!");
-        break;
-      case 2:
-        this.feedbackService.displayError("Error!", "Oh no! The squirrels have escaped!");
-        break;
-      default:
-        break;
+  loadRecommendedEvents() {
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe((user) => {
+        this.userId = user.id;
+        this.userService.getRecommendedEvent(user.id).subscribe((events: Event[]) => {
+          this.recommendedEvents = events;
+        })
+      })
     }
   }
-
 }

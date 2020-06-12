@@ -1,44 +1,41 @@
 <div class="contextual-control">
-  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
-  <span>@{{user.username}}</span>
+  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
+  <span *ngIf="user">User: {{user.name}}</span>
 </div>
-<div class="grid-one-third">
+<div *ngIf="user" class="centered-one-third">
   <div>
     <h2>You</h2>
     <div class="user-info">
-      <img alt="" class="avatar avatar-medium" src="https://picsum.photos/256/256/">
+      <img alt="" class="avatar avatar-medium" src="{{getGravatarLink(user.email, 256)}}">
       <div class="user-details">
-        <div class="username">@{{user.username}}</div>
+        <div class="name">{{user.name}}</div>
+        <div class="email">{{user.email}}</div>
       </div>
     </div>
     <div class="user-organization-list">
-      <div class="user-organization" *ngFor="let role of userRoleInOrganizations">
+      <div *ngFor="let org of userInOrganizations" class="user-organization clickable no-hover-enlarge no-shadow"
+           routerLink="/organization/{{org.id}}">
         <img alt="" class="avatar avatar-small" src="https://picsum.photos/256/256/">
         <div class="user-organization-details">
-          <div class="user-organization-name">{{role.organizationName}}</div>
-          <div class="user-organization-role">{{role.role}}</div>
+          <div class="user-organization-name">{{org.name}}</div>
+          <!--          <div class="user-organization-role">{{org.role}}</div>-->
         </div>
-        <div class="clickable no-hover-enlarge no-shadow user-exit-organization-button">
-          <fa-icon [icon]="faSignOutAlt"></fa-icon>
-        </div>
+<!--        <div class="clickable no-hover-enlarge no-shadow user-exit-organization-button">-->
+<!--          <fa-icon [icon]="faSignOutAlt"></fa-icon>-->
+<!--        </div>-->
       </div>
     </div>
     <div class="user-action-container">
       <div class="user-action clickable primary-action no-hover-enlarge no-shadow">
         <a class="nav-link" routerLink="/form/user/{{user.id}}" routerLinkActive="active">Edit</a>
       </div>
-      <div class="user-action clickable no-hover-enlarge no-shadow">
+      <div (click)="signOut()" class="user-action clickable no-hover-enlarge no-shadow">
         Sign out
       </div>
       <div class="user-action clickable dangerous no-hover-enlarge no-shadow">
         <a class="nav-link" routerLink="/form/user/{{user.id}}#delete" routerLinkActive="active">Delete User</a>
       </div>
     </div>
-  </div>
-  <div>
-    <h2>Lorem</h2>
-  </div>
-  <div>
-    <h2>Ipsum</h2>
   </div>
 </div>

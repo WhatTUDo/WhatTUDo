@@ -1,5 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.EventEndpoint;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
@@ -12,6 +14,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
+import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
@@ -38,6 +41,10 @@ public class SimpleCalendarService implements CalendarService {
     private final EventRepository eventRepository;
     private final OrganizationRepository organizationRepository;
     private final OrganizationService organizationService;
+    private final EventService eventService;
+    private final EventMapper eventMapper;
+
+    private final EventEndpoint eventEndpoint;
     private final Validator validator;
 
 
@@ -115,6 +122,15 @@ public class SimpleCalendarService implements CalendarService {
             }
 
             Calendar toDelete = this.findById(id);
+            List<Event> events = toDelete.getEvents();
+
+          /**  for (Event e: events
+                 ) {
+
+                eventService.delete(e);
+               // eventEndpoint.deleteEvent(eventMapper.eventToEventDto(e));
+            } **/
+
             List<Organization> olist = toDelete.getOrganizations();
 
 
@@ -127,7 +143,7 @@ public class SimpleCalendarService implements CalendarService {
 
                 for (Event e : toDelete.getEvents()) {
 
-                    eventRepository.delete(e);
+                    eventService.delete(e);
                 }
 
                 List<Event> empty = new ArrayList<Event>();

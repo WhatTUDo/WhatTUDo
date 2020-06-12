@@ -51,7 +51,10 @@ public interface UserService extends UserDetailsService {
 
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 
-    Integer getUserId(String name);
+
+     ApplicationUser getUserByName(String name) throws ServiceException;
+
+     List<Organization> getUserOrganizations(Integer userId) throws ServiceException;
 
     /**
      * gets a List of event-recommendations  for a user based on labels of

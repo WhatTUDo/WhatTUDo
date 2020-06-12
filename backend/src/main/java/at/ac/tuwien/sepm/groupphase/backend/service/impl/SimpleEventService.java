@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -35,14 +37,18 @@ public class SimpleEventService implements EventService {
     private final Validator validator;
 
 
+    @Transactional
     @Override
     public void delete(Event event) {
         try {
             if (event.getId() != null) {
-                this.findById(event.getId());
+               Event toDelete = this.findById(event.getId());
+               if(toDelete.getLabels().size() > 0)
+               removeLabels(toDelete, toDelete.getLabels());
             } else {
                 throw new ValidationException("Id is not defined");
             }
+
             eventRepository.delete(event);
             publisher.publishEvent(new EventDeleteEvent(event.getName()));
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
@@ -89,14 +95,13 @@ public class SimpleEventService implements EventService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public List<Event> findForDates(LocalDateTime start, LocalDateTime end) {
         try {
             validator.validateMultipleEventsQuery(start, end);
-            List<Event> foundEvents = eventRepository.findAllByStartDateTimeBetween(start, end);
-            if (foundEvents.size() == 0) {
-                throw new NotFoundException("Could not find any events between the specified dates: " + start.toString() + ", " + end.toString());
-            }
-            return foundEvents;
+            List<Event> events = new ArrayList<>();
+            events = eventRepository.findAllByStartDateTimeBetween(start, end);
+            return events;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
@@ -127,8 +132,13 @@ public class SimpleEventService implements EventService {
         try {
             labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
             labelRepository.saveAll(labels);
-
-            event.getLabels().addAll(labels);
+            if (event.getLabels() != null) {
+                event.getLabels().addAll(labels);
+            }
+            else {
+                List<Label> labelList = new ArrayList<>(labels);
+                event.setLabels(labelList);
+            }
             return eventRepository.save(event);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -136,8 +146,29 @@ public class SimpleEventService implements EventService {
     }
 
     @Override
+    public Event updateLabels(Event event, Collection<Label> labels) {
+        log.info("Adding labels {} to event {}", labels, event);
+        try {
+            removeLabels(event,event.getLabels());
+            labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
+            labelRepository.saveAll(labels);
+            if (event.getLabels() != null) {
+                event.getLabels().addAll(labels);
+            }
+            else {
+                List<Label> labelList = new ArrayList<>(labels);
+                event.setLabels(labelList);
+            }
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    @Override
     public Event removeLabels(Event event, Collection<Label> labels) {
-        log.info("Removing labels {} from event {}", labels, event);
+     //   log.info("Removing labels {} from event {}", labels, event);
         try {
             labels.forEach(it -> {it.getEvents().remove(event);});
             labelRepository.saveAll(labels);

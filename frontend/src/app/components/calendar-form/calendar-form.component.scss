@@ -15,7 +15,7 @@
   }
 }
 
-.form-container {
+.mat-form-container {
   background-color: $white;
   border-radius: $rounded-radius;
   border: 2pt solid $black;
@@ -23,8 +23,12 @@
   .mat-select-container {
     padding: 8pt;
 
-    .mat-form-field > * {
-      padding: 0;
+    mat-form-field {
+      font-family: inherit !important;
+
+      input {
+        background: transparent !important;
+      }
     }
   }
 

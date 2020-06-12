@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { FeedbackHandlerComponent } from './feedback-handler.component';
+import {FeedbackHandlerComponent} from './feedback-handler.component';
 
 describe('FeedbackHandlerComponent', () => {
   let component: FeedbackHandlerComponent;
@@ -8,9 +8,9 @@ describe('FeedbackHandlerComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FeedbackHandlerComponent ]
+      declarations: [FeedbackHandlerComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

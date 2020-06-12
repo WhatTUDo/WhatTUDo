@@ -8,27 +8,24 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.IncomingUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
-import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
-import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
+import io.swagger.models.auth.In;
 import org.hibernate.event.service.spi.EventListenerRegistrationException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -58,7 +55,13 @@ public class UserEndpointTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    OrganizationRepository organizationRepository;
 
+
+    @WithMockUser
     @Test
     public void saveNewUser_shouldReturn_UserDto_withEncodedPassword() {
         IncomingUserDto userDto = new IncomingUserDto(0, "Test", "testy@test.com", "hunter2");
@@ -72,32 +75,23 @@ public class UserEndpointTest {
 
     }
 
+
+
+
+    @WithMockUser
     @Test
-    public void updateUser() {
-        IncomingUserDto userDto = new IncomingUserDto(null, "user1", "testy@test.com", "hunter2");
+    public void getUserOrganizations(){
+        Organization organization = organizationRepository.save(new Organization("organization test"));
+        ApplicationUser user = userRepository.save(new ApplicationUser( "user", "user@test.at", "usertest"));
+        Set<OrganizationMembership> organizationMembershipSet = new HashSet<>();
+        organizationMembershipSet.add(new OrganizationMembership(organization, user, OrganizationRole.MEMBER));
+        user.setMemberships(organizationMembershipSet);
+        userRepository.save(user);
 
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
-
-        assertNotNull(savedUserDto);
-        assertEquals(userDto.getName(), savedUserDto.getName());
-
-        LoggedInUserDto userDto1 = new LoggedInUserDto(savedUserDto.getId(), "user2", null);
-
-        LoggedInUserDto updateUser = userEndpoint.updateUser(userDto1);
-
-        assertEquals(userDto1.getName(), updateUser.getName());
-
-
-        userDto1 = new LoggedInUserDto(savedUserDto.getId(), null, "user43@test.com");
-
-        updateUser = userEndpoint.updateUser(userDto1);
-
-        assertEquals(savedUserDto.getId(), updateUser.getId());
-        assertEquals(userDto1.getEmail(), updateUser.getEmail());
-
-
+        assertEquals(organization.getName(), userEndpoint.getOrganizationOfUser(user.getId()).get(0).getName());
     }
 
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void changePassword() {
         IncomingUserDto userDto = new IncomingUserDto(null, "changePasswordUser", "changepass@test.com", "hunter3");
@@ -115,7 +109,8 @@ public class UserEndpointTest {
     @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
-        ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
+//        ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
+        ApplicationUser user = userService.getUserByName("Person 1");
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(new Organization())));
         List<Label> labels1 = new ArrayList<>();
         List<Label> labels2 = new ArrayList<>();
@@ -155,10 +150,11 @@ public class UserEndpointTest {
 
     }
 
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void ifNoRecommendableEvents_getRecommendedEvents_shouldReturn_anyEvent() {
-        ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
+        ApplicationUser user = userService.getUserByName("Person 1");
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(new Organization())));
         List<Label> labels1 = new ArrayList<>();
         List<Label> labels2 = new ArrayList<>();

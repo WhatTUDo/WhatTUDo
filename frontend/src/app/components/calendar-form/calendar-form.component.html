@@ -4,7 +4,7 @@
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
   <span *ngIf="calendar">Calendar: {{calendar.name}}</span>
 </div>
-<div class="centered-two-third" *ngIf="calendar">
+<div *ngIf="calendar" class="centered-two-third">
   <div>
     <h2>Update Calendar</h2>
     <h3>Calendar Information</h3>
@@ -14,7 +14,7 @@
       <!--          <option *ngFor="let org of this.organizations" value="{{org.id}}">{{org.name}}</option>-->
       <!--        </select>-->
       <label for="calendar.name">Name</label>
-      <input class="form-control " id="calendar.name" placeholder="name" [(ngModel)]="calendar.name">
+      <input [(ngModel)]="calendar.name" class="form-control " id="calendar.name" placeholder="name">
 
     </div>
     <div class="form-group">
@@ -24,21 +24,21 @@
     <h3>Organizations</h3>
     <div class="organization-list">
       <p>You can select one or more Organizations if you are at least a Member in any of them. </p>
-      <div class="form-container">
+      <div class="mat-form-container">
         <div class="mat-select-container">
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Organizations</mat-label>
-            <mat-select multiple id="organization-select" [(ngModel)]="calendar.organizationIds"
-                        [compareWith]="compare">
+            <mat-select [(ngModel)]="calendar.organizationIds" [compareWith]="compare" id="organization-select"
+                        multiple>
               <mat-option *ngFor="let org of this.organizations" [(value)]="org.id">
                 {{org.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        <button class="update button-clickable always-black full-width-form-button no-hover-enlarge no-shadow"
-                title="Update calendar"
-                (click)="onSubmit()">
+        <button (click)="onSubmit()"
+                class="update button-clickable always-black full-width-form-button no-hover-enlarge no-shadow"
+                title="Update calendar">
           Submit
         </button>
       </div>

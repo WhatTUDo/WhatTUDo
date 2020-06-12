@@ -8,8 +8,10 @@ import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {FeedbackService} from "../../services/feedback.service";
-import {MatDatetimepickerModule} from "@mat-datetimepicker/core";
-import {NgxMatDatetimePickerModule, NgxMatDateAdapter} from "@angular-material-components/datetime-picker";
+import {CollisionResponse} from "../../dtos/collision-response";
+import {EventCollisionService} from "../../services/event-collision.service";
+import {Label} from '../../dtos/label';
+import {LabelService} from '../../services/label.service';
 
 @Component({
   selector: 'app-event-form',
@@ -19,6 +21,12 @@ import {NgxMatDatetimePickerModule, NgxMatDateAdapter} from "@angular-material-c
 export class EventFormComponent implements OnInit {
   editableCalendars: Calendar[] = [];
 
+  labels: Array<Label>;
+  label: Label;
+  label2: Label;
+  ev_id: number;
+  labelspicked: Array<Label>;
+  selectedLabel: Label;
   isUpdate: Boolean = false;
   showFeedback: Boolean = false;
 
@@ -26,10 +34,13 @@ export class EventFormComponent implements OnInit {
     showSeconds: 0,
     stepHour: 1,
     stepMinute: 5
-
   }
 
-  event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
+  event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null, null, null, null);
+  title: String = "NEW EVENT"
+
+  conflictExists: boolean = false;
+
   reactiveEventForm = new FormGroup({
     id: new FormControl(''),
     calendarId: new FormControl(''),
@@ -37,11 +48,14 @@ export class EventFormComponent implements OnInit {
     startDate: new FormControl(''),
     endDate: new FormControl(''),
     location: new FormControl(''),
-    labels: new FormControl('')
+    labelspicked: new FormControl('')
   });
+  faChevronLeft = faChevronLeft;
+  collisionResponse: CollisionResponse;
 
   constructor(
     private eventService: EventService,
+    private eventCollisionService: EventCollisionService,
     private calendarService: CalendarService,
     private feedbackService: FeedbackService,
     private route: ActivatedRoute) {
@@ -51,13 +65,64 @@ export class EventFormComponent implements OnInit {
         if (event) {
           this.event = event;
           this.isUpdate = true;
+          this.title = "UPDATE EVENT";
+          this.getEventLabels(id);
+          this.ev_id = id;
         }
       });
+    } else {
+      this.labelspicked = [];
+    }
+    const calendarId = +this.route.snapshot.queryParamMap?.get('calendarId');
+    if (calendarId) {
+      this.event.calendarId = calendarId;
     }
     this.getAllEditableCalendars()
   }
 
   ngOnInit(): void {
+
+    this.getAllLabels();
+  }
+
+  getEvent(): void {
+    const id = +this.route.snapshot.paramMap.get('id');
+    this.eventService.getEvent(id)
+      .subscribe(event => this.event = event);
+  }
+
+  getAllLabels() {
+
+    this.eventService.getAllLabels().subscribe(labels => {
+      this.labels = labels;
+    });
+  }
+
+  getEventLabels(id: number) {
+
+    this.eventService.getEventLabels(id).subscribe(labelspicked => {
+      this.labelspicked = labelspicked;
+    });
+  }
+
+  initNewLabelsSelect() {
+
+    labelspicked => {
+      this.labelspicked = [];
+    };
+  }
+
+
+  onSelect(label: Label): void {
+
+
+    this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
+    this.labelspicked.push(label);
+
+  }
+
+  onRemove(label: Label): void {
+    this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
   }
 
   onSubmit() {
@@ -72,6 +137,7 @@ export class EventFormComponent implements OnInit {
             console.log("Updated event: " + response);
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
+            this.eventService.addLabels(this.ev_id, this.labelspicked);
           },
           err => {
             console.warn(err);
@@ -84,7 +150,7 @@ export class EventFormComponent implements OnInit {
             this.feedbackService.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
 
-            this.eventService.addLabels(1, [1]);
+            this.eventService.addLabels(response.id, this.labelspicked);
           },
           err => {
             console.warn(err);
@@ -141,10 +207,26 @@ export class EventFormComponent implements OnInit {
   getAllEditableCalendars() {
     this.calendarService.getAllCalendars().subscribe((calendars: Calendar[]) => {
       this.editableCalendars = calendars;
-    }) //FIXME: Make me to fetch only editable calendars.
+      // this.editableCalendars = calendars.filter(cal => cal.canEdit);
+      // if (this.editableCalendars) {
+      //   this.feedbackService.displayWarning('Heads up!', 'You have no permission to any calendar. Therefore, you cannot create any new events.')
+      // }
+    })
   }
 
-  faChevronLeft = faChevronLeft;
 
+  getEventConflicts() {
+    if (this.event.startDateTime && this.event.endDateTime) {
+      this.eventCollisionService.getEventCollisions(this.event).subscribe((collisionResponse) => {
+        this.collisionResponse = collisionResponse
+        this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
+      });
+    }
+  }
 
+  updateFromConflictResolver(dates: Date[]) {
+    this.event.startDateTime = dates[0];
+    this.event.endDateTime = dates[1];
+    this.conflictExists = false;
+  }
 }

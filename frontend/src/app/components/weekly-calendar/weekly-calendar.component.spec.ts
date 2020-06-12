@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { WeeklyCalendarComponent } from './weekly-calendar.component';
+import {WeeklyCalendarComponent} from './weekly-calendar.component';
 
 describe('WeeklyCalendarComponent', () => {
   let component: WeeklyCalendarComponent;
@@ -8,9 +8,9 @@ describe('WeeklyCalendarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WeeklyCalendarComponent ]
+      declarations: [WeeklyCalendarComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

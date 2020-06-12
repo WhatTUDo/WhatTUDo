@@ -12,12 +12,14 @@ public class OrganizationMembership {
     private OrganizationMembershipKey id;
 
     @NonNull
+    @ToString.Exclude
     @ManyToOne
     @MapsId("organization_id")
     @JoinColumn(name = "organization_id")
     private Organization organization;
 
     @NonNull
+    @ToString.Exclude
     @ManyToOne
     @MapsId("user_id")
     @JoinColumn(name = "user_id")

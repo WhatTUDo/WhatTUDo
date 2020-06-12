@@ -13,18 +13,17 @@ export class EventLocationComponent implements OnInit {
 
   @Output() locationSaved = new EventEmitter<Location>();
   @Input() location: Location;
-
-  constructor(private eventService: EventService,
-              private sanitizer: DomSanitizer) {
-  }
-
   searchComplete = false
   addressSelected = false;
   selectionComplete = false;
   public searchResults: Array<any>;
   public selectedLocation: Location;
   public previewURL: SafeResourceUrl;
+  faMapMarked = faMapMarked;
 
+  constructor(private eventService: EventService,
+              private sanitizer: DomSanitizer) {
+  }
 
   ngOnInit(): void {
   }
@@ -68,6 +67,4 @@ export class EventLocationComponent implements OnInit {
     console.log(previewString);
     this.previewURL = this.sanitizer.bypassSecurityTrustResourceUrl(previewString)
   }
-
-  faMapMarked = faMapMarked;
 }

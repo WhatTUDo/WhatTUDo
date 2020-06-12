@@ -13,6 +13,9 @@ import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ public abstract class CalendarMapper {
     @Autowired protected OrganizationRepository organizationRepository;
     @Autowired protected CalendarRepository calendarRepository;
     @Autowired protected EventRepository eventRepository;
+    @Autowired protected PermissionEvaluator permissionEvaluator;
 
     public abstract CalendarDto calendarToCalendarDto(Calendar calendar);
 
@@ -39,6 +43,13 @@ public abstract class CalendarMapper {
             .orElseThrow(() -> new NotFoundException("This calendar does not exist in the database"));
 
         calendarDto.setEventIds(calEntity.getEvents().stream().map(Event::getId).collect(Collectors.toList()));
+    }
+
+    @BeforeMapping
+    protected void mapPermissions(Calendar calendar, @MappingTarget CalendarDto calendarDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        calendarDto.setCanEdit(permissionEvaluator.hasPermission(authentication, calendar, "MOD"));
+        calendarDto.setCanDelete(permissionEvaluator.hasPermission(authentication, calendar, "MOD"));
     }
 
     public abstract Calendar calendarCreateDtoToCalendar(CalendarCreateDto calendarCreateDto);

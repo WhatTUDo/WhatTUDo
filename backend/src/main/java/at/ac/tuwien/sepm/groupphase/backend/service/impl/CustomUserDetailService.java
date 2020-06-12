@@ -23,13 +23,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
@@ -154,15 +157,37 @@ public class CustomUserDetailService implements UserService {
         }
     }
 
+
     @Override
-    public Integer getUserId(String name) {
-        Optional<ApplicationUser> found = userRepository.findByName(name);
+    public ApplicationUser getUserByName(String name) throws ServiceException {
+   try {   Optional<ApplicationUser> found = userRepository.findByName(name);
         if (found.isEmpty()) {
             throw new NotFoundException("user not found");
         }
-        return found.get().getId();
+        return found.get();
+   }catch (PersistenceException | IllegalArgumentException e){
+       throw new ServiceException(e.getMessage());
+   }
     }
 
+    @Transactional
+    @Override
+    public List<Organization> getUserOrganizations(Integer userId) throws ServiceException {
+        try {
+            ApplicationUser applicationUser = userRepository.getOne(userId);
+            Set<OrganizationMembership> organizationMemberships = applicationUser.getMemberships();
+            List<Organization> organizations = new ArrayList<>();
+            for (OrganizationMembership o : organizationMemberships) {
+                organizations.add(o.getOrganization());
+            }
+            return organizations;
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+
+    }
+
+    @Transactional
     @Override
     public List<Event> getRecommendedEvents(Integer userId) {
 

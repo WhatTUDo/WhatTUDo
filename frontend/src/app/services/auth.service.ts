@@ -5,6 +5,8 @@ import {HttpClient} from '@angular/common/http';
 import {tap} from 'rxjs/operators';
 import * as jwt_decode from 'jwt-decode';
 import {Globals} from '../global/globals';
+import {User} from '../dtos/user';
+import {Organization} from '../dtos/organization';
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +63,11 @@ export class AuthService {
     return 'UNDEFINED';
   }
 
+  getUser(): Observable<User> | null {
+    if (this.isLoggedIn()) return this.httpClient.get<User>(this.globals.backendUri + "users/user");
+    else return null;
+  }
+
   private setToken(authResponse: string) {
     localStorage.setItem('authToken', authResponse);
   }
@@ -76,9 +83,4 @@ export class AuthService {
     date.setUTCSeconds(decoded.exp);
     return date;
   }
-
-  getUserId(): Observable<number>{
-    return this.httpClient.get<number>(this.globals.backendUri+"users/user");
-  }
-
 }

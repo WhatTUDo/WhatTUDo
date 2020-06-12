@@ -3,10 +3,13 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.IncomingUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.OrganizationMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.UserMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationRole;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.security.PermitAll;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +48,7 @@ public class UserEndpoint {
     private final EventService eventService;
     private final UserMapper userMapper;
     private final EventMapper eventMapper;
+    private final OrganizationMapper organizationMapper;
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
 
@@ -122,17 +127,41 @@ public class UserEndpoint {
         }
     }
 
+
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping("/user")
-    public Integer getUserId() {
-        log.info("get user id");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if ((authentication instanceof AnonymousAuthenticationToken)) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "some message");
+    @ApiOperation(value = "Get logged user", authorizations = {@Authorization(value = "apiKey")})
+    public LoggedInUserDto getLoggedUser() {
+        try {
+            log.info("get current user");
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if ((authentication instanceof AnonymousAuthenticationToken)) {
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "some message");
+            }
+            return userMapper.applicationUserToUserDto(userService.getUserByName(authentication.getName()));
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
-        String currentUserName = authentication.getName();
-        return userService.getUserId(currentUserName);
+    }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @GetMapping("/organizations/{id}")
+    @ApiOperation(value = "Get organization user is member", authorizations = {@Authorization(value = "apiKey")})
+    public List<OrganizationDto> getOrganizationOfUser(@PathVariable(value = "id") Integer userId) {
+        try {
+            log.info("get organizations of user with id {}",userId);
+            List<OrganizationDto> organizationDtos = new ArrayList<>();
+            List<Organization> organizations = userService.getUserOrganizations(userId);
+            for (Organization o: organizations
+                 ) {
+               organizationDtos.add( organizationMapper.organizationToOrganizationDto(o));
+            }
+            return organizationDtos;
+        }catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
     }
 
 
@@ -158,7 +187,7 @@ public class UserEndpoint {
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
+            return null;
         }
     }
 }

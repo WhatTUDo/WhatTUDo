@@ -48,8 +48,9 @@ public class EventEndpoint {
     private final LabelMapper labelMapper;
 
 
-    @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
+    //@PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
     @CrossOrigin
+    @Transactional
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
@@ -65,7 +66,7 @@ public class EventEndpoint {
         }
     }
 
-    //@PreAuthorize("hasPermission(#event, 'MEMBER')")
+   // @PreAuthorize("hasPermission(#event, 'MEMBER')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -151,8 +152,25 @@ public class EventEndpoint {
         }
     }
 
+
     //@PreAuthorize("hasPermission(#eventDto, 'MOD')")
     @Transactional
+    @DeleteMapping(value = "/{id}/labels")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Remove Labels from an Event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto removeLabelsFromEvent(@PathVariable(value = "id") Integer eventId, @RequestParam(value = "labelId") List<Integer> labelIds) {
+        try {
+            Collection<Label> labels = labelIds.stream().map(labelService::findById).collect(Collectors.toList());
+            Event event = eventService.removeLabels(eventService.findById(eventId), labels);
+            return eventMapper.eventToEventDto(event);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    //@PreAuthorize("hasPermission(#eventDto, 'MOD')")
+  /**  @Transactional
     @PutMapping(value = "/{id}/labels")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -165,7 +183,26 @@ public class EventEndpoint {
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
+    }**/
+
+    //@PreAuthorize("hasPermission(#eventDto, 'MOD')")
+    @Transactional
+    @PutMapping(value = "/{id}/labels")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Update Labels of an Event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto updateLabelsOfEvent(@PathVariable(value = "id") Integer eventId, @RequestBody List<Label> labels) {
+        try {
+
+            Event event = eventService.updateLabels(eventService.findById(eventId), labels);
+            return eventMapper.eventToEventDto(event);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
     }
+
+
+
 
 
     @Transactional

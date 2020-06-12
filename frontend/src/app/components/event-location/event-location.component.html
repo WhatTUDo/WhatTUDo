@@ -1,27 +1,27 @@
 <h3>Location</h3>
 <div class="map-container">
-  <div class="map-preview-placeholder" *ngIf="!this.addressSelected">
+  <div *ngIf="!this.addressSelected" class="map-preview-placeholder">
     <fa-icon [icon]="faMapMarked"></fa-icon>
   </div>
   <iframe *ngIf="this.addressSelected"
           [src]="previewURL"></iframe>
 </div>
 <form>
-  <div class="input-button-combo" [class.flat-bottom]="this.searchComplete">
+  <div [class.flat-bottom]="this.searchComplete" class="input-button-combo">
     <label for="addressSearch">Search Location</label>
-    <input type="search" name="addressSearch" id="addressSearch">
-    <button class="button-solid no-hover-enlarge" (click)="performSearch()">Search</button>
+    <input id="addressSearch" name="addressSearch" type="search">
+    <button (click)="performSearch()" class="button-solid no-hover-enlarge">Search</button>
   </div>
 </form>
 <div>
   <div *ngIf="this.searchComplete" id="location-search-results-container">
-    <div class="clickable no-hover-enlarge location-result-entry" *ngFor="let result of this.searchResults"
-         (click)="addressClicked(result)"> {{result.display_name}}</div>
+    <div (click)="addressClicked(result)" *ngFor="let result of this.searchResults"
+         class="clickable no-hover-enlarge location-result-entry"> {{result.display_name}}</div>
   </div>
 </div>
 <div *ngIf="this.addressSelected" class="selected-button-container">
-  <button *ngIf="!this.selectionComplete" class="button-green small-button"
-          (click)="saveButtonClicked()">Save Location
+  <button (click)="saveButtonClicked()" *ngIf="!this.selectionComplete"
+          class="button-green small-button">Save Location
   </button>
 </div>
 

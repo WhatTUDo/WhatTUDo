@@ -36,30 +36,29 @@ export class EventService {
     return this.httpClient.get<Array<Label>>(this.labelBaseUri);
   }
 
-  getEventLabels(id : number): Observable<Label[]> {
+  getEventLabels(id: number): Observable<Label[]> {
 
     console.log('Get event labels');
     return this.httpClient.get<Array<Label>>(this.eventBaseUri + '/' + id + '/' + 'labels');
   }
 
-  addLabels(id : number, labels : number[]) {
+  addLabels(id: number, labelselect: Array<Label>) {
 
-   console.log('add  labels');
-    return this.httpClient.put<Event>(this.eventBaseUri + '/' + id + '/' + 'labels', {
-      params: {
-        labelId: '1'
-      }});
+    console.log('add  labels');
+    console.log(id);
+    return this.httpClient.put<Event>(this.eventBaseUri + '/' + id + '/' + 'labels', labelselect)
+    .subscribe(response => {
+      console.log(response);
+    });
 
 
   }
 
-  getMultiplEvents(name: string, from: Date, to: Date): Observable<Array<CalendarEvent>> {
-    console.log("Load Multiple events: ");
-    let uriEncodedName = encodeURI(name);
+  getMultipleEvents(from: Date, to: Date): Observable<Array<CalendarEvent>> {
     let uriEncodedStartDate = encodeURI(from.toISOString());
     let uriEncodedEndDate = encodeURI(to.toISOString());
 
-    let url = this.eventBaseUri + "?name=" + uriEncodedName + "&from=" + uriEncodedStartDate + "&to=" + uriEncodedEndDate;
+    let url = this.eventBaseUri + "?from=" + uriEncodedStartDate + "&to=" + uriEncodedEndDate;
     return this.httpClient.get<Array<CalendarEvent>>(url);
 
   }
@@ -70,7 +69,7 @@ export class EventService {
    */
   getEvent(id: number): Observable<CalendarEvent> {
     console.log("Load Event with ID", id);
-     return this.httpClient.get<CalendarEvent>(this.eventBaseUri + '/' + id);
+    return this.httpClient.get<CalendarEvent>(this.eventBaseUri + '/' + id);
     // return null;
   }
 
@@ -145,7 +144,7 @@ export class EventService {
    * If the event ends on the same day, the end date will be omitted, so that the date is only printed on time.
    * @param event with correct startDateTime and endDateTime.
    */
-  getEventDateAndTimeString(event: CalendarEvent) {
+  public getEventDateAndTimeString(event: CalendarEvent) {
     const startDateTime: Date = new Date(event.startDateTime);
     const endDateTime: Date = new Date(event.endDateTime);
     const endsOnTheSameDay = (startDateTime.toDateString() == endDateTime.toDateString())
@@ -170,7 +169,7 @@ export class EventService {
    * Used if the date is denoted already.
    * @param event
    */
-  getDisplayTimeString(event: CalendarEvent) {
+  public getDisplayTimeString(event: CalendarEvent) {
     let string = event.startDateTime.toLocaleTimeString('en-US', {
       hour: 'numeric',
       minute: 'numeric'
@@ -181,5 +180,9 @@ export class EventService {
       minute: 'numeric'
     }).replace(":00", "")
     return string
+  }
+
+  public getDuration(event: CalendarEvent){
+    return event.endDateTime.valueOf() - event.startDateTime.valueOf();
   }
 }

@@ -24,10 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -103,7 +103,7 @@ public class CalendarEndpoint {
     }
 
 
-    // @PreAuthorize("hasPermission(#calendar, 'MOD')")
+    @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -121,7 +121,7 @@ public class CalendarEndpoint {
         }
     }
 
-   // @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
+    @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")
@@ -134,11 +134,11 @@ public class CalendarEndpoint {
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
-//    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
+    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
     @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)

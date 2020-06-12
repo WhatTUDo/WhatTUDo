@@ -15,15 +15,14 @@ export class EventCommentComponent implements OnInit {
 
   public author: string;
   public rating: number;
-
-  constructor(eventService: EventService) {
-  }
-
   faThumbsUp = faThumbsUp;
   faThumbsDown = faThumbsDown;
   faUserCircle = faUserCircle;
   faReply = faReply;
   faClock = faClock;
+
+  constructor(eventService: EventService) {
+  }
 
   ngOnInit(): void {
     this.author = "Testguy";

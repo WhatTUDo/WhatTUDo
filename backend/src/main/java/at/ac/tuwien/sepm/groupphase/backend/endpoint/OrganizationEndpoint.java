@@ -1,8 +1,11 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.OrganizationMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.UserMapper;
+import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
@@ -18,9 +21,11 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Collection;
@@ -35,6 +40,7 @@ public class OrganizationEndpoint {
     static final String BASE_URL = "/organizations";
     private final OrganizationService organizationService;
     private final OrganizationMapper organizationMapper;
+    private final UserMapper userMapper;
     private final CalendarService calendarService;
 
 
@@ -98,7 +104,7 @@ public class OrganizationEndpoint {
         try {
             return organizationMapper.organizationToOrganizationDto(organizationService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e); //Fixed: No this should return a 404!
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
@@ -150,5 +156,24 @@ public class OrganizationEndpoint {
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
+    }
+
+    @PreAuthorize("permitAll()")
+    @GetMapping("/members/{id}")
+    @CrossOrigin
+    @ApiOperation(value = "get organization members", authorizations = {@Authorization(value = "apiKey")})
+    public List<LoggedInUserDto> getOrganizationMembers(@PathVariable(value = "id") Integer orgaId){
+        try{
+            log.info("get members of organization with id {}",orgaId);
+            List<LoggedInUserDto> userDtos = new ArrayList<>();
+            List<ApplicationUser> users = organizationService.getMembers(orgaId);
+            for (ApplicationUser user : users){
+                userDtos.add(userMapper.applicationUserToUserDto(user));
+            }
+            return userDtos;
+        }catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(),e );
+        }
+
     }
 }

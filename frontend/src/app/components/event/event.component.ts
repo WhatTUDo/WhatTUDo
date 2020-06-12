@@ -6,11 +6,12 @@ import {Label} from '../../dtos/label';
 import {EventService} from '../../services/event.service';
 import {LabelService} from '../../services/label.service';
 import {ActivatedRoute} from '@angular/router';
-
-import {faChevronLeft, faExternalLinkSquareAlt, faTag} from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faExternalLinkSquareAlt, faTag, faCog} from '@fortawesome/free-solid-svg-icons';
 import {AttendanceStatusService} from '../../services/attendance-status.service';
 import {AuthService} from '../../services/auth.service';
 import {AttendanceDto} from '../../dtos/AttendanceDto';
+import {User} from "../../dtos/user";
+import {FeedbackService} from "../../services/feedback.service";
 
 @Component({
   selector: 'app-event',
@@ -21,31 +22,31 @@ export class EventComponent implements OnInit {
 
 
   id: number;
-  user: number;
+  user: User = null;
   labels: Array<Label>;
-
-
-  constructor(private eventService: EventService, private labelService: LabelService,
-              private attendanceStatusService: AttendanceStatusService, private authService: AuthService,
-              private route: ActivatedRoute) {
-    let id: number = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadCalendarEvent(id);
-    this.authService.getUserId().subscribe((userid: number) => {
-      this.user = userid;
-    }, err => {
-      console.warn(err);
-    });
-
-
-  }
-
   public calendarEvent: CalendarEvent;
-  public eventTimeString: string = 'Event Time';
-   participants: any = {
+  participants: any = {
     'attending': [],
     'interested': [],
     'declined': []
   };
+  faChevronLeft = faChevronLeft;
+  faTag = faTag;
+  faExternalLinkSquareAlt = faExternalLinkSquareAlt;
+  faCog = faCog;
+
+  constructor(private eventService: EventService, private labelService: LabelService,
+              private feedbackService: FeedbackService,
+              private attendanceStatusService: AttendanceStatusService, private authService: AuthService,
+              private route: ActivatedRoute) {
+    let id: number = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadCalendarEvent(id);
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe((user) => {
+        this.user = user;
+      });
+    }
+  }
 
   ngOnInit(): void {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
@@ -54,68 +55,39 @@ export class EventComponent implements OnInit {
 
   }
 
-  /**
-   * Loads Event with ID from Service.
-   * @param id
-   */
-  private loadCalendarEvent(id: number) {
-    this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
-      this.calendarEvent = event;
-      let location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 12.1234, 13.9876);
-      this.calendarEvent.comments = this.getComments();
-      this.calendarEvent.labels = this.getLabels();
-      this.calendarEvent.location = location;
-      this.calendarEvent.description = 'yololo';
-      this.participants = this.getParticipants();
-    }, err => {
-      alert(err.message);
-    });
-  }
-
   public getEventDateAndTimeString() {
     return this.eventService.getEventDateAndTimeString(this.calendarEvent);
   }
 
-  private deleteEvent() {
-    this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
-      console.log('Event deleted');
-    }, error => {
-      // display Error.
-    });
-  }
-
-
   public participate(status: number) {
+    if (!this.authService.isLoggedIn()) {
+      this.feedbackService.displayWarning(`Login Required.`, 'You can only do this after you logged in.');
+      return;
+    }
     switch (status) {
       case 0:
         console.log(this.user);
         console.log(this.id);
-        this.attendanceStatusService.create(new AttendanceDto(this.user, this.id, 0)).subscribe((attendance) => {
+        this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 0)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
-          }, err => {
-            alert(err.message);
           }
         );
         console.log('You declined!');
         break;
       case 1:
-        this.attendanceStatusService.create(new AttendanceDto(this.user, this.id, 1)).subscribe((attendance) => {
+        this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 1)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
-          }, err => {
-            alert(err.message);
           }
         );
 
         console.log('You are attending!');
         break;
       case 2:
-        this.attendanceStatusService.create(new AttendanceDto(this.user, this.id, 2)).subscribe((attendance) => {
+        this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 2)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
-          }, err => {
-            alert(err.message);
           }
         );
         console.log('You are interested!');
@@ -136,6 +108,46 @@ export class EventComponent implements OnInit {
         console.log('Could not read comment!');
       }
     }
+  }
+
+  getAllLabels() {
+
+    this.eventService.getAllLabels().subscribe(labels => {
+      this.labels = labels;
+    });
+  }
+
+  getEventLabels(id: number) {
+
+    this.eventService.getEventLabels(this.id).subscribe(labels => {
+      this.labels = labels;
+    });
+  }
+
+  /**
+   * Loads Event with ID from Service.
+   * @param id
+   */
+  private loadCalendarEvent(id: number) {
+    this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
+      this.calendarEvent = event;
+      let location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 12.1234, 13.9876);
+      this.calendarEvent.comments = this.getComments();
+      this.calendarEvent.labels = this.getLabels();
+      this.calendarEvent.location = location;
+      this.calendarEvent.description = 'yololo';
+      this.participants = this.getParticipants();
+    }, err => {
+      alert(err.message);
+    });
+  }
+
+  private deleteEvent() {
+    this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
+      console.log('Event deleted');
+    }, error => {
+      // display Error.
+    });
   }
 
   private getParticipants() {
@@ -174,23 +186,4 @@ export class EventComponent implements OnInit {
 
     return array;
   }
-
-  getAllLabels() {
-
-    this.eventService.getAllLabels().subscribe(labels => {
-      this.labels = labels;
-    });
-  }
-
-  getEventLabels(id: number) {
-
-    this.eventService.getEventLabels(this.id).subscribe(labels => {
-      this.labels = labels;
-    });
-  }
-
-
-  faChevronLeft = faChevronLeft;
-  faTag = faTag;
-  faExternalLinkSquareAlt = faExternalLinkSquareAlt;
 }

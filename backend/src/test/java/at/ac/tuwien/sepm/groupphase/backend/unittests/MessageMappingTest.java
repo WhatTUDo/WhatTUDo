@@ -31,22 +31,22 @@ public class MessageMappingTest implements TestData {
     @Autowired
     private MessageMapper messageMapper;
 
-    @Test
-    public void givenNothing_whenMapListWithTwoMessageEntitiesToSimpleDto_thenGetListWithSizeTwoAndAllProperties() {
-        List<Message> messages = new ArrayList<>();
-        messages.add(message);
-        messages.add(message);
-
-        List<SimpleMessageDto> simpleMessageDtos = messageMapper.messageToSimpleMessageDto(messages);
-        assertEquals(2, simpleMessageDtos.size());
-        SimpleMessageDto simpleMessageDto = simpleMessageDtos.get(0);
-        assertAll(
-            () -> assertEquals(ID, simpleMessageDto.getId()),
-            () -> assertEquals(TEST_NEWS_TITLE, simpleMessageDto.getTitle()),
-            () -> assertEquals(TEST_NEWS_SUMMARY, simpleMessageDto.getSummary()),
-            () -> assertEquals(TEST_NEWS_PUBLISHED_AT, simpleMessageDto.getPublishedAt())
-        );
-    }
+//    @Test
+//    public void givenNothing_whenMapListWithTwoMessageEntitiesToSimpleDto_thenGetListWithSizeTwoAndAllProperties() {
+//        List<Message> messages = new ArrayList<>();
+//        messages.add(message);
+//        messages.add(message);
+//
+//        List<SimpleMessageDto> simpleMessageDtos = messageMapper.messageToSimpleMessageDto(messages);
+//        assertEquals(2, simpleMessageDtos.size());
+//        SimpleMessageDto simpleMessageDto = simpleMessageDtos.get(0);
+//        assertAll(
+//            () -> assertEquals(ID, simpleMessageDto.getId()),
+//            () -> assertEquals(TEST_NEWS_TITLE, simpleMessageDto.getTitle()),
+//            () -> assertEquals(TEST_NEWS_SUMMARY, simpleMessageDto.getSummary()),
+//            () -> assertEquals(TEST_NEWS_PUBLISHED_AT, simpleMessageDto.getPublishedAt())
+//        );
+//    }
 
 
 }
