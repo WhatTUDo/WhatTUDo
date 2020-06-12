@@ -5,6 +5,7 @@ import {Globals} from '../global/globals';
 import {User} from "../dtos/user";
 import md5 from "md5";
 import {Organization} from "../dtos/organization";
+import {CalendarEvent} from "../dtos/calendar-event";
 
 @Injectable({
   providedIn: 'root'
@@ -62,7 +63,17 @@ export class UserService {
     return this.httpClient.get<Organization[]>(this.globals.backendUri + "users/organizations/" + userId);
   }
 
-  getRecommendedEvent(userId: number): Observable<Event[]> {
-    return this.httpClient.get<Event[]>(this.globals.backendUri + "users/recommendedEvent/" + userId);
+  getRecommendedEvents(userId: number): Observable<CalendarEvent[]> {
+    return this.httpClient.get<CalendarEvent[]>(this.globals.backendUri + "users/recommendedEvents/" + userId);
+  }
+
+  addToOrganizationWithRole(userId: number, organizationId: number, role: string): Observable<User> {
+    return this.httpClient.delete<User>(
+      this.globals.backendUri + `users/${userId}/roles?orgaId=${organizationId}&role=${role}`
+    );
+  }
+
+  removeFromOrganization(userId: number, organizationId: number): Observable<User> {
+    return this.httpClient.delete<User>(this.globals.backendUri + `users/${userId}/roles?orgaId=${organizationId}`);
   }
 }

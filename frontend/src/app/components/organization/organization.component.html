@@ -19,12 +19,12 @@
     </div>
     <p></p>
     <div class="organization-action-container">
-      <a href="/form/organization/{{organization.id}}">
+      <a routerLink="/form/organization/{{organization.id}}">
         <div *ngIf="organization.canEdit" class="organization-action clickable no-hover-enlarge no-shadow">
           Edit team
         </div>
       </a>
-      <div *ngIf="organization.canDelete" class="organization-action dangerous clickable no-hover-enlarge no-shadow">
+      <div *ngIf="organization.canDelete" (click)="deleteOrganization(organization.id)" class="organization-action dangerous clickable no-hover-enlarge no-shadow">
         Dissolve team
       </div>
     </div>

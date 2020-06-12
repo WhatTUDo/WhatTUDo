@@ -91,7 +91,7 @@ export class OrganizationComponent implements OnInit {
         this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
           this.organizationCalendars.push(cal);
         })
-        this.organizationService.getMembers(organization.id).subscribe((users: User[])=>{
+        this.organizationService.getMembers(organization.id).subscribe((users: User[]) => {
           this.organizationMembers = users;
         })
       }
@@ -100,5 +100,12 @@ export class OrganizationComponent implements OnInit {
 
   getGravatarLink(email, size) {
     return this.userService.getGravatarLink(email, size);
+  }
+
+  deleteOrganization(id: number) {
+    if (confirm(`You are deleting organization "${this.organization.name}". Are you sure?`)) {
+      this.organizationService.deleteOrganization(id).subscribe(organization => {
+      })
+    }
   }
 }

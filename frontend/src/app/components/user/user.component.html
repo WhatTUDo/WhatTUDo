@@ -14,16 +14,17 @@
       </div>
     </div>
     <div class="user-organization-list">
-      <div *ngFor="let org of userInOrganizations" class="user-organization clickable no-hover-enlarge no-shadow"
-           routerLink="/organization/{{org.id}}">
-        <img alt="" class="avatar avatar-small" src="https://picsum.photos/256/256/">
-        <div class="user-organization-details">
+      <div *ngFor="let org of userInOrganizations" class="user-organization">
+        <img alt="" class="avatar avatar-small clickable no-hover-enlarge no-shadow"
+             src="https://picsum.photos/256/256/" routerLink="/organization/{{org.id}}">
+        <div class="user-organization-details clickable no-hover-enlarge no-shadow"
+             routerLink="/organization/{{org.id}}">
           <div class="user-organization-name">{{org.name}}</div>
           <!--          <div class="user-organization-role">{{org.role}}</div>-->
         </div>
-<!--        <div class="clickable no-hover-enlarge no-shadow user-exit-organization-button">-->
-<!--          <fa-icon [icon]="faSignOutAlt"></fa-icon>-->
-<!--        </div>-->
+        <div class="clickable no-hover-enlarge no-shadow user-exit-organization-button">
+          <fa-icon (click)="removeSelfFromOrg(org.id)" [icon]="faSignOutAlt"></fa-icon>
+        </div>
       </div>
     </div>
     <div class="user-action-container">

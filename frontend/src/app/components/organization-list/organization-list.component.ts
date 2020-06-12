@@ -31,21 +31,17 @@ export class OrganizationListComponent implements OnInit {
   }
 
   onClickedDelete(id: number) {
-    this.organizationService.deleteOrganization(id).subscribe(deletedID => {
-      this.organizations = this.organizations.filter(elem => elem.id != deletedID);
-      alert("Deleted Organization with id: " + deletedID);
-    }, error => {
-      console.warn(error);
-      alert(error.error.message);
-    });
+    if (confirm(`You are deleting organization "${this.organizations.find(o => o.id === id).name}". Are you sure?`)) {
+      this.organizationService.deleteOrganization(id).subscribe(deletedID => {
+        this.organizations = this.organizations.filter(elem => elem.id != deletedID);
+        alert("Deleted Organization with id: " + deletedID);
+      });
+    }
   }
 
   private getOrganizations() {
     this.organizationService.getAll().subscribe(organizations => {
         this.organizations = organizations;
-      },
-      error => {
-        console.warn(error);
       })
   }
 

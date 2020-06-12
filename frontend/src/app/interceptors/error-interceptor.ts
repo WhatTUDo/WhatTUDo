@@ -34,16 +34,16 @@ export class ErrorInterceptor implements HttpInterceptor {
             switch (error.status) {
               case 400:
               case 405:
-                this.feedbackService.displayError(`Oops. This should not have happened. (${error.status})`, 'We are not sending a correct request to the server. Contact us, we are glad to fix this.');
+                this.feedbackService.displayError(`Oops. This should not have happened. (${error.status})`, `We are not sending a correct request to the server. Contact us, we are glad to fix this.\n${error.message}`);
                 break
               case 401:
-                this.feedbackService.displayError(`Login Required. (${error.status})`, 'You can only do this after you logged in.');
+                this.feedbackService.displayError(`Login Required. (${error.status})`, `You can only do this after you logged in.\n${error.message}`);
                 break
               case 403:
-                this.feedbackService.displayError(`Permission Denied. (${error.status})`, 'You are not allow to do that.');
+                this.feedbackService.displayError(`Permission Denied. (${error.status})`, `You are not allow to do that.\n${error.message}`);
                 break
               case 404:
-                this.feedbackService.displayError(`This does not exist. (${error.status})`, 'We cannot find what you are looking for in our database.');
+                this.feedbackService.displayError(`This does not exist. (${error.status})`, `We cannot find what you are looking for in our database.\n${error.message}`);
                 break
               default:
                 this.feedbackService.displayServerError(error);

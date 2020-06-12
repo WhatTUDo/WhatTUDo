@@ -49,4 +49,11 @@ export class UserComponent implements OnInit {
   getGravatarLink(email, size) {
     return this.userService.getGravatarLink(email, size);
   }
+
+  removeSelfFromOrg(orgId: number) {
+    if (confirm(`You are leaving "${this.userInOrganizations.find(o => o.id === orgId).name}". Are you sure?`)) {
+      this.userService.removeFromOrganization(this.user.id, orgId).subscribe((user) => {
+      })
+    }
+  }
 }
