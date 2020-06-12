@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {CalendarService} from '../../services/calendar.service';
 import {Calendar} from '../../dtos/calendar';
-import {CalendarRepresentation} from '../../dtos/calendar-representation';
 import {Router} from '@angular/router';
 import {faChevronLeft, faCog, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {OrganizationService} from '../../services/organization.service';
@@ -15,9 +14,8 @@ import {Organization} from '../../dtos/organization';
   styleUrls: ['./calendar-list.component.scss']
 })
 export class CalendarListComponent implements OnInit {
-  list: Calendar[] = [];
-  list2: CalendarRepresentation[] = [];
-  mapCalOrg = new Map<number, Organization[]>();
+  calendars: Calendar[] = [];
+  organizationsMap: Map<number, Organization> = new Map();
   searchForm = new FormGroup({
     name: new FormControl('')
   });
@@ -32,30 +30,15 @@ export class CalendarListComponent implements OnInit {
     this.getAllCalendars();
   }
 
-  getAllCalendars() {
-    this.calendarService.getAllCalendars().subscribe((list) => {
-        this.list = list;
-        this.list2 = [];
-
-        for (let e of list) {
-          let listOrg: Organization[] = [];
-          for (let a of e.organizationIds) {
-            this.organizationService.getById(a).subscribe((organization: Organization) => {
-                if (organization != null) {
-                  listOrg.push(organization);
-                }
-              },
-              err => {
-                console.warn(err);
-              })
-          }
-          this.mapCalOrg.set(e.id, listOrg);
-          this.list2.push(new CalendarRepresentation(e.id, e.name, listOrg));
-        }
-      },
-      err => {
-        alert(err.message);
-      });
+  async getAllCalendars() {
+    this.calendars = await this.calendarService.getAllCalendars().toPromise();
+    let organizationIdSet = new Set<number>();
+    this.calendars.forEach(cal => {
+      cal.organizationIds.forEach(id => organizationIdSet.add(id));
+    })
+    for (const id of organizationIdSet) {
+      this.organizationsMap.set(id, await this.organizationService.getById(id).toPromise())
+    }
   }
 
   ngOnInit(): void {
@@ -67,24 +50,7 @@ export class CalendarListComponent implements OnInit {
     if (validationIsPassed) {
       // submit to service
       console.log("search");
-      this.calendarService.searchCalendars(formValue.name).subscribe((list) => {
-          this.list = list;
-          this.list2 = [];
-          for (let e of list) {
-            let listOrg: Organization[] = [];
-            for (let a of e.organizationIds) {
-              this.organizationService.getById(a).subscribe((organization: Organization) => {
-                listOrg.push(organization);
-              });
-            }
-            this.mapCalOrg.set(e.id, listOrg);
-            this.list2.push(new CalendarRepresentation(e.id, e.name, listOrg));
-          }
-
-        },
-        err => {
-          alert(err.message);
-        });
+      this.getAllCalendars();
     }
   }
 
@@ -118,16 +84,16 @@ export class CalendarListComponent implements OnInit {
     }
     this.calendarService.addCalendar({name, eventIds, organizationIds} as Calendar)
       .subscribe(newcalendar => {
-        this.list2.push(new CalendarRepresentation(newcalendar.id, newcalendar.name, this.mapCalOrg.get(newcalendar.id)));
         this.getAllCalendars();
       });
   }
 
   delete(id: number): void {
-
-    this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
-      this.getAllCalendars();
-    });
+    if (confirm(`You are deleting calendar "${this.calendars.find(c => c.id === id).name}". Are you sure?`)) {
+      this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
+        this.getAllCalendars();
+      });
+    }
   }
 }
 

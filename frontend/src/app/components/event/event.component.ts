@@ -6,8 +6,7 @@ import {Label} from '../../dtos/label';
 import {EventService} from '../../services/event.service';
 import {LabelService} from '../../services/label.service';
 import {ActivatedRoute} from '@angular/router';
-
-import {faChevronLeft, faExternalLinkSquareAlt, faTag} from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faExternalLinkSquareAlt, faTag, faCog} from '@fortawesome/free-solid-svg-icons';
 import {AttendanceStatusService} from '../../services/attendance-status.service';
 import {AuthService} from '../../services/auth.service';
 import {AttendanceDto} from '../../dtos/AttendanceDto';
@@ -34,6 +33,7 @@ export class EventComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faTag = faTag;
   faExternalLinkSquareAlt = faExternalLinkSquareAlt;
+  faCog = faCog;
 
   constructor(private eventService: EventService, private labelService: LabelService,
               private feedbackService: FeedbackService,

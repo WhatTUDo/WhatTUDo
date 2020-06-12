@@ -18,10 +18,12 @@
         <div>Upcoming Events: 0</div>
       </div>
       <div class="organization-buttons">
-        <fa-icon [icon]="faCog" class="clickable no-hover-enlarge no-shadow" routerLink="/form/organization/{{org.id}}">
+        <fa-icon *ngIf="org.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
+                 routerLink="/form/organization/{{org.id}}">
           Edit Calendar
         </fa-icon>
-        <fa-icon (click)="onClickedDelete(org.id)" [icon]="faTimesCircle" class="clickable no-hover-enlarge no-shadow">
+        <fa-icon *ngIf="org.canDelete" (click)="onClickedDelete(org.id)" [icon]="faTimesCircle"
+                 class="clickable no-hover-enlarge no-shadow">
           Remove Calendar
         </fa-icon>
       </div>

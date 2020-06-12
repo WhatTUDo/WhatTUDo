@@ -36,54 +36,54 @@ export class EventFormComponent implements OnInit {
     stepMinute: 5
   }
 
-  event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null);
+  event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null, null, null, null);
   title: String = "NEW EVENT"
 
-    conflictExists: boolean = false;
+  conflictExists: boolean = false;
 
-    reactiveEventForm = new FormGroup({
-        id: new FormControl(''),
-        calendarId: new FormControl(''),
-        name: new FormControl(''),
-        startDate: new FormControl(''),
-        endDate: new FormControl(''),
-        location: new FormControl(''),
-        labelspicked: new FormControl('')
-    });
-    faChevronLeft = faChevronLeft;
-    collisionResponse: CollisionResponse;
+  reactiveEventForm = new FormGroup({
+    id: new FormControl(''),
+    calendarId: new FormControl(''),
+    name: new FormControl(''),
+    startDate: new FormControl(''),
+    endDate: new FormControl(''),
+    location: new FormControl(''),
+    labelspicked: new FormControl('')
+  });
+  faChevronLeft = faChevronLeft;
+  collisionResponse: CollisionResponse;
 
-    constructor(
-        private eventService: EventService,
-        private eventCollisionService: EventCollisionService,
-        private calendarService: CalendarService,
-        private feedbackService: FeedbackService,
-        private route: ActivatedRoute) {
-        const id = +this.route.snapshot.paramMap.get('id');
-        if (id) {
-            this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
-                if (event) {
-                    this.event = event;
-                    this.isUpdate = true;
-                    this.title = "UPDATE EVENT";
-                this.getEventLabels(id);
+  constructor(
+    private eventService: EventService,
+    private eventCollisionService: EventCollisionService,
+    private calendarService: CalendarService,
+    private feedbackService: FeedbackService,
+    private route: ActivatedRoute) {
+    const id = +this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
+        if (event) {
+          this.event = event;
+          this.isUpdate = true;
+          this.title = "UPDATE EVENT";
+          this.getEventLabels(id);
           this.ev_id = id;
-            }});
-    }
-    else {
-        this.labelspicked = [];
         }
-        const calendarId = +this.route.snapshot.queryParamMap?.get('calendarId');
-        if (calendarId) {
-            this.event.calendarId = calendarId;
-        }
-        this.getAllEditableCalendars()
+      });
+    } else {
+      this.labelspicked = [];
     }
+    const calendarId = +this.route.snapshot.queryParamMap?.get('calendarId');
+    if (calendarId) {
+      this.event.calendarId = calendarId;
+    }
+    this.getAllEditableCalendars()
+  }
 
   ngOnInit(): void {
 
-   this.getAllLabels();
-    }
+    this.getAllLabels();
+  }
 
   getEvent(): void {
     const id = +this.route.snapshot.paramMap.get('id');
@@ -100,7 +100,7 @@ export class EventFormComponent implements OnInit {
 
   getEventLabels(id: number) {
 
-      this.eventService.getEventLabels(id).subscribe(labelspicked => {
+    this.eventService.getEventLabels(id).subscribe(labelspicked => {
       this.labelspicked = labelspicked;
     });
   }
@@ -113,51 +113,52 @@ export class EventFormComponent implements OnInit {
   }
 
 
-onSelect(label: Label): void {
+  onSelect(label: Label): void {
 
 
-  this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
-  this.labelspicked.push(label);
+    this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
+    this.labelspicked.push(label);
 
-}
+  }
 
-onRemove(label: Label): void {
-  this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
-}
+  onRemove(label: Label): void {
+    this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
+  }
 
   onSubmit() {
     let validationIsPassed = this.validateFormInput(this.event);
     if (validationIsPassed) {
 
 
-            // submit to eventService
-            if (this.isUpdate) {
-                this.eventService.putEvent(this.event).subscribe(response => {
-                        this.feedbackService.displaySuccess("Updated Event!", response.toString());
-                        console.log("Updated event: " + response);
-                        this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
-                        console.log(response);
-                    this.eventService.addLabels(this.ev_id, this.labelspicked);},
-                    err => {
-                        console.warn(err);
-                        this.feedbackService.displayError("Error", err.error.message);
-                    });
-            } else {
+      // submit to eventService
+      if (this.isUpdate) {
+        this.eventService.putEvent(this.event).subscribe(response => {
+            this.feedbackService.displaySuccess("Updated Event!", response.toString());
+            console.log("Updated event: " + response);
+            this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
+            console.log(response);
+            this.eventService.addLabels(this.ev_id, this.labelspicked);
+          },
+          err => {
+            console.warn(err);
+            this.feedbackService.displayError("Error", err.error.message);
+          });
+      } else {
 
         this.eventService.postEvent(this.event).subscribe(response => {
             console.log("Saved event: " + response);
             this.feedbackService.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
 
-                        this.eventService.addLabels(response.id, this.labelspicked);
-                    },
-                    err => {
-                        console.warn(err);
-                        this.feedbackService.displayError("Error", err.error.message);
-                    });
-            }
-        }
+            this.eventService.addLabels(response.id, this.labelspicked);
+          },
+          err => {
+            console.warn(err);
+            this.feedbackService.displayError("Error", err.error.message);
+          });
+      }
     }
+  }
 
   /**
    *
@@ -206,22 +207,26 @@ onRemove(label: Label): void {
   getAllEditableCalendars() {
     this.calendarService.getAllCalendars().subscribe((calendars: Calendar[]) => {
       this.editableCalendars = calendars;
-    }) //FIXME: Make me to fetch only editable calendars.
+      // this.editableCalendars = calendars.filter(cal => cal.canEdit);
+      // if (this.editableCalendars) {
+      //   this.feedbackService.displayWarning('Heads up!', 'You have no permission to any calendar. Therefore, you cannot create any new events.')
+      // }
+    })
   }
 
 
-    getEventConflicts() {
-        if (this.event.startDateTime && this.event.endDateTime) {
-            this.eventCollisionService.getEventCollisions(this.event).subscribe((collisionResponse) => {
-                this.collisionResponse = collisionResponse
-                this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
-            });
-        }
+  getEventConflicts() {
+    if (this.event.startDateTime && this.event.endDateTime) {
+      this.eventCollisionService.getEventCollisions(this.event).subscribe((collisionResponse) => {
+        this.collisionResponse = collisionResponse
+        this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
+      });
     }
+  }
 
-    updateFromConflictResolver(dates: Date[]) {
-        this.event.startDateTime = dates[0];
-        this.event.endDateTime = dates[1];
-        this.conflictExists = false;
-    }
+  updateFromConflictResolver(dates: Date[]) {
+    this.event.startDateTime = dates[0];
+    this.event.endDateTime = dates[1];
+    this.conflictExists = false;
+  }
 }
