@@ -3,6 +3,7 @@ import {CalendarEvent} from '../../dtos/calendar-event';
 
 import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-weekly-calendar',
@@ -34,14 +35,19 @@ export class WeeklyCalendarComponent implements OnInit {
   viewMinRows = 8;
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
+
+  dateLocale: string;
+
   faChevronUp = faChevronUp;
   faChevronDown = faChevronDown;
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
 
   constructor(
-    private eventService: EventService
+    private eventService: EventService,
+    private globals: Globals
   ) {
+    this.dateLocale = globals.dateLocale;
   }
 
   ngOnInit(): void {
@@ -97,7 +103,7 @@ export class WeeklyCalendarComponent implements OnInit {
 
   updateDatetime() {
     const today = this.getToday();
-    this.currentMonth = today.toLocaleString('en-US', {month: 'long'});
+    this.currentMonth = today.toLocaleString(this.globals.dateLocale, {month: 'long'});
     this.currentDate = today.getDate();
     this.currentYear = today.getFullYear();
   }

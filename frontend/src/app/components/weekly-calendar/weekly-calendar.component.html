@@ -1,6 +1,6 @@
 <div class="heading" id="weekly-cal-heading">
   <span id="weekly-cal-month">
-    {{this.offset ? displayingWeek[3].toLocaleString('en-US', {month: 'long'}) : currentMonth}}
+    {{this.offset ? displayingWeek[3].toLocaleString(dateLocale, {month: 'long'}) : currentMonth}}
   </span>
   <span *ngIf="!this.offset" id="weekly-cal-date">{{currentDate}}, </span>
   <span id="weekly-cal-year">
@@ -18,9 +18,9 @@
 </div>
 
 <div class="calendar mobile">
-  <div class="week-day-label">{{displayingDate.toLocaleDateString('en-US', {weekday: 'short'})}}</div>
+  <div class="week-day-label">{{displayingDate.toLocaleDateString(dateLocale, {weekday: 'short'})}}</div>
   <div [ngClass]="{'today': isToday(displayingDate)}" class="calendar-date-label">
-    {{displayingDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}}
+    {{displayingDate.toLocaleDateString(dateLocale, {month: 'short', day: 'numeric'})}}
   </div>
 
   <div class="calendar-day-swim-lane">
@@ -34,12 +34,12 @@
 </div>
 
 <div class="grid-one-sixth calendar desktop">
-  <div class="week-day-label">Mon</div>
-  <div class="week-day-label">Tue</div>
-  <div class="week-day-label">Wed</div>
-  <div class="week-day-label">Thu</div>
-  <div class="week-day-label">Fri</div>
-  <div class="week-day-label">Sat/Sun</div>
+  <div class="week-day-label"
+       *ngFor="let day of displayingWeek.slice(0,5)">{{day.toLocaleDateString(dateLocale, {weekday: 'short'})}}
+  </div>
+  <div class="week-day-label">
+    {{displayingWeek[5].toLocaleDateString(dateLocale, {weekday: 'short'})}}/{{displayingWeek[6].toLocaleDateString(dateLocale, {weekday: 'short'})}}
+  </div>
 
   <div *ngFor="let date of this.displayingWeek.slice(0,5)" [ngClass]="{'today': isToday(date)}"
        class="calendar-date-label">{{date.getDate()}}</div>

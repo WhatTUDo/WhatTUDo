@@ -148,14 +148,14 @@ export class EventService {
     const startDateTime: Date = new Date(event.startDateTime);
     const endDateTime: Date = new Date(event.endDateTime);
     const endsOnTheSameDay = (startDateTime.toDateString() == endDateTime.toDateString())
-    let string = startDateTime.toLocaleTimeString('en-US', {
+    let string = startDateTime.toLocaleTimeString(this.globals.dateLocale, {
       month: 'short',
       day: 'numeric',
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
     string += ' - '
-    string += endDateTime.toLocaleTimeString('en-US', {
+    string += endDateTime.toLocaleTimeString(this.globals.dateLocale, {
       month: endsOnTheSameDay ? undefined : 'short',
       day: endsOnTheSameDay ? undefined : 'numeric',
       hour: 'numeric',
@@ -170,12 +170,12 @@ export class EventService {
    * @param event
    */
   public getDisplayTimeString(event: CalendarEvent) {
-    let string = event.startDateTime.toLocaleTimeString('en-US', {
+    let string = event.startDateTime.toLocaleTimeString(this.globals.dateLocale, {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
     string += ' - '
-    string += event.endDateTime.toLocaleTimeString('en-US', {
+    string += event.endDateTime.toLocaleTimeString(this.globals.dateLocale, {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")

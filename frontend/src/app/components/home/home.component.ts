@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
 import {FeedbackService} from "../../services/feedback.service";
 import {UserService} from "../../services/user.service";
+import {Globals} from "../../global/globals";
 
 
 @Component({
@@ -15,8 +16,9 @@ export class HomeComponent implements OnInit {
   userId: number;
   recommendedEvents: Event[];
 
-  constructor(public authService: AuthService,
-              public userService: UserService,
+  constructor(private authService: AuthService,
+              private userService: UserService,
+              private globals: Globals
   ) {
   }
 
@@ -32,7 +34,7 @@ export class HomeComponent implements OnInit {
 
   updateDatetime() {
     const date = new Date(Date.now());
-    this.currentTime = date.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true})
+    this.currentTime = date.toLocaleString(this.globals.dateLocale, {hour: 'numeric', minute: 'numeric'})
   }
 
 

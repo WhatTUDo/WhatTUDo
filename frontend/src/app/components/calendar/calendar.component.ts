@@ -5,6 +5,7 @@ import {CalendarService} from '../../services/calendar.service';
 import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faPlus} from '@fortawesome/free-solid-svg-icons';
 import {CalendarEvent} from '../../dtos/calendar-event';
 import {EventService} from '../../services/event.service';
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-calendar',
@@ -32,6 +33,8 @@ export class CalendarComponent implements OnInit {
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
+  dateLocale: string;
+
   faChevronUp = faChevronUp;
   faChevronDown = faChevronDown;
   faChevronLeft = faChevronLeft;
@@ -42,6 +45,7 @@ export class CalendarComponent implements OnInit {
     private eventService: EventService,
     private calendarService: CalendarService,
     private route: ActivatedRoute,
+    private globals: Globals
   ) {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) => {
@@ -53,7 +57,7 @@ export class CalendarComponent implements OnInit {
     }, err => {
       console.warn(err);
     });
-
+    this.dateLocale = globals.dateLocale;
   }
 
   ngOnInit(): void {

@@ -6,7 +6,7 @@
 <div *ngIf="calendar" class="title-icon-button-combo desktop">
   <h2 class="heading" id="weekly-cal-heading">
   <span id="weekly-cal-month">
-    {{displayingWeek[3].toLocaleString('en-US', {month: 'long'})}}
+    {{displayingWeek[3].toLocaleString(dateLocale, {month: 'long'})}}
   </span>
     <span id="weekly-cal-year">
     {{displayingWeek[3].getFullYear()}}
@@ -28,9 +28,9 @@
   </div>
 
   <div class="calendar mobile">
-    <div class="week-day-label">{{displayingDate.toLocaleDateString('en-US', {weekday: 'short'})}}</div>
+    <div class="week-day-label">{{displayingDate.toLocaleDateString(dateLocale, {weekday: 'short'})}}</div>
     <div [ngClass]="{'today': isToday(displayingDate)}" class="calendar-date-label">
-      {{displayingDate.toLocaleDateString('en-US', {month: 'short', day: 'numeric'})}}
+      {{displayingDate.toLocaleDateString(dateLocale, {month: 'short', day: 'numeric'})}}
     </div>
 
     <div class="calendar-day-swim-lane">
