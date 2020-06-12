@@ -30,6 +30,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.security.PermitAll;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,29 +139,26 @@ public class UserEndpoint {
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/recommendedEvent/{id}")
-    @ApiOperation(value = "Get recommended Event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto getRecommendedEvent(@PathVariable(value = "id") Integer userId) {
+    @GetMapping(value = "/recommendedEvents/{id}")
+    @ApiOperation(value = "Get recommended Events", authorizations = {@Authorization(value = "apiKey")})
+    public List<EventDto> getRecommendedEvents(@PathVariable(value = "id") Integer userId) {
         log.info("get recommended event for user");
 
         try {
-            Optional<Event> recommendedEvent = userService.getRecommendedEvent(userId);
-            if (recommendedEvent.isPresent()) {
-                return eventMapper.eventToEventDto(recommendedEvent.get());
-            } else {
-                Optional<Event> events = eventService.findForDates(LocalDateTime.now(), LocalDateTime.now().plusDays(30)).stream().findAny();
-                if (events.isPresent()) {
-                    return eventMapper.eventToEventDto(events.get());
-                } else {
-                    throw new ResponseStatusException(HttpStatus.OK, "No recommendable events found");
+            List<Event> recommendedEvent = userService.getRecommendedEvents(userId);
+            if (recommendedEvent.size() < 4) {
+                for (int i = 0; i < 4 - recommendedEvent.size(); i++) {
+                    Optional<Event> event = eventService.findForDates(LocalDateTime.now(), LocalDateTime.now().plusMonths(6)).stream().findAny();
+                    if (event.isPresent()) recommendedEvent.add(event.get());
                 }
             }
+            List<EventDto> eventDtos = new ArrayList<>();
+            recommendedEvent.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
+            return eventDtos;
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
         }
     }
-
-
 }

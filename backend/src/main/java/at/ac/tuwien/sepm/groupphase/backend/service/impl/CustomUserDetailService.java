@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
+import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
@@ -16,13 +17,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -35,6 +39,7 @@ public class CustomUserDetailService implements UserService {
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
     private final AttendanceService attendanceService;
+    private final EventService eventService;
     private final LabelService labelService;
     private final LabelRepository labelRepository;
     private final PasswordEncoder passwordEncoder;
@@ -158,8 +163,10 @@ public class CustomUserDetailService implements UserService {
     }
 
     @Override
-    public Optional<Event> getRecommendedEvent(Integer userId) {
+    public List<Event> getRecommendedEvents(Integer userId) {
+
         try {
+            List<Event> recommendedEvents = Collections.emptyList();
             List<Event> events = attendanceService.getEventUserIsAttending(userId);
             events.addAll(attendanceService.getEventUserIsInterested(userId));
             int[] labels = new int[labelService.getAll().size() + 1];
@@ -179,13 +186,24 @@ public class CustomUserDetailService implements UserService {
 
                 if (labels[maxAt] != 0) {
                     List<Event> possibleEvents = labelService.findById(maxAt).getEvents();
-                    return possibleEvents.stream().filter(e -> e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))).findAny();
-
+                    Optional<Event> possibleEvent = possibleEvents.stream().filter(e -> e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))).findAny();
+                    if (possibleEvent.isPresent()) recommendedEvents.add(possibleEvent.get());
+                    if (recommendedEvents.size() >= 4) return recommendedEvents;
                 }
             }
+            if (recommendedEvents.size() <= 3) {
+                for (int i = 0; i < 4 - recommendedEvents.size(); i++) {
+                    Optional<Event> randomEvent = eventService.findForDates(LocalDateTime.now(), LocalDateTime.now().plusDays(30)).stream().findAny();
+                    if (randomEvent.isPresent() && !recommendedEvents.contains(randomEvent.get())) {
+                        recommendedEvents.add(randomEvent.get());
+                    } else {
+                        return recommendedEvents;
+                    }
+                }
+            }
+            return recommendedEvents;
         } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage(), e);
         }
-        return Optional.empty();
     }
 }
