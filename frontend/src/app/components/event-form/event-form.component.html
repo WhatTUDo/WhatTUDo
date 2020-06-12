@@ -96,6 +96,7 @@
       <p>The application will deliver smart recommendations as you complete the event entry. <a
         href="/explanation/eventcollision">Learn More. </a>
       </p>
+      <button (click)="getEventConflicts()">Check For Conflicts</button>
       <div class="suggestions-container">
         <div class="suggestion-item" *ngIf="conflictExists">
           <app-event-conflict-resolver
