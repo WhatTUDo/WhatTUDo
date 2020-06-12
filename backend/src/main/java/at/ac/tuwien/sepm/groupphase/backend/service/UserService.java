@@ -57,12 +57,12 @@ public interface UserService extends UserDetailsService {
      List<Organization> getUserOrganizations(Integer userId) throws ServiceException;
 
     /**
-     * gets a recommended event for a user based on labels of
+     * gets a List of event-recommendations  for a user based on labels of
      * previous events the user has attended or was interested in
      *
      * @param userId id of the loggedIn user
-     * @return Event if a recommendation can be made, otherwise an Optional.empty()
+     * @return List of 4 recommended Events if a recommendation can be made, otherwise a List of recommended/random events
      * @throws ServiceException is thrown if something goes wrong during data processing.
      */
-    Optional<Event> getRecommendedEvent(Integer userId) throws ServiceException;
+    List<Event> getRecommendedEvents(Integer userId) throws ServiceException;
 }

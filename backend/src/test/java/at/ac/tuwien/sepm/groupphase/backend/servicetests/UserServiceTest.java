@@ -57,7 +57,7 @@ public class UserServiceTest {
     @Test
     public void when_savedUser_findAllUsers_shouldReturnListContainingUser() {
         userService.saveNewUser(new ApplicationUser("TestUser", "testy@test.com", "hunter2"));
-        List users = userRepository.findAll();
+        List<ApplicationUser> users = userRepository.findAll();
         assert (users.size() > 0);
     }
 
@@ -138,16 +138,17 @@ public class UserServiceTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        Optional<Event> recommendedEvent = userService.getRecommendedEvent(user.getId());
-        Event recommendedEventEntity = (Event) recommendedEvent.get();
-        assert (recommendedEvent.isPresent());
-        assertEquals(recommendedEventEntity.getId(), event3.getId());
+        List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
+        assert (recommendedEvent != null);
+        assert (recommendedEvent.size() > 0);
+        assert (recommendedEvent.contains(event3));
 
     }
 
+
     @Test
     @Transactional
-    public void ifNoRecommendableEvents_getRecommendedEvents_shouldReturn_emptyOptional() {
+    public void ifNoRecommendableEvents_getRecommendedEvents_shouldReturn_randomEvents() {
         ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(new Organization())));
         List<Label> labels1 = new ArrayList<>();
@@ -161,7 +162,7 @@ public class UserServiceTest {
         Label label3 = new Label("TestLabel3");
         Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
         Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event3 = new Event("Test Event 3", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
+        Event event3 = new Event("Test Event 3", LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(21), calendar);
         events1.add(event1);
         events2.add(event1);
         events2.add(event2);
@@ -184,8 +185,9 @@ public class UserServiceTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        Optional<Event> recommendedEvent = userService.getRecommendedEvent(user.getId());
-        assert (recommendedEvent.isEmpty());
+        List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
+        assert (recommendedEvent != null);
+        assert (recommendedEvent.size() > 0);
     }
 
 }
