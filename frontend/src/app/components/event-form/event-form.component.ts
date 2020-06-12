@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {Location} from "../../dtos/location";
@@ -11,7 +11,6 @@ import {FeedbackService} from "../../services/feedback.service";
 import {CollisionResponse} from "../../dtos/collision-response";
 import {EventCollisionService} from "../../services/event-collision.service";
 import {Label} from '../../dtos/label';
-import {LabelService} from '../../services/label.service';
 
 @Component({
   selector: 'app-event-form',
@@ -217,10 +216,20 @@ export class EventFormComponent implements OnInit {
 
   getEventConflicts() {
     if (this.event.startDateTime && this.event.endDateTime) {
-      this.eventCollisionService.getEventCollisions(this.event).subscribe((collisionResponse) => {
+      let helperEvent = this.event;
+      helperEvent.name = "";
+      helperEvent.description = "";
+      this.eventCollisionService.getEventCollisions(helperEvent).subscribe((collisionResponse) => {
         this.collisionResponse = collisionResponse
         this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
+
+        if (!this.conflictExists) {
+          this.feedbackService.displaySuccess("No Collisions!", "No collisions were found for this Event!");
+        }
       });
+    }
+    else {
+      this.feedbackService.displayWarning("Event Collision", "A Start and End date must be specified")!
     }
   }
 
