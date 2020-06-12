@@ -111,6 +111,7 @@ public class UserEndpointTest {
 
     }
 
+
     @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
@@ -147,9 +148,11 @@ public class UserEndpointTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        EventDto recommendedEvent = userEndpoint.getRecommendedEvent(user.getId());
+        List<EventDto> recommendedEvent = userEndpoint.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
-        assertEquals(recommendedEvent.getId(), event3.getId());
+        assert (recommendedEvent.size() > 0);
+        assertEquals (recommendedEvent.get(0).getId(), event3.getId());
+
     }
 
     @Test
@@ -191,8 +194,10 @@ public class UserEndpointTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        EventDto recommendedEvent = userEndpoint.getRecommendedEvent(user.getId());
+        List<EventDto> recommendedEvent = userEndpoint.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
+        assert (recommendedEvent.size() > 0);
+
     }
 
 
