@@ -186,7 +186,11 @@ public class SimpleEventCollisionService implements EventCollisionService {
             if(event.getStartDateTime().getHour() > 8){
             help.setStartDateTime(event.getStartDateTime().minusHours(i));
             help.setEndDateTime(event.getEndDateTime().minusHours(i));
-                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);}
+            if(help.getStartDateTime().isAfter(LocalDateTime.now())){
+                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+            }
+
+            }
 
         }
         if(rec.isEmpty()){
