@@ -103,16 +103,19 @@ public class CalendarEndpoint {
     }
 
 
-    @PreAuthorize("hasPermission(#calendar, 'MOD')")
+    //@PreAuthorize("hasPermission(#calendarDto, 'MOD')") FIXME: #calendar was wrong. ("id must not be null!") but #calendarDto gives permission denied even for a valid user
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
     public CalendarDto create(@RequestBody CalendarDto calendar) {
+
+
         try {
             List<Integer> eventsShouldBeEmpty = new ArrayList<>();
             calendar.setEventIds(eventsShouldBeEmpty);
             Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
+
             return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
@@ -121,7 +124,7 @@ public class CalendarEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
+    @PreAuthorize("hasPermission(#id, 'CAL', 'SYSADMIN')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")
