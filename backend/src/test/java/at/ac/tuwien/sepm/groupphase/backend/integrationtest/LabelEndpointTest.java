@@ -81,8 +81,23 @@ public class LabelEndpointTest {
 
         Mockito.when(labelRepository.save(label)).thenReturn(label);
 
+        labelRepository.save(label);
+
         List<LabelDto> labelDtos = labelEndpoint.getAllLabels();
         assertNotEquals(0, labelDtos.size());
+    }
+
+    @WithMockUser(username = "Person 1")
+    @Test
+    public void updateLabel_LabelShouldBeUpdated() {
+        LabelDto labelDto = labelEndpoint.create(new LabelDto(0, "TestLabel", new ArrayList<>()));
+        assertDoesNotThrow(() -> labelEndpoint.getById(labelDto.getId()));
+
+        LabelDto updated = new LabelDto(labelDto.getId(), "TestLabelUpdate", labelDto.getEventIds());
+        labelEndpoint.update(updated);
+
+        assertNotEquals(labelDto.getName(), updated.getName());
+        assertEquals(labelDto.getId(), updated.getId());
     }
 
 
