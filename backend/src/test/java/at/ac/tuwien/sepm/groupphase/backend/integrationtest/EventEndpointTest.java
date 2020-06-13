@@ -406,7 +406,6 @@ public class EventEndpointTest {
 
         assertEquals( eventDto.getName(),label1.get().getEvents().get(0).getName());
 
-        Event event = eventMapper.eventDtoToEvent(eventDto);
         endpoint.removeLabelsFromEvent(eventDto.getId(), Collections.singletonList(label.getId()));
         assertTrue(labelRepository.findById(label.getId()).get().getEvents().isEmpty());
 
