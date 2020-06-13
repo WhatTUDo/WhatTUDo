@@ -105,7 +105,7 @@ public class UserEndpointTest {
 
     }
 
-
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
