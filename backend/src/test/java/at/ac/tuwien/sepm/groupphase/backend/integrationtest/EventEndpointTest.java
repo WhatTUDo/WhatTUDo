@@ -389,7 +389,7 @@ public class EventEndpointTest {
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
-    public void updateLabelsOfEvent_returnsEventWithNewLabels_RemoveLabel_CannotFindLabel(){
+    public void updateLabelsOfEvent_returnsEventWithNewLabels_RemoveLabel_findLabelsByIdIsEmpty(){
         Organization orga = new Organization("Test Organization2");
         orga.setId(1);
         Calendar calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
@@ -409,8 +409,30 @@ public class EventEndpointTest {
         endpoint.removeLabelsFromEvent(eventDto.getId(), Collections.singletonList(label.getId()));
         assertTrue(labelRepository.findById(label.getId()).get().getEvents().isEmpty());
 
+        EventDto finalEventDto = eventDto;
+        assertTrue(endpoint.getLabelsById(finalEventDto.getId()).isEmpty());
+
     }
 
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    @Transactional
+    public void updateLabelsOfEvent_findLabelsById_returnsLabel() {
+        Organization orga = new Organization("Test Organization");
+        orga.setId(1);
+        Calendar calendar = new Calendar("Test Calendar", Collections.singletonList(orga));
+        calendar.setId(1);
+        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+        Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
+        Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
+        Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
+        EventDto eventDto =  endpoint.post(new EventDto(null, "Find Label", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId()));
+        Label label = labelRepository.save(new Label("Test"));
+        LabelDto labelDto = labelMapper.labelToLabelDto(label);
+        eventDto = endpoint.updateLabelsOfEvent(eventDto.getId(), Collections.singletonList(labelDto));
+
+        assertEquals(label.getName(), endpoint.getLabelsById(eventDto.getId()).get(0).getName());
+    }
 
 
 }
