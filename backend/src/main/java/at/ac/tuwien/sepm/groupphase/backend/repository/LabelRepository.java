@@ -22,6 +22,6 @@ public interface LabelRepository extends JpaRepository<Label, Integer> {
      * @param name name of the label.
      * @return the label with the specified name
      */
-    Optional<Organization> findByName(String name);
+    Optional<Label> findByName(String name);
 
 }

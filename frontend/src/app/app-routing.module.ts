@@ -42,7 +42,8 @@ const routes: Routes = [
   {path: 'explanation/:pageName', component: ExplanationComponent},
 
   {path: 'user', component: UserComponent},
-  {path: 'register', component: UserRegistrationComponent},
+  {path: 'register', component: UserRegistrationComponent}
+
 
 ];
 

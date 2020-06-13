@@ -2,9 +2,13 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.EventEndpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LabelDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.LabelMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 
@@ -29,10 +33,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -66,6 +72,13 @@ public class EventEndpointTest {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    LabelRepository labelRepository;
+
+    @Autowired
+    LabelMapper labelMapper;
+
 
 //    @Autowired
 //     JwtTokenizer jwtTokenizer;
@@ -368,6 +381,27 @@ public class EventEndpointTest {
 
        assertThrows(ResponseStatusException.class, () -> endpoint.editEvent(eventDtoChanges));
 
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    @Transactional
+    public void updateLabelsOfEvent_returnsEventWithNewLabels(){
+        Organization orga = new Organization("Test Organization2");
+        orga.setId(1);
+        Calendar calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
+        calendar.setId(1);
+        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
+        Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
+        Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
+        EventDto eventDto =  endpoint.post(new EventDto(null, "Update Label", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId()));
+        Label label = labelRepository.save(new Label("Label 1"));
+        LabelDto labelDto = labelMapper.labelToLabelDto(label);
+        eventDto = endpoint.updateLabelsOfEvent(eventDto.getId(), Collections.singletonList(labelDto));
+        Optional<Label> label1 = labelRepository.findByName(label.getName());
+
+        assertEquals( eventDto.getName(),label1.get().getEvents().get(0).getName());
     }
 
 }

@@ -191,10 +191,13 @@ public class EventEndpoint {
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update Labels of an Event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto updateLabelsOfEvent(@PathVariable(value = "id") Integer eventId, @RequestBody List<Label> labels) {
+    public EventDto updateLabelsOfEvent(@PathVariable(value = "id") Integer eventId, @RequestBody List<LabelDto> labelsDto) {
         try {
-
-            Event event = eventService.updateLabels(eventService.findById(eventId), labels);
+            List<Label> labels = new ArrayList<>();
+            for (LabelDto l: labelsDto) {
+                labels.add(labelMapper.labelDtoToLabel(l));
+            }
+            Event event = eventService.updateLabels(eventService.findById(eventId), labels );
             return eventMapper.eventToEventDto(event);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
