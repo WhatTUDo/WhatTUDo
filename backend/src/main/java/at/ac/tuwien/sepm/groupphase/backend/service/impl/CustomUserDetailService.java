@@ -27,12 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
+import java.util.*;
 import java.util.ArrayList;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
@@ -160,14 +156,15 @@ public class CustomUserDetailService implements UserService {
 
     @Override
     public ApplicationUser getUserByName(String name) throws ServiceException {
-   try {   Optional<ApplicationUser> found = userRepository.findByName(name);
-        if (found.isEmpty()) {
-            throw new NotFoundException("user not found");
+        try {
+            Optional<ApplicationUser> found = userRepository.findByName(name);
+            if (found.isEmpty()) {
+                throw new NotFoundException("user not found");
+            }
+            return found.get();
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
         }
-        return found.get();
-   }catch (PersistenceException | IllegalArgumentException e){
-       throw new ServiceException(e.getMessage());
-   }
     }
 
     @Transactional
@@ -195,8 +192,13 @@ public class CustomUserDetailService implements UserService {
             List<Event> recommendedEvents = new ArrayList<>();
             List<Event> events = attendanceService.getEventUserIsAttending(userId);
             events.addAll(attendanceService.getEventUserIsInterested(userId));
-            int[] labels = new int[labelService.getAll().size() + 1];
-
+            Collection<Label> allLabels = labelService.getAll();
+            int maxLabelId = 0;
+            for (Label l : allLabels
+            ) {
+                maxLabelId = l.getId() > maxLabelId ? l.getId() : maxLabelId;
+            }
+            int[] labels = new int[maxLabelId + 1];
             events.forEach(event -> {
                 List<Label> eventLabels = event.getLabels();
                 eventLabels.forEach(label -> labels[label.getId()]++);
