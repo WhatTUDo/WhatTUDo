@@ -18,10 +18,9 @@ import java.util.List;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Label {
+public class Label extends BaseEntity {
     @Id
     @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NonNull

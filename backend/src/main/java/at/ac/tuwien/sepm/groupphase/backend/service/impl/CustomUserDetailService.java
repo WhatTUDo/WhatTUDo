@@ -202,7 +202,7 @@ public class CustomUserDetailService implements UserService {
                 eventLabels.forEach(label -> labels[label.getId()]++);
             });
 
-            for (int i = 0; i < labels.length; i++) {
+            for (int i = 1; i < labels.length; i++) {
                 int maxAt = 0;
                 for (int j = 0; j < labels.length; j++) {
                     maxAt = labels[j] > labels[maxAt] ? j : maxAt;
