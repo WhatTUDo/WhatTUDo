@@ -79,6 +79,9 @@ public class EventEndpointTest {
     @Autowired
     LabelMapper labelMapper;
 
+    @Autowired
+    EventMapper eventMapper;
+
 
 //    @Autowired
 //     JwtTokenizer jwtTokenizer;
@@ -386,7 +389,7 @@ public class EventEndpointTest {
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
-    public void updateLabelsOfEvent_returnsEventWithNewLabels(){
+    public void updateLabelsOfEvent_returnsEventWithNewLabels_RemoveLabel_CannotFindLabel(){
         Organization orga = new Organization("Test Organization2");
         orga.setId(1);
         Calendar calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
@@ -402,7 +405,14 @@ public class EventEndpointTest {
         Optional<Label> label1 = labelRepository.findByName(label.getName());
 
         assertEquals( eventDto.getName(),label1.get().getEvents().get(0).getName());
+
+        Event event = eventMapper.eventDtoToEvent(eventDto);
+        endpoint.removeLabelsFromEvent(eventDto.getId(), Collections.singletonList(label.getId()));
+        assertTrue(labelRepository.findById(label.getId()).get().getEvents().isEmpty());
+
     }
+
+
 
 }
 
