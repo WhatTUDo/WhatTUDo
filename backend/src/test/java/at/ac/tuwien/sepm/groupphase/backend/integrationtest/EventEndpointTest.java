@@ -434,6 +434,31 @@ public class EventEndpointTest {
         assertEquals(label.getName(), endpoint.getLabelsById(eventDto.getId()).get(0).getName());
     }
 
+    @WithMockUser(username = "Person 1", authorities ={"MOD_1", "MEMBER_1"})
+    @Test
+    public void getEventByCalendarId_returnsEvent(){
+        Organization orga = new Organization("Test Organization");
+        orga.setId(1);
+        Calendar calendar = new Calendar("Test Calendar", Collections.singletonList(orga));
+        calendar.setId(1);
+        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+        Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
+        Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
+        Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
+        EventDto eventDto =  endpoint.post(new EventDto(null, "Find Event", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId()));
+
+        List<EventDto> found = endpoint.getEventsByCalendarId(1);
+        boolean b = false;
+        for (EventDto e :found){
+            if(e.getId().equals(eventDto.getId())){
+                b = true;
+                break;
+            }
+        }
+        if(!b){
+            fail();
+        }
+    }
 
 }
 
