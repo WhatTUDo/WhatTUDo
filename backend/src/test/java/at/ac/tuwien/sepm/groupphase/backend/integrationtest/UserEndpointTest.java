@@ -43,10 +43,6 @@ public class UserEndpointTest {
     UserService userService;
 
     @Autowired
-    CalendarRepository calendarRepository;
-
-
-    @Autowired
     AttendanceRepository attendanceRepository;
 
     @Autowired
