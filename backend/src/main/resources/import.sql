@@ -55,7 +55,8 @@ VALUES (1, 'person1@tuwien.ac.at', false, 'Person 1', '$2a$10$ua4K4vhX75mvmEWkHh
        (6, 'person6@tuwien.ac.at', false, 'Person 6', '$2a$10$crKBS1KD3LvSAVnBOUeL9.CgDtT.Ce0fUgi/tlnwhYkx0C7moUzfu', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
        (7, 'person7@tuwien.ac.at', false, 'Person 7', '$2a$10$wNAkyTOQZayMc6H.lKeIg.qJTo/15X2tmv44VLgGzuuQCVuDmfZvW', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
        (8, 'person8@tuwien.ac.at', false, 'Person 8', '$2a$10$r1KdHV7FEYkmdeTACjHpiORwMSUX3J4xqs0gkwjzaDK3vegMtOkH.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (9, 'person9@tuwien.ac.at', false, 'Person 9', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+       (9, 'person9@tuwien.ac.at', false, 'Person 9', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (10, 'admin1@tuwien.ac.at', true, 'admin1', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 INSERT INTO ORGA_MEMBERSHIP (ORGANIZATION_ID, USER_ID, ROLE)
 VALUES (1, 1, 'MOD'),
@@ -71,15 +72,15 @@ VALUES (1, 1, 'MOD'),
        (7, 9, 'MEMBER'),
        (8, 9, 'MEMBER'),
        (9, 9, 'MEMBER');
-       
+
 
 INSERT INTO EVENT (ID, END_DATE_TIME, NAME, START_DATE_TIME, CALENDAR_ID, CREATED_AT, UPDATED_AT)
-VALUES (1, '2020-05-26 18:00:00', 'Grillparty der FS Architektur', '2020-05-26 12:00:00', 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (2, '2020-05-28 20:00:00', 'Online-Beratung', '2020-05-28 19:00:00', 2, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (3, '2020-05-25 11:30:00', 'Gemeinsames Fruehstueck mit den Fachschaften', '2020-05-25 09:00:00', 7, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (4, '2020-05-29 18:00:00', 'Feier zum 150.Gruendungstag', '2020-05-29 12:00:00', 4, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (5, '2020-06-02 21:00:00', 'Seminar zum ES-Tut', '2020-06-02 19:30:00', 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (6, '2020-05-29 15:00:00', 'Tutorium zum Thema Studienabschluss', '2020-05-25 14:00:00', 5, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+VALUES (1, '2020-06-16 18:00:00', 'Grillparty der FS Architektur', '2020-06-16 12:00:00', 1, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (2, '2020-06-18 20:00:00', 'Online-Beratung', '2020-06-18 19:00:00', 2, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (3, '2020-06-15 11:30:00', 'Gemeinsames Fruehstueck mit den Fachschaften', '2020-06-15 09:00:00', 7, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (4, '2020-06-19 18:00:00', 'Feier zum 150.Gruendungstag', '2020-06-19 12:00:00', 4, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (5, '2020-06-22 21:00:00', 'Seminar zum ES-Tut', '2020-06-22 19:30:00', 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (6, '2020-06-19 15:00:00', 'Tutorium zum Thema Studienabschluss', '2020-06-15 14:00:00', 5, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 INSERT INTO LABEL (ID, NAME, CREATED_AT, UPDATED_AT)
 VALUES (1, 'Schnitzelparty',CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),

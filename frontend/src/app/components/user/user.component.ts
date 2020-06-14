@@ -5,6 +5,7 @@ import {User} from "../../dtos/user";
 import {Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 import {Organization} from "../../dtos/organization";
+import {OrganizationService} from "../../services/organization.service";
 
 @Component({
   selector: 'app-user',
@@ -21,6 +22,7 @@ export class UserComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private userService: UserService,
+              private organizationService: OrganizationService,
               private router: Router) {
     if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user: User) => {
@@ -50,10 +52,14 @@ export class UserComponent implements OnInit {
     return this.userService.getGravatarLink(email, size);
   }
 
-  removeSelfFromOrg(orgId: number) {
-    if (confirm(`You are leaving "${this.userInOrganizations.find(o => o.id === orgId).name}". Are you sure?`)) {
-      this.userService.removeFromOrganization(this.user.id, orgId).subscribe((user) => {
+  removeSelfFromOrg(organizationId: number) {
+    if (confirm(`You are leaving "${this.userInOrganizations.find(o => o.id === organizationId).name}". Are you sure?`)) {
+      this.userService.removeFromOrganization(this.user.id, organizationId).subscribe((user) => {
       })
     }
+  }
+
+  getOrganizationAvatarLink(organizationId: number, size: number) {
+    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
   }
 }

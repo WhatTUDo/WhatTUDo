@@ -6,7 +6,8 @@ import {EventService} from "../../services/event.service";
 import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
 import {ActivatedRoute} from "@angular/router";
-import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faCheckCircle} from "@fortawesome/free-solid-svg-icons";
+import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {FeedbackService} from "../../services/feedback.service";
 import {CollisionResponse} from "../../dtos/collision-response";
 import {EventCollisionService} from "../../services/event-collision.service";
@@ -20,12 +21,9 @@ import {Label} from '../../dtos/label';
 export class EventFormComponent implements OnInit {
   editableCalendars: Calendar[] = [];
 
-  labels: Array<Label>;
-  label: Label;
-  label2: Label;
+  allLabels: Label[] = [];
+  selectedLabels: Label[] = [];
   ev_id: number;
-  labelspicked: Array<Label>;
-  selectedLabel: Label;
   isUpdate: Boolean = false;
   showFeedback: Boolean = false;
 
@@ -50,6 +48,8 @@ export class EventFormComponent implements OnInit {
     labelspicked: new FormControl('')
   });
   faChevronLeft = faChevronLeft;
+  faCircle = faCircle;
+  faCheckCircle = faCheckCircle;
   collisionResponse: CollisionResponse;
 
   constructor(
@@ -70,7 +70,7 @@ export class EventFormComponent implements OnInit {
         }
       });
     } else {
-      this.labelspicked = [];
+      this.selectedLabels = [];
     }
     const calendarId = +this.route.snapshot.queryParamMap?.get('calendarId');
     if (calendarId) {
@@ -84,44 +84,34 @@ export class EventFormComponent implements OnInit {
     this.getAllLabels();
   }
 
-  getEvent(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.eventService.getEvent(id)
-      .subscribe(event => this.event = event);
-  }
-
   getAllLabels() {
 
     this.eventService.getAllLabels().subscribe(labels => {
-      this.labels = labels;
+      this.allLabels = labels;
     });
   }
 
   getEventLabels(id: number) {
 
     this.eventService.getEventLabels(id).subscribe(labelspicked => {
-      this.labelspicked = labelspicked;
+      this.selectedLabels = labelspicked;
     });
   }
 
-  initNewLabelsSelect() {
-
-    labelspicked => {
-      this.labelspicked = [];
-    };
+  toggleLabel(label: Label): void {
+    if (this.labelIsSelected(label)) {
+      this.selectedLabels = this.selectedLabels.filter(l => {
+        return label.id !== l.id;
+      })
+    } else {
+      this.selectedLabels.push(label);
+    }
   }
 
-
-  onSelect(label: Label): void {
-
-
-    this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
-    this.labelspicked.push(label);
-
-  }
-
-  onRemove(label: Label): void {
-    this.labelspicked = this.labelspicked.filter(labelspicked => labelspicked.name !== label.name);
+  labelIsSelected(label: Label) {
+    return this.selectedLabels.find(l => {
+      return label.id === l.id
+    });
   }
 
   onSubmit() {
@@ -136,7 +126,7 @@ export class EventFormComponent implements OnInit {
             console.log("Updated event: " + response);
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
-            this.eventService.addLabels(this.ev_id, this.labelspicked);
+            this.eventService.addLabels(this.ev_id, this.selectedLabels);
           },
           err => {
             console.warn(err);
@@ -149,7 +139,7 @@ export class EventFormComponent implements OnInit {
             this.feedbackService.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
 
-            this.eventService.addLabels(response.id, this.labelspicked);
+            this.eventService.addLabels(response.id, this.selectedLabels);
           },
           err => {
             console.warn(err);
@@ -217,8 +207,8 @@ export class EventFormComponent implements OnInit {
   getEventConflicts() {
     if (this.event.startDateTime && this.event.endDateTime) {
       let helperEvent = this.event;
-      helperEvent.name = "";
-      helperEvent.description = "";
+      helperEvent.name = this.event.name ? this.event.name : "";
+      helperEvent.description = this.event.description ? this.event.description : "";
       this.eventCollisionService.getEventCollisions(helperEvent).subscribe((collisionResponse) => {
         this.collisionResponse = collisionResponse;
         this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
@@ -227,8 +217,7 @@ export class EventFormComponent implements OnInit {
           this.feedbackService.displaySuccess("No Collisions!", "No collisions were found for this Event!");
         }
       });
-    }
-    else {
+    } else {
       this.feedbackService.displayWarning("Event Collision", "A Start and End date must be specified")!
     }
   }

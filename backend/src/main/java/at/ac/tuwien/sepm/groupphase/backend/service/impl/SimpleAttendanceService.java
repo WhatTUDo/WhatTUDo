@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatus;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatusPossibilities;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotAllowedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
@@ -34,7 +35,7 @@ public class SimpleAttendanceService implements AttendanceService {
     public AttendanceStatus create(AttendanceStatus attendanceStatus) throws ServiceException {
         try {
             if(attendanceStatus.getEvent().getEndDateTime().isBefore(LocalDateTime.now())){
-                throw new ValidationException("Sorry, this event is over!");
+                throw new NotAllowedException("Sorry, this event is over!");
             }
             List<AttendanceStatus> list = attendanceRepository.getByUser(attendanceStatus.getUser());
             if (!list.isEmpty()) {

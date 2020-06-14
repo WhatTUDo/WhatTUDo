@@ -64,14 +64,14 @@ export class OrganizationComponent implements OnInit {
   }
 
   removeCalendar(calId: number) {
-    this.organizationService.removeCalendarToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
-      this.organization = organization;
-      this.organizationCalendars = this.organizationCalendars.filter((cal: Calendar) => {
-        return cal.id != calId
-      })
-    }, err => {
-      alert(err.message);
-    });
+    if (confirm(`You are deleting calendar "${this.organizationCalendars.find(c => c.id===calId).name}". Are you sure?`)) {
+      this.organizationService.removeCalendarToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
+        this.organization = organization;
+        this.organizationCalendars = this.organizationCalendars.filter((cal: Calendar) => {
+          return cal.id != calId
+        })
+      });
+    }
   }
 
   getAllEditableCalendars() {
@@ -90,11 +90,11 @@ export class OrganizationComponent implements OnInit {
       for (let calID of organization.calendarIds) {
         this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
           this.organizationCalendars.push(cal);
-        })
-        this.organizationService.getMembers(organization.id).subscribe((users: User[]) => {
-          this.organizationMembers = users;
-        })
+        });
       }
+      this.organizationService.getMembers(organization.id).subscribe((users: User[]) => {
+        this.organizationMembers = users;
+      });
     })
   }
 
@@ -108,4 +108,23 @@ export class OrganizationComponent implements OnInit {
       })
     }
   }
+
+  getOrganizationAvatarLink(organizationId: number, size: number) {
+    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
+  }
+
+  removeFromOrg(userId: number, organizationId: number) {
+    if (
+      confirm(`You are removing "${
+        this.organizationMembers.find(m => m.id === userId).name
+      }" from "${
+        this.organization.name
+      }". Are you sure?`)
+    ) {
+      this.userService.removeFromOrganization(userId, organizationId).subscribe((user) => {
+      })
+    }
+  }
+
+
 }

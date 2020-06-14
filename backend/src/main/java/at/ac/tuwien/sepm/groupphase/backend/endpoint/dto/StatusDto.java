@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class StatusDto extends BaseDto {
-    private Integer userId;
+    private String username;
     private Integer eventId;
     private AttendanceStatusPossibilities status;
 }

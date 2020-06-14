@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -50,6 +51,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @SpringBootTest
 @ActiveProfiles("test")
 @WebAppConfiguration
+@DirtiesContext
 public class EventEndpointTest {
 //
 //    @Autowired
@@ -101,7 +103,7 @@ public class EventEndpointTest {
 //    }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "User 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void save_shouldReturn_sameEvent() throws Exception {
         Organization orga;

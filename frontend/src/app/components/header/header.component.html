@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg" style="height: auto !important;">
-  <a class="navbar-brand ml-lg-5" href="/">SEPM Group Phase</a>
+  <a class="navbar-brand ml-lg-5" routerLink="/">SEPM Group Phase</a>
   <button aria-controls="navbarSupportedContent" aria-expanded="false"
           aria-label="Toggle navigation"
           class="navbar-toggler button-outlined ml-5" data-target="#navbarSupportedContent" data-toggle="collapse">
@@ -21,7 +21,7 @@
     </ul>
 
     <a *ngIf="authService.isLoggedIn()" class="nav-link clickable no-hover-enlarge no-shadow" routerLink="/user">
-      <fa-icon [icon]="faCog">Logout</fa-icon>
+      <fa-icon [icon]="faCog">Manage User</fa-icon>
     </a>
     <a (click)="authService.logoutUser()" *ngIf="authService.isLoggedIn()"
        class="nav-link clickable no-hover-enlarge no-shadow"

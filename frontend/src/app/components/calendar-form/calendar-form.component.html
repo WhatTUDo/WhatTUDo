@@ -1,4 +1,3 @@
-<app-feedback-handler></app-feedback-handler>
 <div class="contextual-control">
   <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
@@ -6,7 +5,7 @@
 </div>
 <div *ngIf="calendar" class="centered-two-third">
   <div>
-    <h2>Update Calendar</h2>
+    <h2 *ngIf="this.title">{{this.title}}</h2>
     <h3>Calendar Information</h3>
     <div class="form-group">
       <!--      <label for="calendar.organizationIds">Organization</label>-->
@@ -23,7 +22,7 @@
     </div>
     <h3>Organizations</h3>
     <div class="organization-list">
-      <p>You can select one or more Organizations if you are at least a Member in any of them. </p>
+      <p>You can select one or more Organizations in which you are a Moderator. </p>
       <div class="mat-form-container">
         <div class="mat-select-container">
           <mat-form-field appearance="outline" style="width: 100%;">

@@ -8,6 +8,10 @@
   width: 100%;
   margin-bottom: 16pt;
 
+  > .avatar {
+    margin-right: 8pt;
+  }
+
   .organization-details {
     width: 100%;
     color: var(--text);
@@ -15,6 +19,14 @@
     .organization-name {
       font-weight: $f-bold;
       font-size: 24pt;
+    }
+
+    .organization-member-avatars {
+      display: flex;
+
+      > .avatar {
+        margin-right: 2pt;
+      }
     }
   }
 

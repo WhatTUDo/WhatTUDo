@@ -8,6 +8,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
 import {Calendar} from '../../dtos/calendar';
 import {Organization} from '../../dtos/organization';
+import {observable} from "rxjs";
+import {CreateCalendar} from "../../dtos/CreateCalendar";
 
 @Component({
   selector: 'app-calendar-form',
@@ -19,6 +21,10 @@ import {Organization} from '../../dtos/organization';
 export class CalendarFormComponent implements OnInit {
 
   calendar: Calendar;
+
+  title: String;
+
+  isUpdate = true;
 
   organizations: Array<Organization>;
   faChevronLeft = faChevronLeft;
@@ -39,27 +45,48 @@ export class CalendarFormComponent implements OnInit {
 
   getCalendar(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.calendarService.getCalendarById(id)
-      .subscribe(calendar => this.calendar = calendar);
+    if (id != 0) {
+      this.title = "UPDATE CALENDAR";
+      this.isUpdate = true;
+      this.calendarService.getCalendarById(id)
+        .subscribe(calendar => this.calendar = calendar);
+    }
+    else {
+      this.title = "CREATE NEW CALENDAR";
+      this.isUpdate = false;
+      this.calendar = new Calendar(0, null, [], []);
+    }
+
   }
 
   onSubmit(): void {
     if (this.validateFormData(this.calendar)) {
-
-      this.calendarService.editCalendar(this.calendar).subscribe(observable => {
-
-        console.log("Updated calendar: ", observable);
-      }, error => {
-        FeedbackHandlerComponent.displayError(error.error.status, error.error.message);
-      }, () => {
-        this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
-          console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
-        }, error => {
-          FeedbackHandlerComponent.displayError(error.error.status, error.error.message);
-        }, () => {
-          this.goBack();
+      if (this.isUpdate) {
+        this.calendarService.editCalendar(this.calendar).subscribe(observable => {
+          console.log("Updated calendar: ", observable);
+        }, error => {}, () => {
+          this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
+            console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
+          }, error => {
+          }, () => {
+            this.goBack();
+          });
         });
-      });
+      }
+      else {
+        let createCalendar = new CreateCalendar(this.calendar.name, this.calendar.organizationIds[0]);
+        this.calendarService.addCalendar(createCalendar).subscribe((createdCalendar: Calendar) => {
+          console.log("Created calendar: ", observable);
+          this.calendar = createdCalendar;
+          this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
+              console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
+            }, error => {},
+            () => {
+              this.goBack();
+            });
+        });
+      }
+
     }
   }
 

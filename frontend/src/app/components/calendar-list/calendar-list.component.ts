@@ -3,7 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {CalendarService} from '../../services/calendar.service';
 import {Calendar} from '../../dtos/calendar';
 import {Router} from '@angular/router';
-import {faChevronLeft, faCog, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faCog, faTimesCircle, faPlus} from "@fortawesome/free-solid-svg-icons";
 import {OrganizationService} from '../../services/organization.service';
 import {Organization} from '../../dtos/organization';
 
@@ -22,6 +22,8 @@ export class CalendarListComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faTimesCircle = faTimesCircle;
   faCog = faCog;
+  faPlus = faPlus;
+
 
   constructor(
     private calendarService: CalendarService,
@@ -87,17 +89,6 @@ export class CalendarListComponent implements OnInit {
     return true;
   }
 
-  add(name: string, eventIds: number[], organizationIds: number[]) {
-    name = name.trim();
-    if (!name) {
-      return;
-    }
-    this.calendarService.addCalendar({name, eventIds, organizationIds} as Calendar)
-      .subscribe(newcalendar => {
-        this.getAllCalendars();
-      });
-  }
-
   delete(id: number): void {
     if (confirm(`You are deleting calendar "${this.calendars.find(c => c.id === id).name}". Are you sure?`)) {
       this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
@@ -105,6 +96,11 @@ export class CalendarListComponent implements OnInit {
       });
     }
   }
+
+  getOrganizationAvatarLink(organizationId: number, size: number) {
+    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
+  }
+
 }
 
 

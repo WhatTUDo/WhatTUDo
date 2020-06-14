@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -35,6 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@DirtiesContext
 public class UserEndpointTest {
     @Autowired
     UserEndpoint userEndpoint;
@@ -64,6 +66,9 @@ public class UserEndpointTest {
 //        assertNotEquals(userDto.getPassword(), savedUserDto.getPassword());
 
     }
+
+
+
 
 
 

@@ -3,7 +3,12 @@
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
 </div>
 <div class="centered-two-third">
-  <h2>Calendars</h2>
+  <div class="title-icon-button-combo">
+    <h2>Calendars</h2>
+    <div class="icon-button clickable no-hover-enlarge no-shadow">
+      <fa-icon [icon]="faPlus" routerLink="/form/calendar"></fa-icon>
+    </div>
+  </div>
   <form (keyup.enter)="onSubmit()" [formGroup]="searchForm" class="form input-button-combo">
     <label for="calendar.name"></label>
     <input class="form-control" formControlName="name" id="calendar.name" placeholder="Search..." type="text">
@@ -17,8 +22,10 @@
         </div>
         <div>
           <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
-            <div *ngIf="organizationsMap.get(orgId)"
-                 class="clickable no-shadow no-hover-enlarge">{{organizationsMap.get(orgId).name}}</div>
+            <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-shadow no-hover-enlarge">
+              <img alt="" class="avatar avatar-ultra-small" src="{{getOrganizationAvatarLink(orgId, 64)}}">
+              <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -34,17 +41,17 @@
       </div>
     </div>
   </div>
-  <div>
-    <h2>New Calendar</h2>
-    <label for="calendarName">
-      Name
-    </label>
-    <div class="input-button-combo">
-      <input #calendarName id="calendarName">
-      <button (click)="add(calendarName.value, [], [1]); calendarName.value=''"
-              class="button-solid no-hover-enlarge">
-        Create
-      </button>
-    </div>
-  </div>
+<!--  <div>-->
+<!--    <h2>New Calendar</h2>-->
+<!--    <label for="calendarName">-->
+<!--      Name-->
+<!--    </label>-->
+<!--    <div class="input-button-combo">-->
+<!--      <input #calendarName id="calendarName">-->
+<!--      <button (click)="add(calendarName.value, [], [1]); calendarName.value=''"-->
+<!--              class="button-solid no-hover-enlarge">-->
+<!--        Create-->
+<!--      </button>-->
+<!--    </div>-->
+<!--  </div>-->
 </div>

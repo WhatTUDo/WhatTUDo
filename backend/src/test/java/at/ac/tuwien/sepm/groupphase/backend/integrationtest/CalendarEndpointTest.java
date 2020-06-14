@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.integrationtest;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.CalendarEndpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.EventEndpoint;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
@@ -16,6 +17,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -33,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @ActiveProfiles("test")
 @WebAppConfiguration
+@DirtiesContext
 public class CalendarEndpointTest {
 
     @Autowired
@@ -46,12 +49,12 @@ public class CalendarEndpointTest {
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
-    public void createCalendar_returnsCalendar(){
-       Organization orga = new Organization("Test Organization");
-       orga.setId(1);
-       Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+    public void createCalendar_returnsCalendar() {
+        Organization orga = new Organization("Test Organization");
+        orga.setId(1);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
 
-        CalendarDto calendarDto = new CalendarDto(1, "Save", Collections.singletonList(orga.getId()), null);
+        CalendarCreateDto calendarDto = new CalendarCreateDto("Save", 1);
 
         CalendarDto calendarSaved = calendarEndpoint.create(calendarDto);
 
@@ -60,32 +63,32 @@ public class CalendarEndpointTest {
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
-    public void searchCalendar_byCalendarName_byEventName_returnsSavedCalendar(){
+    public void searchCalendar_byCalendarName_byEventName_returnsSavedCalendar() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
 
-        CalendarDto calendarDto = calendarEndpoint.create(new CalendarDto(1, "Search", Collections.singletonList(orga.getId()), null));
+        CalendarDto calendarDto = calendarEndpoint.create(new CalendarCreateDto("Search", 1));
 
         List<CalendarDto> found = calendarEndpoint.searchCalendarCombo("Search");
 
         assertEquals(1, found.size());
 
-        EventDto eventDto = eventEndpoint.post(new EventDto(1, "SearchEvent", LocalDateTime.of(2021,2,2,14,0), LocalDateTime.of(2021,2,2,15,0), calendarDto.getId()));
+        EventDto eventDto = eventEndpoint.post(new EventDto(1, "SearchEvent", LocalDateTime.of(2021, 2, 2, 14, 0), LocalDateTime.of(2021, 2, 2, 15, 0), calendarDto.getId()));
         found = calendarEndpoint.searchCalendarCombo("SearchEvent");
         assertEquals(1, found.size());
 
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_2", "MEMBER_2"})
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
-    public void deleteCalendar_findCalendarWillReturnNotFound(){
+    public void deleteCalendar_findCalendarWillReturnNotFound() {
         Organization orga = new Organization("Test Organization");
-        orga.setId(2);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+        orga.setId(1);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
 
-        CalendarDto calendarDto = calendarEndpoint.create(new CalendarDto(2, "Delete", Collections.singletonList(orga.getId()), null));
+        CalendarDto calendarDto = calendarEndpoint.create(new CalendarCreateDto("Delete", 1));
 
         calendarEndpoint.deleteCalendar(calendarDto.getId());
 
@@ -94,40 +97,41 @@ public class CalendarEndpointTest {
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
-    public void editCalendar_returnsCalendarWithUpdatedValues(){
+    public void editCalendar_returnsCalendarWithUpdatedValues() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
         List<Integer> e = new ArrayList<>();
-        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
 
-        CalendarDto calendarDto = new CalendarDto(1, "Save to update", Collections.singletonList(orga.getId()), null);
+        CalendarCreateDto calendarDto = new CalendarCreateDto("Save to update", 1);
 
         CalendarDto calendarSaved = calendarEndpoint.create(calendarDto);
 
-        CalendarDto update = new CalendarDto(calendarSaved.getId(), "Updated", Collections.singletonList(orga.getId()),e );
+        CalendarDto update = new CalendarDto(calendarSaved.getId(), "Updated", Collections.singletonList(orga.getId()), e);
 
-        assertEquals(update.getName(),calendarEndpoint.editCalendar(update).getName());
+        assertEquals(update.getName(), calendarEndpoint.editCalendar(update).getName());
     }
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1", "MOD_2", "MEMBER_2"})
     @Test
-   public void updateOrganizationsForCalendar(){
-       Organization orga = new Organization("Test Organization");
-       orga.setId(1);
-       Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
-       List<Integer> org = new ArrayList<>(); org.add(1);
-       CalendarDto calendarDto = new CalendarDto(1, "Save to update 2", Collections.singletonList(orga.getId()), null);
+    public void updateOrganizationsForCalendar() {
+        Organization orga = new Organization("Test Organization");
+        orga.setId(1);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
+        List<Integer> org = new ArrayList<>();
+        org.add(1);
+        CalendarCreateDto calendarDto = new CalendarCreateDto("Save to update 2", 1);
 
-       CalendarDto calendarSaved = calendarEndpoint.create(calendarDto);
-       Organization orga1 = new Organization("Test Org 2");
-       orga1.setId(2);
-       Mockito.when(organizationRepository.save(new Organization("Test Org 2"))).thenReturn(orga1);
-       org.add(2);
+        CalendarDto calendarSaved = calendarEndpoint.create(calendarDto);
+        Organization orga1 = new Organization("Test Org 2");
+        orga1.setId(2);
+        Mockito.when(organizationRepository.save(new Organization("Test Org 2"))).thenReturn(orga1);
+        org.add(2);
 
-       CalendarDto update = new CalendarDto(calendarSaved.getId(), calendarSaved.getName(), org ,calendarSaved.getEventIds() );
+        CalendarDto update = new CalendarDto(calendarSaved.getId(), calendarSaved.getName(), org, calendarSaved.getEventIds());
 
-       assertEquals(update.getOrganizationIds(), calendarEndpoint.updateOrganizationsForCalendar(update).getOrganizationIds());
+        assertEquals(update.getOrganizationIds(), calendarEndpoint.updateOrganizationsForCalendar(update).getOrganizationIds());
 
 
-   }
+    }
 }

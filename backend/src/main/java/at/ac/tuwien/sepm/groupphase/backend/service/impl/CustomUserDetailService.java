@@ -200,8 +200,9 @@ public class CustomUserDetailService implements UserService {
             }
             int[] labels = new int[maxLabelId + 1];
             events.forEach(event -> {
+                Integer count = 0;
                 List<Label> eventLabels = event.getLabels();
-                eventLabels.forEach(label -> labels[label.getId()]++);
+                eventLabels.forEach(label -> labels[label.getId() - 1]++);
             });
 
             for (int i = 1; i < labels.length; i++) {

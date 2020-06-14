@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {OrganizationService} from "../../services/organization.service";
 import {Organization} from "../../dtos/organization";
 import {faChevronLeft, faCog, faPlus, faTimes, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
+import {UserService} from "../../services/user.service";
+import {User} from "../../dtos/user";
 
 @Component({
   selector: 'app-organization-list',
@@ -10,7 +12,9 @@ import {faChevronLeft, faCog, faPlus, faTimes, faTimesCircle} from "@fortawesome
 })
 export class OrganizationListComponent implements OnInit {
 
-  organizations: Array<Organization>
+  organizations: Organization[];
+  organizationUserAvatars: Map<Organization, string[]> = new Map();
+
   faChevronLeft = faChevronLeft;
   faCog = faCog;
   faTimesCircle = faTimesCircle;
@@ -18,16 +22,13 @@ export class OrganizationListComponent implements OnInit {
   faPlus = faPlus;
 
   constructor(
-    private organizationService: OrganizationService) {
+    private organizationService: OrganizationService,
+    private userService: UserService
+  ) {
   }
 
   ngOnInit(): void {
-
     this.getOrganizations();
-  }
-
-  onClickedEdit(id: number) {
-    window.location.replace("/form/organization/" + id);
   }
 
   onClickedDelete(id: number) {
@@ -41,8 +42,22 @@ export class OrganizationListComponent implements OnInit {
 
   private getOrganizations() {
     this.organizationService.getAll().subscribe(organizations => {
-        this.organizations = organizations;
+      this.organizations = organizations;
+      organizations.forEach(org => {
+        this.organizationService.getMembers(org.id).subscribe(users => {
+          this.organizationUserAvatars.set(org, users.map(user => {
+            return this.getGravatarLink(user.email, 64)
+          }))
+        })
       })
+    })
   }
 
+  getOrganizationAvatarLink(organizationId: number, size: number) {
+    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
+  }
+
+  getGravatarLink(email, size) {
+    return this.userService.getGravatarLink(email, size);
+  }
 }

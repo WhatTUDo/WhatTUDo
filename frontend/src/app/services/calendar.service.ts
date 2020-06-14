@@ -4,6 +4,7 @@ import {CalendarEvent} from '../dtos/calendar-event';
 import {Calendar} from '../dtos/calendar';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Globals} from '../global/globals';
+import {CreateCalendar} from "../dtos/CreateCalendar";
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +33,7 @@ export class CalendarService {
   }
 
   /** POST: add a new calendar to the server */
-  addCalendar(calendar: Calendar): Observable<Calendar> {
+  addCalendar(calendar: CreateCalendar): Observable<Calendar> {
     return this.httpClient.post<Calendar>(this.calendarBaseUri + '/', calendar);
   }
 

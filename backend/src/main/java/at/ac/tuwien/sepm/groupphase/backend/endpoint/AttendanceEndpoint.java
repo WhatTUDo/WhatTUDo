@@ -1,14 +1,11 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.StatusDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.StatusMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.UserMapper;
-import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatus;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.AttendanceService;
@@ -38,15 +35,15 @@ public class AttendanceEndpoint {
     private final EventMapper eventMapper;
     private final UserMapper userMapper;
 
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('SYSADMIN') || #dto.username == authentication.name")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create attendance", authorizations = {@Authorization(value = "apiKey")})
-    public StatusDto create(@RequestBody StatusDto statusDto) {
+    public StatusDto create(@RequestBody StatusDto dto) {
         log.info("create status");
         try {
-            return statusMapper.applicationStatusToStatusDto(attendanceService.create(statusMapper.statusDtoToApplicationStatus(statusDto)));
+            return statusMapper.applicationStatusToStatusDto(attendanceService.create(statusMapper.statusDtoToApplicationStatus(dto)));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }

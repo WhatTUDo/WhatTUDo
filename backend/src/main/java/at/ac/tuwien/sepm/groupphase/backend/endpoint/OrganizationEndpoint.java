@@ -44,16 +44,16 @@ public class OrganizationEndpoint {
     private final CalendarService calendarService;
 
 
-    @PreAuthorize("hasPermission(#organization, 'MOD')")
+    @PreAuthorize("hasPermission(#dto, 'MOD')")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit organization", authorizations = {@Authorization(value = "apiKey")})
-    public OrganizationDto editOrganization(@RequestBody OrganizationDto organization) {
+    public OrganizationDto editOrganization(@RequestBody OrganizationDto dto) {
         try {
-            Organization organizationEntity = organizationService.findById(organization.getId());
-            organizationEntity.setName(organization.getName());
-            organizationMapper.mapCalendars(organization, organizationEntity);
+            Organization organizationEntity = organizationService.findById(dto.getId());
+            organizationEntity.setName(dto.getName());
+            organizationMapper.mapCalendars(dto, organizationEntity);
             return organizationMapper.organizationToOrganizationDto(organizationService.update(organizationEntity));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
@@ -69,9 +69,9 @@ public class OrganizationEndpoint {
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create Organization", authorizations = {@Authorization(value = "apiKey")})
-    public OrganizationDto createOrganization(@RequestBody OrganizationDto organizationDto) {
+    public OrganizationDto createOrganization(@RequestBody OrganizationDto dto) {
         try {
-            Organization organizationEntity = organizationMapper.organizationDtoToOrganization(organizationDto);
+            Organization organizationEntity = organizationMapper.organizationDtoToOrganization(dto);
             return organizationMapper.organizationToOrganizationDto(organizationService.create(organizationEntity));
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
@@ -128,30 +128,30 @@ public class OrganizationEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
     @PutMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add Calendars to an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
-    public OrganizationDto addCalToOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
+    public OrganizationDto addCalToOrga(@PathVariable(value = "id") Integer id, @RequestParam(value = "id") List<Integer> calendarIds) {
         try {
             Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
-            Organization organization = organizationService.addCalendars(organizationService.findById(orgaId), calendars);
+            Organization organization = organizationService.addCalendars(organizationService.findById(id), calendars);
             return organizationMapper.organizationToOrganizationDto(organization);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
 
-    @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
     @DeleteMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Remove Calendars from an Organization by ID", authorizations = {@Authorization(value = "apiKey")})
-    public OrganizationDto removeCalFromOrga(@PathVariable(value = "id") Integer orgaId, @RequestParam(value = "id") List<Integer> calendarIds) {
+    public OrganizationDto removeCalFromOrga(@PathVariable(value = "id") Integer id, @RequestParam(value = "id") List<Integer> calendarIds) {
         try {
             Collection<Calendar> calendars = calendarIds.stream().map(calendarService::findById).collect(Collectors.toList());
-            Organization organization = organizationService.removeCalendars(organizationService.findById(orgaId), calendars);
+            Organization organization = organizationService.removeCalendars(organizationService.findById(id), calendars);
             return organizationMapper.organizationToOrganizationDto(organization);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
@@ -162,11 +162,11 @@ public class OrganizationEndpoint {
     @GetMapping("/members/{id}")
     @CrossOrigin
     @ApiOperation(value = "get organization members", authorizations = {@Authorization(value = "apiKey")})
-    public List<LoggedInUserDto> getOrganizationMembers(@PathVariable(value = "id") Integer orgaId){
+    public List<LoggedInUserDto> getOrganizationMembers(@PathVariable(value = "id") Integer id){
         try{
-            log.info("get members of organization with id {}",orgaId);
+            log.info("get members of organization with id {}",id);
             List<LoggedInUserDto> userDtos = new ArrayList<>();
-            List<ApplicationUser> users = organizationService.getMembers(orgaId);
+            List<ApplicationUser> users = organizationService.getMembers(id);
             for (ApplicationUser user : users){
                 userDtos.add(userMapper.applicationUserToUserDto(user));
             }

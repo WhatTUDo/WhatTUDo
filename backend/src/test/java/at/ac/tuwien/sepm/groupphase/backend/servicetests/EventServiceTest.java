@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -30,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
+@DirtiesContext
 public class EventServiceTest {
 
     @Autowired
@@ -40,6 +42,9 @@ public class EventServiceTest {
 
     @Autowired
     OrganizationRepository organizationRepository;
+
+    @Autowired
+    EventRepository eventRepository;
 
 
     @Test
@@ -105,12 +110,12 @@ public class EventServiceTest {
 
 
   @Test
-    public void deleteEvent_withIdDoesNotExist_throwsNotFoundException(){
+    public void deleteEvent_withIdDoesNotExist_throwsNothing(){
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 6", Collections.singletonList(new Organization())));
 
-        Event eventEntity = new Event("Delete Event Test", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar);
+        Event eventEntity = eventRepository.save(new Event("Delete Event Test", LocalDateTime.of(2020,1,1,15,30),LocalDateTime.of(2020,1,1,16,0),calendar));
 
-        assertThrows(NotFoundException.class, () -> service.delete(eventEntity));
+        service.delete(eventEntity);
     }
 
 

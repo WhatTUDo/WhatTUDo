@@ -67,12 +67,10 @@ export class OrganizationService {
    * @param calendarId ID of calendar to be added.
    */
   addCalendarToOrga(organizationId: number, calendarId: number): Observable<any> {
-    console.log(`Add Calendar ${calendarId} to`, organizationId);
     let params = new HttpParams();
-    params = params.set('calendarId', String(calendarId));
-    params = params.set('organizationId', String(organizationId));
+    params = params.set('id', String(calendarId));
     console.log(params);
-    return this.httpClient.put(this.organizationBaseUri + `/calendars`, {}, {
+    return this.httpClient.put(this.organizationBaseUri + `/${organizationId}/calendars`, {}, {
       params: params
     });
   }
@@ -82,7 +80,6 @@ export class OrganizationService {
    * @param calendarId ID of calendar to be added.
    */
   removeCalendarToOrga(organizationId: number, calendarId: number): Observable<any> {
-    console.log(`Remove Calendar ${calendarId} to`, Organization);
     let params = new HttpParams();
     params = params.set('id', String(calendarId));
     return this.httpClient.delete(this.organizationBaseUri + `/${organizationId}/calendars`, {
@@ -97,5 +94,12 @@ export class OrganizationService {
   getMembers(organizationId: number): Observable<User[]> {
     console.log(`Get members of organization ${organizationId}`);
     return this.httpClient.get<User[]>(`${this.organizationBaseUri}/members/${organizationId}`);
+  }
+
+  getOrganizationAvatarLink(organizationId: number, size: number) {
+    // Return base64 of a 1x1px transparent gif if no organizationId is given.
+    if (!organizationId) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+    return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+    //TODO: Implement this after backend is done.
   }
 }

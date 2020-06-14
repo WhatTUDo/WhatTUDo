@@ -21,6 +21,8 @@
   display: flex;
   align-items: flex-end;
 
+  background-color: var(--shadow);
+
   height: 40em;
 
   border-radius: $rounded-radius;
@@ -58,7 +60,13 @@
   width: 100%;
 
   button {
-    margin: 0 16pt;
+    margin: 0 8pt;
+  }
+
+  @media (screen and min-width: $mobile-breakpoint) {
+    button {
+      margin: 0 16pt;
+    }
   }
 }
 
@@ -86,25 +94,37 @@
   margin-bottom: 8pt;
 }
 
-.organization-info {
-  display: flex;
+.calendar-info {
+  border-radius: $rounded-radius;
+  background-color: var(--shadow);
 
-  padding: 16pt;
-
-  .avatar {
-    justify-self: flex-start;
-    flex-shrink: 0;
-
-    margin-right: 16pt;
+  .calendar-name {
+    text-align: center;
+    padding: 8pt 0 4pt;
+    font-weight: $f-bold;
+    font-size: 24pt;
   }
 
-  .organization-details {
-    text-align: right;
-    justify-self: flex-end;
+  .organization-info {
+    display: flex;
+    align-items: center;
+    padding: 8pt 16pt;
 
-    .organization-name {
-      font-weight: $f-bold;
-      font-size: 16pt;
+    .avatar {
+      justify-self: flex-start;
+      flex-shrink: 0;
+
+      margin-right: 16pt;
+    }
+
+    .organization-details {
+      text-align: right;
+      justify-self: flex-end;
+
+      .organization-name {
+        font-weight: $f-bold;
+        font-size: 16pt;
+      }
     }
   }
 }
