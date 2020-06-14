@@ -39,7 +39,8 @@
   </div>
   <div class="week-day-label">
     {{displayingWeek[5].toLocaleDateString(dateLocale, {weekday: 'short'})}}
-    /{{displayingWeek[6].toLocaleDateString(dateLocale, {weekday: 'short'})}}
+    /
+    {{displayingWeek[6].toLocaleDateString(dateLocale, {weekday: 'short'})}}
   </div>
 
   <div *ngFor="let date of this.displayingWeek.slice(0,5)" [ngClass]="{'today': isToday(date)}"
