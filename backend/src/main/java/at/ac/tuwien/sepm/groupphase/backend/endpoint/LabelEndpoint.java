@@ -53,23 +53,22 @@ public class LabelEndpoint {
         }
     }
 
-
-   // @PreAuthorize("hasPermission(#labelDto, 'SYSADMIN')") FIXME: is this correct? I don't know how auth works in detail atm
-   @CrossOrigin
-   @ResponseStatus(HttpStatus.OK)
-   @DeleteMapping(value = "/{id}")
-   @ApiOperation(value = "Delete label", authorizations = {@Authorization(value = "apiKey")})
-   public void deleteCalendar(@PathVariable("id") Integer id) {
-       try {
-           labelService.delete(id);
-       } catch (ServiceException e) {
-           throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
-       } catch (ValidationException e) {
-           throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
-       } catch (NotFoundException e) {
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-       }
-   }
+    @PreAuthorize("hasRole('SYSADMIN')") //FIXME: is this correct? I don't know how auth works in detail atm
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping(value = "/{id}")
+    @ApiOperation(value = "Delete label", authorizations = {@Authorization(value = "apiKey")})
+    public void delete(@PathVariable("id") Integer id) {
+        try {
+            labelService.delete(id);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
 
     // @PreAuthorize("hasPermission(#labelDto, 'SYSADMIN')") FIXME: is this correct? I don't know how auth works in detail atm
     @CrossOrigin

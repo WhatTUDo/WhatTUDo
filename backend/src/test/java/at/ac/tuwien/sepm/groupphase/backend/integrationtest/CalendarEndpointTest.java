@@ -22,6 +22,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -90,4 +91,43 @@ public class CalendarEndpointTest {
 
         assertThrows(ResponseStatusException.class, () -> calendarEndpoint.getById(calendarDto.getId()));
     }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    public void editCalendar_returnsCalendarWithUpdatedValues(){
+        Organization orga = new Organization("Test Organization");
+        orga.setId(1);
+        List<Integer> e = new ArrayList<>();
+        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+
+        CalendarDto calendarDto = new CalendarDto(1, "Save to update", Collections.singletonList(orga.getId()), null);
+
+        CalendarDto calendarSaved = calendarEndpoint.create(calendarDto);
+
+        CalendarDto update = new CalendarDto(calendarSaved.getId(), "Updated", Collections.singletonList(orga.getId()),e );
+
+        assertEquals(update.getName(),calendarEndpoint.editCalendar(update).getName());
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1", "MOD_2", "MEMBER_2"})
+    @Test
+   public void updateOrganizationsForCalendar(){
+       Organization orga = new Organization("Test Organization");
+       orga.setId(1);
+       Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+       List<Integer> org = new ArrayList<>(); org.add(1);
+       CalendarDto calendarDto = new CalendarDto(1, "Save to update 2", Collections.singletonList(orga.getId()), null);
+
+       CalendarDto calendarSaved = calendarEndpoint.create(calendarDto);
+       Organization orga1 = new Organization("Test Org 2");
+       orga1.setId(2);
+       Mockito.when(organizationRepository.save(new Organization("Test Org 2"))).thenReturn(orga1);
+       org.add(2);
+
+       CalendarDto update = new CalendarDto(calendarSaved.getId(), calendarSaved.getName(), org ,calendarSaved.getEventIds() );
+
+       assertEquals(update.getOrganizationIds(), calendarEndpoint.updateOrganizationsForCalendar(update).getOrganizationIds());
+
+
+   }
 }

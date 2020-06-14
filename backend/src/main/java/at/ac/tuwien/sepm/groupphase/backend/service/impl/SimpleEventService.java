@@ -150,7 +150,15 @@ public class SimpleEventService implements EventService {
         log.info("Adding labels {} to event {}", labels, event);
         try {
             removeLabels(event,event.getLabels());
-            labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
+            for (Label l : labels
+                 ) {
+                if(!l.getEvents().contains(event)){
+                    List<Event> events = new ArrayList<>(l.getEvents());
+                    events.add(event);
+                    l.setEvents(events);
+                }
+            }
+            //labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
             labelRepository.saveAll(labels);
             if (event.getLabels() != null) {
                 event.getLabels().addAll(labels);
@@ -170,10 +178,13 @@ public class SimpleEventService implements EventService {
     public Event removeLabels(Event event, Collection<Label> labels) {
      //   log.info("Removing labels {} from event {}", labels, event);
         try {
-            labels.forEach(it -> {it.getEvents().remove(event);});
-            labelRepository.saveAll(labels);
-
-            event.getLabels().removeAll(labels);
+            if(labels != null) {
+                labels.forEach(it -> {
+                    it.getEvents().remove(event);
+                });
+                labelRepository.saveAll(labels);
+                event.getLabels().removeAll(labels);
+            }
             return eventRepository.save(event);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);

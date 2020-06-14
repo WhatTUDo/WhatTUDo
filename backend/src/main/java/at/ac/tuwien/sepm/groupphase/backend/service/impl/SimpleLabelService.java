@@ -145,7 +145,7 @@ public class SimpleLabelService implements LabelService {
                 result.add(it);});
         }
 
-        else throw new NotFoundException();
+        else {throw new NotFoundException();}
 
         return result;
 

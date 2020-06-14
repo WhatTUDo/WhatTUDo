@@ -50,9 +50,19 @@ export class CalendarListComponent implements OnInit {
     if (validationIsPassed) {
       // submit to service
       console.log("search");
-      this.getAllCalendars();
-    }
-  }
+      this.calendarService.searchCalendars(formValue.name ).subscribe(async (list) => {
+        this.calendars = list;
+        let organizationIdSet = new Set<number>();
+        this.calendars.forEach(cal => {
+          cal.organizationIds.forEach(id => organizationIdSet.add(id));
+        })
+        for (const id of organizationIdSet) {
+          this.organizationsMap.set(id,  await this.organizationService.getById(id).toPromise())
+        }
+
+ });
+    }}
+
 
   /**
    *

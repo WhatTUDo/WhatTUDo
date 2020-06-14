@@ -220,7 +220,7 @@ export class EventFormComponent implements OnInit {
       helperEvent.name = "";
       helperEvent.description = "";
       this.eventCollisionService.getEventCollisions(helperEvent).subscribe((collisionResponse) => {
-        this.collisionResponse = collisionResponse
+        this.collisionResponse = collisionResponse;
         this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
 
         if (!this.conflictExists) {
