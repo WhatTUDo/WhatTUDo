@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
@@ -103,20 +104,15 @@ public class CalendarEndpoint {
     }
 
 
-    //@PreAuthorize("hasPermission(#calendarDto, 'MOD')") FIXME: #calendar was wrong. ("id must not be null!") but #calendarDto gives permission denied even for a valid user
+    @PreAuthorize("hasPermission(#calendar, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
-    public CalendarDto create(@RequestBody CalendarDto calendar) {
-
-
+    public CalendarDto create(@RequestBody CalendarCreateDto calendar) {
         try {
-            List<Integer> eventsShouldBeEmpty = new ArrayList<>();
-            calendar.setEventIds(eventsShouldBeEmpty);
-            Calendar calendarEntity = testMapper.calendarDtoToCalendar(calendar);
-
-            return testMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
+            Calendar calendarEntity = calendarMapper.calendarCreateDtoToCalendar(calendar);
+            return calendarMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -124,7 +120,7 @@ public class CalendarEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#id, 'CAL', 'SYSADMIN')")
+    @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")
