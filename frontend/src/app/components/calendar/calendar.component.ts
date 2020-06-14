@@ -72,12 +72,15 @@ export class CalendarComponent implements OnInit {
           const time = event.getElementsByClassName('calendar-event-time')[0];
           const name = event.getElementsByClassName('calendar-event-name')[0];
           // @ts-ignore
-          if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
-            // @ts-ignore
-            time.innerText = '…';
-            // @ts-ignore
-            name.innerText = '…';
+          if (time && name) {
+            if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
+              // @ts-ignore
+              time.innerText = '…';
+              // @ts-ignore
+              name.innerText = '…';
+            }
           }
+
         });
     }, 500);
   }
@@ -199,11 +202,14 @@ export class CalendarComponent implements OnInit {
   }
 
   isOnSameDay(date1: Date, date2: Date) {
-    return date1.toDateString() === date2.toDateString();
+    let dateA = new Date(date1);
+    let dateB = new Date(date2);
+    return dateA.toDateString() === dateB.toDateString();
   }
 
   getSecondOffsetFromMidnight(date: Date) {
-    return date.getSeconds() + (60 * date.getMinutes()) + (60 * 60 * date.getHours());
+    let dateObject = new Date(date);
+    return dateObject.getSeconds() + (60 * dateObject.getMinutes()) + (60 * 60 * dateObject.getHours());
   }
 
   getMidnight(date: Date) {

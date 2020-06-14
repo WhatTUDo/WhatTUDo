@@ -170,12 +170,14 @@ export class EventService {
    * @param event
    */
   public getDisplayTimeString(event: CalendarEvent) {
-    let string = event.startDateTime.toLocaleTimeString(this.globals.dateLocale, {
+    let startDate = new Date(event.startDateTime);
+    let endDate = new Date(event.endDateTime);
+    let string = startDate.toLocaleTimeString(this.globals.dateLocale, {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
     string += ' - '
-    string += event.endDateTime.toLocaleTimeString(this.globals.dateLocale, {
+    string += endDate.toLocaleTimeString(this.globals.dateLocale, {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
