@@ -41,8 +41,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             //Compares the user with CustomUserDetailService#loadUserByUsername and check if the credentials are correct
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 user.getUsername(),
-                user.getPassword())
-            );
+                user.getPassword()
+            ));
         } catch (IOException e) {
             throw new BadCredentialsException("Wrong API request or JSON schema", e);
         }
