@@ -53,7 +53,7 @@ public class SimpleLabelService implements LabelService {
             //TODO  publisher.publishEvent(new EventFindEvent(organization.getName()));
             return label;
         } else {
-            throw new NotFoundException("No organization found with id " + id);
+            throw new NotFoundException("No label found with id " + id);
         }
     }
 
