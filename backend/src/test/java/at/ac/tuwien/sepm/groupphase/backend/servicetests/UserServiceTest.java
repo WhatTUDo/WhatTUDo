@@ -70,15 +70,16 @@ public class UserServiceTest {
         assert (user.getId() != null && user.getId() != 0);
 
     }
-    @Test
-    public void updateUser(){
 
-        ApplicationUser user = new ApplicationUser( "user1", "testy@test.com", "hunter2");
+    @Test
+    public void updateUser() {
+
+        ApplicationUser user = new ApplicationUser("user1", "testy@test.com", "hunter2");
 
         ApplicationUser savedUser = userService.saveNewUser(user);
 
 
-        ApplicationUser user1 = new ApplicationUser( "user2", "", "");
+        ApplicationUser user1 = new ApplicationUser("user2", "", "");
         user1.setId(savedUser.getId());
 
         ApplicationUser updateUser = userService.updateUser(user1);

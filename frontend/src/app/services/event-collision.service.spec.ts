@@ -1,6 +1,6 @@
-import { TestBed } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { EventCollisionService } from './event-collision.service';
+import {EventCollisionService} from './event-collision.service';
 
 describe('EventCollisionService', () => {
   let service: EventCollisionService;

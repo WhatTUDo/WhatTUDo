@@ -50,8 +50,7 @@ export class CalendarFormComponent implements OnInit {
       this.isUpdate = true;
       this.calendarService.getCalendarById(id)
         .subscribe(calendar => this.calendar = calendar);
-    }
-    else {
+    } else {
       this.title = "CREATE NEW CALENDAR";
       this.isUpdate = false;
       this.calendar = new Calendar(0, null, [], []);
@@ -64,7 +63,8 @@ export class CalendarFormComponent implements OnInit {
       if (this.isUpdate) {
         this.calendarService.editCalendar(this.calendar).subscribe(observable => {
           console.log("Updated calendar: ", observable);
-        }, error => {}, () => {
+        }, error => {
+        }, () => {
           this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
             console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
           }, error => {
@@ -72,15 +72,15 @@ export class CalendarFormComponent implements OnInit {
             this.goBack();
           });
         });
-      }
-      else {
+      } else {
         let createCalendar = new CreateCalendar(this.calendar.name, this.calendar.organizationIds[0]);
         this.calendarService.addCalendar(createCalendar).subscribe((createdCalendar: Calendar) => {
           console.log("Created calendar: ", observable);
           this.calendar = createdCalendar;
           this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
               console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
-            }, error => {},
+            }, error => {
+            },
             () => {
               this.goBack();
             });

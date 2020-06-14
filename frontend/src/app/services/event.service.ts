@@ -47,9 +47,9 @@ export class EventService {
     console.log('add  labels');
     console.log(id);
     return this.httpClient.put<Event>(this.eventBaseUri + '/' + id + '/' + 'labels', labelselect)
-    .subscribe(response => {
-      console.log(response);
-    });
+      .subscribe(response => {
+        console.log(response);
+      });
 
 
   }

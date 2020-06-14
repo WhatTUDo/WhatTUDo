@@ -67,7 +67,8 @@
         <label for="label-picker">Labels: </label>
 
         <div id="label-picker">
-          <div class="label-item clickable no-hover-enlarge no-shadow" (click)="toggleLabel(label)" *ngFor="let label of allLabels">
+          <div class="label-item clickable no-hover-enlarge no-shadow" (click)="toggleLabel(label)"
+               *ngFor="let label of allLabels">
             <fa-icon [icon]="labelIsSelected(label)?faCheckCircle:faCircle"></fa-icon>
             {{label.name}}
           </div>

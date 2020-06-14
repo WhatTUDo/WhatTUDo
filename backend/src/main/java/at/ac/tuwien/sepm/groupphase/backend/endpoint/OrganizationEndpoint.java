@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 import java.util.Collection;
 
 
-
 @Slf4j
 @RestController
 @RequestMapping(value = OrganizationEndpoint.BASE_URL)
@@ -119,16 +118,15 @@ public class OrganizationEndpoint {
     public Integer deleteOrga(@PathVariable(value = "id") Integer id) {
         try {
             return this.organizationService.delete(id);
-        }
-        catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
         }
     }
 
-    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
     @PutMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -143,7 +141,8 @@ public class OrganizationEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')") // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
     @DeleteMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -162,17 +161,17 @@ public class OrganizationEndpoint {
     @GetMapping("/members/{id}")
     @CrossOrigin
     @ApiOperation(value = "get organization members", authorizations = {@Authorization(value = "apiKey")})
-    public List<LoggedInUserDto> getOrganizationMembers(@PathVariable(value = "id") Integer id){
-        try{
-            log.info("get members of organization with id {}",id);
+    public List<LoggedInUserDto> getOrganizationMembers(@PathVariable(value = "id") Integer id) {
+        try {
+            log.info("get members of organization with id {}", id);
             List<LoggedInUserDto> userDtos = new ArrayList<>();
             List<ApplicationUser> users = organizationService.getMembers(id);
-            for (ApplicationUser user : users){
+            for (ApplicationUser user : users) {
                 userDtos.add(userMapper.applicationUserToUserDto(user));
             }
             return userDtos;
-        }catch (ServiceException e){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(),e );
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
 
     }

@@ -16,8 +16,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @Mapper(componentModel = "spring")
 public abstract class EventMapper {
-    @Autowired protected CalendarRepository calendarRepository;
-    @Autowired protected PermissionEvaluator permissionEvaluator;
+    @Autowired
+    protected CalendarRepository calendarRepository;
+    @Autowired
+    protected PermissionEvaluator permissionEvaluator;
 
     public abstract EventDto eventToEventDto(Event event);
 

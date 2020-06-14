@@ -39,20 +39,19 @@ public class CollisionEndpointTest {
     EventCollisionEndpoint eventCollisionEndpoint;
 
 
-
     @WithMockUser
     @Test
-    public void getEventCollisionsAndSuggestions(){
+    public void getEventCollisionsAndSuggestions() {
         Organization orga = new Organization("Test Organization");
-        Calendar calendar =(new Calendar("Calendar test", Collections.singletonList(orga)));
+        Calendar calendar = (new Calendar("Calendar test", Collections.singletonList(orga)));
         calendarRepository.save(calendar);
-        Event event = eventRepository.save(new Event("Event colliding 1", LocalDateTime.of(2021, 8, 8, 10,0),
-            LocalDateTime.of(2021, 8, 8, 11,0), calendar));
-        Event event1=    eventRepository.save(new Event("Event colliding 2", LocalDateTime.of(2021, 8, 8, 9,45),
-            LocalDateTime.of(2021, 8, 8, 11,0), calendar));
+        Event event = eventRepository.save(new Event("Event colliding 1", LocalDateTime.of(2021, 8, 8, 10, 0),
+            LocalDateTime.of(2021, 8, 8, 11, 0), calendar));
+        Event event1 = eventRepository.save(new Event("Event colliding 2", LocalDateTime.of(2021, 8, 8, 9, 45),
+            LocalDateTime.of(2021, 8, 8, 11, 0), calendar));
 
-        CollisionResponseDto eventCollisionDto = eventCollisionEndpoint.getEventCollisions(new EventDto(1, "Event saving", LocalDateTime.of(2021, 8, 8, 10,0),
-            LocalDateTime.of(2021, 8, 8, 11,0), calendar.getId()));
+        CollisionResponseDto eventCollisionDto = eventCollisionEndpoint.getEventCollisions(new EventDto(1, "Event saving", LocalDateTime.of(2021, 8, 8, 10, 0),
+            LocalDateTime.of(2021, 8, 8, 11, 0), calendar.getId()));
 
         assert (eventCollisionDto.getEventCollisions() != null);
         assert (eventCollisionDto.getDateSuggestions() != null);

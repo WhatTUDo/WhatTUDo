@@ -90,8 +90,7 @@ public class OrganizationEndpointTest {
 
         try {
             endpoint.getOrgaById(nonsenseID);
-        }
-        catch (ResponseStatusException e) {
+        } catch (ResponseStatusException e) {
             assertEquals(HttpStatus.NOT_FOUND, e.getStatus());
         }
     }
@@ -100,14 +99,14 @@ public class OrganizationEndpointTest {
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void save_thenEdit_shouldReturn_newOrganization() {
-        Organization organization =(new Organization("Test Organization 1"));
+        Organization organization = (new Organization("Test Organization 1"));
         organization.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization 1"))).thenReturn(organization);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization 1"))).thenReturn(organization);
         List<Integer> calendars = Collections.emptyList();
         OrganizationDto updatedOrganization = new OrganizationDto(organization.getId(), "Updated Test Organization", calendars);
         OrganizationDto returnedOrganization = endpoint.editOrganization(updatedOrganization);
-        assertEquals(returnedOrganization.getId(),organization.getId());
-        assertEquals(returnedOrganization.getName(),updatedOrganization.getName());
+        assertEquals(returnedOrganization.getId(), organization.getId());
+        assertEquals(returnedOrganization.getName(), updatedOrganization.getName());
     }
 
 //    @WithMockUser(username = "Person 1", authorities = {"MOD_200000", "MEMBER_200000"})
@@ -123,9 +122,9 @@ public class OrganizationEndpointTest {
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void edit_withoutName_shouldThrow_ResponseStatusException() {
-        Organization organization =(new Organization("Test Organization 1"));
+        Organization organization = (new Organization("Test Organization 1"));
         organization.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization 1"))).thenReturn(organization);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization 1"))).thenReturn(organization);
         List<Integer> calendars = Collections.emptyList();
         OrganizationDto organizationDto = new OrganizationDto(organization.getId(), "", calendars);
         assertThrows(ResponseStatusException.class, () -> endpoint.editOrganization(organizationDto));

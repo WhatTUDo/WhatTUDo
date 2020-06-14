@@ -16,11 +16,12 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public class CollisionResponseMapper {
 
-    @Autowired EventCollisionMapper eventCollisionMapper;
+    @Autowired
+    EventCollisionMapper eventCollisionMapper;
 
     public CollisionResponseDto mapCollisionResponseDto(List<EventCollision> eventCollisions, List<LocalDateTime[]> dateRecommendations) {
         List<EventCollisionDto> eventCollisionDtos = new ArrayList<>();
-        for(EventCollision eventCollision : eventCollisions) {
+        for (EventCollision eventCollision : eventCollisions) {
             eventCollisionDtos.add(eventCollisionMapper.eventCollisionToEventCollisionDto(eventCollision));
         }
         return new CollisionResponseDto(eventCollisionDtos, dateRecommendations);

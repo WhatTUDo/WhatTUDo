@@ -67,7 +67,7 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
   public changePassword() {
     if (this.changePwdForm.valid) {
       console.log(this.user.name);
-      this.userService.changePwd(new ChangeUserPasswordDto(this.user.name, this.user.email, this.changePwdForm.controls.currentPassword.value, this.changePwdForm.controls.newPassword.value )).subscribe((user: User)=>{
+      this.userService.changePwd(new ChangeUserPasswordDto(this.user.name, this.user.email, this.changePwdForm.controls.currentPassword.value, this.changePwdForm.controls.newPassword.value)).subscribe((user: User) => {
         this.user = user;
 
       }, err => {

@@ -139,13 +139,13 @@ public class OrganizationServiceTest {
 
 
     @Test
-    public void getOrgMembers(){
+    public void getOrgMembers() {
         Organization organization = organizationRepository.save(new Organization("Organization Members Test"));
-        ApplicationUser member1 =userRepository.save(new ApplicationUser("member1", "member1@org.at", "supersecret"));
+        ApplicationUser member1 = userRepository.save(new ApplicationUser("member1", "member1@org.at", "supersecret"));
         ApplicationUser member2 = userRepository.save(new ApplicationUser("member2", "member2@org.at", "supersecret"));
         Set<OrganizationMembership> organizationMemberships = new HashSet<>();
         organizationMemberships.add(new OrganizationMembership(organization, member1, OrganizationRole.MEMBER));
-        organizationMemberships.add(new OrganizationMembership(organization, member2, OrganizationRole.MOD ));
+        organizationMemberships.add(new OrganizationMembership(organization, member2, OrganizationRole.MOD));
         organization.setMemberships(organizationMemberships);
         organizationRepository.save(organization);
 

@@ -43,7 +43,7 @@ import {PromoEventListComponent} from './components/promo-event-list/promo-event
 import {UserRegistrationComponent} from './components/user-registration/user-registration.component';
 import {OverlayModule} from "@angular/cdk/overlay";
 import {ExplanationComponent} from './components/explanation/explanation.component';
-import { EventConflictResolverComponent } from './components/event-conflict-resolver/event-conflict-resolver.component';
+import {EventConflictResolverComponent} from './components/event-conflict-resolver/event-conflict-resolver.component';
 
 
 @NgModule({

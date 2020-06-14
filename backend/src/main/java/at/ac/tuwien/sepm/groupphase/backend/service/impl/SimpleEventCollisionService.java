@@ -85,9 +85,8 @@ public class SimpleEventCollisionService implements EventCollisionService {
         //Case 0: No Overlap
         if (isBeforeOrEqual(endA, startB)) {
             return 0;
-        }
-        else if(isAfterOrEqual(startA, endB)){
-             return 0;
+        } else if (isAfterOrEqual(startA, endB)) {
+            return 0;
         }
         //case 1: Overlap A before B
         else if (isBeforeOrEqual(startA, startB) && isAfterOrEqual(endA, startB)) {
@@ -177,23 +176,23 @@ public class SimpleEventCollisionService implements EventCollisionService {
         }
 
         for (int i = 1; i < 3; i++) {
-            if(event.getStartDateTime().getHour() < 22){
+            if (event.getStartDateTime().getHour() < 22) {
                 help.setStartDateTime(event.getStartDateTime().plusHours(i));
                 help.setEndDateTime(event.getEndDateTime().plusHours(i));
                 recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
             }
 
-            if(event.getStartDateTime().getHour() > 8){
-            help.setStartDateTime(event.getStartDateTime().minusHours(i));
-            help.setEndDateTime(event.getEndDateTime().minusHours(i));
-            if(help.getStartDateTime().isAfter(LocalDateTime.now())){
-                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
-            }
+            if (event.getStartDateTime().getHour() > 8) {
+                help.setStartDateTime(event.getStartDateTime().minusHours(i));
+                help.setEndDateTime(event.getEndDateTime().minusHours(i));
+                if (help.getStartDateTime().isAfter(LocalDateTime.now())) {
+                    recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+                }
 
             }
 
         }
-        if(rec.isEmpty()){
+        if (rec.isEmpty()) {
             throw new ServiceException("Unfortunately we couldn't find any suggestions.");
         }
         return filterBestRecommendations(rec);
@@ -214,7 +213,7 @@ public class SimpleEventCollisionService implements EventCollisionService {
         List<LocalDateTime[]> best = filterMap(rec, 0);
 
         rec.values().removeIf(value -> value == 0);
-        if(rec.isEmpty()){
+        if (rec.isEmpty()) {
             return best;
         }
         Integer min = Collections.min(rec.values());

@@ -35,8 +35,8 @@ export class UserService {
     return this.httpClient.post(this.usersBaseUri, reducedElement);
   }
 
-  changePwd(changeUserPasswordDto: ChangeUserPasswordDto) : Observable<User>{
-     return this.httpClient.put<User>(this.globals.backendUri+ 'changePwd', changeUserPasswordDto);
+  changePwd(changeUserPasswordDto: ChangeUserPasswordDto): Observable<User> {
+    return this.httpClient.put<User>(this.globals.backendUri + 'changePwd', changeUserPasswordDto);
   }
 
   /**

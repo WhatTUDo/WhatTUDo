@@ -1,5 +1,4 @@
-
-export class Calendar{
+export class Calendar {
   constructor(
     public id: number,
     public name: string,

@@ -22,8 +22,11 @@ import java.util.stream.Collectors;
 @Transactional
 @Mapper(componentModel = "spring")
 public abstract class LabelMapper {
-    @Autowired protected LabelRepository labelRepository;
-    @Autowired protected EventRepository eventRepository;
+    @Autowired
+    protected LabelRepository labelRepository;
+    @Autowired
+    protected EventRepository eventRepository;
+
     public abstract LabelDto labelToLabelDto(Label label);
 
     @BeforeMapping

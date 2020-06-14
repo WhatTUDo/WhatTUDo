@@ -117,8 +117,6 @@ export class EventFormComponent implements OnInit {
   onSubmit() {
     let validationIsPassed = this.validateFormInput(this.event);
     if (validationIsPassed) {
-
-
       // submit to eventService
       if (this.isUpdate) {
         this.eventService.putEvent(this.event).subscribe(response => {

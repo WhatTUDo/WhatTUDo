@@ -25,10 +25,14 @@ import java.util.stream.Collectors;
 @Transactional
 @Mapper(componentModel = "spring")
 public abstract class CalendarMapper {
-    @Autowired protected OrganizationRepository organizationRepository;
-    @Autowired protected CalendarRepository calendarRepository;
-    @Autowired protected EventRepository eventRepository;
-    @Autowired protected PermissionEvaluator permissionEvaluator;
+    @Autowired
+    protected OrganizationRepository organizationRepository;
+    @Autowired
+    protected CalendarRepository calendarRepository;
+    @Autowired
+    protected EventRepository eventRepository;
+    @Autowired
+    protected PermissionEvaluator permissionEvaluator;
 
     public abstract CalendarDto calendarToCalendarDto(Calendar calendar);
 
