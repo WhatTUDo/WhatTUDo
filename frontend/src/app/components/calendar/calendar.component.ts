@@ -72,14 +72,14 @@ export class CalendarComponent implements OnInit {
           const time = event.getElementsByClassName('calendar-event-time')[0];
           const name = event.getElementsByClassName('calendar-event-name')[0];
           // @ts-ignore
-          if (time && name) {
-            if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
-              // @ts-ignore
-              time.innerText = '…';
-              // @ts-ignore
-              name.innerText = '…';
-            }
-          }
+          // if (time && name) {
+          //   if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
+          //     // @ts-ignore
+          //     time.innerText = '…';
+          //     // @ts-ignore
+          //     name.innerText = '…';
+          //   }
+          // }
 
         });
     }, 500);
