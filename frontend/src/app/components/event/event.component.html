@@ -7,7 +7,7 @@
   <div class="grid-one-third scroll">
     <div>
       <div class="title-icon-button-combo">
-        <h4>Calendar: {{this.calendarName}}</h4>
+        <h2>Event</h2>
         <div class="icon-button clickable no-hover-enlarge no-shadow">
           <fa-icon *ngIf="calendarEvent.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
                    routerLink="/form/event/{{id}}">
@@ -53,16 +53,17 @@
         </div>
       </div>
       <div class="calendar-info">
-        <div class="calendar-name">
+        <div class="calendar-name clickable no-hover-enlarge no-shadow" routerLink="/calendar/{{calendar.id}}">
           <fa-icon [icon]="faCalendar"></fa-icon>
           {{calendar.name}}
         </div>
         <div class="calendar-organizations">
-          <div class="organization-info" *ngFor="let org of calendarOrganizations">
+          <div class="organization-info clickable no-hover-enlarge no-shadow" *ngFor="let org of calendarOrganizations"
+               routerLink="/organization/{{org.id}}">
             <img alt="" class="avatar avatar-medium" src="{{getOrganizationAvatarLink(org.id, 256)}}">
             <div class="organization-details">
               <div class="organization-name">{{org.name}}</div>
-              <div>I'm baby coloring book iceland forage pour-over leggings. Fanny pack wolf hexagon fingerstache chia lo-fi iceland ramps organic.</div>
+              <div>This is where a short description of the organization should go.</div>
             </div>
           </div>
         </div>
@@ -84,7 +85,8 @@
         <label for="comment-textarea">
           Comments are disabled in the current version.
         </label>
-        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…" disabled="disabled"></textarea>
+        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"
+                  disabled="disabled"></textarea>
         <button (click)="addComment()" class="full-width-form-button no-hover-enlarge btn-lg" disabled="disabled">Send
         </button>
       </div>

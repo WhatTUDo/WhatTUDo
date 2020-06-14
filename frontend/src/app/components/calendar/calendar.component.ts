@@ -99,13 +99,13 @@ export class CalendarComponent implements OnInit {
     //     console.warn('Event does not exist');
     //   });
     // }
-    this.events.forEach(event => {
-      let startDate = new Date(event.startDateTime);
-      let endDate = new Date(event.endDateTime);
-
-      event.startDateTime = startDate;
-      event.endDateTime = endDate;
-    });
+    // this.events.forEach(event => {
+    //   let startDate = new Date(event.startDateTime);
+    //   let endDate = new Date(event.endDateTime);
+    //
+    //   event.startDateTime = startDate;
+    //   event.endDateTime = endDate;
+    // });
     this.displayingWeek.forEach((day: Date) => {
       const keyISOString = this.getMidnight(day).toISOString();
       this.eventsOfTheWeek.set(keyISOString, this.events.filter(event => {
@@ -217,7 +217,11 @@ export class CalendarComponent implements OnInit {
   }
 
   getDisplayTimeString(event: CalendarEvent) {
-    this.eventService.getDisplayTimeString(event);
+    if (this.isOnSameDay(event.startDateTime, event.endDateTime)) {
+      return this.eventService.getDisplayTimeString(event);
+    } else {
+      return this.eventService.getEventDateAndTimeString(event);
+    }
   }
 
   redirectToAddEvent(id: number) {

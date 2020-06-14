@@ -65,18 +65,12 @@
         </div>
         <hr>
         <label for="label-picker">Labels: </label>
-        <div *ngIf="labels">
-          <li *ngFor="let label2 of labelspicked">
 
-            <label>selected:
-              <input [(ngModel)]="label2.name" placeholder="name"/><button (click)="onRemove(label2)"class="button-green clickable btn-lg">remove</button>
-            </label>
-          </li>
-        </div>
-
-        <div id="label-picker" style="background-color: var(--shadow); border-radius: 4pt; padding: 1em; height: 150px">
-          <li *ngFor="let label of labels">{{label.name}}<button (click)="onSelect(label)"class="button-green clickable btn-lg">add</button></li>
-
+        <div id="label-picker">
+          <div class="label-item clickable no-hover-enlarge no-shadow" (click)="toggleLabel(label)" *ngFor="let label of allLabels">
+            <fa-icon [icon]="labelIsSelected(label)?faCheckCircle:faCircle"></fa-icon>
+            {{label.name}}
+          </div>
         </div>
       </div>
       <hr>
