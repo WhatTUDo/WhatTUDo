@@ -136,6 +136,7 @@ public class CustomUserDetailService implements UserService {
     }
 
     @Override
+    @Transactional
     public ApplicationUser removeFromOrga(ApplicationUser user, Organization organization) {
         try {
             Organization dbOrga = organizationRepository.findById(organization.getId()).orElseThrow(() -> new IllegalArgumentException("Organization does not exist"));

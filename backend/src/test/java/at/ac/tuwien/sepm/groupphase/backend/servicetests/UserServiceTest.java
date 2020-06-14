@@ -23,10 +23,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,6 +53,9 @@ public class UserServiceTest {
     @Autowired
     AttendanceService attendanceService;
 
+    @Autowired
+    OrganizationRepository organizationRepository;
+
     @Test
     public void when_savedUser_findAllUsers_shouldReturnListContainingUser() {
         userService.saveNewUser(new ApplicationUser("TestUser", "testy@test.com", "hunter2"));
@@ -68,9 +68,20 @@ public class UserServiceTest {
         userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
         ApplicationUser user = (ApplicationUser) userService.loadUserByUsername("TestUser");
         assert (user.getId() != null && user.getId() != 0);
-
     }
 
+
+
+    @Test
+    public void findUserById_shouldReturnCorrectUser(){
+        ApplicationUser user = userService.saveNewUser(new ApplicationUser("Save user", "testy1@test.com", "hunter2"));
+        assert (userService.findUserById(user.getId()).getName().equals(user.getName()));
+    }
+
+    @Test
+    public void findUserById_nonExistentId_shouldThrowNotFound(){
+        assertThrows(NotFoundException.class, ()->userService.findUserById(0));
+    }
     @Test
     public void updateUser() {
 
@@ -97,6 +108,25 @@ public class UserServiceTest {
 
     }
 
+    @Test
+    public void removeUserFromOrganization(){
+        Organization organization = organizationRepository.save(new Organization("Memmbers"));
+        ApplicationUser user = userService.saveNewUser(new ApplicationUser("remove member", "testy@test.com", "hunter2"));
+        Set<OrganizationMembership> organizationMemberships = new HashSet<>();
+        organizationMemberships.add(new OrganizationMembership(organization, user, OrganizationRole.MOD));
+        organization.setMemberships(organizationMemberships);
+        user.setMemberships(organizationMemberships);
+        user = userRepository.save(user);
+        organization = organizationRepository.save(organization);
+
+        assert(!user.getMemberships().isEmpty());
+
+        user = userService.removeFromOrga(user, organization);
+
+        assert (user.getMemberships().isEmpty());
+
+    }
+
     /*@Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
@@ -109,9 +139,9 @@ public class UserServiceTest {
         List<Event> events2 = new ArrayList<>();
         Label label1 = new Label("TestLabel1");
         Label label2 = new Label("TestLabel2");
-        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event3 = new Event("Test Event 3", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
+        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        Event event3 = new Event("Test Event 3", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
 
         events1.add(event1);
         events1.add(event3);
@@ -162,8 +192,8 @@ public class UserServiceTest {
         Label label1 = new Label("TestLabel1");
         Label label2 = new Label("TestLabel2");
         Label label3 = new Label("TestLabel3");
-        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
+        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
         Event event3 = new Event("Test Event 3", LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(21), calendar);
         events1.add(event1);
         events2.add(event1);
