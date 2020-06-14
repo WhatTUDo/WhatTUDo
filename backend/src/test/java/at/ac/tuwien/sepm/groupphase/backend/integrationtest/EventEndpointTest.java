@@ -101,7 +101,7 @@ public class EventEndpointTest {
 //    }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "User 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void save_shouldReturn_sameEvent() throws Exception {
         Organization orga;
