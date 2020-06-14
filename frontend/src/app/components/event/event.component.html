@@ -7,7 +7,7 @@
   <div class="grid-one-third scroll">
     <div>
       <div class="title-icon-button-combo">
-        <h2>People</h2>
+        <h4>Calendar: {{this.calendarName}}</h4>
         <div class="icon-button clickable no-hover-enlarge no-shadow">
           <fa-icon *ngIf="calendarEvent.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow" routerLink="/form/event/{{id}}">
             Edit
@@ -76,10 +76,10 @@
       </div>
       <div id="comment-area">
         <label for="comment-textarea">
-          Leave a comment
+          Comments are disabled in the current version.
         </label>
-        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"></textarea>
-        <button (click)="addComment()" class="full-width-form-button no-hover-enlarge btn-lg">Send
+        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…" disabled="disabled"></textarea>
+        <button (click)="addComment()" class="full-width-form-button no-hover-enlarge btn-lg" disabled="disabled">Send
         </button>
       </div>
     </div>

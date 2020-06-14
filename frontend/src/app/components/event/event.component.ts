@@ -12,6 +12,7 @@ import {AuthService} from '../../services/auth.service';
 import {AttendanceDto} from '../../dtos/AttendanceDto';
 import {User} from "../../dtos/user";
 import {FeedbackService} from "../../services/feedback.service";
+import {CalendarService} from "../../services/calendar.service";
 
 @Component({
   selector: 'app-event',
@@ -24,6 +25,7 @@ export class EventComponent implements OnInit {
   id: number;
   user: User = null;
   labels: Array<Label>;
+  calendarName: String;
   public calendarEvent: CalendarEvent;
   participants: any = {
     'attending': [],
@@ -35,9 +37,12 @@ export class EventComponent implements OnInit {
   faExternalLinkSquareAlt = faExternalLinkSquareAlt;
   faCog = faCog;
 
-  constructor(private eventService: EventService, private labelService: LabelService,
+  constructor(private eventService: EventService,
+              private labelService: LabelService,
               private feedbackService: FeedbackService,
-              private attendanceStatusService: AttendanceStatusService, private authService: AuthService,
+              private calendarService: CalendarService,
+              private attendanceStatusService: AttendanceStatusService,
+              private authService: AuthService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
@@ -135,11 +140,20 @@ export class EventComponent implements OnInit {
       this.calendarEvent.comments = this.getComments();
       this.calendarEvent.labels = this.getLabels();
       this.calendarEvent.location = location;
-      this.calendarEvent.description = 'yololo';
+      this.calendarEvent.description = 'No Calendar Description available!';
       this.participants = this.getParticipants();
     }, err => {
       alert(err.message);
+    }, () => {
+      this.loadCalendarName(this.calendarEvent.calendarId);
     });
+  }
+
+  private loadCalendarName(calendarId: number) {
+    this.calendarService.getCalendarById(calendarId).subscribe(calendar => {
+      this.calendarName = calendar.name;
+    })
+
   }
 
   private deleteEvent() {
@@ -171,7 +185,7 @@ export class EventComponent implements OnInit {
     let comment3 = new EventComment(null, null, 'Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.\n' +
       '\n', 0.91);
     let array = new Array<EventComment>();
-    array.push(comment1, comment2, comment3);
+    // array.push(comment1, comment2, comment3);
 
     return array;
   }
