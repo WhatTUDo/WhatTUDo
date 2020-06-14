@@ -108,4 +108,8 @@ export class OrganizationComponent implements OnInit {
       })
     }
   }
+
+  getOrganizationAvatarLink(organizationId: number, size: number) {
+    this.organizationService.getOrganizationAvatarLink(organizationId, size);
+  }
 }

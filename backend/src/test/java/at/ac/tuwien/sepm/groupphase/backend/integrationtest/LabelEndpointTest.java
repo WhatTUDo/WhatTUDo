@@ -49,7 +49,7 @@ public class LabelEndpointTest {
     @Mock
     LabelRepository labelRepository;
 
-    @WithMockUser(username = "Person 1")
+    @WithMockUser(roles = {"SYSADMIN"})
     @Test
     public void createNewLabel_ShouldReturnNewLabel() {
         LabelDto labelDto = new LabelDto(0, "TestLabel", new ArrayList<>());
@@ -87,7 +87,7 @@ public class LabelEndpointTest {
         assertNotEquals(0, labelDtos.size());
     }
 
-    @WithMockUser(username = "Person 1")
+    @WithMockUser(roles = {"SYSADMIN"})
     @Test
     public void updateLabel_LabelShouldBeUpdated() {
         LabelDto labelDto = labelEndpoint.create(new LabelDto(0, "TestLabel", new ArrayList<>()));

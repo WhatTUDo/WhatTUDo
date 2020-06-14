@@ -22,6 +22,16 @@ form {
     }
   }
 
+  .organization-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4pt;
+
+    > .avatar {
+      margin-right: 4pt;
+    }
+  }
+
   .calendar-buttons {
     margin-left: auto;
     display: flex;

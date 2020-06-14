@@ -14,7 +14,7 @@
           </fa-icon>
         </div>
       </div>
-      <div class="event-promo-container" style="background-image: url(https://picsum.photos/800/1200/);">
+      <div class="event-promo-container" [style.background-image]="'url('+getEventPromoImageLink(id)+')'">
         <div class="event-promo-details">
           <div class="event-time">{{getEventDateAndTimeString()}}</div>
           <div class="event-name">{{calendarEvent.name}}</div>
@@ -51,15 +51,15 @@
           <button (click)="participate(0)" class="button-red btn-lg">Decline</button>
         </div>
       </div>
-      <div class="organization-info">
-        <img alt="" class="avatar avatar-medium" src="https://picsum.photos/256/256/">
-        <div class="organization-details">
-          <div class="organization-name">FS Winf</div>
-          <div>Als kooperative und engagierte Interessensvertretung wollen wir eine offene Anlaufstelle sein,
-            Studierende beim Studium unterstützen, untereinander vernetzen und kompetent beraten.
-          </div>
-        </div>
-      </div>
+<!--      <div class="organization-info">-->
+<!--        <img alt="" class="avatar avatar-medium" src="https://picsum.photos/256/256/">-->
+<!--        <div class="organization-details">-->
+<!--          <div class="organization-name">FS Winf</div>-->
+<!--          <div>Als kooperative und engagierte Interessensvertretung wollen wir eine offene Anlaufstelle sein,-->
+<!--            Studierende beim Studium unterstützen, untereinander vernetzen und kompetent beraten.-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
       <div class="event-location">
         <div class="event-location-map-container">
           <iframe id="open-street-map-iframe"

@@ -38,7 +38,7 @@ public abstract class StatusMapper {
 
     @BeforeMapping
     protected void mapUser(StatusDto statusDto, @MappingTarget AttendanceStatus applicationStatus){
-        Optional<ApplicationUser> found = userRepository.findById(statusDto.getUserId());
+        Optional<ApplicationUser> found = userRepository.findByName(statusDto.getUsername());
         if(!found.isPresent()){
             throw new NotFoundException("User not found");
         }
@@ -59,7 +59,7 @@ public abstract class StatusMapper {
 
     @BeforeMapping
     protected void mapUser(AttendanceStatus applicationStatus, @MappingTarget StatusDto statusDto){
-       statusDto.setUserId(applicationStatus.getUser().getId());
+       statusDto.setUsername(applicationStatus.getUser().getUsername());
     }
 
 

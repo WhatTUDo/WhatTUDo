@@ -17,8 +17,10 @@
         </div>
         <div>
           <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
-            <div *ngIf="organizationsMap.get(orgId)"
-                 class="clickable no-shadow no-hover-enlarge">{{organizationsMap.get(orgId).name}}</div>
+            <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-shadow no-hover-enlarge">
+              <img alt="" class="avatar avatar-ultra-small" src="{{getOrganizationAvatarLink(orgId, 64)}}">
+              <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+            </div>
           </div>
         </div>
       </div>

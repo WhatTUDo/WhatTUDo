@@ -57,9 +57,9 @@ public class UserEndpoint {
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation(value = "Create New User!")
-    public LoggedInUserDto createNewUser(@RequestBody IncomingUserDto user) {
+    public LoggedInUserDto createNewUser(@RequestBody IncomingUserDto dto) {
         try {
-            ApplicationUser newUser = userService.saveNewUser(userMapper.userDtoToApplicationUser(user));
+            ApplicationUser newUser = userService.saveNewUser(userMapper.userDtoToApplicationUser(dto));
 
             return userMapper.applicationUserToUserDto(newUser);
         } catch (ServiceException e) {
@@ -69,14 +69,14 @@ public class UserEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('SYSADMIN') || #userDto.name == principal.username")
+    @PreAuthorize("hasRole('SYSADMIN') || #dto.name == principal.username")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("update user")
-    public LoggedInUserDto updateUser(@RequestBody LoggedInUserDto userDto) {
+    public LoggedInUserDto updateUser(@RequestBody LoggedInUserDto dto) {
         try {
-            return userMapper.applicationUserToUserDto(userService.updateUser(userMapper.loggedInUserDtoToApplicationUser(userDto)));
+            return userMapper.applicationUserToUserDto(userService.updateUser(userMapper.loggedInUserDtoToApplicationUser(dto)));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
         } catch (ValidationException e) {
@@ -87,14 +87,14 @@ public class UserEndpoint {
     }
 
     @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')")
-    @PutMapping("/{userId}/roles")
+    @PutMapping("/{id}/roles")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("update user")
-    public LoggedInUserDto updateRoleInOrga(@PathVariable Integer userId, @RequestParam Integer orgaId, @RequestParam String role) {
+    public LoggedInUserDto updateRoleInOrga(@PathVariable Integer id, @RequestParam Integer orgaId, @RequestParam String role) {
         try {
             return userMapper.applicationUserToUserDto(userService.updateRoleInOrga(
-                userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found")),
+                userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found")),
                 organizationRepository.findById(orgaId).orElseThrow(() -> new NotFoundException("Organization not found")),
                 OrganizationRole.valueOf(role)
             ));
@@ -108,14 +108,14 @@ public class UserEndpoint {
     }
 
     @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')")
-    @DeleteMapping("/{userId}/roles")
+    @DeleteMapping("/{id}/roles")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("update user")
-    public LoggedInUserDto removeFromOrga(@PathVariable Integer userId, @RequestParam Integer orgaId) {
+    public LoggedInUserDto removeFromOrga(@PathVariable Integer id, @RequestParam Integer orgaId) {
         try {
             return userMapper.applicationUserToUserDto(userService.removeFromOrga(
-                userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User not found")),
+                userRepository.findById(id).orElseThrow(() -> new NotFoundException("User not found")),
                 organizationRepository.findById(orgaId).orElseThrow(() -> new NotFoundException("Organization not found"))
             ));
         } catch (ServiceException e) {
@@ -131,7 +131,7 @@ public class UserEndpoint {
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping("/user")
-    @ApiOperation(value = "Get logged user", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Get logged user")
     public LoggedInUserDto getLoggedUser() {
         try {
             log.info("get current user");
@@ -149,11 +149,11 @@ public class UserEndpoint {
     @CrossOrigin
     @GetMapping("/organizations/{id}")
     @ApiOperation(value = "Get organization user is member", authorizations = {@Authorization(value = "apiKey")})
-    public List<OrganizationDto> getOrganizationOfUser(@PathVariable(value = "id") Integer userId) {
+    public List<OrganizationDto> getOrganizationOfUser(@PathVariable(value = "id") Integer id) {
         try {
-            log.info("get organizations of user with id {}",userId);
+            log.info("get organizations of user with id {}",id);
             List<OrganizationDto> organizationDtos = new ArrayList<>();
-            List<Organization> organizations = userService.getUserOrganizations(userId);
+            List<Organization> organizations = userService.getUserOrganizations(id);
             for (Organization o: organizations
                  ) {
                organizationDtos.add( organizationMapper.organizationToOrganizationDto(o));
@@ -169,16 +169,20 @@ public class UserEndpoint {
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/recommendedEvents/{id}")
-    @ApiOperation(value = "Get recommended Events", authorizations = {@Authorization(value = "apiKey")})
-    public List<EventDto> getRecommendedEvents(@PathVariable(value = "id") Integer userId) {
+    @ApiOperation(value = "Get recommended Events")
+    public List<EventDto> getRecommendedEvents(@PathVariable(value = "id") Integer id) {
         log.info("get recommended event for user");
 
         try {
-            List<Event> recommendedEvent = userService.getRecommendedEvents(userId);
+            List<Event> recommendedEvent = userService.getRecommendedEvents(id);
             if (recommendedEvent.size() < 4) {
                 for (int i = 0; i < 4 - recommendedEvent.size(); i++) {
                     Optional<Event> event = eventService.findForDates(LocalDateTime.now(), LocalDateTime.now().plusMonths(6)).stream().findAny();
-                    if (event.isPresent()) recommendedEvent.add(event.get());
+                    if (event.isPresent() && !recommendedEvent.contains(event.get())) recommendedEvent.add(event.get());
+                }
+                for (int i = 0; i <4-recommendedEvent.size() ; i++) {
+                    Optional<Event> event = eventService.findForDates(LocalDateTime.now(),LocalDateTime.MAX).stream().findAny();
+                    if(event.isPresent() && !recommendedEvent.contains(event.get())) recommendedEvent.add(event.get());
                 }
             }
             List<EventDto> eventDtos = new ArrayList<>();
