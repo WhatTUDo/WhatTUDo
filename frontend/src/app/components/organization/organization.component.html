@@ -22,7 +22,8 @@
           Edit team
         </div>
       </a>
-      <div *ngIf="organization.canDelete" (click)="deleteOrganization(organization.id)" class="organization-action dangerous clickable no-hover-enlarge no-shadow">
+      <div *ngIf="organization.canDelete" (click)="deleteOrganization(organization.id)"
+           class="organization-action dangerous clickable no-hover-enlarge no-shadow">
         Dissolve team
       </div>
     </div>
@@ -47,7 +48,8 @@
             <fa-icon *ngIf="organization.canEdit" [icon]="faCog"></fa-icon>
           </div>
           <div class="clickable no-hover-enlarge no-shadow organization-kick-member-button">
-            <fa-icon (click)="removeFromOrg(member.id, organization.id)" *ngIf="organization.canEdit" [icon]="faTimesCircle"></fa-icon>
+            <fa-icon (click)="removeFromOrg(member.id, organization.id)" *ngIf="organization.canEdit"
+                     [icon]="faTimesCircle"></fa-icon>
           </div>
         </div>
       </div>

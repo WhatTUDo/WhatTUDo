@@ -31,17 +31,20 @@ public class ApplicationUser extends BaseEntity implements CustomUserDetails {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER) // Eager necessary because of getAuthorities()
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    // Eager necessary because of getAuthorities()
     private Set<OrganizationMembership> memberships = new HashSet<>();
 
     @Column(name = "is_sysadmin")
     private boolean isSysAdmin = false;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AttendanceStatus> attendanceStatuses;
+
     /**
      * Infers the User Roles (authorities) from the admin status and the memberships
+     *
      * @return a list of granted authorities
      */
     @Override

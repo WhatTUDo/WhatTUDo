@@ -99,11 +99,9 @@ public class SimpleOrganizationService implements OrganizationService {
             this.removeCalendars(organizationToDelete, calendarsToRemove);
             organizationRepository.delete(organizationToDelete);
             return organisationID;
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             throw new NotFoundException(e.getMessage(), e);
-        }
-        catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
@@ -159,17 +157,18 @@ public class SimpleOrganizationService implements OrganizationService {
 
     @Transactional
     @Override
-    public List<ApplicationUser> getMembers(Integer id) throws ServiceException{
-      try {  Organization organization = organizationRepository.getOne(id);
-        Set<OrganizationMembership> organizationMembershipSet =organization.getMemberships();
-        List<ApplicationUser> members = new ArrayList<>();
+    public List<ApplicationUser> getMembers(Integer id) throws ServiceException {
+        try {
+            Organization organization = organizationRepository.getOne(id);
+            Set<OrganizationMembership> organizationMembershipSet = organization.getMemberships();
+            List<ApplicationUser> members = new ArrayList<>();
 
-        for (OrganizationMembership o: organizationMembershipSet){
-            members.add(o.getUser());
+            for (OrganizationMembership o : organizationMembershipSet) {
+                members.add(o.getUser());
+            }
+            return members;
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
         }
-        return members;
-      } catch (PersistenceException | IllegalArgumentException e){
-          throw new ServiceException(e.getMessage());
-      }
     }
 }

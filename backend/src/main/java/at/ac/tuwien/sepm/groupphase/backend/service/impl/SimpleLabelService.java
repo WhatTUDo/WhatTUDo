@@ -67,7 +67,7 @@ public class SimpleLabelService implements LabelService {
             } else {
                 throw new ValidationException("Id is not defined");
             }
-         //   publisher.publishLabel(new EventDeleteLabel(this.findById(id).getName())); sth like this?
+            //   publisher.publishLabel(new EventDeleteLabel(this.findById(id).getName())); sth like this?
 
             Label toDelete = this.findById(id);
             List<Event> elist = toDelete.getEvents();
@@ -79,8 +79,8 @@ public class SimpleLabelService implements LabelService {
                 toDelete.getEvents().removeAll(elist);
 
 
-                    List<Event> empty = new ArrayList<Event>();
-                    toDelete.setEvents(empty);
+                List<Event> empty = new ArrayList<Event>();
+                toDelete.setEvents(empty);
 
 
                 labelRepository.delete(toDelete);
@@ -102,7 +102,7 @@ public class SimpleLabelService implements LabelService {
             Label result = labelRepository.save(label);
 
 
-         //   publisher.publishEvent(new EventCreateLabel(label.getName())); ???
+            //   publisher.publishEvent(new EventCreateLabel(label.getName())); ???
             return result;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -115,14 +115,14 @@ public class SimpleLabelService implements LabelService {
 
             Label toUpdate = this.findById(label.getId());
 
-            if(!(label.getName().isBlank()) || !(label.getName().equals((this.findById(label.getId())).getName()))){
+            if (!(label.getName().isBlank()) || !(label.getName().equals((this.findById(label.getId())).getName()))) {
                 toUpdate.setName(label.getName());
             }
 
             toUpdate.setEvents(this.findById(label.getId()).getEvents());
 
 
-        //    publisher.publishEvent(new EventUpdateLabel(label.getName()));
+            //    publisher.publishEvent(new EventUpdateLabel(label.getName()));
             return labelRepository.save(toUpdate);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -131,21 +131,23 @@ public class SimpleLabelService implements LabelService {
 
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    public List<Label> findByEventId(int id){
+    public List<Label> findByEventId(int id) {
 
         List<Label> result = new ArrayList<Label>();
 
         Optional<Event> found = eventRepository.findById(id);
 
-        if(found.isPresent()) {
+        if (found.isPresent()) {
             Event finditslabels = found.get();
 
 
-            labelRepository.findAll().forEach(it -> {if((it.getEvents().contains(finditslabels)))
-                result.add(it);});
+            labelRepository.findAll().forEach(it -> {
+                if ((it.getEvents().contains(finditslabels)))
+                    result.add(it);
+            });
+        } else {
+            throw new NotFoundException();
         }
-
-        else {throw new NotFoundException();}
 
         return result;
 

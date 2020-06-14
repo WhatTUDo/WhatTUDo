@@ -34,35 +34,33 @@ public class CalendarServiceTest {
     OrganizationRepository organizationRepository;
 
 
-
-
-    public Organization createOrga(){
+    public Organization createOrga() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         return orga;
     }
 
     @Test
-    public void saveNewCalendar_returnsCalendar(){
+    public void saveNewCalendar_returnsCalendar() {
 
         Calendar calendar = new Calendar("save", Collections.singletonList(createOrga()));
-        Calendar saved =  calendarService.save(calendar);
+        Calendar saved = calendarService.save(calendar);
         assertEquals("save", saved.getName());
         assertEquals(calendar.getOrganizations(), saved.getOrganizations());
     }
 
     @Test
-    public void findByIdAndName_returnsCreatedCalendar(){
+    public void findByIdAndName_returnsCreatedCalendar() {
         Calendar calendar = calendarService.save(new Calendar("find", Collections.singletonList(createOrga())));
-         assertEquals(calendar.getName(), calendarService.findById(calendar.getId()).getName());
-         assertEquals(calendar.getOrganizations().size(), calendarService.findByName(calendar.getName()).get(0).getOrganizations().size());
+        assertEquals(calendar.getName(), calendarService.findById(calendar.getId()).getName());
+        assertEquals(calendar.getOrganizations().size(), calendarService.findByName(calendar.getName()).get(0).getOrganizations().size());
         assertEquals(calendar.getId(), calendarService.findByName(calendar.getName()).get(0).getId());
     }
 
     @Test
-    public void deleteCalendar_findByCalendarId_returnsNotFoundException(){
+    public void deleteCalendar_findByCalendarId_returnsNotFoundException() {
         Calendar calendar = calendarService.save(new Calendar("delete", Collections.singletonList(createOrga())));
         assertEquals(calendar.getName(), calendarService.findById(calendar.getId()).getName());
 
@@ -73,17 +71,14 @@ public class CalendarServiceTest {
     }
 
     @Test
-    public void updateCalendarName_returnsUpdatedCalendarWithUpdatedName(){
+    public void updateCalendarName_returnsUpdatedCalendarWithUpdatedName() {
         Calendar calendar = calendarService.save(new Calendar("update", Collections.singletonList(createOrga())));
         Calendar calendar1 = new Calendar("updated", calendar.getOrganizations());
         calendar1.setId(calendar.getId());
 
-        assertEquals(calendar1.getName(),calendarService.update(calendar1).getName());
+        assertEquals(calendar1.getName(), calendarService.update(calendar1).getName());
 
     }
-
-
-
 
 
 }

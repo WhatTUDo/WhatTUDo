@@ -28,38 +28,38 @@ public abstract class StatusMapper {
     protected EventRepository eventRepository;
 
     @BeforeMapping
-    protected void mapEvent(StatusDto statusDto, @MappingTarget AttendanceStatus applicationStatus){
-       Optional<Event> found= eventRepository.findById(statusDto.getEventId());
-       if(!found.isPresent()){
-           throw new NotFoundException("Event not found");
-       }
+    protected void mapEvent(StatusDto statusDto, @MappingTarget AttendanceStatus applicationStatus) {
+        Optional<Event> found = eventRepository.findById(statusDto.getEventId());
+        if (!found.isPresent()) {
+            throw new NotFoundException("Event not found");
+        }
         applicationStatus.setEvent(found.get());
     }
 
     @BeforeMapping
-    protected void mapUser(StatusDto statusDto, @MappingTarget AttendanceStatus applicationStatus){
+    protected void mapUser(StatusDto statusDto, @MappingTarget AttendanceStatus applicationStatus) {
         Optional<ApplicationUser> found = userRepository.findByName(statusDto.getUsername());
-        if(!found.isPresent()){
+        if (!found.isPresent()) {
             throw new NotFoundException("User not found");
         }
         applicationStatus.setUser(found.get());
     }
 
     @BeforeMapping
-    protected void mapStatus(StatusDto statusDto, @MappingTarget AttendanceStatus attendanceStatus){
+    protected void mapStatus(StatusDto statusDto, @MappingTarget AttendanceStatus attendanceStatus) {
         attendanceStatus.setLastModified(LocalDateTime.now());
     }
 
     public abstract AttendanceStatus statusDtoToApplicationStatus(StatusDto statusDto);
 
     @BeforeMapping
-    protected void mapEvent(AttendanceStatus applicationStatus, @MappingTarget StatusDto statusDto){
-       statusDto.setEventId(applicationStatus.getEvent().getId());
+    protected void mapEvent(AttendanceStatus applicationStatus, @MappingTarget StatusDto statusDto) {
+        statusDto.setEventId(applicationStatus.getEvent().getId());
     }
 
     @BeforeMapping
-    protected void mapUser(AttendanceStatus applicationStatus, @MappingTarget StatusDto statusDto){
-       statusDto.setUsername(applicationStatus.getUser().getUsername());
+    protected void mapUser(AttendanceStatus applicationStatus, @MappingTarget StatusDto statusDto) {
+        statusDto.setUsername(applicationStatus.getUser().getUsername());
     }
 
 

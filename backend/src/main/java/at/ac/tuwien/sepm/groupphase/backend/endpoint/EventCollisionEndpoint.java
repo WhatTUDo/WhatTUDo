@@ -49,16 +49,15 @@ public class EventCollisionEndpoint {
             if (!eventCollisions.isEmpty()) {
                 EventCollision min = eventCollisions.stream().min(Comparator.comparing(EventCollision::getCollisionScore)).get();
                 List<LocalDateTime[]> suggestions = this.eventCollisionService.getAlternativeDateSuggestions(eventMapper.eventDtoToEvent(dto), min.getCollisionScore());
-                if(suggestions.size()>10){
-                List<LocalDateTime[]> ten_suggestions= suggestions.subList(0, 9);
-                return collisionResponseMapper.mapCollisionResponseDto(eventCollisions, ten_suggestions);
+                if (suggestions.size() > 10) {
+                    List<LocalDateTime[]> ten_suggestions = suggestions.subList(0, 9);
+                    return collisionResponseMapper.mapCollisionResponseDto(eventCollisions, ten_suggestions);
                 }
                 return collisionResponseMapper.mapCollisionResponseDto(eventCollisions, suggestions);
             }
             return collisionResponseMapper.mapCollisionResponseDto(eventCollisions, new ArrayList<>());
 
-        }
-        catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }

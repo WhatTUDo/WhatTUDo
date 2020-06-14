@@ -22,9 +22,12 @@ import java.util.stream.Collectors;
 @Transactional
 @Mapper(componentModel = "spring")
 public abstract class OrganizationMapper {
-    @Autowired protected CalendarRepository calendarRepository;
-    @Autowired protected OrganizationRepository organizationRepository;
-    @Autowired protected PermissionEvaluator permissionEvaluator;
+    @Autowired
+    protected CalendarRepository calendarRepository;
+    @Autowired
+    protected OrganizationRepository organizationRepository;
+    @Autowired
+    protected PermissionEvaluator permissionEvaluator;
 
     public abstract OrganizationDto organizationToOrganizationDto(Organization organization);
 

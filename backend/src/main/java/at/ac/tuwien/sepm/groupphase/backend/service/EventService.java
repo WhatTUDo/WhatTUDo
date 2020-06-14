@@ -81,8 +81,8 @@ public interface EventService {
     /**
      * Add labels to an event.
      *
-     * @param event - to add the labels to
-     * @param labels  to be added to this event
+     * @param event  - to add the labels to
+     * @param labels to be added to this event
      * @return the updated event
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
      */
@@ -91,8 +91,8 @@ public interface EventService {
     /**
      * Remove labels from an event.
      *
-     * @param event - to remove the labels from
-     * @param labels    to be removed from this event
+     * @param event  - to remove the labels from
+     * @param labels to be removed from this event
      * @return the updated event
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
      */
@@ -101,8 +101,8 @@ public interface EventService {
     /**
      * Update labels from an event. Set those as the events labels
      *
-     * @param event - to set the labels to
-     * @param labels    to be set for this event
+     * @param event  - to set the labels to
+     * @param labels to be set for this event
      * @return the updated event
      * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
      */

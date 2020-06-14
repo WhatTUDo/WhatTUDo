@@ -16,7 +16,6 @@ import java.util.List;
 public interface LabelService {
 
 
-
     /**
      * Find all labels in db.
      *

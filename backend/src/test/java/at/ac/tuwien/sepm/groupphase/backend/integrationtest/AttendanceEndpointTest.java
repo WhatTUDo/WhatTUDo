@@ -49,13 +49,13 @@ public class AttendanceEndpointTest {
 
     @WithMockUser(username = "testUser")
     @Test
-    public void createAttendance_returnsCorrectAttendanceStatus_returnsCorrectUsers_returnsCorrectEvents(){
+    public void createAttendance_returnsCorrectAttendanceStatus_returnsCorrectUsers_returnsCorrectEvents() {
         Organization orga = new Organization("Test Organization");
-        Calendar calendar =calendarRepository.save(new Calendar("Calendar test", Collections.singletonList(orga)));
-        Event event = eventRepository.save(new Event("Attend Event", LocalDateTime.of(2021, 8,8,15,0), LocalDateTime.of(2021,8,8,17,0),calendar));
+        Calendar calendar = calendarRepository.save(new Calendar("Calendar test", Collections.singletonList(orga)));
+        Event event = eventRepository.save(new Event("Attend Event", LocalDateTime.of(2021, 8, 8, 15, 0), LocalDateTime.of(2021, 8, 8, 17, 0), calendar));
         ApplicationUser applicationUser = userRepository.save(new ApplicationUser("testUser", "testUser@testing.test", "testtest"));
 
-        StatusDto statusDto = new StatusDto(applicationUser.getUsername(),event.getId(), AttendanceStatusPossibilities.ATTENDING);
+        StatusDto statusDto = new StatusDto(applicationUser.getUsername(), event.getId(), AttendanceStatusPossibilities.ATTENDING);
 
         assertEquals(AttendanceStatusPossibilities.ATTENDING, attendanceEndpoint.create(statusDto).getStatus());
         assertEquals(event.getId(), attendanceEndpoint.getEventsUserIsAttending(applicationUser.getId()).get(0).getId());

@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.*;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -15,6 +16,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
@@ -23,6 +28,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 
 @ExtendWith(SpringExtension.class)
@@ -52,7 +59,19 @@ public class UserEndpointRecommendationTest {
     @Autowired
     LabelRepository labelRepository;
 
+    @Autowired
+    PlatformTransactionManager txm;
 
+    TransactionStatus txstatus;
+
+    @BeforeEach
+    public void setupDBTransaction() {
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        txstatus = txm.getTransaction(def);
+        assumeTrue(txstatus.isNewTransaction());
+        txstatus.setRollbackOnly();
+    }
 
    /* @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
@@ -145,7 +164,7 @@ public class UserEndpointRecommendationTest {
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
         List<EventDto> recommendedEvent = userEndpoint.getRecommendedEvents(user.getId());
-        assert (recommendedEvent != null);
+        assertNotNull(recommendedEvent);
         assert (recommendedEvent.size() > 0);
 
     }*/

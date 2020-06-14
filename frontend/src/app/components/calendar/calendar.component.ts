@@ -108,9 +108,11 @@ export class CalendarComponent implements OnInit {
     // });
     this.displayingWeek.forEach((day: Date) => {
       const keyISOString = this.getMidnight(day).toISOString();
-      this.eventsOfTheWeek.set(keyISOString, this.events.filter(event => {
-        const isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
-        const isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
+      this.eventsOfTheWeek.set(keyISOString, this.events.filter((event: CalendarEvent) => {
+        let startDate = new Date(event.startDateTime);
+        let endDate = new Date(event.endDateTime);
+        const isAfterMidnight = startDate.getTime() > this.getMidnight(day).getTime();
+        const isBeforeEndOfDay = endDate.getTime() < this.getEndOfDay(day).getTime();
         return isAfterMidnight && isBeforeEndOfDay;
       }));
     });

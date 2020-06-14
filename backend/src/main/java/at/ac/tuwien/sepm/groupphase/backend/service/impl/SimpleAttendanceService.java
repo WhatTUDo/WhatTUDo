@@ -34,13 +34,13 @@ public class SimpleAttendanceService implements AttendanceService {
     @Override
     public AttendanceStatus create(AttendanceStatus attendanceStatus) throws ServiceException {
         try {
-            if(attendanceStatus.getEvent().getEndDateTime().isBefore(LocalDateTime.now())){
+            if (attendanceStatus.getEvent().getEndDateTime().isBefore(LocalDateTime.now())) {
                 throw new NotAllowedException("Sorry, this event is over!");
             }
             List<AttendanceStatus> list = attendanceRepository.getByUser(attendanceStatus.getUser());
             if (!list.isEmpty()) {
-                for (AttendanceStatus a: list) {
-                    if(a.getEvent().getId().equals(attendanceStatus.getEvent().getId())){
+                for (AttendanceStatus a : list) {
+                    if (a.getEvent().getId().equals(attendanceStatus.getEvent().getId())) {
                         attendanceRepository.delete(a);
 
                     }
@@ -85,8 +85,8 @@ public class SimpleAttendanceService implements AttendanceService {
     @Override
     public List<Event> getEventUserIsAttending(Integer userId) throws ServiceException, NotFoundException {
         try {
-            Optional<ApplicationUser> userFound= userRepository.findById(userId);
-            if(!userFound.isPresent()){
+            Optional<ApplicationUser> userFound = userRepository.findById(userId);
+            if (!userFound.isPresent()) {
                 throw new NotFoundException("user not found");
             }
             List<AttendanceStatus> list = attendanceRepository.getByUser(userFound.get());
@@ -103,10 +103,10 @@ public class SimpleAttendanceService implements AttendanceService {
     }
 
     @Override
-    public List<Event> getEventUserIsInterested(Integer userId) throws ServiceException , NotFoundException{
+    public List<Event> getEventUserIsInterested(Integer userId) throws ServiceException, NotFoundException {
         try {
-            Optional<ApplicationUser> userFound= userRepository.findById(userId);
-            if(!userFound.isPresent()){
+            Optional<ApplicationUser> userFound = userRepository.findById(userId);
+            if (!userFound.isPresent()) {
                 throw new NotFoundException("user not found");
             }
             List<AttendanceStatus> list = attendanceRepository.getByUser(userFound.get());
@@ -123,58 +123,64 @@ public class SimpleAttendanceService implements AttendanceService {
     }
 
     @Override
-    public List<ApplicationUser> getUsersAttendingEvent(Integer eventId) throws ServiceException , NotFoundException{
+    public List<ApplicationUser> getUsersAttendingEvent(Integer eventId) throws ServiceException, NotFoundException {
         try {
-            Optional<Event> eventFound= eventRepository.findById(eventId);
-            if(!eventFound.isPresent()){
+            Optional<Event> eventFound = eventRepository.findById(eventId);
+            if (!eventFound.isPresent()) {
                 throw new NotFoundException("event not found");
             }
             List<AttendanceStatus> list = attendanceRepository.getByEvent(eventFound.get());
             List<ApplicationUser> users = new ArrayList<>();
             for (AttendanceStatus a : list) {
-                if(a.getStatus().equals(AttendanceStatusPossibilities.ATTENDING)){
-                users.add(a.getUser());}
+                if (a.getStatus().equals(AttendanceStatusPossibilities.ATTENDING)) {
+                    users.add(a.getUser());
+                }
             }
             return users;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
-        }    }
+        }
+    }
 
     @Override
     public List<ApplicationUser> getUsersInterestedInEvent(Integer eventId) throws ServiceException, NotFoundException {
         try {
-            Optional<Event> eventFound= eventRepository.findById(eventId);
-            if(!eventFound.isPresent()){
+            Optional<Event> eventFound = eventRepository.findById(eventId);
+            if (!eventFound.isPresent()) {
                 throw new NotFoundException("event not found");
             }
             List<AttendanceStatus> list = attendanceRepository.getByEvent(eventFound.get());
             List<ApplicationUser> users = new ArrayList<>();
             for (AttendanceStatus a : list) {
-                if(a.getStatus().equals(AttendanceStatusPossibilities.INTERESTED)){
-                    users.add(a.getUser());}
+                if (a.getStatus().equals(AttendanceStatusPossibilities.INTERESTED)) {
+                    users.add(a.getUser());
+                }
             }
             return users;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
-        }     }
+        }
+    }
 
     @Override
     public List<ApplicationUser> getUsersDecliningEvent(Integer eventId) throws ServiceException, NotFoundException {
         try {
-            Optional<Event> eventFound= eventRepository.findById(eventId);
-            if(!eventFound.isPresent()){
+            Optional<Event> eventFound = eventRepository.findById(eventId);
+            if (!eventFound.isPresent()) {
                 throw new NotFoundException("event not found");
             }
             List<AttendanceStatus> list = attendanceRepository.getByEvent(eventFound.get());
             List<ApplicationUser> users = new ArrayList<>();
             for (AttendanceStatus a : list) {
-                if(a.getStatus().equals(AttendanceStatusPossibilities.DECLINED)){
-                    users.add(a.getUser());}
+                if (a.getStatus().equals(AttendanceStatusPossibilities.DECLINED)) {
+                    users.add(a.getUser());
+                }
             }
             return users;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
-        }     }
+        }
+    }
 
 
 }

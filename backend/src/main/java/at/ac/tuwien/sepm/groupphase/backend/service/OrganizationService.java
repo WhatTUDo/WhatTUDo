@@ -53,10 +53,11 @@ public interface OrganizationService {
 
     /**
      * Deletes the Organization with the specified id. Also removes all Calendars associated with the Organization.
+     *
      * @param organisationID ID of the Organization to delete
      * @return ID of the deleted Organization.
-     * @throws ServiceException     is thrown if something goes wrong during data processing.
-     * @throws NotFoundException    is thrown if no organization can be found in db.
+     * @throws ServiceException  is thrown if something goes wrong during data processing.
+     * @throws NotFoundException is thrown if no organization can be found in db.
      */
     Integer delete(Integer organisationID) throws ServiceException, NotFoundException;
 
@@ -91,6 +92,7 @@ public interface OrganizationService {
 
     /**
      * Find members of organization with id id.
+     *
      * @param id id of organization whose members are returned
      * @return list of members of organization with id id.
      * @throws ServiceException is thrown if something goes wrong during data processing.

@@ -22,9 +22,11 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public abstract class TestCalendarMapper {
-    @Autowired protected OrganizationRepository organizationRepository;
+    @Autowired
+    protected OrganizationRepository organizationRepository;
 
-    @Autowired protected SimpleEventService eventService;
+    @Autowired
+    protected SimpleEventService eventService;
 
     public abstract CalendarDto calendarToCalendarDto(Calendar calendar);
 
@@ -32,14 +34,14 @@ public abstract class TestCalendarMapper {
     protected void mapOrganizations(Calendar calendar, @MappingTarget CalendarDto calendarDto) {
 
         List<Integer> orgaIds = new ArrayList<Integer>();
-        for(Organization o : calendar.getOrganizations()){
+        for (Organization o : calendar.getOrganizations()) {
             orgaIds.add(o.getId());
         }
 
         calendarDto.setOrganizationIds(orgaIds);
 
         List<Integer> EventIds = new ArrayList<Integer>();
-        for(Event e : calendar.getEvents())
+        for (Event e : calendar.getEvents())
             EventIds.add(e.getId());
         calendarDto.setEventIds(EventIds);
     }
@@ -57,17 +59,17 @@ public abstract class TestCalendarMapper {
         }
 
         List<Event> eventList = new ArrayList<Event>();
-        for(Integer e : calendarDto.getEventIds())
+        for (Integer e : calendarDto.getEventIds())
             //if following line is not allowed, then use: eventList.add(eventRepository.findById(e).orElseThrow(() -> new NotFoundException("No Event with this ID"));
             eventList.add(eventService.findById(e));
         calendar.setEvents(eventList);
 
     }
 
-    public List<CalendarDto> calendarsToCalendarDtos(List <Calendar> calendars){
+    public List<CalendarDto> calendarsToCalendarDtos(List<Calendar> calendars) {
 
         List<CalendarDto> calendarFinal = new ArrayList<CalendarDto>();
-        for(Calendar c : calendars){
+        for (Calendar c : calendars) {
             calendarFinal.add(calendarToCalendarDto(c));
         }
 
