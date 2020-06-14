@@ -96,9 +96,11 @@ export class CalendarListComponent implements OnInit {
       });
     }
   }
+
   getOrganizationAvatarLink(organizationId: number, size: number) {
     return this.organizationService.getOrganizationAvatarLink(organizationId, size);
   }
+
 }
 
 
