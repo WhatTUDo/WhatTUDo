@@ -110,6 +110,21 @@ export class OrganizationComponent implements OnInit {
   }
 
   getOrganizationAvatarLink(organizationId: number, size: number) {
-    this.organizationService.getOrganizationAvatarLink(organizationId, size);
+    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
   }
+
+  removeFromOrg(userId: number, organizationId: number) {
+    if (
+      confirm(`You are removing "${
+        this.organizationMembers.find(m => m.id === userId).name
+      }" from "${
+        this.organization.name
+      }". Are you sure?`)
+    ) {
+      this.userService.removeFromOrganization(userId, organizationId).subscribe((user) => {
+      })
+    }
+  }
+
+
 }

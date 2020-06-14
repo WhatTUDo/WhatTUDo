@@ -7,9 +7,10 @@
   <div class="grid-one-third scroll">
     <div>
       <div class="title-icon-button-combo">
-        <h2>People</h2>
+        <h4>Calendar: {{this.calendarName}}</h4>
         <div class="icon-button clickable no-hover-enlarge no-shadow">
-          <fa-icon *ngIf="calendarEvent.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow" routerLink="/form/event/{{id}}">
+          <fa-icon *ngIf="calendarEvent.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
+                   routerLink="/form/event/{{id}}">
             Edit
           </fa-icon>
         </div>
@@ -51,22 +52,27 @@
           <button (click)="participate(0)" class="button-red btn-lg">Decline</button>
         </div>
       </div>
-<!--      <div class="organization-info">-->
-<!--        <img alt="" class="avatar avatar-medium" src="https://picsum.photos/256/256/">-->
-<!--        <div class="organization-details">-->
-<!--          <div class="organization-name">FS Winf</div>-->
-<!--          <div>Als kooperative und engagierte Interessensvertretung wollen wir eine offene Anlaufstelle sein,-->
-<!--            Studierende beim Studium unterstützen, untereinander vernetzen und kompetent beraten.-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+      <div class="calendar-info">
+        <div class="calendar-name">
+          <fa-icon [icon]="faCalendar"></fa-icon>
+          {{calendar.name}}
+        </div>
+        <div class="calendar-organizations">
+          <div class="organization-info" *ngFor="let org of calendarOrganizations">
+            <img alt="" class="avatar avatar-medium" src="{{getOrganizationAvatarLink(org.id, 256)}}">
+            <div class="organization-details">
+              <div class="organization-name">{{org.name}}</div>
+              <div>I'm baby coloring book iceland forage pour-over leggings. Fanny pack wolf hexagon fingerstache chia lo-fi iceland ramps organic.</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="event-location">
         <div class="event-location-map-container">
           <iframe id="open-street-map-iframe"
                   src="//www.openstreetmap.org/export/embed.html?bbox=16.36812955141068%2C48.19411795494773%2C16.371696889400486%2C48.19578432955719&amp;layer=mapnik"></iframe>
         </div>
         <small><a href="https://www.openstreetmap.org/#map=19/48.19495/16.36991">View Larger Map</a></small>
-        <!--TODO: Make this look better-->
       </div>
     </div>
     <div>
@@ -76,10 +82,10 @@
       </div>
       <div id="comment-area">
         <label for="comment-textarea">
-          Leave a comment
+          Comments are disabled in the current version.
         </label>
-        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"></textarea>
-        <button (click)="addComment()" class="full-width-form-button no-hover-enlarge btn-lg">Send
+        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…" disabled="disabled"></textarea>
+        <button (click)="addComment()" class="full-width-form-button no-hover-enlarge btn-lg" disabled="disabled">Send
         </button>
       </div>
     </div>

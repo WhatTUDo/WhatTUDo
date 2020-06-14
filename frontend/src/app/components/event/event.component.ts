@@ -6,12 +6,16 @@ import {Label} from '../../dtos/label';
 import {EventService} from '../../services/event.service';
 import {LabelService} from '../../services/label.service';
 import {ActivatedRoute} from '@angular/router';
-import {faChevronLeft, faExternalLinkSquareAlt, faTag, faCog} from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faTag, faCog, faCalendar} from '@fortawesome/free-solid-svg-icons';
 import {AttendanceStatusService} from '../../services/attendance-status.service';
 import {AuthService} from '../../services/auth.service';
 import {AttendanceDto} from '../../dtos/AttendanceDto';
 import {User} from "../../dtos/user";
 import {FeedbackService} from "../../services/feedback.service";
+import {Organization} from "../../dtos/organization";
+import {Calendar} from "../../dtos/calendar";
+import {CalendarService} from "../../services/calendar.service";
+import {OrganizationService} from "../../services/organization.service";
 
 @Component({
   selector: 'app-event',
@@ -25,6 +29,8 @@ export class EventComponent implements OnInit {
   user: User = null;
   labels: Array<Label>;
   public calendarEvent: CalendarEvent;
+  calendar: Calendar;
+  calendarOrganizations: Organization[] = [];
   participants: any = {
     'attending': [],
     'interested': [],
@@ -32,12 +38,16 @@ export class EventComponent implements OnInit {
   };
   faChevronLeft = faChevronLeft;
   faTag = faTag;
-  faExternalLinkSquareAlt = faExternalLinkSquareAlt;
   faCog = faCog;
+  faCalendar = faCalendar;
 
-  constructor(private eventService: EventService, private labelService: LabelService,
+  constructor(private eventService: EventService,
+              private labelService: LabelService,
+              private calendarService: CalendarService,
+              private organizationService: OrganizationService,
               private feedbackService: FeedbackService,
-              private attendanceStatusService: AttendanceStatusService, private authService: AuthService,
+              private attendanceStatusService: AttendanceStatusService,
+              private authService: AuthService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
@@ -135,10 +145,16 @@ export class EventComponent implements OnInit {
       this.calendarEvent.comments = this.getComments();
       this.calendarEvent.labels = this.getLabels();
       this.calendarEvent.location = location;
-      this.calendarEvent.description = 'yololo';
+      this.calendarEvent.description = 'No Calendar Description available!';
       this.participants = this.getParticipants();
-    }, err => {
-      alert(err.message);
+      this.calendarService.getCalendarById(event.id).subscribe(cal => {
+        this.calendar = cal;
+        cal.organizationIds.forEach(id => {
+          this.organizationService.getById(id).subscribe(org => {
+            this.calendarOrganizations.push(org);
+          })
+        })
+      })
     });
   }
 
@@ -171,7 +187,7 @@ export class EventComponent implements OnInit {
     let comment3 = new EventComment(null, null, 'Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.\n' +
       '\n', 0.91);
     let array = new Array<EventComment>();
-    array.push(comment1, comment2, comment3);
+    // array.push(comment1, comment2, comment3);
 
     return array;
   }
@@ -189,5 +205,9 @@ export class EventComponent implements OnInit {
 
   getEventPromoImageLink(eventId: number) {
     return this.eventService.getEventPromoImageLink(eventId);
+  }
+
+  getOrganizationAvatarLink(organizationId: number, size: number) {
+    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
   }
 }
