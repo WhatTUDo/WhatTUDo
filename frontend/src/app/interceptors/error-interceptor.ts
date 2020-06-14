@@ -31,6 +31,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError((error: any) => {
         if (error instanceof HttpErrorResponse) {
           try {
+            error = error.error;
             switch (error.status) {
               case 400:
               case 405:
