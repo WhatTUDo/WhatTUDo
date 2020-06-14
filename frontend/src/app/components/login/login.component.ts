@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.authService.loginUser(authRequest).subscribe(
       () => {
         console.log('Successfully logged in user: ' + authRequest.username);
-        this.router.navigate(['/']);
+        location.replace('/'); // Using location.replace() to force a reload.
       }
     );
   }
