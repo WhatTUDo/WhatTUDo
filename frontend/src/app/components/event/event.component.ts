@@ -46,7 +46,8 @@ export class EventComponent implements OnInit {
               private calendarService: CalendarService,
               private organizationService: OrganizationService,
               private feedbackService: FeedbackService,
-              private attendanceStatusService: AttendanceStatusService, private authService: AuthService,
+              private attendanceStatusService: AttendanceStatusService,
+              private authService: AuthService,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadCalendarEvent(id);
@@ -144,7 +145,7 @@ export class EventComponent implements OnInit {
       this.calendarEvent.comments = this.getComments();
       this.calendarEvent.labels = this.getLabels();
       this.calendarEvent.location = location;
-      this.calendarEvent.description = 'yololo';
+      this.calendarEvent.description = 'No Calendar Description available!';
       this.participants = this.getParticipants();
       this.calendarService.getCalendarById(event.id).subscribe(cal => {
         this.calendar = cal;
@@ -186,7 +187,7 @@ export class EventComponent implements OnInit {
     let comment3 = new EventComment(null, null, 'Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.\n' +
       '\n', 0.91);
     let array = new Array<EventComment>();
-    array.push(comment1, comment2, comment3);
+    // array.push(comment1, comment2, comment3);
 
     return array;
   }
