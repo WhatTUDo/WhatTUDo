@@ -93,8 +93,8 @@ export class WeeklyCalendarComponent implements OnInit {
       this.displayingWeek.forEach((day: Date) => {
         let keyISOString = this.getMidnight(day).toISOString()
         this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
-          let isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
-          let isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
+          const isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
+          const isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
           return isAfterMidnight && isBeforeEndOfDay;
         }));
       })
@@ -208,9 +208,12 @@ export class WeeklyCalendarComponent implements OnInit {
     return endOfDay;
   }
 
-  // FIXME: Make it make sense for multiday events.
   getDisplayTimeString(event: CalendarEvent) {
-    return this.eventService.getDisplayTimeString(event);
+    if (this.isOnSameDay(event.startDateTime, event.endDateTime)) {
+      return this.eventService.getDisplayTimeString(event);
+    } else {
+      return this.eventService.getEventDateAndTimeString(event);
+    }
   }
 
   private updateOffsettedDates() {

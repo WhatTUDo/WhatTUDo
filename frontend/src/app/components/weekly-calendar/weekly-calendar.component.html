@@ -38,7 +38,8 @@
        *ngFor="let day of displayingWeek.slice(0,5)">{{day.toLocaleDateString(dateLocale, {weekday: 'short'})}}
   </div>
   <div class="week-day-label">
-    {{displayingWeek[5].toLocaleDateString(dateLocale, {weekday: 'short'})}}/{{displayingWeek[6].toLocaleDateString(dateLocale, {weekday: 'short'})}}
+    {{displayingWeek[5].toLocaleDateString(dateLocale, {weekday: 'short'})}}
+    /{{displayingWeek[6].toLocaleDateString(dateLocale, {weekday: 'short'})}}
   </div>
 
   <div *ngFor="let date of this.displayingWeek.slice(0,5)" [ngClass]="{'today': isToday(date)}"
@@ -53,7 +54,8 @@
     <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())"
          [style.grid-row]="getDisplayRows(event, date)"
          class="calendar-event" routerLink="/event/{{event.id}}">
-      <div class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
+      <div
+        class="calendar-event-time">{{isOnSameDay(event.startDateTime, date) ? this.getDisplayTimeString(event) : ''}}</div>
       <div class="calendar-event-name">{{event.name}}</div>
     </div>
   </div>
@@ -62,7 +64,8 @@
       <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[5].toISOString())"
            [style.grid-row]="getDisplayRows(event, displayingWeek[5])"
            class="calendar-event " routerLink="/event/{{event.id}}">
-        <div class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
+        <div
+          class="calendar-event-time">{{isOnSameDay(event.startDateTime, displayingWeek[5]) ? this.getDisplayTimeString(event) : ''}}</div>
         <div class="calendar-event-name">{{event.name}}</div>
       </div>
     </div>
@@ -70,7 +73,8 @@
       <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[6].toISOString())"
            [style.grid-row]="getDisplayRows(event, displayingWeek[6])"
            class="calendar-event weekend-sun" routerLink="/event/{{event.id}}">
-        <div class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
+        <div
+          class="calendar-event-time">{{isOnSameDay(event.startDateTime, displayingWeek[6]) ? this.getDisplayTimeString(event) : ''}}</div>
         <div class="calendar-event-name">{{event.name}}</div>
       </div>
     </div>
