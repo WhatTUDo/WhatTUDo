@@ -103,7 +103,7 @@ public class CalendarEndpoint {
     }
 
 
-    //@PreAuthorize("hasPermission(#calendarDto, 'MOD')") FIXME: #calendar was wrong. ("id must not be null!") but #calendarDto gives permission denied even for a valid user
+    //@PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
