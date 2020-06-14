@@ -35,6 +35,7 @@ export class FeedbackHandlerComponent implements OnInit {
   static message: String;
   static state: State;
   static isVisible: Boolean;
+  static dismissAfter = 5_000;
   faTimes = faTimes;
 
   constructor() {
@@ -62,7 +63,7 @@ export class FeedbackHandlerComponent implements OnInit {
     this.header = header;
     this.state = state;
 
-    console.log(header, message)
+    setTimeout(_=>{this.onDismiss();}, this.dismissAfter)
   }
 
   ngOnInit(): void {
@@ -84,9 +85,8 @@ export class FeedbackHandlerComponent implements OnInit {
     return FeedbackHandlerComponent.message;
   }
 
-  onDismiss() {
+  static onDismiss() {
     FeedbackHandlerComponent.isVisible = !FeedbackHandlerComponent.isVisible;
-    console.log("Dismiss");
   }
 }
 
