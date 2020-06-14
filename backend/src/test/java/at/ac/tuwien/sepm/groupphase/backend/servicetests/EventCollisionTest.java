@@ -66,7 +66,7 @@ public class EventCollisionTest {
         this.organization = organizationRepository.save(new Organization("BesterTestnameEver"));
     }
 
-    /*@Test
+    @Test
     public void createEvent_CheckForCollisions_shouldReturnEmptyList() {
         ApplicationUser user = userRepository.save(new ApplicationUser("Dorian", "grazie@gmx.com", "pwdsuperstrong"));
         Calendar calendar = calendarRepository.save(new Calendar("Katzenkalenderreleases", Collections.singletonList(organization)));
@@ -80,7 +80,7 @@ public class EventCollisionTest {
 
         List<EventCollision> eventCollisions = eventCollisionService.getEventCollisions(event, 3, 12L);
         assertEquals(0, eventCollisions.size());
-    }*/
+    }
 
     @Test
     public void saveEvents_createEventWithCollidingDates_CheckForCollisions_ShouldReturnCollisionList() {
