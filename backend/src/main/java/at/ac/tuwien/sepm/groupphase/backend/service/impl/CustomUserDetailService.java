@@ -153,6 +153,20 @@ public class CustomUserDetailService implements UserService {
         }
     }
 
+    @Override
+    public ApplicationUser findUserById(Integer id) throws NotFoundException, ServiceException {
+        try {
+            Optional<ApplicationUser> found = userRepository.findById(id);
+            if(!found.isPresent()){
+                throw new NotFoundException("Could not find any user with id"+id);
+            }
+
+            return found.get();
+        }catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
 
     @Override
     public ApplicationUser getUserByName(String name) throws ServiceException {
