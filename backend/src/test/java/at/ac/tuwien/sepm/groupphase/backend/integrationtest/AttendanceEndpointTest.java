@@ -45,7 +45,7 @@ public class AttendanceEndpointTest {
     CalendarRepository calendarRepository;
 
 
-    @WithMockUser
+    @WithMockUser(username = "testUser")
     @Test
     public void createAttendance_returnsCorrectAttendanceStatus_returnsCorrectUsers_returnsCorrectEvents(){
         Organization orga = new Organization("Test Organization");
