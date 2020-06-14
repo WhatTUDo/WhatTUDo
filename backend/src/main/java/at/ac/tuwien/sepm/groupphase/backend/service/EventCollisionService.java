@@ -21,7 +21,7 @@ public interface EventCollisionService {
      *
      * @param event Event entity for which the Collision List should be generated.
      * @return a list of EventCollision Objects, ordered descendingly by their collisionScore.
-     * @throws ServiceException is thrown when something goes wrong during calculation.
+     * @throws ServiceException    is thrown when something goes wrong during calculation.
      * @throws ValidationException is thrown if the Event entity does not pass validation.
      */
     List<EventCollision> getEventCollisions(Event event, Integer scoreThreshold, Long additionalTimespan) throws ServiceException, ValidationException;
@@ -37,7 +37,8 @@ public interface EventCollisionService {
      * In the end it checks same date as initial date of event but different time. It checks up to 2 hours earlier or later.
      * In the end method filterBestRecommendations is called. The method adds to suggestion list the dates that cause no collision(0 score).
      * Afterwards it gets the minimal collision score from map rec (ignoring 0 scores) and adds them to suggestion list.
-     * @param event Event entity for which suggestions should be generated
+     *
+     * @param event        Event entity for which suggestions should be generated
      * @param initialScore minimal collision score event causes.
      * @return list of suggestions with start and end time.
      * @throws ServiceException in case no suggestion are found.

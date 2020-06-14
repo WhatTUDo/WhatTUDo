@@ -47,9 +47,9 @@ export class EventService {
     console.log('add  labels');
     console.log(id);
     return this.httpClient.put<Event>(this.eventBaseUri + '/' + id + '/' + 'labels', labelselect)
-    .subscribe(response => {
-      console.log(response);
-    });
+      .subscribe(response => {
+        console.log(response);
+      });
 
 
   }
@@ -170,12 +170,14 @@ export class EventService {
    * @param event
    */
   public getDisplayTimeString(event: CalendarEvent) {
-    let string = event.startDateTime.toLocaleTimeString(this.globals.dateLocale, {
+    let startDate = new Date(event.startDateTime);
+    let endDate = new Date(event.endDateTime);
+    let string = startDate.toLocaleTimeString(this.globals.dateLocale, {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")
     string += ' - '
-    string += event.endDateTime.toLocaleTimeString(this.globals.dateLocale, {
+    string += endDate.toLocaleTimeString(this.globals.dateLocale, {
       hour: 'numeric',
       minute: 'numeric'
     }).replace(":00", "")

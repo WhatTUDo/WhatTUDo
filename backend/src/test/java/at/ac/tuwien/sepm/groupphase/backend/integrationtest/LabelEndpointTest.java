@@ -24,6 +24,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -53,6 +54,7 @@ public class LabelEndpointTest {
 
     @WithMockUser(roles = {"SYSADMIN"})
     @Test
+    @Transactional
     public void createNewLabel_ShouldReturnNewLabel() {
         LabelDto labelDto = new LabelDto(0, "TestLabel", new ArrayList<>());
         LabelDto saved = labelEndpoint.create(labelDto);
@@ -61,6 +63,7 @@ public class LabelEndpointTest {
 
     @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
     @Test
+    @Transactional
     public void deleteLabel_labelShouldBeDeleted() {
         LabelDto labelDto = new LabelDto(0, "TestLabel", new ArrayList<>());
         LabelDto saved = labelEndpoint.create(labelDto);
@@ -70,14 +73,14 @@ public class LabelEndpointTest {
 
         try {
             labelEndpoint.getById(saved.getId());
-        }
-        catch (ResponseStatusException e) {
+        } catch (ResponseStatusException e) {
             assertEquals(HttpStatus.NOT_FOUND, e.getStatus());
         }
     }
 
     @WithMockUser(username = "Person 1")
     @Test
+    @Transactional
     public void getAllLabels_ListOfAllLabelsShouldBeReturned() {
         Label label = new Label("TestLabel");
 
@@ -91,6 +94,7 @@ public class LabelEndpointTest {
 
     @WithMockUser(roles = {"SYSADMIN"})
     @Test
+    @Transactional
     public void updateLabel_LabelShouldBeUpdated() {
         LabelDto labelDto = labelEndpoint.create(new LabelDto(0, "TestLabel", new ArrayList<>()));
         assertDoesNotThrow(() -> labelEndpoint.getById(labelDto.getId()));

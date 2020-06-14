@@ -70,7 +70,7 @@ public class CalendarEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/search")
     @ApiOperation(value = "Get calendars with name")
-    public List<CalendarDto> searchCalendarCombo(@RequestParam(value = "name")  String name) {
+    public List<CalendarDto> searchCalendarCombo(@RequestParam(value = "name") String name) {
         log.info("GET" + BASE_URL + "search {}", name);
         try {
             List<Calendar> fromCalendars = calendarService.findByName(name);

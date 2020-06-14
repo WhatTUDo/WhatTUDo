@@ -68,16 +68,11 @@ public class UserEndpointTest {
     }
 
 
-
-
-
-
-
     @WithMockUser
     @Test
-    public void getUserOrganizations(){
+    public void getUserOrganizations() {
         Organization organization = organizationRepository.save(new Organization("organization test"));
-        ApplicationUser user = userRepository.save(new ApplicationUser( "user", "user@test.at", "usertest"));
+        ApplicationUser user = userRepository.save(new ApplicationUser("user", "user@test.at", "usertest"));
         Set<OrganizationMembership> organizationMembershipSet = new HashSet<>();
         organizationMembershipSet.add(new OrganizationMembership(organization, user, OrganizationRole.MEMBER));
         user.setMemberships(organizationMembershipSet);
@@ -85,7 +80,6 @@ public class UserEndpointTest {
 
         assertEquals(organization.getName(), userEndpoint.getOrganizationOfUser(user.getId()).get(0).getName());
     }
-
 
 
 }

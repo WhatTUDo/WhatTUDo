@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EventConflictResolverComponent } from './event-conflict-resolver.component';
+import {EventConflictResolverComponent} from './event-conflict-resolver.component';
 
 describe('AppointmentConflictResolverComponent', () => {
   let component: EventConflictResolverComponent;
@@ -8,9 +8,9 @@ describe('AppointmentConflictResolverComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ EventConflictResolverComponent ]
+      declarations: [EventConflictResolverComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

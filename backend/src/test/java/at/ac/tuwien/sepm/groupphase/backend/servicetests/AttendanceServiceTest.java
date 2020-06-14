@@ -193,7 +193,7 @@ public class AttendanceServiceTest {
         attendanceService.create(new AttendanceStatus(user3, event, AttendanceStatusPossibilities.INTERESTED));
         attendanceService.create(new AttendanceStatus(user4, event, AttendanceStatusPossibilities.ATTENDING));
         List<ApplicationUser> users = attendanceService.getUsersAttendingEvent(event.getId());
-        assert(users.size()==2);
+        assert (users.size() == 2);
     }
 
     @Test
@@ -209,7 +209,7 @@ public class AttendanceServiceTest {
         attendanceService.create(new AttendanceStatus(user3, event, AttendanceStatusPossibilities.INTERESTED));
         attendanceService.create(new AttendanceStatus(user4, event, AttendanceStatusPossibilities.ATTENDING));
         List<ApplicationUser> users = attendanceService.getUsersInterestedInEvent(event.getId());
-        assert(users.size()==1);
+        assert (users.size() == 1);
     }
 
     @Test
@@ -225,7 +225,7 @@ public class AttendanceServiceTest {
         attendanceService.create(new AttendanceStatus(user3, event, AttendanceStatusPossibilities.INTERESTED));
         attendanceService.create(new AttendanceStatus(user4, event, AttendanceStatusPossibilities.ATTENDING));
         List<ApplicationUser> users = attendanceService.getUsersDecliningEvent(event.getId());
-        assert(users.size()==1);
+        assert (users.size() == 1);
     }
 
 

@@ -30,7 +30,8 @@ public class OrganizationMembership {
     @Enumerated(EnumType.STRING)
     private OrganizationRole role;
 
-    public OrganizationMembership() {}
+    public OrganizationMembership() {
+    }
 
     public OrganizationMembership(Organization organization, ApplicationUser user, OrganizationRole role) {
         this.id = new OrganizationMembershipKey(organization.getId(), user.getId());

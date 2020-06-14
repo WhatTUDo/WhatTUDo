@@ -13,11 +13,14 @@ import java.util.List;
 @Transactional
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
-    @Autowired protected UserRepository userRepository;
+    @Autowired
+    protected UserRepository userRepository;
 
 
     public abstract LoggedInUserDto applicationUserToUserDto(ApplicationUser user);
+
     public abstract ApplicationUser userDtoToApplicationUser(IncomingUserDto userDto);
+
     public abstract ApplicationUser loggedInUserDtoToApplicationUser(LoggedInUserDto userDto);
 
     public abstract List<LoggedInUserDto> applicationUserToUserDtoList(List<ApplicationUser> applicationUsers);

@@ -145,7 +145,7 @@ export class EventComponent implements OnInit {
       this.calendarEvent.comments = this.getComments();
       this.calendarEvent.labels = this.getLabels();
       this.calendarEvent.location = location;
-      this.calendarEvent.description = 'No Calendar Description available!';
+      this.calendarEvent.description = '';
       this.participants = this.getParticipants();
       this.calendarService.getCalendarById(event.id).subscribe(cal => {
         this.calendar = cal;

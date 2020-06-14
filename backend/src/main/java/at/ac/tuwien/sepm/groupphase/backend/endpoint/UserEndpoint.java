@@ -151,15 +151,15 @@ public class UserEndpoint {
     @ApiOperation(value = "Get organization user is member", authorizations = {@Authorization(value = "apiKey")})
     public List<OrganizationDto> getOrganizationOfUser(@PathVariable(value = "id") Integer id) {
         try {
-            log.info("get organizations of user with id {}",id);
+            log.info("get organizations of user with id {}", id);
             List<OrganizationDto> organizationDtos = new ArrayList<>();
             List<Organization> organizations = userService.getUserOrganizations(id);
-            for (Organization o: organizations
-                 ) {
-               organizationDtos.add( organizationMapper.organizationToOrganizationDto(o));
+            for (Organization o : organizations
+            ) {
+                organizationDtos.add(organizationMapper.organizationToOrganizationDto(o));
             }
             return organizationDtos;
-        }catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
@@ -180,9 +180,9 @@ public class UserEndpoint {
                     Optional<Event> event = eventService.findForDates(LocalDateTime.now(), LocalDateTime.now().plusMonths(6)).stream().findAny();
                     if (event.isPresent() && !recommendedEvent.contains(event.get())) recommendedEvent.add(event.get());
                 }
-                for (int i = 0; i <4-recommendedEvent.size() ; i++) {
-                    Optional<Event> event = eventService.findForDates(LocalDateTime.now(),LocalDateTime.MAX).stream().findAny();
-                    if(event.isPresent() && !recommendedEvent.contains(event.get())) recommendedEvent.add(event.get());
+                for (int i = 0; i < 4 - recommendedEvent.size(); i++) {
+                    Optional<Event> event = eventService.findForDates(LocalDateTime.now(), LocalDateTime.MAX).stream().findAny();
+                    if (event.isPresent() && !recommendedEvent.contains(event.get())) recommendedEvent.add(event.get());
                 }
             }
             List<EventDto> eventDtos = new ArrayList<>();

@@ -23,8 +23,8 @@ public interface AttendanceService {
      * Get all users that responded to event
      *
      * @param event Event whose users we want to get.
-     * @throws ServiceException is thrown if something goes wrong during data processing.
      * @return list of users that responded to event.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
      */
     List<ApplicationUser> getUsersByEvent(Event event) throws ServiceException;
 
@@ -32,17 +32,18 @@ public interface AttendanceService {
      * Get all events that user responded to
      *
      * @param user User whose events we want to get.
-     * @throws ServiceException is thrown if something goes wrong during data processing.
      * @return list of events that user responded to.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
      */
     List<Event> getEventByUser(ApplicationUser user) throws ServiceException;
 
-     List<Event> getEventUserIsAttending(Integer userId) throws ServiceException, NotFoundException;
+    List<Event> getEventUserIsAttending(Integer userId) throws ServiceException, NotFoundException;
 
-     List<Event> getEventUserIsInterested(Integer userId) throws ServiceException, NotFoundException;
+    List<Event> getEventUserIsInterested(Integer userId) throws ServiceException, NotFoundException;
 
     List<ApplicationUser> getUsersAttendingEvent(Integer eventId) throws ServiceException, NotFoundException;
 
     List<ApplicationUser> getUsersInterestedInEvent(Integer eventId) throws ServiceException, NotFoundException;
+
     List<ApplicationUser> getUsersDecliningEvent(Integer eventId) throws ServiceException, NotFoundException;
 }

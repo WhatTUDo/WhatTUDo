@@ -124,12 +124,12 @@ public class SimpleCalendarService implements CalendarService {
             Calendar toDelete = this.findById(id);
             List<Event> events = toDelete.getEvents();
 
-          /**  for (Event e: events
-                 ) {
+            /**  for (Event e: events
+             ) {
 
-                eventService.delete(e);
-               // eventEndpoint.deleteEvent(eventMapper.eventToEventDto(e));
-            } **/
+             eventService.delete(e);
+             // eventEndpoint.deleteEvent(eventMapper.eventToEventDto(e));
+             } **/
 
             List<Organization> olist = toDelete.getOrganizations();
 
@@ -170,11 +170,9 @@ public class SimpleCalendarService implements CalendarService {
             return savedCalendar;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             throw new NotFoundException(e.getMessage());
-        }
-        catch (ValidationException e) {
+        } catch (ValidationException e) {
             throw new ValidationException(e.getMessage());
         }
     }
@@ -185,7 +183,7 @@ public class SimpleCalendarService implements CalendarService {
             Optional<Calendar> currentCalendar = calendarRepository.findById(calendar.getId());
             if (currentCalendar.isPresent()) {
                 List<Organization> savedOrgs = currentCalendar.get().getOrganizations();
-                savedOrgs.forEach( org -> {
+                savedOrgs.forEach(org -> {
                     org.getCalendars().removeIf(cal -> cal.getId().equals(calendar.getId()));
                 });
                 organizationRepository.saveAll(savedOrgs);
@@ -203,11 +201,9 @@ public class SimpleCalendarService implements CalendarService {
             return savedCalendar;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             throw new NotFoundException(e.getMessage());
-        }
-        catch (ValidationException e) {
+        } catch (ValidationException e) {
             throw new ValidationException(e.getMessage());
         }
     }

@@ -168,7 +168,7 @@ public class EventEndpoint {
 
     @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
     @Transactional
-    @PutMapping(value = "/{id}/labels")
+    @PostMapping(value = "/{id}/labels")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Add Labels to an Event", authorizations = {@Authorization(value = "apiKey")})
@@ -184,7 +184,7 @@ public class EventEndpoint {
 
     @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
     @Transactional
-    @PostMapping(value = "/{id}/labels")
+    @PutMapping(value = "/{id}/labels")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update Labels of an Event", authorizations = {@Authorization(value = "apiKey")})

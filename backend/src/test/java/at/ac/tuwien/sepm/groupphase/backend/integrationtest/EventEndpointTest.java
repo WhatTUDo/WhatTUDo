@@ -61,10 +61,10 @@ public class EventEndpointTest {
     EventEndpoint endpoint;
 
     @Mock
-     CalendarRepository calendarRepository;
+    CalendarRepository calendarRepository;
 
     @Mock
-     OrganizationRepository organizationRepository;
+    OrganizationRepository organizationRepository;
 
     @InjectMocks
     SimpleCalendarService calendarService;
@@ -112,14 +112,14 @@ public class EventEndpointTest {
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
 
         EventDto eventDto = new EventDto(1, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
 
-         EventDto returnedEvent = endpoint.post(eventDto);
+        EventDto returnedEvent = endpoint.post(eventDto);
         assertEquals(eventDto.getName(), returnedEvent.getName());
         assertEquals(eventDto.getEndDateTime(), returnedEvent.getEndDateTime());
         assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
@@ -135,7 +135,7 @@ public class EventEndpointTest {
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
@@ -168,14 +168,14 @@ public class EventEndpointTest {
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
 //        Organization orga = organizationRepository.save(new Organization("Test Organization3"));
 //        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar3", Collections.singletonList(orga)));
         EventDto eventDto1 = new EventDto(null, "", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
-        EventDto eventDto2 = new EventDto(null, "Test Event", LocalDateTime.of(2020, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0),calendar.getId());
+        EventDto eventDto2 = new EventDto(null, "Test Event", LocalDateTime.of(2020, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto1));
         assertThrows(ResponseStatusException.class, () -> endpoint.post(eventDto2));
     }
@@ -202,7 +202,7 @@ public class EventEndpointTest {
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
@@ -240,13 +240,13 @@ public class EventEndpointTest {
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
 //        Organization orga = organizationRepository.save(new Organization("Test Organization10"));
 //        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar10", Collections.singletonList(orga)));
-        EventDto eventDto = new EventDto(10, "Test Name10", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0),calendar.getId());
+        EventDto eventDto = new EventDto(10, "Test Name10", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
 
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
@@ -266,7 +266,7 @@ public class EventEndpointTest {
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
@@ -283,11 +283,11 @@ public class EventEndpointTest {
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
-        EventDto eventDto = new EventDto(null, "Delete Event", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0),calendar.getId());
+        EventDto eventDto = new EventDto(null, "Delete Event", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
         endpoint.deleteEvent(returnedEvent);
         assertThrows(ResponseStatusException.class, () -> endpoint.getById(returnedEvent.getId()));
@@ -302,13 +302,13 @@ public class EventEndpointTest {
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
 //        Organization orga = organizationRepository.save(new Organization("Test Organization6"));
 //        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar6", Collections.singletonList(orga)));
-        EventDto eventDto = new EventDto(3, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0),calendar.getId());
+        EventDto eventDto = new EventDto(3, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
 
         assertEquals(eventDto.getName(), returnedEvent.getName());
@@ -316,7 +316,7 @@ public class EventEndpointTest {
         assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
         assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
 
-        EventDto eventDtoChanges = new EventDto(returnedEvent.getId(), "Test2", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0),1);
+        EventDto eventDtoChanges = new EventDto(returnedEvent.getId(), "Test2", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), 1);
 
         EventDto finalEvent = endpoint.editEvent(eventDtoChanges);
 
@@ -340,7 +340,7 @@ public class EventEndpointTest {
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
@@ -362,12 +362,12 @@ public class EventEndpointTest {
     @Test
     public void updateEntityStartDateBeforeEndDate_throwsResponseException() {
         Organization orga;
-     Calendar calendar;
+        Calendar calendar;
         orga = new Organization("Test Organization2");
         orga.setId(1);
         calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
@@ -382,31 +382,31 @@ public class EventEndpointTest {
         assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
         assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
 
-        EventDto eventDtoChanges = new EventDto(returnedEvent.getId(), "Test2", LocalDateTime.of(2022, 1, 1, 17, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar.getId() );
+        EventDto eventDtoChanges = new EventDto(returnedEvent.getId(), "Test2", LocalDateTime.of(2022, 1, 1, 17, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar.getId());
 
-       assertThrows(ResponseStatusException.class, () -> endpoint.editEvent(eventDtoChanges));
+        assertThrows(ResponseStatusException.class, () -> endpoint.editEvent(eventDtoChanges));
 
     }
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
-    public void updateLabelsOfEvent_returnsEventWithNewLabels_RemoveLabel_findLabelsByIdIsEmpty(){
+    public void updateLabelsOfEvent_returnsEventWithNewLabels_RemoveLabel_findLabelsByIdIsEmpty() {
         Organization orga = new Organization("Test Organization2");
         orga.setId(1);
         Calendar calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization2"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization2"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
-        EventDto eventDto =  endpoint.post(new EventDto(null, "Update Label", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId()));
+        EventDto eventDto = endpoint.post(new EventDto(null, "Update Label", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId()));
         Label label = labelRepository.save(new Label("Label 1"));
         LabelDto labelDto = labelMapper.labelToLabelDto(label);
         eventDto = endpoint.updateLabelsOfEvent(eventDto.getId(), Collections.singletonList(labelDto));
         Optional<Label> label1 = labelRepository.findByName(label.getName());
 
-        assertEquals( eventDto.getName(),label1.get().getEvents().get(0).getName());
+        assertEquals(eventDto.getName(), label1.get().getEvents().get(0).getName());
 
         endpoint.removeLabelsFromEvent(eventDto.getId(), Collections.singletonList(label.getId()));
         assertTrue(labelRepository.findById(label.getId()).get().getEvents().isEmpty());
@@ -424,11 +424,11 @@ public class EventEndpointTest {
         orga.setId(1);
         Calendar calendar = new Calendar("Test Calendar", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
-        EventDto eventDto =  endpoint.post(new EventDto(null, "Find Label", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId()));
+        EventDto eventDto = endpoint.post(new EventDto(null, "Find Label", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId()));
         Label label = labelRepository.save(new Label("Test"));
         LabelDto labelDto = labelMapper.labelToLabelDto(label);
         eventDto = endpoint.updateLabelsOfEvent(eventDto.getId(), Collections.singletonList(labelDto));
@@ -436,28 +436,28 @@ public class EventEndpointTest {
         assertEquals(label.getName(), endpoint.getLabelsById(eventDto.getId()).get(0).getName());
     }
 
-    @WithMockUser(username = "Person 1", authorities ={"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
-    public void getEventByCalendarId_returnsEvent(){
+    public void getEventByCalendarId_returnsEvent() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
         Calendar calendar = new Calendar("Test Calendar", Collections.singletonList(orga));
         calendar.setId(1);
-        Mockito.when(organizationRepository.save( new Organization("Test Organization"))).thenReturn(orga);
+        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
         Mockito.when(calendarRepository.save(calendar)).thenReturn(calendar);
         Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         Mockito.when(calendarRepository.findById(1)).thenReturn(Optional.ofNullable(calendar));
-        EventDto eventDto =  endpoint.post(new EventDto(null, "Find Event", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId()));
+        EventDto eventDto = endpoint.post(new EventDto(null, "Find Event", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId()));
 
         List<EventDto> found = endpoint.getEventsByCalendarId(1);
         boolean b = false;
-        for (EventDto e :found){
-            if(e.getId().equals(eventDto.getId())){
+        for (EventDto e : found) {
+            if (e.getId().equals(eventDto.getId())) {
                 b = true;
                 break;
             }
         }
-        if(!b){
+        if (!b) {
             fail();
         }
     }

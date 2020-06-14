@@ -42,9 +42,9 @@ public class SimpleEventService implements EventService {
     public void delete(Event event) {
         try {
             if (event.getId() != null) {
-               Event toDelete = this.findById(event.getId());
-               if(toDelete.getLabels() != null && toDelete.getLabels().size() > 0)
-               removeLabels(toDelete, toDelete.getLabels());
+                Event toDelete = this.findById(event.getId());
+                if (toDelete.getLabels() != null && toDelete.getLabels().size() > 0)
+                    removeLabels(toDelete, toDelete.getLabels());
             } else {
                 throw new ValidationException("Id is not defined");
             }
@@ -130,12 +130,15 @@ public class SimpleEventService implements EventService {
     public Event addLabels(Event event, Collection<Label> labels) {
         log.info("Adding labels {} to event {}", labels, event);
         try {
-            labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
+            labels.forEach(it -> {
+                if (!(it.getEvents().contains(event))) {
+                    it.getEvents().add(event);
+                }
+            });
             labelRepository.saveAll(labels);
             if (event.getLabels() != null) {
                 event.getLabels().addAll(labels);
-            }
-            else {
+            } else {
                 List<Label> labelList = new ArrayList<>(labels);
                 event.setLabels(labelList);
             }
@@ -149,10 +152,10 @@ public class SimpleEventService implements EventService {
     public Event updateLabels(Event event, Collection<Label> labels) {
         log.info("Adding labels {} to event {}", labels, event);
         try {
-            removeLabels(event,event.getLabels());
+            removeLabels(event, event.getLabels());
             for (Label l : labels
-                 ) {
-                if(!l.getEvents().contains(event)){
+            ) {
+                if (!l.getEvents().contains(event)) {
                     List<Event> events = new ArrayList<>(l.getEvents());
                     events.add(event);
                     l.setEvents(events);
@@ -162,8 +165,7 @@ public class SimpleEventService implements EventService {
             labelRepository.saveAll(labels);
             if (event.getLabels() != null) {
                 event.getLabels().addAll(labels);
-            }
-            else {
+            } else {
                 List<Label> labelList = new ArrayList<>(labels);
                 event.setLabels(labelList);
             }
@@ -176,9 +178,9 @@ public class SimpleEventService implements EventService {
     @Transactional
     @Override
     public Event removeLabels(Event event, Collection<Label> labels) {
-     //   log.info("Removing labels {} from event {}", labels, event);
+        //   log.info("Removing labels {} from event {}", labels, event);
         try {
-            if(labels != null) {
+            if (labels != null) {
                 labels.forEach(it -> {
                     it.getEvents().remove(event);
                 });
@@ -193,10 +195,10 @@ public class SimpleEventService implements EventService {
 
 
     public List<Event> getByCalendarId(Integer id) throws ServiceException {
-        try{
-        return eventRepository.findByCalendarId(id);
-        }catch (PersistenceException e){
-            throw new ServiceException(e.getMessage(),e);
+        try {
+            return eventRepository.findByCalendarId(id);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
         }
     }
 

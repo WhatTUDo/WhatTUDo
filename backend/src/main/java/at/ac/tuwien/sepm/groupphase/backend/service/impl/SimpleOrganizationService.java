@@ -1,10 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
-import at.ac.tuwien.sepm.groupphase.backend.entity.OrganizationMembership;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarAddEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarRemoveEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCreateEvent;
@@ -101,11 +99,9 @@ public class SimpleOrganizationService implements OrganizationService {
             this.removeCalendars(organizationToDelete, calendarsToRemove);
             organizationRepository.delete(organizationToDelete);
             return organisationID;
-        }
-        catch (NotFoundException e) {
+        } catch (NotFoundException e) {
             throw new NotFoundException(e.getMessage(), e);
-        }
-        catch (ServiceException e) {
+        } catch (ServiceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
@@ -140,11 +136,15 @@ public class SimpleOrganizationService implements OrganizationService {
 
     public Organization removeCalendars(Organization organization, Collection<Calendar> calendars) {
         try {
-            calendars.forEach(it -> it.getOrganizations().remove(organization));
-            calendarRepository.saveAll(calendars);
+            List<Integer> calendarIds = calendars.stream().map(BaseEntity::getId).collect(Collectors.toList());
+            calendarRepository.findAllById(calendarIds).forEach(it -> {
+                it.getOrganizations().remove(organization);
+                calendarRepository.save(it);
+            });
 
-            organization.getCalendars().removeAll(calendars);
-            Organization savedOrga = organizationRepository.save(organization);
+            Organization dbOrga = organizationRepository.findById(organization.getId()).get();
+            dbOrga.getCalendars().removeIf(it -> calendarIds.contains(it.getId()));
+            Organization savedOrga = organizationRepository.save(dbOrga);
             publisher.publishEvent(new OrganizationCalendarRemoveEvent(savedOrga.getName(), calendars.stream().map(Calendar::getName).collect(Collectors.toList())));
             return savedOrga;
         } catch (PersistenceException e) {
@@ -157,17 +157,18 @@ public class SimpleOrganizationService implements OrganizationService {
 
     @Transactional
     @Override
-    public List<ApplicationUser> getMembers(Integer id) throws ServiceException{
-      try {  Organization organization = organizationRepository.getOne(id);
-        Set<OrganizationMembership> organizationMembershipSet =organization.getMemberships();
-        List<ApplicationUser> members = new ArrayList<>();
+    public List<ApplicationUser> getMembers(Integer id) throws ServiceException {
+        try {
+            Organization organization = organizationRepository.getOne(id);
+            Set<OrganizationMembership> organizationMembershipSet = organization.getMemberships();
+            List<ApplicationUser> members = new ArrayList<>();
 
-        for (OrganizationMembership o: organizationMembershipSet){
-            members.add(o.getUser());
+            for (OrganizationMembership o : organizationMembershipSet) {
+                members.add(o.getUser());
+            }
+            return members;
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
         }
-        return members;
-      } catch (PersistenceException | IllegalArgumentException e){
-          throw new ServiceException(e.getMessage());
-      }
     }
 }

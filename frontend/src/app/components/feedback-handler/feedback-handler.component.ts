@@ -63,7 +63,9 @@ export class FeedbackHandlerComponent implements OnInit {
     this.header = header;
     this.state = state;
 
-    setTimeout(_=>{this.onDismiss();}, this.dismissAfter)
+    setTimeout(_ => {
+      this.onDismiss();
+    }, this.dismissAfter)
   }
 
   ngOnInit(): void {
