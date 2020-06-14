@@ -11,6 +11,27 @@ form {
   }
 }
 
+#label-picker {
+  display: flex;
+  margin-bottom: 12pt;
+  align-items: center;
+
+  background-color: var(--shadow);
+  border-radius: $rounded-radius;
+  padding: 4pt;
+
+  .label-item {
+    border: 1px solid var(--text);
+    padding: 2pt 8pt;
+    border-radius: $rounded-radius;
+    margin-right: 8pt;
+
+    fa-icon {
+      font-size: 0.75em;
+    }
+  }
+}
+
 .event-form-container {
   display: flex;
   align-items: flex-end;
