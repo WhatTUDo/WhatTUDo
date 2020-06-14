@@ -50,6 +50,13 @@ body {
   }
 }
 
+@media screen and (max-width: $mobile-breakpoint) {
+  .mobile-full-width {
+    margin: 0 -12pt;
+    border-radius: 0 !important;
+  }
+}
+
 h1, h2, .heading, .heading * {
   font-size: 36pt;
   font-weight: $f-bold;
