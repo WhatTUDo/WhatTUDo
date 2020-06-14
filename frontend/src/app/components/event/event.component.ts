@@ -78,7 +78,7 @@ export class EventComponent implements OnInit {
       case 0:
         console.log(this.user);
         console.log(this.id);
-        this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 0)).subscribe((attendance) => {
+        this.attendanceStatusService.create(new AttendanceDto(this.user.name, this.id, 0)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
           }
@@ -86,7 +86,7 @@ export class EventComponent implements OnInit {
         console.log('You declined!');
         break;
       case 1:
-        this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 1)).subscribe((attendance) => {
+        this.attendanceStatusService.create(new AttendanceDto(this.user.name, this.id, 1)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
           }
@@ -95,7 +95,7 @@ export class EventComponent implements OnInit {
         console.log('You are attending!');
         break;
       case 2:
-        this.attendanceStatusService.create(new AttendanceDto(this.user.id, this.id, 2)).subscribe((attendance) => {
+        this.attendanceStatusService.create(new AttendanceDto(this.user.name, this.id, 2)).subscribe((attendance) => {
             console.log(attendance);
             this.getParticipants();
           }
