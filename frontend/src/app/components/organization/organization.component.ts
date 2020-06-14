@@ -64,14 +64,14 @@ export class OrganizationComponent implements OnInit {
   }
 
   removeCalendar(calId: number) {
-    this.organizationService.removeCalendarToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
-      this.organization = organization;
-      this.organizationCalendars = this.organizationCalendars.filter((cal: Calendar) => {
-        return cal.id != calId
-      })
-    }, err => {
-      alert(err.message);
-    });
+    if (confirm(`You are deleting calendar "${this.organizationCalendars.find(c => c.id===calId).name}". Are you sure?`)) {
+      this.organizationService.removeCalendarToOrga(this.organization.id, calId).subscribe((organization: Organization) => {
+        this.organization = organization;
+        this.organizationCalendars = this.organizationCalendars.filter((cal: Calendar) => {
+          return cal.id != calId
+        })
+      });
+    }
   }
 
   getAllEditableCalendars() {
