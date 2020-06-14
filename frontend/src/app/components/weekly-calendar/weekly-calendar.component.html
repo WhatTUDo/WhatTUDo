@@ -26,7 +26,7 @@
   <div class="calendar-day-swim-lane">
     <div *ngFor="let event of this.eventsOfTheWeek.get(displayingDate.toISOString())"
          [style.grid-row]="getDisplayRows(event, displayingDate)"
-         class="calendar-event">
+         class="calendar-event" routerLink="/event/{{event.id}}">
       <div *ngIf="event != null" class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
       <div *ngIf="event != null" class="calendar-event-name">{{event.name}}</div>
     </div>
