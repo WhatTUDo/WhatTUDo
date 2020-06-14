@@ -186,4 +186,8 @@ export class EventComponent implements OnInit {
 
     return array;
   }
+
+  getEventPromoImageLink(eventId: number) {
+    return this.eventService.getEventPromoImageLink(eventId);
+  }
 }

@@ -314,6 +314,20 @@ iframe {
   user-select: none;
   -webkit-user-drag: none;
   background-color: var(--shadow);
+  background-size: cover;
+  background-repeat: no-repeat;
+  filter: blur();
+  flex-grow: 0;
+  flex-shrink: 0;
+
+  &.avatar-ultra-small {
+    height: 16pt;
+    width: 16pt;
+
+    fa-icon {
+      font-size: 16pt;
+    }
+  }
 
   &.avatar-small {
     height: 48pt;

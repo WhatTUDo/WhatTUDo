@@ -182,7 +182,10 @@ export class EventService {
     return string
   }
 
-  public getDuration(event: CalendarEvent){
-    return event.endDateTime.valueOf() - event.startDateTime.valueOf();
+  getEventPromoImageLink(eventId: number) {
+    // Return base64 of a 1x1px transparent gif if no organizationId is given.
+    if (!eventId) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+    return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+    //TODO: Implement this after backend is done.
   }
 }
