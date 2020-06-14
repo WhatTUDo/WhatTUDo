@@ -6,6 +6,7 @@ import {User} from "../dtos/user";
 import md5 from "md5";
 import {Organization} from "../dtos/organization";
 import {CalendarEvent} from "../dtos/calendar-event";
+import {ChangeUserPasswordDto} from '../dtos/ChangeUserPasswordDto';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,10 @@ export class UserService {
     };
 
     return this.httpClient.post(this.usersBaseUri, reducedElement);
+  }
+
+  changePwd(changeUserPasswordDto: ChangeUserPasswordDto) : Observable<User>{
+     return this.httpClient.put<User>(this.globals.backendUri+ 'changePwd', changeUserPasswordDto);
   }
 
   /**

@@ -6,6 +6,7 @@ import {User} from "../../dtos/user";
 import {AuthService} from "../../services/auth.service";
 import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {FeedbackService} from "../../services/feedback.service";
+import {ChangeUserPasswordDto} from '../../dtos/ChangeUserPasswordDto';
 
 @Component({
   selector: 'app-user-form',
@@ -65,7 +66,14 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
 
   public changePassword() {
     if (this.changePwdForm.valid) {
-      //call update method in service.
+      console.log(this.user.name);
+      this.userService.changePwd(new ChangeUserPasswordDto(this.user.name, this.user.email, this.changePwdForm.controls.currentPassword.value, this.changePwdForm.controls.newPassword.value )).subscribe((user: User)=>{
+        this.user = user;
+
+      }, err => {
+        console.warn(err);
+        this.feedbackService.displayError("Error", err.error.message);
+      });
     }
   }
 
