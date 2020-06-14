@@ -15,7 +15,7 @@
           </fa-icon>
         </div>
       </div>
-      <div class="event-promo-container" [style.background-image]="'url('+getEventPromoImageLink(id)+')'">
+      <div class="event-promo-container mobile-full-width" [style.background-image]="'url('+getEventPromoImageLink(id)+')'">
         <div class="event-promo-details">
           <div class="event-time">{{getEventDateAndTimeString()}}</div>
           <div class="event-name">{{calendarEvent.name}}</div>
@@ -31,25 +31,33 @@
         </div>
       </div>
       <div>
-
         <div class="participation-status grid-one-third also-on-mobile no-gap">
-          <div class="participation-status-item">
+          <div class="participation-status-item"
+               [style.color]="userParticipationStatus===AttendanceStatusPossibilities.ATTENDING?'var(--accent)':undefined">
             <div class="participation-count">{{participants.attending.length}}</div>
             <div class="participation-label">Attending</div>
           </div>
-          <div class="participation-status-item">
+          <div class="participation-status-item"
+               [style.color]="userParticipationStatus===AttendanceStatusPossibilities.INTERESTED?'var(--accent)':undefined">
             <div class="participation-count">{{participants.interested.length}}</div>
             <div class="participation-label">Interested</div>
           </div>
-          <div class="participation-status-item">
+          <div class="participation-status-item"
+               [style.color]="userParticipationStatus===AttendanceStatusPossibilities.DECLINED?'var(--accent)':undefined">
             <div class="participation-count">{{participants.declined.length}}</div>
             <div class="participation-label">Declined</div>
           </div>
         </div>
         <div class="participation-button-container grid-one-third also-on-mobile no-gap">
-          <button (click)="participate(1)" class="button-blue btn-lg">Attend</button>
-          <button (click)="participate(2)" class="button-yellow btn-lg">Interested</button>
-          <button (click)="participate(0)" class="button-red btn-lg">Decline</button>
+          <button (click)="participate(AttendanceStatusPossibilities.ATTENDING)" class="button-blue btn-lg">
+            Attend
+          </button>
+          <button (click)="participate(AttendanceStatusPossibilities.INTERESTED)" class="button-yellow btn-lg">
+            Interested
+          </button>
+          <button (click)="participate(AttendanceStatusPossibilities.DECLINED)" class="button-red btn-lg">
+            Decline
+          </button>
         </div>
       </div>
       <div class="calendar-info">
