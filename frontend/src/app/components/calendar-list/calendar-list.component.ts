@@ -90,6 +90,7 @@ export class CalendarListComponent implements OnInit {
     return true;
   }
 
+
   delete(id: number): void {
     if (confirm(`You are deleting calendar "${this.calendars.find(c => c.id === id).name}". Are you sure?`)) {
       this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
