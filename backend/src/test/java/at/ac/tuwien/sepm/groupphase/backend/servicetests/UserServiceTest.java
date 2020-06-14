@@ -98,7 +98,7 @@ public class UserServiceTest {
     }
 
 
-    /*@Test
+    @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
         ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
@@ -146,10 +146,10 @@ public class UserServiceTest {
         assert (recommendedEvent.size() > 0);
         assert (recommendedEvent.contains(event3));
 
-    }*/
+    }
 
 
-    /*@Test
+    @Test
     @Transactional
     public void ifNoRecommendableEvents_getRecommendedEvents_shouldReturn_randomEvents() {
         ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
@@ -191,6 +191,6 @@ public class UserServiceTest {
         List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
         assert (recommendedEvent.size() > 0);
-    }*/
+    }
 
 }
