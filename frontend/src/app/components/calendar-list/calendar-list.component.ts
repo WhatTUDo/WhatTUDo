@@ -89,16 +89,7 @@ export class CalendarListComponent implements OnInit {
     return true;
   }
 
-  add(name: string, eventIds: number[], organizationIds: number[]) {
-    name = name.trim();
-    if (!name) {
-      return;
-    }
-    this.calendarService.addCalendar({name, eventIds, organizationIds} as Calendar)
-      .subscribe(newcalendar => {
-        this.getAllCalendars();
-      });
-  }
+
 
   delete(id: number): void {
     if (confirm(`You are deleting calendar "${this.calendars.find(c => c.id === id).name}". Are you sure?`)) {
