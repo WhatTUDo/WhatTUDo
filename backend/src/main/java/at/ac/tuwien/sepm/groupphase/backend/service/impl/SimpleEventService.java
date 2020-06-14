@@ -43,7 +43,7 @@ public class SimpleEventService implements EventService {
         try {
             if (event.getId() != null) {
                Event toDelete = this.findById(event.getId());
-               if(toDelete.getLabels().size() > 0)
+               if(toDelete.getLabels() != null && toDelete.getLabels().size() > 0)
                removeLabels(toDelete, toDelete.getLabels());
             } else {
                 throw new ValidationException("Id is not defined");

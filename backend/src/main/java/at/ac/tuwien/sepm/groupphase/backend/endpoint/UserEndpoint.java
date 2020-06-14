@@ -69,7 +69,7 @@ public class UserEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('SYSADMIN') || #dto.name == principal")
+    @PreAuthorize("hasRole('SYSADMIN') || #dto.name == principal.username")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)

@@ -38,7 +38,7 @@ public class AttendanceEndpoint {
     private final EventMapper eventMapper;
     private final UserMapper userMapper;
 
-    @PreAuthorize("hasRole('SYSADMIN') || #dto.username == principal")
+    @PreAuthorize("hasRole('SYSADMIN') || #dto.username == principal.username")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping

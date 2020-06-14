@@ -26,7 +26,7 @@ public class ChangeUserPasswordEndpoint {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @PreAuthorize("hasRole('SYSADMIN') || #dto.username == principal")
+    @PreAuthorize("hasRole('SYSADMIN') || #dto.username == principal.username")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
