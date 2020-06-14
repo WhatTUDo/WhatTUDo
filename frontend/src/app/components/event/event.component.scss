@@ -60,7 +60,13 @@
   width: 100%;
 
   button {
-    margin: 0 16pt;
+    margin: 0 8pt;
+  }
+
+  @media (screen and min-width: $mobile-breakpoint) {
+    button {
+      margin: 0 16pt;
+    }
   }
 }
 
