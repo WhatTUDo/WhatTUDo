@@ -49,7 +49,7 @@
             <fa-icon *ngIf="organization.canEdit" [icon]="faCog"></fa-icon>
           </div>
           <div class="clickable no-hover-enlarge no-shadow organization-kick-member-button">
-            <fa-icon *ngIf="organization.canEdit" [icon]="faTimesCircle"></fa-icon>
+            <fa-icon (click)="removeFromOrg(member.id, organization.id)" *ngIf="organization.canEdit" [icon]="faTimesCircle"></fa-icon>
           </div>
         </div>
       </div>

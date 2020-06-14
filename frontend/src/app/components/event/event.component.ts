@@ -6,12 +6,16 @@ import {Label} from '../../dtos/label';
 import {EventService} from '../../services/event.service';
 import {LabelService} from '../../services/label.service';
 import {ActivatedRoute} from '@angular/router';
-import {faChevronLeft, faExternalLinkSquareAlt, faTag, faCog} from '@fortawesome/free-solid-svg-icons';
+import {faChevronLeft, faTag, faCog, faCalendar} from '@fortawesome/free-solid-svg-icons';
 import {AttendanceStatusService} from '../../services/attendance-status.service';
 import {AuthService} from '../../services/auth.service';
 import {AttendanceDto} from '../../dtos/AttendanceDto';
 import {User} from "../../dtos/user";
 import {FeedbackService} from "../../services/feedback.service";
+import {Organization} from "../../dtos/organization";
+import {Calendar} from "../../dtos/calendar";
+import {CalendarService} from "../../services/calendar.service";
+import {OrganizationService} from "../../services/organization.service";
 
 @Component({
   selector: 'app-event',
@@ -25,6 +29,8 @@ export class EventComponent implements OnInit {
   user: User = null;
   labels: Array<Label>;
   public calendarEvent: CalendarEvent;
+  calendar: Calendar;
+  calendarOrganizations: Organization[] = [];
   participants: any = {
     'attending': [],
     'interested': [],
@@ -32,10 +38,13 @@ export class EventComponent implements OnInit {
   };
   faChevronLeft = faChevronLeft;
   faTag = faTag;
-  faExternalLinkSquareAlt = faExternalLinkSquareAlt;
   faCog = faCog;
+  faCalendar = faCalendar;
 
-  constructor(private eventService: EventService, private labelService: LabelService,
+  constructor(private eventService: EventService,
+              private labelService: LabelService,
+              private calendarService: CalendarService,
+              private organizationService: OrganizationService,
               private feedbackService: FeedbackService,
               private attendanceStatusService: AttendanceStatusService, private authService: AuthService,
               private route: ActivatedRoute) {
@@ -137,8 +146,14 @@ export class EventComponent implements OnInit {
       this.calendarEvent.location = location;
       this.calendarEvent.description = 'yololo';
       this.participants = this.getParticipants();
-    }, err => {
-      alert(err.message);
+      this.calendarService.getCalendarById(event.id).subscribe(cal => {
+        this.calendar = cal;
+        cal.organizationIds.forEach(id => {
+          this.organizationService.getById(id).subscribe(org => {
+            this.calendarOrganizations.push(org);
+          })
+        })
+      })
     });
   }
 
@@ -189,5 +204,9 @@ export class EventComponent implements OnInit {
 
   getEventPromoImageLink(eventId: number) {
     return this.eventService.getEventPromoImageLink(eventId);
+  }
+
+  getOrganizationAvatarLink(organizationId: number, size: number) {
+    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
   }
 }
