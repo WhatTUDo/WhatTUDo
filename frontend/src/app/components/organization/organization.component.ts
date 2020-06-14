@@ -90,11 +90,11 @@ export class OrganizationComponent implements OnInit {
       for (let calID of organization.calendarIds) {
         this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
           this.organizationCalendars.push(cal);
-        })
-        this.organizationService.getMembers(organization.id).subscribe((users: User[]) => {
-          this.organizationMembers = users;
-        })
+        });
       }
+      this.organizationService.getMembers(organization.id).subscribe((users: User[]) => {
+        this.organizationMembers = users;
+      });
     })
   }
 
