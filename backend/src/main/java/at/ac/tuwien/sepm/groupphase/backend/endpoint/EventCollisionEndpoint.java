@@ -40,15 +40,15 @@ public class EventCollisionEndpoint {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Get Event Collisions and Date Recommendations", authorizations = {@Authorization(value = "apiKey")})
-    public CollisionResponseDto getEventCollisions(@RequestBody EventDto eventDto) {
+    public CollisionResponseDto getEventCollisions(@RequestBody EventDto dto) {
         Integer threshold = 3;
         Long timespan = 12L;
         log.info("Get Event Collisions with set CS threshold {} and additional timespan {}h", threshold, timespan);
         try {
-            List<EventCollision> eventCollisions = this.eventCollisionService.getEventCollisions(eventMapper.eventDtoToEvent(eventDto), threshold, timespan);
+            List<EventCollision> eventCollisions = this.eventCollisionService.getEventCollisions(eventMapper.eventDtoToEvent(dto), threshold, timespan);
             if (!eventCollisions.isEmpty()) {
-                EventCollision min = eventCollisions.stream().min(Comparator.comparing(e -> e.getCollisionScore())).get();
-                List<LocalDateTime[]> suggestions = this.eventCollisionService.getAlternativeDateSuggestions(eventMapper.eventDtoToEvent(eventDto), min.getCollisionScore());
+                EventCollision min = eventCollisions.stream().min(Comparator.comparing(EventCollision::getCollisionScore)).get();
+                List<LocalDateTime[]> suggestions = this.eventCollisionService.getAlternativeDateSuggestions(eventMapper.eventDtoToEvent(dto), min.getCollisionScore());
                 if(suggestions.size()>10){
                 List<LocalDateTime[]> ten_suggestions= suggestions.subList(0, 9);
                 return collisionResponseMapper.mapCollisionResponseDto(eventCollisions, ten_suggestions);

@@ -55,7 +55,8 @@ VALUES (1, 'person1@tuwien.ac.at', false, 'Person 1', '$2a$10$ua4K4vhX75mvmEWkHh
        (6, 'person6@tuwien.ac.at', false, 'Person 6', '$2a$10$crKBS1KD3LvSAVnBOUeL9.CgDtT.Ce0fUgi/tlnwhYkx0C7moUzfu', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
        (7, 'person7@tuwien.ac.at', false, 'Person 7', '$2a$10$wNAkyTOQZayMc6H.lKeIg.qJTo/15X2tmv44VLgGzuuQCVuDmfZvW', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
        (8, 'person8@tuwien.ac.at', false, 'Person 8', '$2a$10$r1KdHV7FEYkmdeTACjHpiORwMSUX3J4xqs0gkwjzaDK3vegMtOkH.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (9, 'person9@tuwien.ac.at', false, 'Person 9', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+       (9, 'person9@tuwien.ac.at', false, 'Person 9', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (10, 'admin1@tuwien.ac.at', true, 'admin', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 INSERT INTO ORGA_MEMBERSHIP (ORGANIZATION_ID, USER_ID, ROLE)
 VALUES (1, 1, 'MOD'),

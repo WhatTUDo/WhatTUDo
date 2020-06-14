@@ -2,17 +2,13 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LabelDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.LabelMapper;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
-import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -48,15 +44,15 @@ public class EventEndpoint {
     private final LabelMapper labelMapper;
 
 
-    //@PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
+    @PreAuthorize("hasPermission(#dto, 'MEMBER')")
     @CrossOrigin
     @Transactional
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
-    public void deleteEvent(@RequestBody EventDto eventDto) {
+    public void deleteEvent(@RequestBody EventDto dto) {
         try {
-            eventService.delete(eventMapper.eventDtoToEvent(eventDto));
+            eventService.delete(eventMapper.eventDtoToEvent(dto));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (ValidationException e) {
@@ -66,14 +62,14 @@ public class EventEndpoint {
         }
     }
 
-   // @PreAuthorize("hasPermission(#event, 'MEMBER')")
+    @PreAuthorize("hasPermission(#dto, 'MEMBER')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto post(@RequestBody EventDto event) {
+    public EventDto post(@RequestBody EventDto dto) {
         try {
-            Event eventEntity = eventMapper.eventDtoToEvent(event);
+            Event eventEntity = eventMapper.eventDtoToEvent(dto);
             return eventMapper.eventToEventDto(eventService.save(eventEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
@@ -117,14 +113,14 @@ public class EventEndpoint {
         }
     }
 
+    @PreAuthorize("hasPermission(#dto, 'MEMBER')")
     @CrossOrigin
-    @PreAuthorize("hasPermission(#eventDto, 'MEMBER')")
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto editEvent(@RequestBody EventDto eventDto) {
+    public EventDto editEvent(@RequestBody EventDto dto) {
         try {
-            Event eventEntity = eventMapper.eventDtoToEvent(eventDto);
+            Event eventEntity = eventMapper.eventDtoToEvent(dto);
             return eventMapper.eventToEventDto(eventService.update(eventEntity));
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
@@ -153,55 +149,55 @@ public class EventEndpoint {
     }
 
 
-    //@PreAuthorize("hasPermission(#eventDto, 'MOD')")
+    @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
     @Transactional
     @DeleteMapping(value = "/{id}/labels")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Remove Labels from an Event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto removeLabelsFromEvent(@PathVariable(value = "id") Integer eventId, @RequestParam(value = "labelId") List<Integer> labelIds) {
+    public EventDto removeLabelsFromEvent(@PathVariable(value = "id") Integer id, @RequestParam(value = "labelId") List<Integer> labelIds) {
         try {
             Collection<Label> labels = labelIds.stream().map(labelService::findById).collect(Collectors.toList());
-            Event event = eventService.removeLabels(eventService.findById(eventId), labels);
+            Event event = eventService.removeLabels(eventService.findById(id), labels);
             return eventMapper.eventToEventDto(event);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
 
-    //@PreAuthorize("hasPermission(#eventDto, 'MOD')")
-  /**  @Transactional
-    @PutMapping(value = "/{id}/labels")
-    @CrossOrigin
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Add Labels to an Event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto addLabelToEvent(@PathVariable(value = "id") Integer eventId, @RequestParam(value = "labelId") List<Integer> labelIds) {
-        try {
-            Collection<Label> labels = labelIds.stream().map(labelService::findById).collect(Collectors.toList());
-            Event event = eventService.addLabels(eventService.findById(eventId), labels);
-            return eventMapper.eventToEventDto(event);
-        } catch (ServiceException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
-        }
-    }**/
-
-    //@PreAuthorize("hasPermission(#eventDto, 'MOD')")
+    @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
     @Transactional
     @PutMapping(value = "/{id}/labels")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Add Labels to an Event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto addLabelToEvent(@PathVariable(value = "id") Integer id, @RequestParam(value = "labelId") List<Integer> labelIds) {
+        try {
+            Collection<Label> labels = labelIds.stream().map(labelService::findById).collect(Collectors.toList());
+            Event event = eventService.addLabels(eventService.findById(id), labels);
+            return eventMapper.eventToEventDto(event);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
+    @Transactional
+    @PostMapping(value = "/{id}/labels")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update Labels of an Event", authorizations = {@Authorization(value = "apiKey")})
-    public EventDto updateLabelsOfEvent(@PathVariable(value = "id") Integer eventId, @RequestBody List<LabelDto> labelsDto) {
+    public EventDto updateLabelsOfEvent(@PathVariable(value = "id") Integer id, @RequestBody List<LabelDto> labelsDto) {
         try {
 
             List<Label> labels = new ArrayList<Label>();
-            for(LabelDto l : labelsDto){
+            for (LabelDto l : labelsDto) {
 
                 labels.add(labelMapper.labelDtoToLabel(l));
 
             }
 
-            Event event = eventService.updateLabels(eventService.findById(eventId), labels);
+            Event event = eventService.updateLabels(eventService.findById(id), labels);
             return eventMapper.eventToEventDto(event);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
@@ -209,9 +205,7 @@ public class EventEndpoint {
     }
 
 
-
-
-
+    @PreAuthorize("permitAll()")
     @Transactional
     @GetMapping(value = "/{id}/labels")
     @CrossOrigin

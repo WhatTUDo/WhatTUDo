@@ -45,7 +45,7 @@ public class LabelEndpoint {
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping(value = "/{id}")
-    public LabelDto getById(@PathVariable("id") int id) {
+    public LabelDto getById(@PathVariable("id") Integer id) {
         try {
             return labelMapper.labelToLabelDto(labelService.findById(id));
         } catch (NotFoundException e) {
@@ -53,7 +53,7 @@ public class LabelEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('SYSADMIN')") //FIXME: is this correct? I don't know how auth works in detail atm
+    @PreAuthorize("hasRole('SYSADMIN')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")
@@ -70,16 +70,16 @@ public class LabelEndpoint {
         }
     }
 
-    // @PreAuthorize("hasPermission(#labelDto, 'SYSADMIN')") FIXME: is this correct? I don't know how auth works in detail atm
+    @PreAuthorize("hasRole('SYSADMIN')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create label", authorizations = {@Authorization(value = "apiKey")})
-    public LabelDto create(@RequestBody LabelDto labelDto) {
+    public LabelDto create(@RequestBody LabelDto dto) {
         try {
             List<Integer> eventsShouldBeEmpty = new ArrayList<Integer>();
-            labelDto.setEventIds(eventsShouldBeEmpty);
-            Label label = labelMapper.labelDtoToLabel(labelDto);
+            dto.setEventIds(eventsShouldBeEmpty);
+            Label label = labelMapper.labelDtoToLabel(dto);
             return labelMapper.labelToLabelDto(labelService.save(label));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
@@ -88,14 +88,14 @@ public class LabelEndpoint {
         }
     }
 
-    // @PreAuthorize("hasPermission(#labelDto, 'SYSADMIN')") FIXME: is this correct? I don't know how auth works in detail atm
+    @PreAuthorize("hasRole('SYSADMIN')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @PutMapping
     @ApiOperation(value = "Update label", authorizations = {@Authorization(value = "apiKey")})
-    public LabelDto update(@RequestBody LabelDto labelDto) {
+    public LabelDto update(@RequestBody LabelDto dto) {
         try {
-            Label label = labelMapper.labelDtoToLabel(labelDto);
+            Label label = labelMapper.labelDtoToLabel(dto);
             return labelMapper.labelToLabelDto(labelService.update(label));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);

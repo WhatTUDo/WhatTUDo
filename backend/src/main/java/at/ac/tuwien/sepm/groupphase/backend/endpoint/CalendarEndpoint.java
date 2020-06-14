@@ -3,7 +3,6 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TestCalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
@@ -14,18 +13,15 @@ import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Or;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -104,14 +100,14 @@ public class CalendarEndpoint {
     }
 
 
-    @PreAuthorize("hasPermission(#calendar, 'MOD')")
+    @PreAuthorize("hasPermission(#dto, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Create calendar", authorizations = {@Authorization(value = "apiKey")})
-    public CalendarDto create(@RequestBody CalendarCreateDto calendar) {
+    public CalendarDto create(@RequestBody CalendarCreateDto dto) {
         try {
-            Calendar calendarEntity = calendarMapper.calendarCreateDtoToCalendar(calendar);
+            Calendar calendarEntity = calendarMapper.calendarCreateDtoToCalendar(dto);
             return calendarMapper.calendarToCalendarDto(calendarService.save(calendarEntity));
         } catch (ValidationException | IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
@@ -137,14 +133,14 @@ public class CalendarEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#calendarDto, 'MOD')")
+    @PreAuthorize("hasPermission(#dto, 'MOD')")
     @CrossOrigin
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Edit calendar", authorizations = {@Authorization(value = "apiKey")})
-    public CalendarDto editCalendar(@RequestBody CalendarDto calendarDto) {
+    public CalendarDto editCalendar(@RequestBody CalendarDto dto) {
         try {
-            Calendar calendar = testMapper.calendarDtoToCalendar(calendarDto);
+            Calendar calendar = testMapper.calendarDtoToCalendar(dto);
             return testMapper.calendarToCalendarDto(calendarService.update(calendar));
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
@@ -153,13 +149,14 @@ public class CalendarEndpoint {
         }
     }
 
+    @PreAuthorize("hasPermission(#dto, 'MOD')")
     @CrossOrigin
     @PutMapping(value = "/organizations")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update Associated Organizations of a given Calendar!")
-    public CalendarDto updateOrganizationsForCalendar(@RequestBody CalendarDto calendarDto) {
+    public CalendarDto updateOrganizationsForCalendar(@RequestBody CalendarDto dto) {
         try {
-            Calendar calendar = calendarMapper.calendarDtoToCalendar(calendarDto);
+            Calendar calendar = calendarMapper.calendarDtoToCalendar(dto);
             List<Organization> updatedOrganizationList = calendar.getOrganizations();
             return calendarMapper.calendarToCalendarDto(calendarService.updateOrganizationsWithList(calendar, updatedOrganizationList));
 

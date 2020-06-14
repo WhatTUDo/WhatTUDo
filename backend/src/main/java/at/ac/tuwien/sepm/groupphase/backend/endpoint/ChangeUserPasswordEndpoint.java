@@ -26,17 +26,17 @@ public class ChangeUserPasswordEndpoint {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @PreAuthorize("hasRole('SYSADMIN') || #changePasswordDto.username == principal.username")
+    @PreAuthorize("hasRole('SYSADMIN') || #dto.username == principal.username")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Update User Password", authorizations = {@Authorization(value = "apiKey")})
-    public LoggedInUserDto changeUserPassword(@RequestBody ChangePasswordDto changePasswordDto) {
+    public LoggedInUserDto changeUserPassword(@RequestBody ChangePasswordDto dto) {
         try {
             return userMapper.applicationUserToUserDto(userService.changeUserPassword(
-                changePasswordDto.getUsername(),
-                changePasswordDto.getCurrentPassword(),
-                changePasswordDto.getNewPassword()
+                dto.getUsername(),
+                dto.getCurrentPassword(),
+                dto.getNewPassword()
             ));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
