@@ -40,8 +40,7 @@ public class OrganizationEndpointTest {
 
     @Autowired
     OrganizationEndpoint endpoint;
-    @Mock
-    OrganizationRepository organizationRepository;
+
 
     @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
     @Test
@@ -58,7 +57,6 @@ public class OrganizationEndpointTest {
     public void getAllOrganisations_shouldReturnListOfOrganizations() {
         Organization organization = (new Organization("Test Organization"));
         organization.setId(1);
-        Mockito.when(organizationRepository.save(organization)).thenReturn(organization);
 
         List<OrganizationDto> organizationDtos = endpoint.getAllOrgas();
         assertNotEquals(0, organizationDtos.size());
@@ -70,7 +68,6 @@ public class OrganizationEndpointTest {
         Integer id = 1;
         Organization organization = (new Organization("Test Organization"));
         organization.setId(id);
-        Mockito.when(organizationRepository.save(organization)).thenReturn(organization);
 
         OrganizationDto organizationDto = endpoint.getOrgaById(id);
 
@@ -84,7 +81,6 @@ public class OrganizationEndpointTest {
         Integer nonsenseID = 123456;
         Organization organization = (new Organization("Test Organization"));
         organization.setId(id);
-        Mockito.when(organizationRepository.save(organization)).thenReturn(organization);
 
         assertThrows(ResponseStatusException.class, () -> endpoint.getOrgaById(nonsenseID));
 
@@ -101,7 +97,6 @@ public class OrganizationEndpointTest {
     public void save_thenEdit_shouldReturn_newOrganization() {
         Organization organization = (new Organization("Test Organization 1"));
         organization.setId(1);
-        Mockito.when(organizationRepository.save(new Organization("Test Organization 1"))).thenReturn(organization);
         List<Integer> calendars = Collections.emptyList();
         OrganizationDto updatedOrganization = new OrganizationDto(organization.getId(), "Updated Test Organization", calendars);
         OrganizationDto returnedOrganization = endpoint.editOrganization(updatedOrganization);
@@ -109,14 +104,6 @@ public class OrganizationEndpointTest {
         assertEquals(returnedOrganization.getName(), updatedOrganization.getName());
     }
 
-//    @WithMockUser(username = "Person 1", authorities = {"MOD_200000", "MEMBER_200000"})
-//    @Test
-//    public void edit_nonSavedOrganization_shouldThrow_ResponseStatusException() {
-//        List<Integer> calendars = Collections.emptyList();
-//        OrganizationDto organizationDto = new OrganizationDto(200000, "newFalseName", calendars);
-//        assertThrows(ResponseStatusException.class, () -> endpoint.editOrganization(organizationDto));
-//    }
-    //This test will throw NotFoundException, because when we check the authorities, the Org Id will not be found and it wont allow user to go any further.
 
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
@@ -124,7 +111,6 @@ public class OrganizationEndpointTest {
     public void edit_withoutName_shouldThrow_ResponseStatusException() {
         Organization organization = (new Organization("Test Organization 1"));
         organization.setId(1);
-        Mockito.when(organizationRepository.save(new Organization("Test Organization 1"))).thenReturn(organization);
         List<Integer> calendars = Collections.emptyList();
         OrganizationDto organizationDto = new OrganizationDto(organization.getId(), "", calendars);
         assertThrows(ResponseStatusException.class, () -> endpoint.editOrganization(organizationDto));
