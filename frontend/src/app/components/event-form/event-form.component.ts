@@ -217,8 +217,8 @@ export class EventFormComponent implements OnInit {
   getEventConflicts() {
     if (this.event.startDateTime && this.event.endDateTime) {
       let helperEvent = this.event;
-      helperEvent.name = "";
-      helperEvent.description = "";
+      helperEvent.name = this.event.name ? this.event.name : "";
+      helperEvent.description = this.event.description ? this.event.description : "";
       this.eventCollisionService.getEventCollisions(helperEvent).subscribe((collisionResponse) => {
         this.collisionResponse = collisionResponse;
         this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
