@@ -98,7 +98,7 @@ public class UserServiceTest {
     }
 
 
-    /*@Test
+    @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
         ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
@@ -110,9 +110,9 @@ public class UserServiceTest {
         List<Event> events2 = new ArrayList<>();
         Label label1 = new Label("TestLabel1");
         Label label2 = new Label("TestLabel2");
-        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event3 = new Event("Test Event 3", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
+        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        Event event3 = new Event("Test Event 3", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
 
         events1.add(event1);
         events1.add(event3);
@@ -146,10 +146,10 @@ public class UserServiceTest {
         assert (recommendedEvent.size() > 0);
         assert (recommendedEvent.contains(event3));
 
-    }*/
+    }
 
 
-    /*@Test
+    @Test
     @Transactional
     public void ifNoRecommendableEvents_getRecommendedEvents_shouldReturn_randomEvents() {
         ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
@@ -163,8 +163,8 @@ public class UserServiceTest {
         Label label1 = new Label("TestLabel1");
         Label label2 = new Label("TestLabel2");
         Label label3 = new Label("TestLabel3");
-        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
+        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
         Event event3 = new Event("Test Event 3", LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(21), calendar);
         events1.add(event1);
         events2.add(event1);
@@ -191,6 +191,6 @@ public class UserServiceTest {
         List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
         assert (recommendedEvent.size() > 0);
-    }*/
+    }
 
 }

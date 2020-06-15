@@ -72,8 +72,8 @@ public class EventCollisionTest {
         Calendar calendar = calendarRepository.save(new Calendar("Katzenkalenderreleases", Collections.singletonList(organization)));
         ApplicationUser user = userRepository.save(new ApplicationUser("Dorian", "grazie@gmx.com", "pwdsuperstrong"));
 
-        Event event1 = eventRepository.save(new Event("Adventskatzenkalender", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
-        Event eventToTest = eventRepository.save(new Event("Adventskatzenkalender2", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
+        Event event1 = eventRepository.save(new Event("Adventskatzenkalender", LocalDateTime.of(2030, 1, 1, 15, 30), LocalDateTime.of(2030, 1, 1, 16, 0), calendar));
+        Event eventToTest = eventRepository.save(new Event("Adventskatzenkalender2", LocalDateTime.of(2030, 1, 1, 15, 30), LocalDateTime.of(2030, 1, 1, 16, 0), calendar));
         List<Label> labels = new ArrayList<>();
         AttendanceStatus attendance = new AttendanceStatus(user, event1, AttendanceStatusPossibilities.ATTENDING);
         AttendanceStatus attendance2 = new AttendanceStatus(user, eventToTest, AttendanceStatusPossibilities.ATTENDING);
