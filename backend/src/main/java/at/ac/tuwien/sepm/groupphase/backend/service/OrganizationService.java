@@ -99,4 +99,13 @@ public interface OrganizationService {
      */
     List<ApplicationUser> getMembers(Integer id) throws ServiceException;
 
+    /**
+     * add member/moderator to organization
+     * @param user to add to org
+     * @param organization org to update user
+     * @param role role user will have in org
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    Organization addMembership(ApplicationUser user, Organization organization, String role) throws ServiceException;
+
 }

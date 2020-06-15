@@ -4,6 +4,7 @@ package at.ac.tuwien.sepm.groupphase.backend.servicetests;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.IncomingUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
@@ -23,10 +24,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,6 +54,9 @@ public class UserServiceTest {
     @Autowired
     AttendanceService attendanceService;
 
+    @Autowired
+    OrganizationRepository organizationRepository;
+
     @Test
     public void when_savedUser_findAllUsers_shouldReturnListContainingUser() {
         userService.saveNewUser(new ApplicationUser("TestUser", "testy@test.com", "hunter2"));
@@ -66,11 +67,22 @@ public class UserServiceTest {
     @Test
     public void when_savedUser_findAllUsers_shouldReturnCorrectUserDetails() {
         userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
-        ApplicationUser user = (ApplicationUser) userService.loadUserByUsername("TestUser");
+        ApplicationUser user = (ApplicationUser) userService.getUserByName("TestUser");
         assert (user.getId() != null && user.getId() != 0);
-
     }
 
+
+
+    @Test
+    public void findUserById_shouldReturnCorrectUser(){
+        ApplicationUser user = userService.saveNewUser(new ApplicationUser("Save user", "testy1@test.com", "hunter2"));
+        assert (userService.findUserById(user.getId()).getName().equals(user.getName()));
+    }
+
+    @Test
+    public void findUserById_nonExistentId_shouldThrowNotFound(){
+        assertThrows(NotFoundException.class, ()->userService.findUserById(0));
+    }
     @Test
     public void updateUser() {
 
@@ -97,7 +109,41 @@ public class UserServiceTest {
 
     }
 
-    /*@Test
+    @Test
+    public void removeUserFromOrganization(){
+        Organization organization = organizationRepository.save(new Organization("Memmbers"));
+        ApplicationUser user = userService.saveNewUser(new ApplicationUser("remove member", "testy@test.com", "hunter2"));
+        Set<OrganizationMembership> organizationMemberships = new HashSet<>();
+        organizationMemberships.add(new OrganizationMembership(organization, user, OrganizationRole.MOD));
+        organization.setMemberships(organizationMemberships);
+        user.setMemberships(organizationMemberships);
+        user = userRepository.save(user);
+        organization = organizationRepository.save(organization);
+
+        assert(!user.getMemberships().isEmpty());
+
+        user = userService.removeFromOrga(user, organization);
+
+        assert (user.getMemberships().isEmpty());
+
+    }
+
+    @Test
+    public void getUserOrganization(){
+        Organization organization = organizationRepository.save(new Organization("Get Users test"));
+        ApplicationUser user = userService.saveNewUser(new ApplicationUser("member", "testy@test.com", "hunter2"));
+        Set<OrganizationMembership> organizationMemberships = new HashSet<>();
+        organizationMemberships.add(new OrganizationMembership(organization, user, OrganizationRole.MOD));
+        organization.setMemberships(organizationMemberships);
+        user.setMemberships(organizationMemberships);
+        user = userRepository.save(user);
+        organization = organizationRepository.save(organization);
+
+        assert (!userService.getUserOrganizations(user.getId()).isEmpty());
+        assertEquals(organization.getName(),userService.getUserOrganizations(user.getId()).get(0).getName());
+    }
+
+    @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
         ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
@@ -109,9 +155,9 @@ public class UserServiceTest {
         List<Event> events2 = new ArrayList<>();
         Label label1 = new Label("TestLabel1");
         Label label2 = new Label("TestLabel2");
-        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event3 = new Event("Test Event 3", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
+        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        Event event3 = new Event("Test Event 3", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
 
         events1.add(event1);
         events1.add(event3);
@@ -145,10 +191,10 @@ public class UserServiceTest {
         assert (recommendedEvent.size() > 0);
         assert (recommendedEvent.contains(event3));
 
-    }*/
+    }
 
 
-    /*@Test
+    @Test
     @Transactional
     public void ifNoRecommendableEvents_getRecommendedEvents_shouldReturn_randomEvents() {
         ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
@@ -162,8 +208,8 @@ public class UserServiceTest {
         Label label1 = new Label("TestLabel1");
         Label label2 = new Label("TestLabel2");
         Label label3 = new Label("TestLabel3");
-        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
+        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
+        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
         Event event3 = new Event("Test Event 3", LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(21), calendar);
         events1.add(event1);
         events2.add(event1);
@@ -190,7 +236,7 @@ public class UserServiceTest {
         List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
         assert (recommendedEvent.size() > 0);
-    }*/
+    }
 
 
 }

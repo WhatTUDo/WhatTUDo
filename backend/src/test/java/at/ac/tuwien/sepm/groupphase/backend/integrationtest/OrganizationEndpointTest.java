@@ -9,7 +9,11 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
+import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
+import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import org.aspectj.weaver.ast.Not;
 import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,6 +45,8 @@ public class OrganizationEndpointTest {
     @Autowired
     OrganizationEndpoint endpoint;
 
+    @Autowired
+    UserService userService;
 
     @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
     @Test
@@ -105,8 +111,6 @@ public class OrganizationEndpointTest {
     }
 
 
-
-
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void edit_withoutName_shouldThrow_ResponseStatusException() {
@@ -117,5 +121,42 @@ public class OrganizationEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.editOrganization(organizationDto));
     }
 
-}
+    @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
+    @Test
+    public void deleteOrganizationThatDoesNotExist_throwResponseStatusException() {
+        assertThrows(ResponseStatusException.class, () -> endpoint.getOrgaById(0));
+    }
 
+    @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
+    @Test
+    public void addCalendarsToOrgWithUnknownId_throwsNotFound() {
+        assertThrows(NotFoundException.class, () -> endpoint.addCalToOrga(0, Collections.singletonList(0)));
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
+    @Test
+    public void removeCalendarsOfUnknownOrganization_throwsNotFound() {
+        assertThrows(NotFoundException.class, () -> endpoint.removeCalFromOrga(0, Collections.singletonList(0)));
+    }
+
+    @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
+    @Test
+    public void getOrganizationMembers() {
+        OrganizationDto organizationDto = new OrganizationDto(0, "get members", new ArrayList<>());
+
+        OrganizationDto createdDto = endpoint.createOrganization(organizationDto);
+
+        assertEquals(organizationDto.getName(), createdDto.getName());
+
+
+        assert(endpoint.getOrganizationMembers(createdDto.getId()).isEmpty());
+
+    }
+    @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
+    @Test
+    public void addMemberToNonExistentOrg_throwsNotFound(){
+        assertThrows(NotFoundException.class, () -> endpoint.addMembership(1, 0, "MOD"));
+    }
+
+
+}

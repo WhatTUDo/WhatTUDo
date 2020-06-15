@@ -148,7 +148,16 @@ export class EventFormComponent implements OnInit {
       }
     }
   }
-
+  private deleteEvent() {
+    if (confirm(`You are deleting "${this.event.name}". Are you sure?`)) {
+      this.eventService.deleteEvent(this.event.id).subscribe(() => {
+        this.feedbackService.displaySuccess("Successfully deleted", "Event "+this.event.name+" is deleted");
+      }, err => {
+          console.warn(err);
+          this.feedbackService.displayError("Error", err.error.message);
+        });
+    }
+  }
   /**
    *
    * @param event

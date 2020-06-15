@@ -139,13 +139,6 @@ export class EventComponent implements OnInit {
         });
     }
 
-    private deleteEvent() {
-        if (confirm(`You are deleting "${this.calendarEvent.name}". Are you sure?`)) {
-            this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
-                console.log('Event deleted');
-            });
-        }
-    }
 
     private getParticipants() {
         this.attendanceStatusService.getUsersAttendingEvent(this.id).subscribe((users: User[]) => {

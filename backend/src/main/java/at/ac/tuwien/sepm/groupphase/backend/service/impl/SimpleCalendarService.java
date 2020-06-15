@@ -143,7 +143,7 @@ public class SimpleCalendarService implements CalendarService {
 
                 for (Event e : toDelete.getEvents()) {
 
-                    eventService.delete(e);
+                    eventService.delete(e.getId());
                 }
 
                 List<Event> empty = new ArrayList<Event>();
