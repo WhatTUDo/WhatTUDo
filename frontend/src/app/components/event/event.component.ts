@@ -128,7 +128,7 @@ export class EventComponent implements OnInit {
             this.calendarEvent.location = location;
             this.calendarEvent.description = '';
             this.participants = this.getParticipants();
-            this.calendarService.getCalendarById(event.id).subscribe(cal => {
+            this.calendarService.getCalendarById(event.calendarId).subscribe(cal => {
                 this.calendar = cal;
                 cal.organizationIds.forEach(id => {
                     this.organizationService.getById(id).subscribe(org => {
