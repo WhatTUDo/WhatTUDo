@@ -32,6 +32,14 @@ form {
   }
 }
 
+.event-promo-image {
+  width: 100%;
+  height: 120pt;
+  background-color: var(--shadow);
+  border-radius: $rounded-radius;
+  margin-bottom: 8pt;
+}
+
 .event-form-container {
   display: flex;
   align-items: flex-end;

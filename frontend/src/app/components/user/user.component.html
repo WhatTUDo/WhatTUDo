@@ -16,7 +16,7 @@
     <div class="user-organization-list">
       <div *ngFor="let org of userInOrganizations" class="user-organization">
         <img alt="" class="avatar avatar-small clickable no-hover-enlarge no-shadow"
-             src="{{getOrganizationAvatarLink(org.id, 256)}}" routerLink="/organization/{{org.id}}">
+             src="{{getOrganizationAvatarLink(org.id, 128)}}" routerLink="/organization/{{org.id}}">
         <div class="user-organization-details clickable no-hover-enlarge no-shadow"
              routerLink="/organization/{{org.id}}">
           <div class="user-organization-name">{{org.name}}</div>

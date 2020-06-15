@@ -4,15 +4,33 @@
   <span *ngIf="organization&&isUpdate">Edit Team: {{organization.name}}</span>
   <span *ngIf="organization&&!isUpdate">New Team{{organization.name ? ": " + organization.name : ''}}</span>
 </div>
-<div *ngIf="organization" class="centered-two-third">
-  <h2>{{isUpdate ? "Edit" : "Create"}} Organization</h2>
+
+<h2>{{isUpdate ? "Edit" : "Create"}} Organization</h2>
+<div class="avatar-container" *ngIf="organization">
+  <img alt="" class="avatar avatar-medium" src="{{getOrganizationAvatarLink(organization.id, 256)}}">
+</div>
+
+<form *ngIf="organization" class="centered-one-third">
+  <label for="organization-avatar">
+    Avatar
+  </label>
+  <div class="input-button-combo">
+    <input type="file" name="organization-avatar"
+           id="organization-avatar" accept="{{this.globals.allowedAvatarMimeTypes.join(',')}}">
+    <button type="submit" class="button-solid no-hover-enlarge no-shadow">Upload</button>
+  </div>
+</form>
+
+<form *ngIf="organization" class="centered-one-third">
   <div class="form-group">
     <label for="organization.name">
-      Name:
+      Name
     </label>
-    <input #organizationName [(ngModel)]="organization.name" class="form-control" id="organization.name" type=text>
-    <button (click)="onSubmit(organizationName.value)"
-            class="submit-button clickable button-green btn-lg">Submit
-    </button>
+    <div class="input-button-combo">
+      <input #organizationName [(ngModel)]="organization.name" class="form-control" id="organization.name" type=text>
+      <button (click)="onSubmit(organizationName.value)"
+              class="submit-button button-solid">Update
+      </button>
+    </div>
   </div>
-</div>
+</form>
