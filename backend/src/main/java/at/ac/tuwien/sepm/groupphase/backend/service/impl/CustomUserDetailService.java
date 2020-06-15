@@ -200,12 +200,11 @@ public class CustomUserDetailService implements UserService {
             }
             int[] labels = new int[maxLabelId + 1];
             events.forEach(event -> {
-                Integer count = 0;
                 List<Label> eventLabels = event.getLabels();
                 eventLabels.forEach(label -> labels[label.getId()]++);
             });
 
-            for (int i = 1; i < labels.length; i++) {
+            for (int i = 0; i < labels.length; i++) {
                 int maxAt = 0;
                 for (int j = 0; j < labels.length; j++) {
                     maxAt = labels[j] > labels[maxAt] ? j : maxAt;
@@ -214,7 +213,9 @@ public class CustomUserDetailService implements UserService {
                 if (labels[maxAt] != 0) {
                     List<Event> possibleEvents = labelService.findById(maxAt).getEvents();
                     Optional<Event> possibleEvent = possibleEvents.stream().filter(e -> e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))).findAny();
+                    if(possibleEvent.isPresent() && !recommendedEvents.contains(possibleEvent.get())) recommendedEvents.add(possibleEvent.get());
                     possibleEvent.ifPresent(recommendedEvents::add);
+                    labels[maxAt] = 0;
                     if (recommendedEvents.size() >= 4) return recommendedEvents;
                 }
             }
