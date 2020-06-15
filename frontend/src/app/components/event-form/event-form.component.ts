@@ -12,6 +12,7 @@ import {FeedbackService} from "../../services/feedback.service";
 import {CollisionResponse} from "../../dtos/collision-response";
 import {EventCollisionService} from "../../services/event-collision.service";
 import {Label} from '../../dtos/label';
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-event-form',
@@ -57,6 +58,7 @@ export class EventFormComponent implements OnInit {
     private eventCollisionService: EventCollisionService,
     private calendarService: CalendarService,
     private feedbackService: FeedbackService,
+    public globals: Globals,
     private route: ActivatedRoute) {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id) {
@@ -233,5 +235,9 @@ export class EventFormComponent implements OnInit {
     this.event.startDateTime = dates[0];
     this.event.endDateTime = dates[1];
     this.conflictExists = false;
+  }
+
+  getEventPromoImageLink(id) {
+    return this.eventService.getEventPromoImageLink(id);
   }
 }
