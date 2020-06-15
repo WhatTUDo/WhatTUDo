@@ -4,6 +4,7 @@ package at.ac.tuwien.sepm.groupphase.backend.servicetests;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.IncomingUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
@@ -66,7 +67,7 @@ public class UserServiceTest {
     @Test
     public void when_savedUser_findAllUsers_shouldReturnCorrectUserDetails() {
         userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
-        ApplicationUser user = (ApplicationUser) userService.loadUserByUsername("TestUser");
+        ApplicationUser user = (ApplicationUser) userService.getUserByName("TestUser");
         assert (user.getId() != null && user.getId() != 0);
     }
 
@@ -127,7 +128,22 @@ public class UserServiceTest {
 
     }
 
-    /*@Test
+    @Test
+    public void getUserOrganization(){
+        Organization organization = organizationRepository.save(new Organization("Get Users test"));
+        ApplicationUser user = userService.saveNewUser(new ApplicationUser("member", "testy@test.com", "hunter2"));
+        Set<OrganizationMembership> organizationMemberships = new HashSet<>();
+        organizationMemberships.add(new OrganizationMembership(organization, user, OrganizationRole.MOD));
+        organization.setMemberships(organizationMemberships);
+        user.setMemberships(organizationMemberships);
+        user = userRepository.save(user);
+        organization = organizationRepository.save(organization);
+
+        assert (!userService.getUserOrganizations(user.getId()).isEmpty());
+        assertEquals(organization.getName(),userService.getUserOrganizations(user.getId()).get(0).getName());
+    }
+
+    @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
         ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
@@ -175,10 +191,10 @@ public class UserServiceTest {
         assert (recommendedEvent.size() > 0);
         assert (recommendedEvent.contains(event3));
 
-    }*/
+    }
 
 
-    /*@Test
+    @Test
     @Transactional
     public void ifNoRecommendableEvents_getRecommendedEvents_shouldReturn_randomEvents() {
         ApplicationUser user = userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
@@ -220,7 +236,7 @@ public class UserServiceTest {
         List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
         assert (recommendedEvent.size() > 0);
-    }*/
+    }
 
 
 }
