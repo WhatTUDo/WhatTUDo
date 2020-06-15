@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.LabelMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
@@ -182,7 +183,7 @@ public class EventEndpointTest {
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
-    public void delete_nonSavedEvent_IdNotGenerated_throwsResponseStatusException() {
+    public void delete_nonSavedEvent_IdNotGenerated_throwsNotFound() {
         Organization orga;
         Calendar calendar;
         orga = new Organization("Test Organization2");
@@ -191,7 +192,7 @@ public class EventEndpointTest {
         calendar.setId(1);
 
         EventDto notSavedEvent = new EventDto(null, "Non Existent", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
-        assertThrows(ResponseStatusException.class, () -> endpoint.deleteEvent(notSavedEvent));
+        assertThrows(NotFoundException.class, () -> endpoint.deleteEvent(0));
     }
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
@@ -206,7 +207,7 @@ public class EventEndpointTest {
 
         EventDto eventDto = new EventDto(null, "Delete Event", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
         EventDto returnedEvent = endpoint.post(eventDto);
-        endpoint.deleteEvent(returnedEvent);
+        endpoint.deleteEvent(returnedEvent.getId());
         assertThrows(ResponseStatusException.class, () -> endpoint.getById(returnedEvent.getId()));
     }
 

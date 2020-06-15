@@ -87,10 +87,7 @@ public class EventServiceTest {
 
     @Test
     public void delete_nonSavedEvent_IdNotGenerated_throwsValidationException() {
-        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 4", Collections.singletonList(new Organization())));
-
-        Event notSavedEvent = new Event("Non Existent", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        assertThrows(ValidationException.class, () -> service.delete(notSavedEvent));
+        assertThrows(ValidationException.class, () -> service.delete(0));
     }
 
     @Test
@@ -99,18 +96,18 @@ public class EventServiceTest {
 
         Event eventEntity = new Event("Delete Event Test", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
         Event event = service.save(eventEntity);
-        service.delete(event);
+        service.delete(event.getId());
         assertThrows(NotFoundException.class, () -> service.findById(event.getId()));
     }
 
 
     @Test
-    public void deleteEvent_withIdDoesNotExist_throwsNothing() {
+    public void deleteEvent() {
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 6", Collections.singletonList(new Organization())));
 
         Event eventEntity = eventRepository.save(new Event("Delete Event Test", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
 
-        service.delete(eventEntity);
+        service.delete(eventEntity.getId());
     }
 
 
