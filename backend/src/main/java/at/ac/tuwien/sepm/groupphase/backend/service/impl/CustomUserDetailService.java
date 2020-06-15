@@ -136,6 +136,7 @@ public class CustomUserDetailService implements UserService {
     }
 
     @Override
+    @Transactional
     public ApplicationUser removeFromOrga(ApplicationUser user, Organization organization) {
         try {
             Organization dbOrga = organizationRepository.findById(organization.getId()).orElseThrow(() -> new IllegalArgumentException("Organization does not exist"));
@@ -149,6 +150,20 @@ public class CustomUserDetailService implements UserService {
             publisher.publishEvent(new UserRoleRemoveEvent(savedUser.getUsername(), dbOrga));
             return savedUser;
         } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public ApplicationUser findUserById(Integer id) throws NotFoundException, ServiceException {
+        try {
+            Optional<ApplicationUser> found = userRepository.findById(id);
+            if(!found.isPresent()){
+                throw new NotFoundException("Could not find any user with id"+id);
+            }
+
+            return found.get();
+        }catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
         }
     }

@@ -6,7 +6,7 @@ import {Label} from '../../dtos/label';
 import {EventService} from '../../services/event.service';
 import {LabelService} from '../../services/label.service';
 import {ActivatedRoute} from '@angular/router';
-import {faChevronLeft, faTag, faCog, faCalendar} from '@fortawesome/free-solid-svg-icons';
+import {faCalendar, faChevronLeft, faCog, faTag} from '@fortawesome/free-solid-svg-icons';
 import {AttendanceStatusService} from '../../services/attendance-status.service';
 import {AuthService} from '../../services/auth.service';
 import {AttendanceDto} from '../../dtos/AttendanceDto';
@@ -16,198 +16,190 @@ import {Organization} from "../../dtos/organization";
 import {Calendar} from "../../dtos/calendar";
 import {CalendarService} from "../../services/calendar.service";
 import {OrganizationService} from "../../services/organization.service";
+import {AttendanceStatusPossibilities} from "../../dtos/AttendanceStatusPossibilities";
 
 @Component({
-  selector: 'app-event',
-  templateUrl: './event.component.html',
-  styleUrls: ['./event.component.scss']
+    selector: 'app-event',
+    templateUrl: './event.component.html',
+    styleUrls: ['./event.component.scss']
 })
 export class EventComponent implements OnInit {
 
 
-  id: number;
-  user: User = null;
-  labels: Array<Label>;
-  public calendarEvent: CalendarEvent;
-  calendar: Calendar;
-  calendarOrganizations: Organization[] = [];
-  participants: any = {
-    'attending': [],
-    'interested': [],
-    'declined': []
-  };
-  faChevronLeft = faChevronLeft;
-  faTag = faTag;
-  faCog = faCog;
-  faCalendar = faCalendar;
+    id: number;
+    user: User = null;
+    userParticipationStatus: AttendanceStatusPossibilities;
+    labels: Array<Label>;
+    public calendarEvent: CalendarEvent;
+    calendar: Calendar;
+    calendarOrganizations: Organization[] = [];
+    participants = {
+        attending: [],
+        interested: [],
+        declined: []
+    };
+    faChevronLeft = faChevronLeft;
+    faTag = faTag;
+    faCog = faCog;
+    faCalendar = faCalendar;
+    AttendanceStatusPossibilities = AttendanceStatusPossibilities;
 
-  constructor(private eventService: EventService,
-              private labelService: LabelService,
-              private calendarService: CalendarService,
-              private organizationService: OrganizationService,
-              private feedbackService: FeedbackService,
-              private attendanceStatusService: AttendanceStatusService,
-              private authService: AuthService,
-              private route: ActivatedRoute) {
-    let id: number = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadCalendarEvent(id);
-    if (this.authService.isLoggedIn()) {
-      this.authService.getUser().subscribe((user) => {
-        this.user = user;
-      });
+    constructor(private eventService: EventService,
+                private labelService: LabelService,
+                private calendarService: CalendarService,
+                private organizationService: OrganizationService,
+                private feedbackService: FeedbackService,
+                private attendanceStatusService: AttendanceStatusService,
+                private authService: AuthService,
+                private route: ActivatedRoute) {
+        let id: number = Number(this.route.snapshot.paramMap.get('id'));
+        this.loadCalendarEvent(id);
+        if (this.authService.isLoggedIn()) {
+            this.authService.getUser().subscribe((user) => {
+                this.user = user;
+            });
+        }
     }
-  }
 
-  ngOnInit(): void {
-    this.id = parseInt(this.route.snapshot.paramMap.get('id'));
+    ngOnInit(): void {
+        this.id = parseInt(this.route.snapshot.paramMap.get('id'));
 
-    this.getEventLabels(this.id);
+        this.getEventLabels(this.id);
 
-  }
-
-  public getEventDateAndTimeString() {
-    return this.eventService.getEventDateAndTimeString(this.calendarEvent);
-  }
-
-  public participate(status: number) {
-    if (!this.authService.isLoggedIn()) {
-      this.feedbackService.displayWarning(`Login Required.`, 'You can only do this after you logged in.');
-      return;
     }
-    switch (status) {
-      case 0:
-        console.log(this.user);
-        console.log(this.id);
-        this.attendanceStatusService.create(new AttendanceDto(this.user.name, this.id, 0)).subscribe((attendance) => {
-            console.log(attendance);
-            this.getParticipants();
-          }
+
+    public getEventDateAndTimeString() {
+        return this.eventService.getEventDateAndTimeString(this.calendarEvent);
+    }
+
+    public participate(status: number) {
+        if (!this.authService.isLoggedIn()) {
+            this.feedbackService.displayWarning(`Login Required.`, 'You can only do this after you logged in.');
+            return;
+        }
+        switch (status) {
+            case AttendanceStatusPossibilities.DECLINED:
+                console.log('You declined!');
+                break;
+            case AttendanceStatusPossibilities.ATTENDING:
+                console.log('You are attending!');
+                break;
+            case AttendanceStatusPossibilities.INTERESTED:
+                console.log('You are interested!');
+                break
+            default:
+                console.log('No idea what you want!');
+                break;
+        }
+        this.attendanceStatusService.create(new AttendanceDto(this.user.name, this.id, status)).subscribe((attendance) => {
+                this.getParticipants();
+            }
         );
-        console.log('You declined!');
-        break;
-      case 1:
-        this.attendanceStatusService.create(new AttendanceDto(this.user.name, this.id, 1)).subscribe((attendance) => {
-            console.log(attendance);
-            this.getParticipants();
-          }
-        );
-
-        console.log('You are attending!');
-        break;
-      case 2:
-        this.attendanceStatusService.create(new AttendanceDto(this.user.name, this.id, 2)).subscribe((attendance) => {
-            console.log(attendance);
-            this.getParticipants();
-          }
-        );
-        console.log('You are interested!');
-        break;
-      default:
-        console.log('No idea what you want!');
-        break;
     }
-  }
 
-  public addComment() {
-    let textArea: any = document.getElementById('comment-area');
-    if (textArea) {
-      let comment = textArea.value;
-      if (comment || comment.length > 0) {
-        console.log('Comments aren\'t live yet, but here\'s what you wrote: ' + comment);
-      } else {
-        console.log('Could not read comment!');
-      }
+    public addComment() {
+        let textArea: any = document.getElementById('comment-area');
+        if (textArea) {
+            let comment = textArea.value;
+            if (comment || comment.length > 0) {
+                console.log('Comments aren\'t live yet, but here\'s what you wrote: ' + comment);
+            } else {
+                console.log('Could not read comment!');
+            }
+        }
     }
-  }
 
-  getAllLabels() {
-
-    this.eventService.getAllLabels().subscribe(labels => {
-      this.labels = labels;
-    });
-  }
-
-  getEventLabels(id: number) {
-
-    this.eventService.getEventLabels(this.id).subscribe(labels => {
-      this.labels = labels;
-    });
-  }
-
-  /**
-   * Loads Event with ID from Service.
-   * @param id
-   */
-  private loadCalendarEvent(id: number) {
-    this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
-      this.calendarEvent = event;
-      let location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 12.1234, 13.9876);
-      this.calendarEvent.comments = this.getComments();
-      this.calendarEvent.labels = this.getLabels();
-      this.calendarEvent.location = location;
-      this.calendarEvent.description = '';
-      this.participants = this.getParticipants();
-      this.calendarService.getCalendarById(event.id).subscribe(cal => {
-        this.calendar = cal;
-        cal.organizationIds.forEach(id => {
-          this.organizationService.getById(id).subscribe(org => {
-            this.calendarOrganizations.push(org);
-          })
-        })
-      })
-    });
-  }
-
-  private deleteEvent() {
-    if (confirm(`You are deleting "${this.calendarEvent.name}". Are you sure?`)) {
-      this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
-        console.log('Event deleted');
-      });
+    getEventLabels(id: number) {
+        this.eventService.getEventLabels(id).subscribe(labels => {
+            this.labels = labels;
+        });
     }
-  }
 
-  private getParticipants() {
-    this.attendanceStatusService.getUsersAttendingEvent(this.id).subscribe((users: any[]) => {
-      this.participants.attending = users;
-    });
-    this.attendanceStatusService.getUsersInterestedInEvent(this.id).subscribe((users: any[]) => {
-      this.participants.interested = users;
-    });
-    this.attendanceStatusService.getUsersDecliningEvent(this.id).subscribe((users: any[]) => {
-      this.participants.declined = users;
-    });
-    return this.participants;
-  }
+    /**
+     * Loads Event with ID from Service.
+     * @param id
+     */
+    private loadCalendarEvent(id: number) {
+        this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
+            this.calendarEvent = event;
+            let location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 12.1234, 13.9876);
+            this.calendarEvent.comments = this.getComments();
+            this.calendarEvent.labels = this.getLabels();
+            this.calendarEvent.location = location;
+            this.calendarEvent.description = '';
+            this.participants = this.getParticipants();
+            this.calendarService.getCalendarById(event.id).subscribe(cal => {
+                this.calendar = cal;
+                cal.organizationIds.forEach(id => {
+                    this.organizationService.getById(id).subscribe(org => {
+                        this.calendarOrganizations.push(org);
+                    })
+                })
+            })
+        });
+    }
 
-  private getComments() {
-    let comment1 = new EventComment(null, null, 'Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.\n' +
-      '\n', 0.85);
-    let comment2 = new EventComment(null, null, 'Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation X is on the runway heading towards a streamlined cloud solution. User generated content in real-time will have multiple touchpoints for offshoring.\n' +
-      '\n', 0.66);
-    let comment3 = new EventComment(null, null, 'Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.\n' +
-      '\n', 0.91);
-    let array = new Array<EventComment>();
-    // array.push(comment1, comment2, comment3);
+    private deleteEvent() {
+        if (confirm(`You are deleting "${this.calendarEvent.name}". Are you sure?`)) {
+            this.eventService.deleteEvent(this.calendarEvent).subscribe(() => {
+                console.log('Event deleted');
+            });
+        }
+    }
 
-    return array;
-  }
+    private getParticipants() {
+        this.attendanceStatusService.getUsersAttendingEvent(this.id).subscribe((users: User[]) => {
+            this.participants.attending = users;
+            if (users.find(u => u.id === this.user.id)) {
+                this.userParticipationStatus = AttendanceStatusPossibilities.ATTENDING;
+            }
+        });
+        this.attendanceStatusService.getUsersInterestedInEvent(this.id).subscribe((users: User[]) => {
+            this.participants.interested = users;
+            if (users.find(u => u.id === this.user.id)) {
+                this.userParticipationStatus = AttendanceStatusPossibilities.INTERESTED;
+            }
+        });
+        this.attendanceStatusService.getUsersDecliningEvent(this.id).subscribe((users: User[]) => {
+            this.participants.declined = users;
+            if (users.find(u => u.id === this.user.id)) {
+                this.userParticipationStatus = AttendanceStatusPossibilities.DECLINED;
+            }
+        });
+        this.userParticipationStatus = null;
+        return this.participants;
+    }
 
-  private getLabels() {
+    private getComments() {
+        let comment1 = new EventComment(null, null, 'Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.\n' +
+            '\n', 0.85);
+        let comment2 = new EventComment(null, null, 'Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation X is on the runway heading towards a streamlined cloud solution. User generated content in real-time will have multiple touchpoints for offshoring.\n' +
+            '\n', 0.66);
+        let comment3 = new EventComment(null, null, 'Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.\n' +
+            '\n', 0.91);
+        let array = new Array<EventComment>();
+        // array.push(comment1, comment2, comment3);
 
-    let label1 = new Label(null, 'Party', null);
-    let label2 = new Label(null, 'Festl', null);
-    let array = new Array<Label>();
+        return array;
+    }
 
-    array.push(label1, label2);
+    private getLabels() {
 
-    return array;
-  }
+        let label1 = new Label(null, 'Party', null);
+        let label2 = new Label(null, 'Festl', null);
+        let array = new Array<Label>();
 
-  getEventPromoImageLink(eventId: number) {
-    return this.eventService.getEventPromoImageLink(eventId);
-  }
+        array.push(label1, label2);
 
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
-  }
+        return array;
+    }
+
+    getEventPromoImageLink(eventId: number) {
+        return this.eventService.getEventPromoImageLink(eventId);
+    }
+
+    getOrganizationAvatarLink(organizationId: number, size: number) {
+        return this.organizationService.getOrganizationAvatarLink(organizationId, size);
+    }
+
 }

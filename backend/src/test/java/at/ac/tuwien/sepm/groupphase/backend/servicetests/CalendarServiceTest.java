@@ -30,15 +30,11 @@ public class CalendarServiceTest {
     @Autowired
     CalendarService calendarService;
 
-    @Mock
-    OrganizationRepository organizationRepository;
 
 
     public Organization createOrga() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
-        Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         return orga;
     }
 
