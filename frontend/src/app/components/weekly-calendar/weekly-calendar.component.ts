@@ -34,7 +34,7 @@ export class WeeklyCalendarComponent implements OnInit {
   /** min row count for an event so that there's place for text. */
   viewMinRows = 8;
 
-  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
+  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
   dateLocale: string;
 
@@ -68,7 +68,7 @@ export class WeeklyCalendarComponent implements OnInit {
           // @ts-ignore
           if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
             // @ts-ignore
-            time.innerText = '…'
+            time.innerText = '…';
             // @ts-ignore
             name.innerText = '…';
           }

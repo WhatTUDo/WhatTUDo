@@ -22,14 +22,19 @@ export class CalendarComponent implements OnInit {
   displayingWeek: Date[]; // Starts at a monday.
   offset = 0;
 
+  /** Change view… variables to configure: */
+  /** number of rows. */
   viewBeginningAtRow = 1;
-  viewBeginningAtTime = 8 * (60 * 60);
   viewEndingAtRow = 64;
-  viewEndingAtTime = 24 * (60 * 60) - 1;
-  viewMinRows = 8;
-
-  viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
   viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
+
+  /** when the start and end of the grid represents. */
+  viewBeginningAtTime = 8 * (60 * 60);
+  viewEndingAtTime = 24 * (60 * 60) - 1;
+  viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
+
+  /** min row count for an event so that there's place for text. */
+  viewMinRows = 8;
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
@@ -39,7 +44,9 @@ export class CalendarComponent implements OnInit {
   faChevronDown = faChevronDown;
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
-  faPlus = faPlus;
+  currentDate: number;
+  currentMonth: String;
+  currentYear: number;
 
   constructor(
     private eventService: EventService,
@@ -51,6 +58,11 @@ export class CalendarComponent implements OnInit {
     this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) => {
       this.events = events;
       this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+      this.updateDatetime();
+      setInterval(_ => {
+        this.updateDatetime();
+      }, 1000);
+
     });
     this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
@@ -71,15 +83,13 @@ export class CalendarComponent implements OnInit {
         .forEach(event => {
           const time = event.getElementsByClassName('calendar-event-time')[0];
           const name = event.getElementsByClassName('calendar-event-name')[0];
-          // @ts-ignore
-          // if (time && name) {
-          //   if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
-          //     // @ts-ignore
-          //     time.innerText = '…';
-          //     // @ts-ignore
-          //     name.innerText = '…';
-          //   }
-          // }
+         // @ts-ignore
+          if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
+            // @ts-ignore
+            time.innerText = '…';
+            // @ts-ignore
+            name.innerText = '…';
+          }
 
         });
     }, 500);
@@ -102,25 +112,28 @@ export class CalendarComponent implements OnInit {
     //     console.warn('Event does not exist');
     //   });
     // }
-    // this.events.forEach(event => {
-    //   let startDate = new Date(event.startDateTime);
-    //   let endDate = new Date(event.endDateTime);
-    //
-    //   event.startDateTime = startDate;
-    //   event.endDateTime = endDate;
-    // });
+    this.events.forEach(event => {
+      let startDate = new Date(event.startDateTime);
+      let endDate = new Date(event.endDateTime);
+
+      event.startDateTime = startDate;
+      event.endDateTime = endDate;
+    });
     this.displayingWeek.forEach((day: Date) => {
       const keyISOString = this.getMidnight(day).toISOString();
-      this.eventsOfTheWeek.set(keyISOString, this.events.filter((event: CalendarEvent) => {
-        let startDate = new Date(event.startDateTime);
-        let endDate = new Date(event.endDateTime);
-        const isAfterMidnight = startDate.getTime() > this.getMidnight(day).getTime();
-        const isBeforeEndOfDay = endDate.getTime() < this.getEndOfDay(day).getTime();
+      this.eventsOfTheWeek.set(keyISOString, this.events.filter(event => {
+        const isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
+        const isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
         return isAfterMidnight && isBeforeEndOfDay;
       }));
     });
   }
-
+  updateDatetime() {
+    const today = this.getToday();
+    this.currentMonth = today.toLocaleString(this.globals.dateLocale, {month: 'long'});
+    this.currentDate = today.getDate();
+    this.currentYear = today.getFullYear();
+  }
   getWeek(offset = 0) {
     const offsetWeeks = Math.round(offset / 7);
     const currentWeekDates = [];
