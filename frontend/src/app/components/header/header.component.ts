@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
   faSignOutAlt = faSignOutAlt;
   faChevronDown = faChevronDown;
   faCog = faCog;
+  mobileCollapsed: boolean = true;
 
   constructor(public authService: AuthService,
               private userService: UserService
@@ -32,5 +33,9 @@ export class HeaderComponent implements OnInit {
 
   getGravatarLink(email, size) {
     return this.userService.getGravatarLink(email, size);
+  }
+
+  toggleCollapsed(){
+    this.mobileCollapsed = !this.mobileCollapsed;
   }
 }

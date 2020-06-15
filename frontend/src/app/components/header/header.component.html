@@ -1,12 +1,10 @@
-<nav class="navbar navbar-expand-lg" style="height: auto !important;">
+<nav class="navbar navbar-expand-lg">
   <a class="navbar-brand ml-lg-5" routerLink="/">SEPM Group Phase</a>
-  <button aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation"
-          class="navbar-toggler button-outlined ml-5" data-target="#navbarSupportedContent" data-toggle="collapse">
+  <div class="collapse-button clickable no-hover-enlarge no-shadow" (click)="toggleCollapsed()">
     <fa-icon [icon]="faChevronDown"></fa-icon>
-  </button>
+  </div>
 
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse" [class.collapse]="mobileCollapsed">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a class="nav-link" routerLink="/calendar-list" routerLinkActive="active">
@@ -20,20 +18,22 @@
       </li>
     </ul>
 
-    <a *ngIf="authService.isLoggedIn()" class="nav-link clickable no-hover-enlarge no-shadow" routerLink="/user">
-      <fa-icon [icon]="faCog">Manage User</fa-icon>
-    </a>
-    <a (click)="authService.logoutUser()" *ngIf="authService.isLoggedIn()"
-       class="nav-link clickable no-hover-enlarge no-shadow"
-       routerLink="/">
-      <fa-icon [icon]="faSignOutAlt">Logout</fa-icon>
-    </a>
-    <img *ngIf="authService.isLoggedIn()" alt=""
-         class="avatar avatar-small clickable no-hover-enlarge no-shadow"
-         routerLink="/user" src="{{getGravatarLink(userEmail, 128)}}">
-    <div *ngIf="!authService.isLoggedIn()"
-         class="sign-in-avatar avatar avatar-small clickable no-hover-enlarge no-shadow" routerLink="/login">
-      <fa-icon [icon]="faSignInAlt">Login</fa-icon>
+    <div class="avatar-action-container">
+      <a *ngIf="authService.isLoggedIn()" class="nav-link clickable no-hover-enlarge no-shadow" routerLink="/user">
+        <fa-icon [icon]="faCog">Manage User</fa-icon>
+      </a>
+      <a (click)="authService.logoutUser()" *ngIf="authService.isLoggedIn()"
+         class="nav-link clickable no-hover-enlarge no-shadow"
+         routerLink="/">
+        <fa-icon [icon]="faSignOutAlt">Logout</fa-icon>
+      </a>
+      <img *ngIf="authService.isLoggedIn()" alt=""
+           class="avatar avatar-small clickable no-hover-enlarge no-shadow"
+           routerLink="/user" src="{{getGravatarLink(userEmail, 128)}}">
+      <div *ngIf="!authService.isLoggedIn()"
+           class="sign-in-avatar avatar avatar-small clickable no-hover-enlarge no-shadow" routerLink="/login">
+        <fa-icon [icon]="faSignInAlt">Login</fa-icon>
+      </div>
     </div>
   </div>
 </nav>
