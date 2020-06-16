@@ -66,6 +66,20 @@ public class CalendarEndpointTest {
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
+    public void createCalendar_withDescription_returnsCalendar() {
+        Organization orga = new Organization("Test Organization");
+        orga.setId(1);
+
+        CalendarCreateDto calendarDto = new CalendarCreateDto("Save", 1, "Description");
+
+        CalendarDto calendarSaved = calendarEndpoint.create(calendarDto);
+
+        assertEquals(calendarDto.getName(), calendarSaved.getName());
+        assertEquals(calendarDto.getDescription(), calendarSaved.getDescription());
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
     public void searchCalendar_byCalendarName_byEventName_returnsSavedCalendar() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
