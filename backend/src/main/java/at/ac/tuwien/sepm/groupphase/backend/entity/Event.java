@@ -44,5 +44,8 @@ public class Event extends BaseEntity {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<AttendanceStatus> attendanceStatuses;
 
+    @ToString.Exclude
+    @Lob
+    private Byte[] coverImage;
 }
 

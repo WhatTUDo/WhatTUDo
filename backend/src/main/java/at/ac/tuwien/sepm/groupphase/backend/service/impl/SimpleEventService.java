@@ -194,6 +194,7 @@ public class SimpleEventService implements EventService {
     }
 
 
+    @Override
     public List<Event> getByCalendarId(Integer id) throws ServiceException {
         try {
             return eventRepository.findByCalendarId(id);
@@ -202,4 +203,15 @@ public class SimpleEventService implements EventService {
         }
     }
 
+    @Override
+    public Event setCoverImage(Event event, byte[] imageBlob) {
+        try {
+            Byte[] byteArray = new Byte[imageBlob.length];
+            for (int i = 0; i < imageBlob.length; i++) byteArray[i] = imageBlob[i];
+            event.setCoverImage(byteArray);
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
 }

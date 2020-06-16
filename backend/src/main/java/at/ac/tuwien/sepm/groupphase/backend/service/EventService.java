@@ -110,5 +110,12 @@ public interface EventService {
 
     List<Event> getByCalendarId(Integer id) throws ServiceException;
 
-
+    /**
+     * Sets the cover image of this event
+      *@param event to set the image to
+     * @param imageBlob as byte array
+     * @return the updated event
+     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     */
+    Event setCoverImage(Event event, byte[] imageBlob);
 }
