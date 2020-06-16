@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.*;
 import org.hibernate.annotations.Cascade;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -31,6 +32,9 @@ public class Calendar extends BaseEntity {
     @ToString.Exclude
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.MERGE)
     private List<Event> events = new ArrayList<>();
+
+    @Nullable
+    private String description;
 
 }
 
