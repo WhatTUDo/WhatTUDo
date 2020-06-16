@@ -15,6 +15,7 @@ import {Organization} from '../../dtos/organization';
 })
 export class CalendarListComponent implements OnInit {
   calendars: Calendar[] = [];
+  subscribedCalendarIds: number[] = this.calendars.map(c => c.id);
   organizationsMap: Map<number, Organization> = new Map();
   searchForm = new FormGroup({
     name: new FormControl('')
