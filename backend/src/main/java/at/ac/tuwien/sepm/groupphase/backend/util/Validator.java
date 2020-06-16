@@ -1,9 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.util;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -214,5 +211,32 @@ public class Validator {
         Pattern pattern = Pattern.compile(mailRegex);
         Matcher matcher = pattern.matcher(emailString);
         return matcher.matches();
+    }
+
+    public void validateLocation(Location location) {
+        List<Exception> exceptions = new ArrayList<>();
+        if (location==null) {
+            exceptions.add(new ValidationException("Location must not be null"));
+        }
+        if (location.getName().isBlank()) {
+            exceptions.add(new ValidationException("Name must not be empty"));
+        }
+        if (location.getAddress().isBlank()) {
+            exceptions.add(new ValidationException("Address must not be empty"));
+        }
+        if (location.getZip().isBlank()) {
+            exceptions.add(new ValidationException("ZIP-Code must not be empty"));
+        }
+        if (location.getLatitude()>180 || location.getLatitude()<-180) {
+            exceptions.add(new ValidationException("Invalid Latitude"));
+        }
+        if (location.getLongitude()>180 || location.getLongitude()<-180) {
+            exceptions.add(new ValidationException("Invalid Longitude"));
+        }
+
+        if (!exceptions.isEmpty()) {
+            String summary = createExceptionSummaryString(exceptions);
+            throw new ValidationException(summary);
+        }
     }
 }
