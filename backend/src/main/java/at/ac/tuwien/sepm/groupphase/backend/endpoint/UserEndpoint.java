@@ -176,13 +176,18 @@ public class UserEndpoint {
         try {
             List<Event> recommendedEvent = userService.getRecommendedEvents(id);
             if (recommendedEvent.size() < 4) {
+                ArrayList ids = new ArrayList();
+                for (Event e : recommendedEvent
+                ) {
+                    ids.add(e.getId());
+                }
                 for (int i = 0; i < 4 - recommendedEvent.size(); i++) {
                     Optional<Event> event = eventService.findForDates(LocalDateTime.now(), LocalDateTime.now().plusMonths(6)).stream().findAny();
-                    if (event.isPresent() && !recommendedEvent.contains(event.get())) recommendedEvent.add(event.get());
+                    if (event.isPresent() && !ids.contains(event.get().getId())) recommendedEvent.add(event.get());
                 }
                 for (int i = 0; i < 4 - recommendedEvent.size(); i++) {
                     Optional<Event> event = eventService.findForDates(LocalDateTime.now(), LocalDateTime.MAX).stream().findAny();
-                    if (event.isPresent() && !recommendedEvent.contains(event.get())) recommendedEvent.add(event.get());
+                    if (event.isPresent() && !ids.contains(event.get().getId())) recommendedEvent.add(event.get());
                 }
             }
             List<EventDto> eventDtos = new ArrayList<>();

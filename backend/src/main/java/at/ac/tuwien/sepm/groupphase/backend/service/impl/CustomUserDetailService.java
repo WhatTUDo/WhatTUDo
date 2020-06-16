@@ -229,7 +229,6 @@ public class CustomUserDetailService implements UserService {
                     List<Event> possibleEvents = labelService.findById(maxAt).getEvents();
                     Optional<Event> possibleEvent = possibleEvents.stream().filter(e -> e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))).findAny();
                     if(possibleEvent.isPresent() && !recommendedEvents.contains(possibleEvent.get())) recommendedEvents.add(possibleEvent.get());
-                    possibleEvent.ifPresent(recommendedEvents::add);
                     labels[maxAt] = 0;
                     if (recommendedEvents.size() >= 4) return recommendedEvents;
                 }
