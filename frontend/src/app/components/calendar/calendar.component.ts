@@ -44,6 +44,7 @@ export class CalendarComponent implements OnInit {
   faChevronDown = faChevronDown;
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
+  faPlus = faPlus;
   currentDate: number;
   currentMonth: String;
   currentYear: number;
