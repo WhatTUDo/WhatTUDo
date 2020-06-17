@@ -13,6 +13,8 @@
   --shadow: rgba(20, 17, 17, 0.25);
   --placeholder: rgba(20, 17, 17, 0.75);
 
+  --button-gradient: linear-gradient(15deg, rgba(247, 250, 248, 0), rgba(247, 250, 248, 0.25));
+
   @media (prefers-color-scheme: dark) {
 
     --background: #141111;
@@ -23,6 +25,8 @@
     --overlay: rgba(20, 17, 17, 0.5);
     --shadow: rgba(247, 250, 248, 0.25);
     --placeholder: rgba(247, 250, 248, 0.75);
+
+    --button-gradient: linear-gradient(15deg, rgba(20, 17, 17, 0.25), rgba(20, 17, 17, 0));
   }
 }
 
@@ -47,6 +51,13 @@ body {
 
   @media screen and (min-width: $mobile-breakpoint) {
     padding: 0 72pt;
+  }
+}
+
+@media screen and (max-width: $mobile-breakpoint) {
+  .mobile-full-width {
+    margin: 0 -12pt;
+    border-radius: 0 !important;
   }
 }
 
@@ -212,13 +223,18 @@ button {
   justify-content: center;
   align-items: center;
 
+  min-height: 24pt;
+  min-width: 24pt;
+
+  padding: 4pt 8pt;
+
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
   color: $black;
   border: none;
   border-radius: $rounded-radius;
   box-sizing: border-box;
   box-shadow: 1px 1px 2px var(--shadow);
-  background-image: linear-gradient(15deg, transparentize($white, 1), transparentize($white, 0.75));
+  background-image: var(--button-gradient);
   background-color: var(--background);
 
   user-select: none;
@@ -274,10 +290,6 @@ button {
   &.button-solid {
     background-color: var(--text);
     color: var(--background);
-  }
-
-  &.small-button {
-    border-radius: 3.5pt;
   }
 
   &.full-width-form-button {

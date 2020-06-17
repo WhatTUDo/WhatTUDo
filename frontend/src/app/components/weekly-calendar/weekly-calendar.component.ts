@@ -34,7 +34,7 @@ export class WeeklyCalendarComponent implements OnInit {
   /** min row count for an event so that there's place for text. */
   viewMinRows = 8;
 
-  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>()
+  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
   dateLocale: string;
 
@@ -68,7 +68,7 @@ export class WeeklyCalendarComponent implements OnInit {
           // @ts-ignore
           if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
             // @ts-ignore
-            time.innerText = '…'
+            time.innerText = '…';
             // @ts-ignore
             name.innerText = '…';
           }
@@ -109,7 +109,7 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   getWeek(offset = 0) {
-    const offsetWeeks = Math.round(offset / 7);
+    const offsetWeeks = Math.floor((offset + this.getToday().getDay()) / 7); // TODO: Investigate whether this fix #149
     let currentWeekDates = [];
     let today = this.getToday();
 

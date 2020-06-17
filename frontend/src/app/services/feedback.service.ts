@@ -9,16 +9,16 @@ export class FeedbackService {
   constructor() {
   }
 
-  displaySuccess(header: string, message: string) {
-    FeedbackHandlerComponent.displaySuccess(header, message)
+  displaySuccess(header: string, message: string, technicalInformation: string = null) {
+    FeedbackHandlerComponent.displaySuccess(header, message, technicalInformation)
   }
 
-  displayWarning(header: string, message: string) {
-    FeedbackHandlerComponent.displayWarning(header, message)
+  displayWarning(header: string, message: string, technicalInformation: string = null) {
+    FeedbackHandlerComponent.displayWarning(header, message, technicalInformation)
   }
 
-  displayError(header: string, message: string) {
-    FeedbackHandlerComponent.displayError(header, message)
+  displayError(header: string, message: string, technicalInformation: string = null) {
+    FeedbackHandlerComponent.displayError(header, message, technicalInformation)
   }
 
   displayServerError(error) {

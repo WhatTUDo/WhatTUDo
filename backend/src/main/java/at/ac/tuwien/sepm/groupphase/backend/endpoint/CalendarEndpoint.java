@@ -100,6 +100,7 @@ public class CalendarEndpoint {
     }
 
 
+    
     @PreAuthorize("hasPermission(#dto, 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)

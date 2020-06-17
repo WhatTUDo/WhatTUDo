@@ -19,9 +19,9 @@ export class EventService {
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
 
-  deleteEvent(event: CalendarEvent) {
+  deleteEvent(eventId: number) {
     console.log("Delete Event", CalendarEvent);
-    return this.httpClient.delete(this.eventBaseUri + '/' + event);
+    return this.httpClient.delete(this.eventBaseUri + '/'+eventId);
   }
 
   getEventsByCalendarId(id: number): Observable<Array<CalendarEvent>> {

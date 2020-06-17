@@ -12,6 +12,7 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
+import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
@@ -41,6 +42,7 @@ public class OrganizationEndpoint {
     private final OrganizationMapper organizationMapper;
     private final UserMapper userMapper;
     private final CalendarService calendarService;
+    private final UserService userService;
 
 
     @PreAuthorize("hasPermission(#dto, 'MOD')")
@@ -138,6 +140,8 @@ public class OrganizationEndpoint {
             return organizationMapper.organizationToOrganizationDto(organization);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -154,6 +158,8 @@ public class OrganizationEndpoint {
             return organizationMapper.organizationToOrganizationDto(organization);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -174,5 +180,22 @@ public class OrganizationEndpoint {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
 
+    }
+
+    @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')")
+    @PutMapping("/addMembership")
+    @CrossOrigin
+    @ApiOperation(value = "create membership", authorizations = {@Authorization(value = "apiKey")})
+    public OrganizationDto addMembership(@PathVariable(value = "userId") Integer userId, @PathVariable(value = "orgaId") Integer orgaId, @PathVariable(value = "role") String role ){
+        try {
+            ApplicationUser applicationUser = userService.findUserById(userId);
+            Organization organization = organizationService.findById(orgaId);
+
+            return organizationMapper.organizationToOrganizationDto(organizationService.addMembership(applicationUser,organization, role));
+        }catch (NotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
     }
 }

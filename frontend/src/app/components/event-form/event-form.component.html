@@ -3,9 +3,21 @@
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
 </div>
 <div>
+
   <h2>{{this.title}}</h2>
   <div class="row">
     <div class="col-md-8">
+      <img class="event-promo-image mobile-full-width" src="{{getEventPromoImageLink(event.id)}}">
+      <form *ngIf="event">
+        <label for="event-promo-image-upload">
+          Avatar
+        </label>
+        <div class="input-button-combo">
+          <input type="file" name="event-promo-image-upload"
+                 id="event-promo-image-upload" accept="{{this.globals.allowedPromoImageMimeTypes.join(',')}}">
+          <button type="submit" class="button-solid no-hover-enlarge no-shadow">Upload</button>
+        </div>
+      </form>
       <h4>Event Details</h4>
       <p>Please note that fields marked with * are <b>required fields</b>. </p>
       <div class="form-group">
@@ -83,8 +95,9 @@
                             [location]="event.location"></app-event-location>
       </div>
       <hr>
-
       <button (click)="onSubmit()" class="button-green clickable btn-lg">Submit</button>
+      <br/>
+      <button (click) = "deleteEvent()" class="button-red clickable btn-lg">Delete</button>
     </div>
     <div class="col-md-4">
       <h4>Suggestions</h4>

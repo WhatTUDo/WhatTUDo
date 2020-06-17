@@ -1,0 +1,39 @@
+<div class="contextual-control">
+  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+  <span>Admin Dashboard</span>
+</div>
+<div class="grid-one-third">
+  <div>
+    <h2>Admin</h2>
+    <div></div>
+  </div>
+  <div>
+    <div class="title-icon-button-combo">
+      <h2>Event Labels</h2>
+      <div class="icon-button clickable no-hover-enlarge no-shadow">
+        <fa-icon [icon]="faPlus">Add Label</fa-icon>
+      </div>
+    </div>
+    <div>
+      <div id="label-container" *ngFor="let label of labels">
+      <div class="label-item">
+        {{label.name}}
+      </div>
+        <div class="label-buttons">
+          <fa-icon *ngIf="!label.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
+                   routerLink="/form/label/{{label.id}}">
+            Edit Label
+          </fa-icon>
+          <fa-icon *ngIf="!label.canDelete" (click)="deleteLabel(label.id)" class="clickable no-shadow no-hover-enlarge" [icon]="faTimesCircle">
+            Remove Label
+          </fa-icon>
+        </div>
+    </div>
+  </div>
+</div>
+<div>
+  <h2>Admin</h2>
+  <div></div>
+</div>
+</div>

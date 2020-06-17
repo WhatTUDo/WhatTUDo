@@ -152,4 +152,26 @@ public class OrganizationServiceTest {
         assertEquals(2, organizationService.getMembers(organization.getId()).size());
 
     }
+
+    @Test
+    public void addMembership(){
+        Organization organization = organizationRepository.save(new Organization("Organization Add member"));
+        ApplicationUser user = userRepository.save(new ApplicationUser("user add member", "usermember@org.at", "supersecret"));
+        Organization organization1 = organizationService.addMembership(user, organization, "MOD" );
+
+        assert (!organization1.getMemberships().isEmpty());
+        boolean b = false;
+        for (OrganizationMembership o : organization1.getMemberships()){
+            if(o.getUser().getId().equals(user.getId())){
+                if(!o.getRole().equals(OrganizationRole.MOD)){
+                    fail();
+                }
+                b=true;
+                break;
+            }
+        }
+        if(!b){
+            fail();
+        }
+    }
 }

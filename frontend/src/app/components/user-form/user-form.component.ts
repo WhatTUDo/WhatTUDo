@@ -1,11 +1,11 @@
 import {AfterContentChecked, ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from "@angular/router";
-import {UserService} from "../../services/user.service";
-import {User} from "../../dtos/user";
-import {AuthService} from "../../services/auth.service";
-import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
-import {FeedbackService} from "../../services/feedback.service";
+import {ActivatedRoute, Router} from '@angular/router';
+import {UserService} from '../../services/user.service';
+import {User} from '../../dtos/user';
+import {AuthService} from '../../services/auth.service';
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import {FeedbackService} from '../../services/feedback.service';
 import {ChangeUserPasswordDto} from '../../dtos/ChangeUserPasswordDto';
 
 @Component({
@@ -31,7 +31,7 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
       {
         username: new FormControl('', Validators.max(255)),
         email: new FormControl('', [
-          Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]),
+          Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$')]),
       }
     );
     this.changePwdForm = this.formBuilder.group(
@@ -60,7 +60,21 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
 
   public update() {
     if (this.updateForm.valid) {
-      //call update method in service.
+      if (this.updateForm.controls.username) {
+        if(this.updateForm.controls.username.value != ""){
+        this.user.name = this.updateForm.controls.username.value;}
+      } else if (this.updateForm.controls.email) {
+        if(this.updateForm.controls.email.value != ""){
+          this.user.email = this.updateForm.controls.email.value;}
+      }
+      this.userService.putUser(this.user).subscribe((user: any) => {
+        this.user = user;
+        this.feedbackService.displaySuccess('Successfully updated', 'Successfully updated');
+
+      }, err => {
+        console.warn(err);
+        this.feedbackService.displayError('Error', err.error.message);
+      });
     }
   }
 
@@ -69,10 +83,11 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
       console.log(this.user.name);
       this.userService.changePwd(new ChangeUserPasswordDto(this.user.name, this.user.email, this.changePwdForm.controls.currentPassword.value, this.changePwdForm.controls.newPassword.value)).subscribe((user: User) => {
         this.user = user;
+        this.feedbackService.displaySuccess('Password changed', 'Password changed');
 
       }, err => {
         console.warn(err);
-        this.feedbackService.displayError("Error", err.error.message);
+        this.feedbackService.displayError('Error', err.error.message);
       });
     }
   }

@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationEdit
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class SimpleOrganizationService implements OrganizationService {
     private final ApplicationEventPublisher publisher;
     private final OrganizationRepository organizationRepository;
     private final CalendarRepository calendarRepository;
+    private final UserRepository userRepository;
     private final Validator validator;
 
 
@@ -168,6 +170,24 @@ public class SimpleOrganizationService implements OrganizationService {
             }
             return members;
         } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Organization addMembership(ApplicationUser user, Organization organization, String role) throws ServiceException {
+        try {
+            OrganizationMembership organizationMembership = new OrganizationMembership(organization, user, OrganizationRole.valueOf(role));
+            Set<OrganizationMembership> organizationMemberships = new HashSet<>(user.getMemberships());
+            organizationMemberships.add(organizationMembership);
+            user.setMemberships(organizationMemberships);
+            organizationMemberships = organization.getMemberships();
+            organizationMemberships.add(organizationMembership);
+            organization.setMemberships(organizationMemberships);
+            userRepository.save(user);
+            return  organizationRepository.save(organization);
+
+        }catch (PersistenceException | IllegalArgumentException e){
             throw new ServiceException(e.getMessage());
         }
     }

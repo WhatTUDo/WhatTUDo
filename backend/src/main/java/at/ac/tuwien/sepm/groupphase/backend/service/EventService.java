@@ -20,11 +20,11 @@ public interface EventService {
     /**
      * Deletes a single event from the db.
      *
-     * @param event event to be deleted from db
+     * @param id of event to be deleted from db
      * @throws ServiceException    is thrown if something goes wrong during data processing.
      * @throws ValidationException is thrown if the Event Entity does not pass validation.
      */
-    void delete(Event event) throws ServiceException, ValidationException;
+    void delete(Integer id) throws ServiceException, ValidationException;
 
     /**
      * Save a new event into the database.

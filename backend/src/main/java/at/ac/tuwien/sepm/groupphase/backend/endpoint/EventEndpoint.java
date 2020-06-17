@@ -47,21 +47,21 @@ public class EventEndpoint {
     private final LabelMapper labelMapper;
 
 
-    @PreAuthorize("hasPermission(#dto, 'MEMBER')")
+    @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
     @CrossOrigin
     @Transactional
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping
+    @DeleteMapping(value = "/{id}")
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
-    public void deleteEvent(@RequestBody EventDto dto) {
+    public void deleteEvent(@PathVariable Integer id) {
         try {
-            eventService.delete(eventMapper.eventDtoToEvent(dto));
+            eventService.delete(id);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 

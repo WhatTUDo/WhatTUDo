@@ -51,9 +51,29 @@ public interface UserService extends UserDetailsService {
 
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 
+    /**
+     * find user by id.
+     * @param id of user that is being searched.
+     * @return found user
+     * @throws NotFoundException is thrown when user is not found.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    ApplicationUser findUserById(Integer id) throws NotFoundException, ServiceException;
 
+    /**
+     * Search user by name
+     * @param name of user who user is looking for
+     * @return found user
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
     ApplicationUser getUserByName(String name) throws ServiceException;
 
+    /**
+     * Get list of organization that user has a membership at.
+     * @param userId id of user.
+     * @return list of organizations where user has a membership
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
     List<Organization> getUserOrganizations(Integer userId) throws ServiceException;
 
     /**

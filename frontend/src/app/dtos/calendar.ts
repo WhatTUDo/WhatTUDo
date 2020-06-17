@@ -4,6 +4,7 @@ export class Calendar {
     public name: string,
     public eventIds: number[],
     public organizationIds: number[],
+    public description?: string,
     public canEdit?: Boolean,
     public canDelete?: Boolean
   ) {

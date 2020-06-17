@@ -44,6 +44,7 @@ import {UserRegistrationComponent} from './components/user-registration/user-reg
 import {OverlayModule} from "@angular/cdk/overlay";
 import {ExplanationComponent} from './components/explanation/explanation.component';
 import {EventConflictResolverComponent} from './components/event-conflict-resolver/event-conflict-resolver.component';
+import { AdminDashboardComponent } from './components/admin-dashboard/admin-dashboard.component';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import {EventConflictResolverComponent} from './components/event-conflict-resolv
     PromoEventListComponent,
     ExplanationComponent,
     UserRegistrationComponent,
-    EventConflictResolverComponent
+    EventConflictResolverComponent,
+    AdminDashboardComponent
   ],
   imports: [
     BrowserModule,

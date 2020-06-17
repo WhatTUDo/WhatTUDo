@@ -50,15 +50,12 @@ public class CalendarEndpointTest {
     @Autowired
     EventEndpoint eventEndpoint;
 
-    @Mock
-    OrganizationRepository organizationRepository;
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void createCalendar_returnsCalendar() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
 
         CalendarCreateDto calendarDto = new CalendarCreateDto("Save", 1);
 
@@ -69,10 +66,23 @@ public class CalendarEndpointTest {
 
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
+    public void createCalendar_withDescription_returnsCalendar() {
+        Organization orga = new Organization("Test Organization");
+        orga.setId(1);
+
+        CalendarCreateDto calendarDto = new CalendarCreateDto("Save", 1, "Description");
+
+        CalendarDto calendarSaved = calendarEndpoint.create(calendarDto);
+
+        assertEquals(calendarDto.getName(), calendarSaved.getName());
+        assertEquals(calendarDto.getDescription(), calendarSaved.getDescription());
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
     public void searchCalendar_byCalendarName_byEventName_returnsSavedCalendar() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
 
         CalendarDto calendarDto = calendarEndpoint.create(new CalendarCreateDto("Search", 1));
 
@@ -92,7 +102,6 @@ public class CalendarEndpointTest {
     public void deleteCalendar_findCalendarWillReturnNotFound() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
 
         CalendarDto calendarDto = calendarEndpoint.create(new CalendarCreateDto("Delete", 1));
 
@@ -107,7 +116,6 @@ public class CalendarEndpointTest {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
         List<Integer> e = new ArrayList<>();
-        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
 
         CalendarCreateDto calendarDto = new CalendarCreateDto("Save to update", 1);
 
@@ -123,7 +131,6 @@ public class CalendarEndpointTest {
     public void updateOrganizationsForCalendar() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
         List<Integer> org = new ArrayList<>();
         org.add(1);
         CalendarCreateDto calendarDto = new CalendarCreateDto("Save to update 2", 1);
@@ -131,7 +138,6 @@ public class CalendarEndpointTest {
         CalendarDto calendarSaved = calendarEndpoint.create(calendarDto);
         Organization orga1 = new Organization("Test Org 2");
         orga1.setId(2);
-        Mockito.when(organizationRepository.save(new Organization("Test Org 2"))).thenReturn(orga1);
         org.add(2);
 
         CalendarDto update = new CalendarDto(calendarSaved.getId(), calendarSaved.getName(), org, calendarSaved.getEventIds());

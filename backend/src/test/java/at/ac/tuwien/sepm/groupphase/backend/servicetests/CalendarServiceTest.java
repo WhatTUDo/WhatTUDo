@@ -30,15 +30,11 @@ public class CalendarServiceTest {
     @Autowired
     CalendarService calendarService;
 
-    @Mock
-    OrganizationRepository organizationRepository;
 
 
     public Organization createOrga() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        Mockito.when(organizationRepository.save(new Organization("Test Organization"))).thenReturn(orga);
-        Mockito.when(organizationRepository.findById(1)).thenReturn(Optional.ofNullable(orga));
         return orga;
     }
 
@@ -49,6 +45,16 @@ public class CalendarServiceTest {
         Calendar saved = calendarService.save(calendar);
         assertEquals("save", saved.getName());
         assertEquals(calendar.getOrganizations(), saved.getOrganizations());
+    }
+
+    @Test
+    public void saveNewCalendar_sadreturnsCalendar() {
+
+        Calendar calendar = new Calendar("save", Collections.singletonList(createOrga()), "Description");
+        Calendar saved = calendarService.save(calendar);
+        assertEquals("save", saved.getName());
+        assertEquals(calendar.getOrganizations(), saved.getOrganizations());
+        assertEquals("Description", saved.getDescription());
     }
 
     @Test

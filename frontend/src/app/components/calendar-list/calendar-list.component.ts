@@ -15,6 +15,7 @@ import {Organization} from '../../dtos/organization';
 })
 export class CalendarListComponent implements OnInit {
   calendars: Calendar[] = [];
+  subscribedCalendarIds: number[] = this.calendars.map(c => c.id);
   organizationsMap: Map<number, Organization> = new Map();
   searchForm = new FormGroup({
     name: new FormControl('')
@@ -89,6 +90,7 @@ export class CalendarListComponent implements OnInit {
     }
     return true;
   }
+
 
   delete(id: number): void {
     if (confirm(`You are deleting calendar "${this.calendars.find(c => c.id === id).name}". Are you sure?`)) {

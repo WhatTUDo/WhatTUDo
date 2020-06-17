@@ -3,6 +3,7 @@ import {Organization} from '../../dtos/organization';
 import {OrganizationService} from '../../services/organization.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-organization-form',
@@ -16,6 +17,7 @@ export class OrganizationFormComponent implements OnInit {
   faChevronLeft = faChevronLeft;
 
   constructor(private organizationService: OrganizationService,
+              public globals: Globals,
               private route: ActivatedRoute,
               private router: Router) {
   }
@@ -64,5 +66,9 @@ export class OrganizationFormComponent implements OnInit {
         error => {
           alert("Could not update organization: " + error.error.message);
         });
+  }
+
+  getOrganizationAvatarLink(organizationId: number, size: number) {
+    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
   }
 }
