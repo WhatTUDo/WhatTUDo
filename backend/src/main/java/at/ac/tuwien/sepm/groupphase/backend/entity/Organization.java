@@ -33,5 +33,9 @@ public class Organization extends BaseEntity {
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE})
     private Set<OrganizationMembership> memberships = new HashSet<>();
+
+    @ToString.Exclude
+    @Lob
+    private Byte[] coverImage;
 }
 

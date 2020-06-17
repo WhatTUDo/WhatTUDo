@@ -260,5 +260,4 @@ public class EventEndpoint {
             throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, e.getMessage(), e);
         }
     }
-
 }

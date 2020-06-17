@@ -191,4 +191,17 @@ public class SimpleOrganizationService implements OrganizationService {
             throw new ServiceException(e.getMessage());
         }
     }
+
+
+    @Override
+    public Organization setCoverImage(Organization organization, byte[] imageBlob) {
+        try {
+            Byte[] byteArray = new Byte[imageBlob.length];
+            for (int i = 0; i < imageBlob.length; i++) byteArray[i] = imageBlob[i];
+            organization.setCoverImage(byteArray);
+            return organizationRepository.save(organization);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
 }

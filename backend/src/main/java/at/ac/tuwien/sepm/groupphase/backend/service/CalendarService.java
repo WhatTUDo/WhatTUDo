@@ -78,4 +78,13 @@ public interface CalendarService {
      * @throws NotFoundException   is thrown if the Calendar Entity Id is not found in Database.
      */
     Calendar updateOrganizationsWithList(Calendar calendar, List<Organization> organizations) throws ServiceException, NotFoundException, ValidationException;
+
+    /**
+     * Sets the cover image
+     * @param calendar to set the cover to
+     * @param imageBlob - image blob
+     * @return the changed calendar
+     * @throws ServiceException    is thrown if something goes wrong during data processing.
+     */
+    Calendar setCoverImage(Calendar calendar, byte[] imageBlob);
 }

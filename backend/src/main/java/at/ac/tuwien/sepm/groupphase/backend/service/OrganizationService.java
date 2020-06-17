@@ -108,4 +108,12 @@ public interface OrganizationService {
      */
     Organization addMembership(ApplicationUser user, Organization organization, String role) throws ServiceException;
 
+    /**
+     * Sets the cover image
+     * @param organization to set the cover to
+     * @param imageBlob - image blob
+     * @return the changed calendar
+     * @throws ServiceException    is thrown if something goes wrong during data processing.
+     */
+    Organization setCoverImage(Organization organization, byte[] imageBlob);
 }

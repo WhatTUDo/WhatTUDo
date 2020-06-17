@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.OrganizationMapper;
@@ -21,11 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +41,7 @@ import java.util.Collection;
 @RequestMapping(value = OrganizationEndpoint.BASE_URL)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OrganizationEndpoint {
-    static final String BASE_URL = "/organizations";
+    public static final String BASE_URL = "/organizations";
     private final OrganizationService organizationService;
     private final OrganizationMapper organizationMapper;
     private final UserMapper userMapper;
@@ -196,6 +200,38 @@ public class OrganizationEndpoint {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }catch (ServiceException e){
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get cover image", authorizations = {@Authorization(value = "apiKey")})
+    public @ResponseBody byte[] getCoverImage(@PathVariable int id) {
+        try {
+            Byte[] coverImageBlob = organizationService.findById(id).getCoverImage();
+            byte[] byteArray = new byte[coverImageBlob.length];
+            for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            return byteArray;
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    @CrossOrigin
+    @PostMapping("/{id}/cover")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Set cover image", authorizations = {@Authorization(value = "apiKey")})
+    public OrganizationDto setCoverImage(@PathVariable int id, @RequestParam("imagefile") MultipartFile file) {
+        try {
+            Organization organization = organizationService.setCoverImage(organizationService.findById(id), file.getBytes());
+            return organizationMapper.organizationToOrganizationDto(organization);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, e.getMessage(), e);
         }
     }
 }
