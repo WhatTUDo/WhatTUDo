@@ -13,6 +13,8 @@
   --shadow: rgba(20, 17, 17, 0.25);
   --placeholder: rgba(20, 17, 17, 0.75);
 
+  --button-gradient: linear-gradient(15deg, rgba(247, 250, 248, 0), rgba(247, 250, 248, 0.25));
+
   @media (prefers-color-scheme: dark) {
 
     --background: #141111;
@@ -23,6 +25,8 @@
     --overlay: rgba(20, 17, 17, 0.5);
     --shadow: rgba(247, 250, 248, 0.25);
     --placeholder: rgba(247, 250, 248, 0.75);
+
+    --button-gradient: linear-gradient(15deg, rgba(20, 17, 17, 0.25), rgba(20, 17, 17, 0));
   }
 }
 
@@ -230,7 +234,7 @@ button {
   border-radius: $rounded-radius;
   box-sizing: border-box;
   box-shadow: 1px 1px 2px var(--shadow);
-  background-image: linear-gradient(15deg, transparentize($white, 1), transparentize($white, 0.75));
+  background-image: var(--button-gradient);
   background-color: var(--background);
 
   user-select: none;
