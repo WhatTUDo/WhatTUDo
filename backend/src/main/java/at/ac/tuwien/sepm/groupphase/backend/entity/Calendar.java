@@ -2,6 +2,7 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.*;
 import org.hibernate.annotations.Cascade;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -13,7 +14,7 @@ import java.util.List;
 @Entity
 @Table
 @Data
-@NoArgsConstructor
+//@NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Calendar extends BaseEntity {
@@ -32,5 +33,16 @@ public class Calendar extends BaseEntity {
     @OneToMany(mappedBy = "calendar", cascade = CascadeType.MERGE)
     private List<Event> events = new ArrayList<>();
 
+    @Nullable
+    private String description;
+
+    public Calendar(String name, List<Organization> organizations, String description) {
+        this.name = name;
+        this.organizations = organizations;
+        this.description = description;
+    }
+
+    public Calendar() {
+    }
 }
 
