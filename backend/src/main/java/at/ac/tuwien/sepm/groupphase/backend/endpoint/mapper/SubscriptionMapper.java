@@ -9,7 +9,6 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.SubscriptionRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
-import org.aspectj.lang.annotation.Before;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

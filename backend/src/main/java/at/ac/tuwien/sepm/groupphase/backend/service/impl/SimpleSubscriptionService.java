@@ -32,8 +32,17 @@ public class SimpleSubscriptionService implements SubscriptionService {
     public Subscription create(Subscription subscription) throws ServiceException, NotFoundException {
         try {
             return subscriptionRepository.save(subscription);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
-        catch (PersistenceException e) {
+    }
+
+    @Override
+    public Subscription delete(Subscription subscription) throws ServiceException {
+        try {
+            subscriptionRepository.delete(subscription);
+            return subscription;
+        } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
     }
@@ -42,8 +51,7 @@ public class SimpleSubscriptionService implements SubscriptionService {
     public List<Subscription> getSubscriptionsByUser(ApplicationUser user) throws ServiceException, NotFoundException {
         try {
             return subscriptionRepository.getByUser(user);
-        }
-        catch (PersistenceException e) {
+        } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
     }

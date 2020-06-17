@@ -13,14 +13,16 @@ public interface SubscriptionService {
 
 
     //TODO: Write doc.
-    Subscription create(Subscription subscription) throws ServiceException, NotFoundException;
+    Subscription create(Subscription subscription) throws ServiceException;
 
-    List<Subscription> getSubscriptionsByUser(ApplicationUser user) throws ServiceException, NotFoundException;
+    Subscription delete(Subscription subscription) throws ServiceException;
 
-    List<Subscription> getSubscriptionsForCalendar(Calendar calendar) throws ServiceException, NotFoundException;
+    List<Subscription> getSubscriptionsByUser(ApplicationUser user) throws ServiceException;
 
-    List<ApplicationUser> getSubscribedUsersForCalendar(Calendar calendar) throws ServiceException, NotFoundException;
+    List<Subscription> getSubscriptionsForCalendar(Calendar calendar) throws ServiceException;
 
-    List<Calendar> getSubsribedCalendarsForUser(ApplicationUser user) throws ServiceException, NotFoundException;
+    List<ApplicationUser> getSubscribedUsersForCalendar(Calendar calendar) throws ServiceException;
+
+    List<Calendar> getSubsribedCalendarsForUser(ApplicationUser user) throws ServiceException;
 
 }
