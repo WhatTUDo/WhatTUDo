@@ -219,6 +219,11 @@ button {
   justify-content: center;
   align-items: center;
 
+  min-height: 24pt;
+  min-width: 24pt;
+
+  padding: 4pt 8pt;
+
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
   color: $black;
   border: none;
@@ -281,10 +286,6 @@ button {
   &.button-solid {
     background-color: var(--text);
     color: var(--background);
-  }
-
-  &.small-button {
-    border-radius: 3.5pt;
   }
 
   &.full-width-form-button {
