@@ -3,9 +3,13 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {CalendarService} from '../../services/calendar.service';
 import {Calendar} from '../../dtos/calendar';
 import {Router} from '@angular/router';
-import {faChevronLeft, faCog, faTimesCircle, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faCog, faTimesCircle, faPlus, faBookmark} from "@fortawesome/free-solid-svg-icons";
 import {OrganizationService} from '../../services/organization.service';
+import {AuthService} from "../../services/auth.service";
+import {FeedbackService} from "../../services/feedback.service";
+import {SubscriptionService} from "../../services/subscription.service";
 import {Organization} from '../../dtos/organization';
+import {SubscriptionDto} from "../../dtos/subscriptionDto";
 
 
 @Component({
@@ -24,12 +28,16 @@ export class CalendarListComponent implements OnInit {
   faTimesCircle = faTimesCircle;
   faCog = faCog;
   faPlus = faPlus;
+  faBookmark = faBookmark;
 
 
   constructor(
     private calendarService: CalendarService,
     private router: Router,
-    private organizationService: OrganizationService) {
+    private organizationService: OrganizationService,
+    private subscriptionService: SubscriptionService,
+    private feedbackService: FeedbackService,
+    private authService: AuthService) {
     this.getAllCalendars();
   }
 
@@ -103,6 +111,21 @@ export class CalendarListComponent implements OnInit {
   getOrganizationAvatarLink(organizationId: number, size: number) {
     return this.organizationService.getOrganizationAvatarLink(organizationId, size);
   }
+
+  //Subscription stuff
+
+  onClickSubscribe(calendarId: number) {
+    this.authService.getUser().subscribe(user => {
+      let userName = user.name;
+      let subscription = new SubscriptionDto(userName, calendarId);
+      this.subscriptionService.create(subscription).subscribe(savedSub => {
+        if (savedSub.calendarId != 0 && savedSub.userName != null) {
+          this.feedbackService.displaySuccess("Subscribed!", "You subscribed successfully to this calendar!");
+        }
+      })
+    })
+  }
+
 
 }
 

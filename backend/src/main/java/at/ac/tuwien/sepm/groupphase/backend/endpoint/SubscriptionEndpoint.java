@@ -41,10 +41,10 @@ public class SubscriptionEndpoint {
     private final CalendarMapper calendarMapper;
     private final UserMapper userMapper;
 
-    @PreAuthorize("hasRole('SYSADMIN') || subscriptionDto.userName == authentication.name")
+    @PreAuthorize("hasRole('SYSADMIN') || #subscriptionDto.userName == authentication.name")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
+    @PostMapping("/")
     @ApiOperation(value = "Create a new Subscription", authorizations = {@Authorization(value = "apiKey")})
     public SubscriptionDto create(@RequestBody SubscriptionDto subscriptionDto) {
         try {
@@ -56,7 +56,7 @@ public class SubscriptionEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('SYSADMIN') || subscriptionDto.userName == authentication.name")
+    @PreAuthorize("hasRole('SYSADMIN') || #subscriptionDto.userName == authentication.name")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping
@@ -74,7 +74,7 @@ public class SubscriptionEndpoint {
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/calendars")
+    @GetMapping("/calendars/{id}")
     @ApiOperation(value = "Get all Calendars to which a User is subscribed", authorizations = {@Authorization(value = "apiKey")})
     public List<CalendarDto> getAllSubscribedCalenders(@PathVariable(value = "id") Integer userId) {
         try {
@@ -90,7 +90,7 @@ public class SubscriptionEndpoint {
     @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/users")
+    @GetMapping("/users/{id}")
     @ApiOperation(value = "Get all Users who subscribe to a Calendar", authorizations = {@Authorization(value = "apiKey")})
     public List<LoggedInUserDto> getAllSubscribedUsers(@PathVariable(value = "id") Integer calendarId) {
         try {
