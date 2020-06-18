@@ -5,7 +5,7 @@ import {Location} from "../../dtos/location";
 import {EventService} from "../../services/event.service";
 import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {faChevronLeft, faCheckCircle} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {FeedbackService} from "../../services/feedback.service";
@@ -59,7 +59,8 @@ export class EventFormComponent implements OnInit {
     private calendarService: CalendarService,
     private feedbackService: FeedbackService,
     public globals: Globals,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private router: Router) {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id) {
       this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
@@ -127,6 +128,7 @@ export class EventFormComponent implements OnInit {
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
             this.eventService.addLabels(this.ev_id, this.selectedLabels);
+            this.router.navigate([`/event/${response.id}`])
           },
           err => {
             console.warn(err);
@@ -140,6 +142,7 @@ export class EventFormComponent implements OnInit {
             console.log(response);
 
             this.eventService.addLabels(response.id, this.selectedLabels);
+            this.router.navigate([`/event/${response.id}`])
           },
           err => {
             console.warn(err);
@@ -148,16 +151,18 @@ export class EventFormComponent implements OnInit {
       }
     }
   }
-  private deleteEvent() {
+
+  deleteEvent() {
     if (confirm(`You are deleting "${this.event.name}". Are you sure?`)) {
       this.eventService.deleteEvent(this.event.id).subscribe(() => {
-        this.feedbackService.displaySuccess("Successfully deleted", "Event "+this.event.name+" is deleted");
+        this.feedbackService.displaySuccess("Successfully deleted", "Event " + this.event.name + " is deleted");
       }, err => {
-          console.warn(err);
-          this.feedbackService.displayError("Error", err.error.message);
-        });
+        console.warn(err);
+        this.feedbackService.displayError("Error", err.error.message);
+      });
     }
   }
+
   /**
    *
    * @param event
