@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.SubscriptionMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.UserMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Subscription;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.SubscriptionService;
@@ -56,14 +57,15 @@ public class SubscriptionEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('SYSADMIN') || #subscriptionDto.userName == authentication.name")
+    @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete an existing Subscription", authorizations = {@Authorization(value = "apiKey")})
-    public SubscriptionDto delete(@RequestBody SubscriptionDto subscriptionDto) {
+    public SubscriptionDto delete(@PathVariable(value = "id") Integer subscriptionId) {
         try {
-            return subscriptionMapper.subscriptionToSubscriptionDto(subscriptionService.delete(subscriptionMapper.subscriptionDtoToSubscription(subscriptionDto)));
+            Subscription subscription = subscriptionService.getById(subscriptionId);
+            return subscriptionMapper.subscriptionToSubscriptionDto(subscriptionService.delete(subscription));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {
@@ -103,5 +105,35 @@ public class SubscriptionEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/for/calendar/{calendarId}")
+    @ApiOperation(value = "Get Subscriptions for a Calendar", authorizations = {@Authorization(value = "apiKey")})
+    public List<SubscriptionDto> getSubscriptionsForCalendar(@PathVariable("calendarId") Integer calendarId) {
+        try {
+            Calendar calendar = calendarService.findById(calendarId);
+            return subscriptionMapper.subscriptionDtoList(subscriptionService.getSubscriptionsForCalendar(calendar));
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
 
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/for/user/{userId}")
+    @ApiOperation(value = "Get Subscriptions by a User", authorizations = {@Authorization(value = "apiKey")})
+    public List<SubscriptionDto> getSubscriptionsForuser(@PathVariable("userId") Integer userId) {
+        try {
+            ApplicationUser user = userService.findUserById(userId);
+            return subscriptionMapper.subscriptionDtoList(subscriptionService.getSubscriptionsByUser(user));
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
 }

@@ -18,8 +18,8 @@
   <div *ngIf="subscribedCalendarIds !== undefined">
     <div *ngIf="authService.isLoggedIn()">
       <h3>My Calendars</h3>
-      <div *ngIf="subscribedCalendarIds.length===0">You have no subscribed calenders yet.</div>
-      <div *ngFor="let cal of getSubscribedCalendars()" class="calendar">
+      <div *ngIf="subscribedCalendars.length===0">You have no subscribed calenders yet.</div>
+      <div *ngFor="let cal of this.subscribedCalendars" class="calendar">
         <div class="calendar-details">
           <div routerLink="/calendar/{{cal.id}}">
             <div class="calendar-name clickable no-hover-enlarge">{{cal.name}}</div>

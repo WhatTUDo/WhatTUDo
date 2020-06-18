@@ -32,6 +32,8 @@ export class CalendarListComponent implements OnInit {
   faCircleNotch = faCircleNotch;
   otherCalenderFilteredBy: string = "";
 
+  subscribedCalendars: Calendar[] = [];
+
 
   constructor(
     private calendarService: CalendarService,
@@ -58,6 +60,13 @@ export class CalendarListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe(user => {
+        this.subscriptionService.getSubscribedCalendars(user.id).subscribe(calendars => {
+          this.subscribedCalendars = calendars;
+        })
+      })
+    }
   }
 
   // onSubmit() {
@@ -122,7 +131,7 @@ export class CalendarListComponent implements OnInit {
   onClickSubscribe(calendarId: number) {
     this.authService.getUser().subscribe(user => {
       let userName = user.name;
-      let subscription = new SubscriptionDto(userName, calendarId);
+      let subscription = new SubscriptionDto(0, userName, calendarId);
       this.subscriptionService.create(subscription).subscribe(savedSub => {
         if (savedSub.calendarId != 0 && savedSub.userName != null) {
           this.subscribedCalendarIds.push(calendarId);
@@ -135,7 +144,7 @@ export class CalendarListComponent implements OnInit {
   onClickUnsubscribe(calendarId: number) {
     this.authService.getUser().subscribe(user => {
       let userName = user.name;
-      let subscription = new SubscriptionDto(userName, calendarId);
+      let subscription = new SubscriptionDto(0, userName, calendarId);
       // this.subscriptionService.delete(subscription).subscribe(_ => {
         this.subscribedCalendarIds = this.subscribedCalendarIds.filter(id => id !== calendarId);
         this.feedbackService.displaySuccess("Unsubscribed!", "You removed your subscription successfully!");

@@ -17,6 +17,8 @@ public interface SubscriptionService {
 
     Subscription delete(Subscription subscription) throws ServiceException;
 
+    Subscription getById(Integer id) throws ServiceException, NotFoundException;
+
     List<Subscription> getSubscriptionsByUser(ApplicationUser user) throws ServiceException;
 
     List<Subscription> getSubscriptionsForCalendar(Calendar calendar) throws ServiceException;

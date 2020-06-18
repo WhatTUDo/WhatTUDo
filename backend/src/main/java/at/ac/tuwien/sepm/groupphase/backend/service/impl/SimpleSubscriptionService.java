@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -42,6 +43,20 @@ public class SimpleSubscriptionService implements SubscriptionService {
         try {
             subscriptionRepository.delete(subscription);
             return subscription;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Subscription getById(Integer id) throws ServiceException, NotFoundException {
+        try {
+            Optional<Subscription> foundSubscription = subscriptionRepository.findById(id);
+            if (foundSubscription.isPresent()) {
+                return foundSubscription.get();
+            } else {
+                throw new NotFoundException("Could not retrieve Subscription with ID " + id);
+            }
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }

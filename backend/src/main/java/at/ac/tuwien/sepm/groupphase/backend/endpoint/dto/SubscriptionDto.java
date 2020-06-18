@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SubscriptionDto {
-
+    public Integer id;
     public String userName;
     public Integer calendarId;
 }
