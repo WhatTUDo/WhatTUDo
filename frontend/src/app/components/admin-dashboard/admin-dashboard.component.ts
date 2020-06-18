@@ -15,6 +15,8 @@ export class AdminDashboardComponent implements OnInit {
   faPlus = faPlus;
   faCog = faCog;
   labels: Label[];
+  newLabelName: string;
+  addLabelExpanded: boolean = false;
 
   constructor(private labelService: LabelService) {
     this.loadAllLabels()
@@ -29,7 +31,20 @@ export class AdminDashboardComponent implements OnInit {
     })
   }
 
-  deleteLabel(id:number){
-    this.labelService.deleteLabel(id).subscribe(_=>{});
+  deleteLabel(id: number) {
+    if (confirm(`You are deleting label "${this.labels.find(l => l.id === id).name}". Are you sure?`)) {
+      this.labelService.deleteLabel(id).subscribe(_ => {
+      });
+    }
+  }
+
+  onSubmit() {
+    this.labelService.createLabel(name).subscribe((label) => {
+      this.labels.push(label);
+    });
+  }
+
+  toggleAddLabelExpanded() {
+    this.addLabelExpanded = !this.addLabelExpanded;
   }
 }
