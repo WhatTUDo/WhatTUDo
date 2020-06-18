@@ -1,13 +1,15 @@
 @import "../var.scss";
 
-app-feedback-handler {
-  position: fixed;
-  bottom: 0;
+:host > * {
+  display: block;
+}
 
-  width: 100%;
+*~router-outlet {
+  display: block !important;
+}
 
+.container {
   @media screen and (min-width: $mobile-breakpoint) {
-    bottom: 0;
-    padding: 16pt;
+    min-height: calc(100% - 72pt - 40pt);
   }
 }

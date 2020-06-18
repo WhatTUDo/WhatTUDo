@@ -24,7 +24,11 @@
 
   background-color: var(--shadow);
 
-  height: 40em;
+  height: $mobile-object-full-height;
+
+  @media (screen and min-width: $mobile-breakpoint) {
+    height: $desktop-object-full-height;
+  }
 
   border-radius: $rounded-radius;
 

@@ -31,26 +31,32 @@
 }
 
 
-body {
+html, body {
   background-color: var(--background);
   color: var(--text);
+
+  height: 100%;
+  margin: 0;
 
   max-width: 100%;
 
   font-family: $font-stack;
   font-weight: $f-regular;
 
+  hyphens: auto;
+  word-break: break-word;
+
   line-height: 1;
 }
 
 .container {
-  margin: 0;
-  padding: 12pt;
+  padding: 0 12pt;
 
   max-width: 100%;
 
   @media screen and (min-width: $mobile-breakpoint) {
-    padding: 0 72pt;
+    max-width: 1200pt;
+    margin: 0 auto;
   }
 }
 
@@ -140,7 +146,8 @@ a {
   .grid-one-third {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    column-gap: 4rem;
+    //grid-template-rows: $desktop-object-full-height;
+    column-gap: 24pt;
 
     &.scroll > * {
       overflow-y: scroll;
