@@ -122,13 +122,14 @@ export class WeeklyCalendarComponent implements OnInit {
 
   filterSubscribedEvents() {
     if (!this.filterIsActive) {
+      let filteredEventsOfTheWeek = new Map<String, CalendarEvent[]>();
       this.eventsOfTheWeek.forEach((events, day) => {
-        events.filter(event => {
-          return this.subscribeCalendarIds.filter(value => {
-            return value == event.calendarId
-          })
+        let filteredEvents = events.filter(event => {
+          return this.subscribeCalendarIds.includes(event.calendarId)
         });
+        filteredEventsOfTheWeek.set(day, filteredEvents);
       });
+      this.eventsOfTheWeek = filteredEventsOfTheWeek;
     } else {
       this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     }
