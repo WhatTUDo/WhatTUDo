@@ -65,13 +65,15 @@ export class WeeklyCalendarComponent implements OnInit {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
 
-    this.authService.getUser().subscribe(user => {
-      this.subscriptionService.getSubscribedCalendars(user.id).subscribe(calendars => {
-        this.subscribeCalendarIds = calendars.map(cal => {
-          return cal.id
-        });
+    if (this.authService.isLoggedIn()) {
+      this.authService.getUser().subscribe(user => {
+        this.subscriptionService.getSubscribedCalendars(user.id).subscribe(calendars => {
+          this.subscribeCalendarIds = calendars.map(cal => {
+            return cal.id
+          });
+        })
       })
-    })
+    }
 
     this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     this.updateDatetime();
@@ -145,7 +147,7 @@ export class WeeklyCalendarComponent implements OnInit {
 
   getWeek(offset = 0) {
     const weekOffset = (this.getToday().getDay() - 1 + 7) % 7;
-    const offsetWeeks = Math.floor((offset + weekOffset)/7);
+    const offsetWeeks = Math.floor((offset + weekOffset) / 7);
     let currentWeekDates = [];
     let today = this.getToday();
 
