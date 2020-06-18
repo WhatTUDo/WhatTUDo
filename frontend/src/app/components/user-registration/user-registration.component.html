@@ -41,7 +41,7 @@
       <div class="form-group">
         <label class="control-label" for="password">Password</label>
         <div>
-          <input #passwordField="ngModel" [(ngModel)]="user.password" autocomplete="new-password" class="form-control"
+          <input #passwordField="ngModel" [(ngModel)]="password" autocomplete="new-password" class="form-control"
                  id="password" minlength="8" name="password" passwordrules="minlength: 8;"
                  required type="password">
           <div [hidden]="passwordField.valid || passwordField.pristine" class="jasmine-errored">
