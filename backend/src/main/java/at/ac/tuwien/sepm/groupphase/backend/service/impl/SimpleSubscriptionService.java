@@ -68,11 +68,22 @@ public class SimpleSubscriptionService implements SubscriptionService {
 
     @Override
     public List<ApplicationUser> getSubscribedUsersForCalendar(Calendar calendar) throws ServiceException, NotFoundException {
-        return null;
+        List<Subscription> subscriptions = this.getSubscriptionsForCalendar(calendar);
+        List<ApplicationUser> users = new ArrayList<>();
+
+        subscriptions.forEach(subscription -> {
+            users.add(subscription.getUser());
+        });
+        return users;
     }
 
     @Override
     public List<Calendar> getSubsribedCalendarsForUser(ApplicationUser user) throws ServiceException, NotFoundException {
-        return null;
+        List<Subscription> subscriptions = this.getSubscriptionsByUser(user);
+        List<Calendar> calendars = new ArrayList<>();
+        subscriptions.forEach(subscription -> {
+            calendars.add(subscription.getCalendar());
+        });
+        return calendars;
     }
 }
