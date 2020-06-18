@@ -124,9 +124,21 @@ export class CalendarListComponent implements OnInit {
       let subscription = new SubscriptionDto(userName, calendarId);
       this.subscriptionService.create(subscription).subscribe(savedSub => {
         if (savedSub.calendarId != 0 && savedSub.userName != null) {
+          this.subscribedCalendarIds.push(calendarId);
           this.feedbackService.displaySuccess("Subscribed!", "You subscribed successfully to this calendar!");
         }
       })
+    })
+  }
+
+  onClickUnsubscribe(calendarId: number) {
+    this.authService.getUser().subscribe(user => {
+      let userName = user.name;
+      let subscription = new SubscriptionDto(userName, calendarId);
+      // this.subscriptionService.delete(subscription).subscribe(_ => {
+        this.subscribedCalendarIds = this.subscribedCalendarIds.filter(id => id !== calendarId);
+        this.feedbackService.displaySuccess("Unsubscribed!", "You removed your subscription successfully!");
+      // })
     })
   }
 

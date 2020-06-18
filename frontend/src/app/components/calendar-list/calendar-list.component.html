@@ -28,8 +28,8 @@
           </div>
         </div>
         <div class="calendar-buttons">
-          <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
-                   class="subscribed clickable no-hover-enlarge no-shadow">Subscribe
+          <fa-icon (click)="onClickUnsubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
+                   class="subscribed clickable no-hover-enlarge no-shadow">Unsubscribe
           </fa-icon>
           <fa-icon *ngIf="cal.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
                    routerLink="/form/calendar/{{cal.id}}">
@@ -64,7 +64,7 @@
         </div>
         <div class="calendar-buttons">
           <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
-                   class="clickable no-hover-enlarge no-shadow">Subscribe
+                   class="clickable no-hover-enlarge no-shadow">subscribe
           </fa-icon>
           <fa-icon *ngIf="cal.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
                    routerLink="/form/calendar/{{cal.id}}">

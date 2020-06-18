@@ -22,6 +22,11 @@ export class SubscriptionService {
     return this.httpClient.post<SubscriptionDto>(this.subscriptionUri + "/", subscription);
   }
 
+  delete(subscription: SubscriptionDto): Observable<void> {
+    // return this.httpClient.delete<SubscriptionDto>(this.subscriptionUri + "/"); //FIXME
+    return new Observable<void>();
+  }
+
   getSubscribedCalendars(userId: number): Observable<Array<Calendar>> {
     return this.httpClient.get<Array<Calendar>>(this.subscriptionUri + "/calendars/" + userId);
   }
