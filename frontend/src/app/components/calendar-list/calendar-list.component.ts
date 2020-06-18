@@ -69,51 +69,6 @@ export class CalendarListComponent implements OnInit {
     }
   }
 
-  // onSubmit() {
-  //   let formValue = this.searchForm.value;
-  //   let validationIsPassed = this.validateFormInput(formValue);
-  //   if (validationIsPassed) {
-  //     // submit to service
-  //     console.log("search");
-  //     this.calendarService.searchCalendars(formValue.name).subscribe(async (list) => {
-  //       this.calendars = list;
-  //       let organizationIdSet = new Set<number>();
-  //       this.calendars.forEach(cal => {
-  //         cal.organizationIds.forEach(id => organizationIdSet.add(id));
-  //       })
-  //       for (const id of organizationIdSet) {
-  //         this.organizationsMap.set(id, await this.organizationService.getById(id).toPromise())
-  //       }
-  //
-  //     });
-  //   }
-  // }
-  //
-  //
-  // /**
-  //  *
-  //  * @param formValue
-  //  * returns true/false depending on whether validation succeeds.
-  //  */
-  // validateFormInput(formValue: any) {
-  //   let errors: Array<Error> = new Array<Error>();
-  //   if ((formValue.name == "")) {
-  //     errors.push(new Error("Nothing was given to search."));
-  //   }
-  //
-  //   if (errors.length > 0) {
-  //     console.warn(errors);
-  //     let errorMessage = "";
-  //     for (let error of errors) {
-  //       errorMessage += error.message + " ";
-  //     }
-  //     alert(errorMessage);
-  //     return false;
-  //   }
-  //   return true;
-  // }
-
-
   delete(id: number): void {
     if (confirm(`You are deleting calendar "${this.calendars.find(c => c.id === id).name}". Are you sure?`)) {
       this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
@@ -134,8 +89,11 @@ export class CalendarListComponent implements OnInit {
       let subscription = new SubscriptionDto(0, userName, calendarId);
       this.subscriptionService.create(subscription).subscribe(savedSub => {
         if (savedSub.calendarId != 0 && savedSub.userName != null) {
-          this.subscribedCalendarIds.push(calendarId);
           this.feedbackService.displaySuccess("Subscribed!", "You subscribed successfully to this calendar!");
+          let calendar = this.calendars.filter(cal => {
+            return cal.id == calendarId
+          }).pop();
+          this.subscribedCalendars.push(calendar);
         }
       })
     })
@@ -143,19 +101,22 @@ export class CalendarListComponent implements OnInit {
 
   onClickUnsubscribe(calendarId: number) {
     this.authService.getUser().subscribe(user => {
-      let userName = user.name;
-      let subscription = new SubscriptionDto(0, userName, calendarId);
-      // this.subscriptionService.delete(subscription).subscribe(_ => {
-        this.subscribedCalendarIds = this.subscribedCalendarIds.filter(id => id !== calendarId);
-        this.feedbackService.displaySuccess("Unsubscribed!", "You removed your subscription successfully!");
-      // })
-    })
-  }
+      this.subscriptionService.getSubscriptionsForUser(user.id).subscribe(subscriptions => {
+        let filteredSubscriptions = subscriptions.filter(sub => {
+          return sub.calendarId == calendarId
+        });
+        if (filteredSubscriptions.length == 1) {
+          this.subscriptionService.delete(filteredSubscriptions.pop().id).subscribe(deletedSubscription => {
+            this.feedbackService.displaySuccess("Unsubscribed!", "You successfully unsubscribed from this calendar!");
+            this.subscribedCalendars = this.subscribedCalendars.filter(cal => {
+              return cal.id != calendarId
+            });
+          })
+        } else {
 
-  getSubscribedCalendars() {
-    return this.calendars.filter(
-      cal => this.subscribedCalendarIds.find(id => id === cal.id)
-    );
+        }
+      })
+    })
   }
 
   getOtherCalendars() {
