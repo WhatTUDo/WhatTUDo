@@ -18,13 +18,13 @@
 </div>
 
 <div *ngIf="calendar">
-  <div (click)="minusOneWeek()" class="calendar-navigation desktop">
+  <div (click)="minusOneWeek()" class="calendar-navigation desktop clickable no-hover-enlarge">
     <fa-icon [icon]="faChevronUp">Last week</fa-icon>
   </div>
 
   <div class="calendar-navigation mobile">
-    <fa-icon (click)="minusOneDay()" [icon]="faChevronLeft">Last day</fa-icon>
-    <fa-icon (click)="addOneDay()" [icon]="faChevronRight">Next day</fa-icon>
+    <fa-icon (click)="minusOneDay()" [icon]="faChevronLeft" class="clickable no-hover-enlarge">Last day</fa-icon>
+    <fa-icon (click)="addOneDay()" [icon]="faChevronRight" class="clickable no-hover-enlarge">Next day</fa-icon>
   </div>
 
   <div class="calendar mobile">
@@ -91,7 +91,7 @@
     </div>
   </div>
 
-  <div (click)="addOneWeek()" class="calendar-navigation desktop">
+  <div (click)="addOneWeek()" class="calendar-navigation desktop clickable no-hover-enlarge">
     <fa-icon [icon]="faChevronDown">Next week</fa-icon>
   </div>
 </div>

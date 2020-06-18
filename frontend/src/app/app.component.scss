@@ -1,7 +1,7 @@
 @import "../var.scss";
 
-:host > * {
-  display: block;
+:host {
+  height: 100vh;
 }
 
 *~router-outlet {
@@ -10,6 +10,6 @@
 
 .container {
   @media screen and (min-width: $mobile-breakpoint) {
-    min-height: calc(100% - 72pt - 40pt);
+    height: calc(100vh - 72pt - 40pt);
   }
 }

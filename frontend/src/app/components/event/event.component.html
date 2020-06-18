@@ -31,7 +31,7 @@
         </div>
       </div>
       <div>
-        <div class="participation-status grid-one-third also-on-mobile no-gap">
+        <div class="participation-status actions-one-third">
           <div class="participation-status-item"
                [style.color]="userParticipationStatus===AttendanceStatusPossibilities.ATTENDING?'var(--accent)':undefined">
             <div class="participation-count">{{participants.attending.length}}</div>
@@ -48,14 +48,14 @@
             <div class="participation-label">Declined</div>
           </div>
         </div>
-        <div class="participation-button-container grid-one-third also-on-mobile no-gap">
-          <button (click)="participate(AttendanceStatusPossibilities.ATTENDING)" class="button-blue btn-lg">
+        <div class="participation-button-container actions-one-third">
+          <button (click)="participate(AttendanceStatusPossibilities.ATTENDING)" class="button-blue">
             Attend
           </button>
-          <button (click)="participate(AttendanceStatusPossibilities.INTERESTED)" class="button-yellow btn-lg">
+          <button (click)="participate(AttendanceStatusPossibilities.INTERESTED)" class="button-yellow">
             Interested
           </button>
-          <button (click)="participate(AttendanceStatusPossibilities.DECLINED)" class="button-red btn-lg">
+          <button (click)="participate(AttendanceStatusPossibilities.DECLINED)" class="button-red">
             Decline
           </button>
         </div>
