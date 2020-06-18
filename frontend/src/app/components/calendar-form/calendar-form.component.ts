@@ -10,6 +10,7 @@ import {Calendar} from '../../dtos/calendar';
 import {Organization} from '../../dtos/organization';
 import {observable} from "rxjs";
 import {CreateCalendar} from "../../dtos/CreateCalendar";
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-calendar-form',
@@ -28,13 +29,15 @@ export class CalendarFormComponent implements OnInit {
 
   organizations: Array<Organization>;
   faChevronLeft = faChevronLeft;
+  private selectedImage: File;
 
   constructor(
     private route: ActivatedRoute,
     private calendarService: CalendarService,
     private organizationService: OrganizationService,
     private location: Location,
-    private select: MatSelectModule
+    private select: MatSelectModule,
+    public globals: Globals
   ) {
   }
 
@@ -126,6 +129,17 @@ export class CalendarFormComponent implements OnInit {
   private compare(id1: number, id2: number): boolean {
     console.log("compared" + id1 + " with " + id2);
     return id1 && id2 ? id1 === id2 : false;
+  }
+
+  selectImage(event) {
+    this.selectedImage = event.target.files.item(0);
+  }
+
+  uploadImage() {
+    this.organizationService.uploadOrganizationAvatar(this.calendar.id, this.selectedImage).subscribe(resp => {
+      // @ts-ignore
+      this.calendar.coverImageUrl = resp.url;
+    });
   }
 
 }

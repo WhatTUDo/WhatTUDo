@@ -15,6 +15,17 @@
   }
 }
 
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 8pt;
+}
+
+label[for="calendar-avatar"] {
+  display: none;
+}
+
 .mat-form-container {
   background-color: $white;
   border-radius: $rounded-radius;

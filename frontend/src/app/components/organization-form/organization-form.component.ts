@@ -70,10 +70,6 @@ export class OrganizationFormComponent implements OnInit {
         });
   }
 
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
-  }
-
   selectImage(event) {
     this.selectedImage = event.target.files.item(0);
   }
