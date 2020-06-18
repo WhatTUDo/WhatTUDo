@@ -9,52 +9,73 @@
       <fa-icon [icon]="faPlus" routerLink="/form/calendar"></fa-icon>
     </div>
   </div>
-  <form (keyup.enter)="onSubmit()" [formGroup]="searchForm" class="form input-button-combo">
-    <label for="calendar.name"></label>
-    <input class="form-control" formControlName="name" id="calendar.name" placeholder="Search..." type="text">
-    <button class="button-solid no-hover-enlarge" type="submit">Filter</button>
-  </form>
-  <div>
-    <div *ngFor="let cal of calendars" class="calendar">
-      <div class="calendar-details">
-        <div routerLink="/calendar/{{cal.id}}">
-          <div class="calendar-name clickable no-shadow no-hover-enlarge">{{cal.name}}</div>
-        </div>
-        <div>
-          <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
-            <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-shadow no-hover-enlarge">
-              <img alt="" class="avatar avatar-ultra-small" src="{{getOrganizationAvatarLink(orgId, 64)}}">
-              <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+  <div *ngIf="subscribedCalendarIds !== undefined">
+    <div>
+      <h3>My Calendars</h3>
+      <div *ngIf="subscribedCalendarIds.length===0">You have no subscribed calenders yet.</div>
+      <div *ngFor="let cal of getSubscribedCalendars()" class="calendar">
+        <div class="calendar-details">
+          <div routerLink="/calendar/{{cal.id}}">
+            <div class="calendar-name clickable no-shadow no-hover-enlarge">{{cal.name}}</div>
+          </div>
+          <div>
+            <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
+              <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-shadow no-hover-enlarge">
+                <img alt="" class="avatar avatar-ultra-small" src="{{getOrganizationAvatarLink(orgId, 64)}}">
+                <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+              </div>
             </div>
           </div>
         </div>
+        <div class="calendar-buttons">
+          <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
+                   class="subscribed clickable no-hover-enlarge no-shadow">Subscribe
+          </fa-icon>
+          <fa-icon *ngIf="cal.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
+                   routerLink="/form/calendar/{{cal.id}}">
+            Edit Calendar
+          </fa-icon>
+          <fa-icon *ngIf="cal.canEdit" (click)="delete(cal.id)" [icon]="faTimesCircle"
+                   class="clickable no-hover-enlarge no-shadow">
+            Remove Calendar
+          </fa-icon>
+        </div>
       </div>
-      <div class="calendar-buttons">
-        <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
-                 class="clickable no-hover-enlarge no-shadow">Subscribe
-        </fa-icon>
-        <fa-icon *ngIf="cal.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
-                 routerLink="/form/calendar/{{cal.id}}">
-          Edit Calendar
-        </fa-icon>
-        <fa-icon *ngIf="cal.canEdit" (click)="delete(cal.id)" [icon]="faTimesCircle"
-                 class="clickable no-hover-enlarge no-shadow">
-          Remove Calendar
-        </fa-icon>
+    </div>
+    <div *ngIf="getOtherCalendars().length > 0 || otherCalenderFilteredBy">
+      <h3>All Calendars</h3>
+      <div class="filter">
+        <label for="calendar.name"></label>
+        <input class="form-control" (input)="filter($event)" id="calendar.name" placeholder="Filter..." type="text">
+      </div>
+      <div *ngFor="let cal of getOtherCalendars()" class="calendar">
+        <div class="calendar-details">
+          <div routerLink="/calendar/{{cal.id}}">
+            <div class="calendar-name clickable no-shadow no-hover-enlarge">{{cal.name}}</div>
+          </div>
+          <div>
+            <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
+              <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-shadow no-hover-enlarge">
+                <img alt="" class="avatar avatar-ultra-small" src="{{getOrganizationAvatarLink(orgId, 64)}}">
+                <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="calendar-buttons">
+          <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
+                   class="clickable no-hover-enlarge no-shadow">Subscribe
+          </fa-icon>
+          <fa-icon *ngIf="cal.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
+                   routerLink="/form/calendar/{{cal.id}}">
+            Edit Calendar
+          </fa-icon>
+          <fa-icon *ngIf="cal.canEdit" (click)="delete(cal.id)" [icon]="faTimesCircle"
+                   class="clickable no-hover-enlarge no-shadow">
+            Remove Calendar
+          </fa-icon>
+        </div>
       </div>
     </div>
   </div>
-  <!--  <div>-->
-  <!--    <h2>New Calendar</h2>-->
-  <!--    <label for="calendarName">-->
-  <!--      Name-->
-  <!--    </label>-->
-  <!--    <div class="input-button-combo">-->
-  <!--      <input #calendarName id="calendarName">-->
-  <!--      <button (click)="add(calendarName.value, [], [1]); calendarName.value=''"-->
-  <!--              class="button-solid no-hover-enlarge">-->
-  <!--        Create-->
-  <!--      </button>-->
-  <!--    </div>-->
-  <!--  </div>-->
 </div>

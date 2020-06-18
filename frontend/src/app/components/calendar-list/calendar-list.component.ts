@@ -19,7 +19,7 @@ import {SubscriptionDto} from "../../dtos/subscriptionDto";
 })
 export class CalendarListComponent implements OnInit {
   calendars: Calendar[] = [];
-  subscribedCalendarIds: number[] = this.calendars.map(c => c.id);
+  subscribedCalendarIds: number[];
   organizationsMap: Map<number, Organization> = new Map();
   searchForm = new FormGroup({
     name: new FormControl('')
@@ -29,6 +29,7 @@ export class CalendarListComponent implements OnInit {
   faCog = faCog;
   faPlus = faPlus;
   faBookmark = faBookmark;
+  private otherCalenderFilteredBy: string = "";
 
 
   constructor(
@@ -37,12 +38,15 @@ export class CalendarListComponent implements OnInit {
     private organizationService: OrganizationService,
     private subscriptionService: SubscriptionService,
     private feedbackService: FeedbackService,
-    private authService: AuthService) {
-    this.getAllCalendars();
+    public authService: AuthService) {
+    this.getAllCalendars().then();
+
   }
 
   async getAllCalendars() {
     this.calendars = await this.calendarService.getAllCalendars().toPromise();
+    //this.subscribedCalendarIds = this.calendars.map(c => c.id); // FIXME: Delete this line when we actually load sub status.
+    this.subscribedCalendarIds = [];
     let organizationIdSet = new Set<number>();
     this.calendars.forEach(cal => {
       cal.organizationIds.forEach(id => organizationIdSet.add(id));
@@ -55,49 +59,49 @@ export class CalendarListComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit() {
-    let formValue = this.searchForm.value;
-    let validationIsPassed = this.validateFormInput(formValue);
-    if (validationIsPassed) {
-      // submit to service
-      console.log("search");
-      this.calendarService.searchCalendars(formValue.name).subscribe(async (list) => {
-        this.calendars = list;
-        let organizationIdSet = new Set<number>();
-        this.calendars.forEach(cal => {
-          cal.organizationIds.forEach(id => organizationIdSet.add(id));
-        })
-        for (const id of organizationIdSet) {
-          this.organizationsMap.set(id, await this.organizationService.getById(id).toPromise())
-        }
-
-      });
-    }
-  }
-
-
-  /**
-   *
-   * @param formValue
-   * returns true/false depending on whether validation succeeds.
-   */
-  validateFormInput(formValue: any) {
-    let errors: Array<Error> = new Array<Error>();
-    if ((formValue.name == "")) {
-      errors.push(new Error("Nothing was given to search."));
-    }
-
-    if (errors.length > 0) {
-      console.warn(errors);
-      let errorMessage = "";
-      for (let error of errors) {
-        errorMessage += error.message + " ";
-      }
-      alert(errorMessage);
-      return false;
-    }
-    return true;
-  }
+  // onSubmit() {
+  //   let formValue = this.searchForm.value;
+  //   let validationIsPassed = this.validateFormInput(formValue);
+  //   if (validationIsPassed) {
+  //     // submit to service
+  //     console.log("search");
+  //     this.calendarService.searchCalendars(formValue.name).subscribe(async (list) => {
+  //       this.calendars = list;
+  //       let organizationIdSet = new Set<number>();
+  //       this.calendars.forEach(cal => {
+  //         cal.organizationIds.forEach(id => organizationIdSet.add(id));
+  //       })
+  //       for (const id of organizationIdSet) {
+  //         this.organizationsMap.set(id, await this.organizationService.getById(id).toPromise())
+  //       }
+  //
+  //     });
+  //   }
+  // }
+  //
+  //
+  // /**
+  //  *
+  //  * @param formValue
+  //  * returns true/false depending on whether validation succeeds.
+  //  */
+  // validateFormInput(formValue: any) {
+  //   let errors: Array<Error> = new Array<Error>();
+  //   if ((formValue.name == "")) {
+  //     errors.push(new Error("Nothing was given to search."));
+  //   }
+  //
+  //   if (errors.length > 0) {
+  //     console.warn(errors);
+  //     let errorMessage = "";
+  //     for (let error of errors) {
+  //       errorMessage += error.message + " ";
+  //     }
+  //     alert(errorMessage);
+  //     return false;
+  //   }
+  //   return true;
+  // }
 
 
   delete(id: number): void {
@@ -126,7 +130,32 @@ export class CalendarListComponent implements OnInit {
     })
   }
 
+  getSubscribedCalendars() {
+    return this.calendars.filter(
+      cal => this.subscribedCalendarIds.find(id => id === cal.id)
+    );
+  }
 
+  getOtherCalendars() {
+    let calenders = this.calendars.filter(
+      cal => !this.subscribedCalendarIds.find(id => id === cal.id)
+    )
+    if (this.otherCalenderFilteredBy) {
+      calenders = calenders.filter(cal => {
+        const nameMatched = cal.name.toLowerCase().match(this.otherCalenderFilteredBy.toLowerCase());
+        const orgMatched = cal.organizationIds.find(orgId =>
+          this.organizationsMap.get(orgId).name.toLowerCase().match(this.otherCalenderFilteredBy.toLowerCase())
+        )
+        return nameMatched || orgMatched;
+      })
+    }
+    return calenders;
+  }
+
+  filter(event: Event) {
+    // @ts-ignore
+    this.otherCalenderFilteredBy = event.target.value;
+  }
 }
 
 
