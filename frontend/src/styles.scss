@@ -207,6 +207,10 @@ button, input[type=button] {
   justify-content: center;
   align-items: center;
 
+
+  hyphens: none;
+  word-break: normal;
+
   min-height: 24pt;
   min-width: 24pt;
 

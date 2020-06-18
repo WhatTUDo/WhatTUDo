@@ -29,7 +29,8 @@ export class UserService {
     let reducedElement = {
       'id': null,
       'name': user.name,
-      'email': user.email
+      'email': user.email,
+      'password': user.password
     };
 
     return this.httpClient.post(this.usersBaseUri, reducedElement);
