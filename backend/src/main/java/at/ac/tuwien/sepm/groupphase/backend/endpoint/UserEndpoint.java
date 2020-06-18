@@ -167,6 +167,20 @@ public class UserEndpoint {
 
     @PreAuthorize("permitAll()")
     @CrossOrigin
+    @GetMapping("/getByName/{name}")
+    @ApiOperation(value = "Get user by name", authorizations = {@Authorization(value = "apiKey")})
+    public LoggedInUserDto getUserByName(@PathVariable(value = "name") String name){
+     try  { ApplicationUser applicationUser = userService.getUserByName(name);
+        return userMapper.applicationUserToUserDto(applicationUser);
+     } catch (ServiceException e){
+         throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+     }
+    }
+
+
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/recommendedEvents/{id}")
     @ApiOperation(value = "Get recommended Events")

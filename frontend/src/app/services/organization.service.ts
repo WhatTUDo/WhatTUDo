@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {Organization} from '../dtos/organization';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Globals} from '../global/globals';
-import {User} from "../dtos/user";
+import {User} from '../dtos/user';
 
 @Injectable({
   providedIn: 'root'
@@ -58,8 +58,8 @@ export class OrganizationService {
    * @param id
    */
   deleteOrganization(id: number): Observable<number> {
-    console.log("Delete Organization with ID ", id);
-    return this.httpClient.delete<number>(this.organizationBaseUri + "/" + id);
+    console.log('Delete Organization with ID ', id);
+    return this.httpClient.delete<number>(this.organizationBaseUri + '/' + id);
   }
 
   /**
@@ -84,7 +84,7 @@ export class OrganizationService {
     params = params.set('id', String(calendarId));
     return this.httpClient.delete(this.organizationBaseUri + `/${organizationId}/calendars`, {
       params: params
-    })
+    });
   }
 
   /**
@@ -98,8 +98,17 @@ export class OrganizationService {
 
   getOrganizationAvatarLink(organizationId: number, size: number) {
     // Return base64 of a 1x1px transparent gif if no organizationId is given.
-    if (!organizationId) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
-    return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
+    if (!organizationId) {
+      return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+    }
+    return 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
     //TODO: Implement this after backend is done.
+  }
+
+  addMembership(orgaId: number, userId: number, role: string): Observable<any> {
+    let params = new HttpParams();
+    params = params.set('userId', String(userId))
+      .set('role', role);
+    return this.httpClient.put(this.organizationBaseUri + `/addMembership/${orgaId}`,{},{params: params});
   }
 }

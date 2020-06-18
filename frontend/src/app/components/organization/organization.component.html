@@ -34,8 +34,46 @@
       <div class="icon-button clickable no-hover-enlarge no-shadow">
         <fa-icon *ngIf="false" [icon]="faPlus"></fa-icon>
       </div>
+      <div *ngIf="organization.canEdit"
+           (click)="userAddExpanded = !userAddExpanded"
+           class="icon-button clickable no-hover-enlarge no-shadow">
+        <fa-icon *ngIf="!userAddExpanded" [icon]="faPlus"></fa-icon>
+        <fa-icon *ngIf="userAddExpanded" [icon]="faTimes"></fa-icon>
+      </div>
     </div>
-
+    <div *ngIf="organization.canEdit && userAddExpanded" class="add-user-section">
+      <form (ngSubmit)="addMembership()" [formGroup]="addMemberForm">
+      <div class="form-group">
+        <label class="control-label" for="username">Username</label>
+        <div>
+          <input autocomplete="username" class="form-control" formControlName="username"
+                 id="username"
+                 type="text">
+          <div *ngIf="addMemberForm.controls.username.errors" class="jasmine-errored">
+            <small *ngIf="addMemberForm.controls.username.errors.pattern"
+                   class="form-text text-warning">Please enter a username!
+            </small>
+          </div>
+        </div>
+      </div>
+        <div class="form-group">
+          <label class="control-label" for="role">Role</label>
+          <div>
+            <input autocomplete="role" class="form-control" formControlName="role"
+                   id="role"
+                   type="text">
+            <div *ngIf="addMemberForm.controls.role.errors" class="jasmine-errored">
+              <small *ngIf="addMemberForm.controls.role.errors.pattern"
+                     class="form-text text-warning">Please enter a role!
+              </small>
+            </div>
+          </div>
+        </div>
+      </form>
+      <button (click)="onSubmitAddMember()"
+                class="button-solid no-hover-enlarge">Submit
+        </button>
+    </div>
     <div class="organization-member-list">
       <div *ngFor="let member of organizationMembers" class="organization-member">
         <img alt="" class="avatar avatar-small" src="{{getGravatarLink(member.email, 256)}}">

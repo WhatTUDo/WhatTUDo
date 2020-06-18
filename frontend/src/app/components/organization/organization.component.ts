@@ -7,6 +7,8 @@ import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
 import {User} from "../../dtos/user";
 import {UserService} from "../../services/user.service";
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FeedbackService} from '../../services/feedback.service';
 
 @Component({
   selector: 'app-organization',
@@ -21,25 +23,39 @@ export class OrganizationComponent implements OnInit {
   editableCalendars: Calendar[];
   pickedCalendarId: number;
   calendarAddExpanded: boolean = false;
+  userAddExpanded : boolean = false;
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
   faPlus = faPlus;
   faTimes = faTimes;
   faCog = faCog;
   faTimesCircle = faTimesCircle;
+  addMemberForm = new FormGroup({
+    username: new FormControl(''),
+    role: new FormControl('')
+  });
 
   constructor(private organizationService: OrganizationService,
               private calendarService: CalendarService,
               private userService: UserService,
+              private feedbackService: FeedbackService,
+              private formBuilder: FormBuilder,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadOrganization(id);
     this.getAllEditableCalendars();
+    this.addMemberForm = this.formBuilder.group({
+      username: new FormControl('', Validators.required),
+      role: new FormControl('', Validators.required)
+    });
   }
 
   ngOnInit(): void {
   }
-
+  onSubmitAddMember(){
+    this.addMembership();
+    this.userAddExpanded = false;
+  }
   onSubmitAddCalendar(calId: number) {
     this.addCalendar(calId);
     this.calendarAddExpanded = false;
@@ -125,6 +141,21 @@ export class OrganizationComponent implements OnInit {
       })
     }
   }
+
+  addMembership(){
+    this.userService.getUserByName(this.addMemberForm.controls.username.value).subscribe((found:User)=>{
+      this.organizationService.addMembership( this.organization.id,found.id, this.addMemberForm.controls.role.value).subscribe((orga: any) => {
+          this.organization = orga;
+          this.organizationMembers.push(found);
+          this.feedbackService.displaySuccess("Success", "User added as a "+this.addMemberForm.controls.role.value)
+        }, error =>
+          this.feedbackService.displayError("Error", error.error.message )
+      );
+    },error => {
+      this.feedbackService.displayError("Error", error.error.message )
+    });
+
+    }
 
 
 }

@@ -182,14 +182,15 @@ public class OrganizationEndpoint {
 
     }
 
-    @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')")
-    @PutMapping("/addMembership")
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    @PutMapping(value = "/addMembership/{id}")
     @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "create membership", authorizations = {@Authorization(value = "apiKey")})
-    public OrganizationDto addMembership(@PathVariable(value = "userId") Integer userId, @PathVariable(value = "orgaId") Integer orgaId, @PathVariable(value = "role") String role ){
+    public OrganizationDto addMembership(@PathVariable(value = "id") Integer id,@RequestParam(value = "userId") Integer userId, @RequestParam(value = "role") String role ){
         try {
             ApplicationUser applicationUser = userService.findUserById(userId);
-            Organization organization = organizationService.findById(orgaId);
+            Organization organization = organizationService.findById(id);
 
             return organizationMapper.organizationToOrganizationDto(organizationService.addMembership(applicationUser,organization, role));
         }catch (NotFoundException e){
