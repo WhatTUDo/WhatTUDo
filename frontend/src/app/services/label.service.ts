@@ -1,11 +1,9 @@
 import {Injectable} from '@angular/core';
-import {AuthRequest} from "../dtos/auth-request";
 import {Observable} from "rxjs";
-import {CalendarEvent} from "../dtos/calendar-event";
 import {Label} from "../dtos/label";
 import {HttpClient} from "@angular/common/http";
 import {Globals} from "../global/globals";
-import {EventComment} from "../dtos/event-comment";
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +16,22 @@ export class LabelService {
   }
 
   getAll(): Observable<Label[]> {
-
-    console.log('Get all labels');
     return this.httpClient.get<Label[]>(this.labelBaseUri);
+  }
+
+  deleteLabel(id: number): Observable<void> {
+    return this.httpClient.delete<void>(this.labelBaseUri + `/${id}`);
+  }
+
+  createLabel(name: string): Observable<Label> {
+    console.log('Post Label to Server', name);
+    let reducedElement = {
+      'id': null,
+      'name': name,
+      'events': null
+    };
+
+    return this.httpClient.post<Label>(this.labelBaseUri, reducedElement);
   }
 
 }

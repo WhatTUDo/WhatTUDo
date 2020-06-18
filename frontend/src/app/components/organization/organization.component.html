@@ -1,5 +1,5 @@
 <div class="contextual-control">
-  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span *ngIf="organization">Team: {{organization.name}}</span>
 </div>
@@ -18,12 +18,12 @@
     <p></p>
     <div class="organization-action-container">
       <a routerLink="/form/organization/{{organization.id}}">
-        <div *ngIf="organization.canEdit" class="organization-action clickable no-hover-enlarge no-shadow">
+        <div *ngIf="organization.canEdit" class="organization-action clickable no-hover-enlarge">
           Edit team
         </div>
       </a>
       <div *ngIf="organization.canDelete" (click)="deleteOrganization(organization.id)"
-           class="organization-action dangerous clickable no-hover-enlarge no-shadow">
+           class="organization-action dangerous clickable no-hover-enlarge">
         Dissolve team
       </div>
     </div>
@@ -31,7 +31,7 @@
   <div>
     <div class="title-icon-button-combo">
       <h2>People</h2>
-      <div class="icon-button clickable no-hover-enlarge no-shadow">
+      <div class="icon-button clickable no-hover-enlarge">
         <fa-icon *ngIf="false" [icon]="faPlus"></fa-icon>
       </div>
       <div *ngIf="organization.canEdit"
@@ -82,10 +82,10 @@
           <!--          <div class="organization-member-role">{{member.role}}</div>-->
         </div>
         <div class="organization-member-buttons">
-          <div class="clickable no-hover-enlarge no-shadow organization-manage-member-button">
+          <div class="clickable no-hover-enlarge organization-manage-member-button">
             <fa-icon *ngIf="organization.canEdit" [icon]="faCog"></fa-icon>
           </div>
-          <div class="clickable no-hover-enlarge no-shadow organization-kick-member-button">
+          <div class="clickable no-hover-enlarge organization-kick-member-button">
             <fa-icon (click)="removeFromOrg(member.id, organization.id)" *ngIf="organization.canEdit"
                      [icon]="faTimesCircle"></fa-icon>
           </div>
@@ -98,7 +98,7 @@
       <h2>Calendars</h2>
       <div *ngIf="organization.canEdit"
            (click)="calendarAddExpanded = !calendarAddExpanded"
-           class="icon-button clickable no-hover-enlarge no-shadow">
+           class="icon-button clickable no-hover-enlarge">
         <fa-icon *ngIf="!calendarAddExpanded" [icon]="faPlus"></fa-icon>
         <fa-icon *ngIf="calendarAddExpanded" [icon]="faTimes"></fa-icon>
       </div>
@@ -112,20 +112,20 @@
                   value="{{cal.id}}">{{cal.name}}</option>
         </select>
         <button (click)="onSubmitAddCalendar(pickedCalendarId)" [disabled]="!pickedCalendarId"
-                class="button-solid no-hover-enlarge">Submit
+                class="no-hover-enlarge">Submit
         </button>
       </div>
     </div>
     <div>
       <div *ngFor="let cal of organizationCalendars"
            class="organization-calendar">
-        <div class="organization-calendar-details clickable no-hover-enlarge no-shadow"
+        <div class="organization-calendar-details clickable no-hover-enlarge"
              routerLink="/calendar/{{cal.id}}">
           <div class="organization-calendar-name">{{cal.name}}</div>
         </div>
         <div class="organization-calendar-buttons">
           <fa-icon *ngIf="organization.canEdit" (click)="removeCalendar(cal.id)" [icon]="faTimesCircle"
-                   class="clickable no-hover-enlarge no-shadow">
+                   class="clickable no-hover-enlarge">
             Remove Calendar
           </fa-icon>
         </div>

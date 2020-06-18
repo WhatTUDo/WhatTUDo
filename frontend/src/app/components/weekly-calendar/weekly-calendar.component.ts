@@ -3,7 +3,10 @@ import {CalendarEvent} from '../../dtos/calendar-event';
 
 import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
+import {SubscriptionService} from "../../services/subscription.service";
 import {Globals} from "../../global/globals";
+import {Calendar} from "../../dtos/calendar";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-weekly-calendar',
@@ -34,6 +37,12 @@ export class WeeklyCalendarComponent implements OnInit {
   /** min row count for an event so that there's place for text. */
   viewMinRows = 8;
 
+  /** color classes to add **/
+  calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
+
+  filterIsActive = false;
+  subscribeCalendarIds: number[];
+
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
   dateLocale: string;
@@ -45,6 +54,8 @@ export class WeeklyCalendarComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
+    private subscriptionService: SubscriptionService,
+    private authService: AuthService,
     private globals: Globals
   ) {
     this.dateLocale = globals.dateLocale;
@@ -53,6 +64,14 @@ export class WeeklyCalendarComponent implements OnInit {
   ngOnInit(): void {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
+
+    this.authService.getUser().subscribe(user => {
+      this.subscriptionService.getSubscribedCalendars(user.id).subscribe(calendars => {
+        this.subscribeCalendarIds = calendars.map(cal => {
+          return cal.id
+        });
+      })
+    })
 
     this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     this.updateDatetime();
@@ -99,6 +118,22 @@ export class WeeklyCalendarComponent implements OnInit {
         }));
       })
     });
+  }
+
+  filterSubscribedEvents() {
+    if (!this.filterIsActive) {
+      let filteredEventsOfTheWeek = new Map<String, CalendarEvent[]>();
+      this.eventsOfTheWeek.forEach((events, day) => {
+        let filteredEvents = events.filter(event => {
+          return this.subscribeCalendarIds.includes(event.calendarId)
+        });
+        filteredEventsOfTheWeek.set(day, filteredEvents);
+      });
+      this.eventsOfTheWeek = filteredEventsOfTheWeek;
+    } else {
+      this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+    }
+    this.filterIsActive = !this.filterIsActive;
   }
 
   updateDatetime() {
@@ -229,5 +264,9 @@ export class WeeklyCalendarComponent implements OnInit {
    */
   private calcRow(sec) {
     return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
+  }
+
+  getCalendarColor(event: CalendarEvent) {
+    return this.calendarColors[event.calendarId % this.calendarColors.length];
   }
 }

@@ -1,7 +1,7 @@
 @import "../../../var.scss";
 
-form {
-  margin: 16pt 0;
+.filter {
+  margin-bottom: 16pt;
 }
 
 .calendar {
@@ -43,4 +43,8 @@ form {
       margin-left: 4pt;
     }
   }
+}
+
+.subscribed {
+  color: var(--accent);
 }

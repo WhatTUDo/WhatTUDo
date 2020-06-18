@@ -20,11 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +40,7 @@ import java.util.stream.Collectors;
 @RequestMapping(value = EventEndpoint.BASE_URL)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EventEndpoint {
-    static final String BASE_URL = "/events";
+    public static final String BASE_URL = "/events";
     private final EventService eventService;
     private final EventMapper eventMapper;
     private final LabelService labelService;
@@ -226,5 +229,35 @@ public class EventEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
+    public @ResponseBody byte[] getCoverImage(@PathVariable int id) {
+        try {
+            Byte[] coverImageBlob = eventService.findById(id).getCoverImage();
+            byte[] byteArray = new byte[coverImageBlob.length];
+            for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            return byteArray;
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
 
+    @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
+    @CrossOrigin
+    @PostMapping("/{id}/cover")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto setCoverImage(@PathVariable int id, @RequestParam("imagefile") MultipartFile file) {
+        try {
+            Event event = eventService.setCoverImage(eventService.findById(id), file.getBytes());
+            return eventMapper.eventToEventDto(event);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, e.getMessage(), e);
+        }
+    }
 }

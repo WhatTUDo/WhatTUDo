@@ -10,6 +10,7 @@
     padding: 2pt 8pt;
     border-radius: $rounded-radius;
     margin-right: 8pt;
+    font-size: 16pt;
 
     fa-icon {
       font-size: 0.75em;
@@ -23,7 +24,11 @@
 
   background-color: var(--shadow);
 
-  height: 40em;
+  height: $mobile-object-full-height;
+
+  @media (screen and min-width: $mobile-breakpoint) {
+    height: 100%
+  }
 
   border-radius: $rounded-radius;
 
@@ -51,22 +56,22 @@
 
 .details-stack {
   > *:not(h2) {
-    margin-bottom: 32pt;
+    margin-bottom: 16pt;
   }
 }
+
+.actions-one-third {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 
 .participation-button-container {
   text-align: center;
   width: 100%;
 
   button {
-    margin: 0 8pt;
-  }
-
-  @media (screen and min-width: $mobile-breakpoint) {
-    button {
-      margin: 0 16pt;
-    }
+    margin: 0 4pt;
   }
 }
 

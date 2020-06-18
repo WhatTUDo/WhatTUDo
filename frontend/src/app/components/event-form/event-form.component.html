@@ -1,5 +1,5 @@
 <div class="contextual-control">
-  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
 </div>
 <div>
@@ -15,7 +15,7 @@
         <div class="input-button-combo">
           <input type="file" name="event-promo-image-upload"
                  id="event-promo-image-upload" accept="{{this.globals.allowedPromoImageMimeTypes.join(',')}}">
-          <button type="submit" class="button-solid no-hover-enlarge no-shadow">Upload</button>
+          <button type="submit" class="no-hover-enlarge">Upload</button>
         </div>
       </form>
       <h4>Event Details</h4>
@@ -79,7 +79,7 @@
         <label for="label-picker">Labels: </label>
 
         <div id="label-picker">
-          <div class="label-item clickable no-hover-enlarge no-shadow" (click)="toggleLabel(label)"
+          <div class="label-item clickable no-hover-enlarge" (click)="toggleLabel(label)"
                *ngFor="let label of allLabels">
             <fa-icon [icon]="labelIsSelected(label)?faCheckCircle:faCircle"></fa-icon>
             {{label.name}}

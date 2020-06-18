@@ -1,0 +1,31 @@
+@import "../../../var.scss";
+
+#label-container {
+  margin-bottom: 12pt;
+  align-items: center;
+  display: flex;
+
+  .label-item {
+    border: 1px solid var(--text);
+    padding: 2pt 8pt;
+    border-radius: $rounded-radius;
+    margin-right: 8pt;
+    font-size: 16pt;
+
+    fa-icon {
+      font-size: 0.75em;
+    }
+  }
+
+  .label-buttons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    * {
+      font-size: 16pt;
+      margin-left: 4pt;
+    }
+  }
+}

@@ -207,4 +207,17 @@ public class SimpleCalendarService implements CalendarService {
             throw new ValidationException(e.getMessage());
         }
     }
+
+
+    @Override
+    public Calendar setCoverImage(Calendar calendar, byte[] imageBlob) {
+        try {
+            Byte[] byteArray = new Byte[imageBlob.length];
+            for (int i = 0; i < imageBlob.length; i++) byteArray[i] = imageBlob[i];
+            calendar.setCoverImage(byteArray);
+            return calendarRepository.save(calendar);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
 }

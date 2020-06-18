@@ -17,7 +17,9 @@
 
 .grid-one-sixth {
   display: grid;
+  height: 100%;
   grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 16pt 36pt 1fr;
 }
 
 .week-day-label {
@@ -66,8 +68,6 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
   grid-auto-columns: minmax(0, 1fr);
 
   width: 100%;
-  height: 360pt;
-
 
   &.weekend-lane-container {
     display: flex;
@@ -99,13 +99,36 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
 }
 
 .calendar-event {
-  border-left: 4pt solid $blue;
-  background-color: transparentize($blue, 0.75);
+  --event-color: 124, 201, 242;
+
+  &.blue {
+    --event-color: 124, 201, 242;
+  }
+
+  &.green {
+    --event-color: 126, 222, 163;
+  }
+
+  &.yellow {
+    --event-color: 250, 205, 107;
+  }
+
+  &.orange {
+    --event-color: 232, 152, 109;
+  }
+
+  &.red {
+    --event-color: 242, 133, 124;
+  }
+
+  &.violet {
+    --event-color: 173, 111, 189;
+  }
+
+  border-left: 4pt solid rgb(var(--event-color));
+  background-color: rgba(var(--event-color), 0.25);
 
   cursor: pointer;
-
-  hyphens: auto;
-  word-break: break-word;
 
   position: relative;
 

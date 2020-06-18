@@ -1,5 +1,5 @@
 <div class="contextual-control">
-  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span *ngIf="calendar">Calendar: {{calendar.name}}</span>
 </div>
@@ -12,19 +12,19 @@
     {{displayingWeek[3].getFullYear()}}
   </span>
   </h2>
-  <div (click)="redirectToAddEvent(calendar.id)" class="icon-button clickable no-hover-enlarge no-shadow">
+  <div (click)="redirectToAddEvent(calendar.id)" class="icon-button clickable no-hover-enlarge">
     <fa-icon [icon]="faPlus"></fa-icon>
   </div>
 </div>
 
 <div *ngIf="calendar">
-  <div (click)="minusOneWeek()" class="calendar-navigation desktop">
+  <div (click)="minusOneWeek()" class="calendar-navigation desktop clickable no-hover-enlarge">
     <fa-icon [icon]="faChevronUp">Last week</fa-icon>
   </div>
 
   <div class="calendar-navigation mobile">
-    <fa-icon (click)="minusOneDay()" [icon]="faChevronLeft">Last day</fa-icon>
-    <fa-icon (click)="addOneDay()" [icon]="faChevronRight">Next day</fa-icon>
+    <fa-icon (click)="minusOneDay()" [icon]="faChevronLeft" class="clickable no-hover-enlarge">Last day</fa-icon>
+    <fa-icon (click)="addOneDay()" [icon]="faChevronRight" class="clickable no-hover-enlarge">Next day</fa-icon>
   </div>
 
   <div class="calendar mobile">
@@ -91,7 +91,7 @@
     </div>
   </div>
 
-  <div (click)="addOneWeek()" class="calendar-navigation desktop">
+  <div (click)="addOneWeek()" class="calendar-navigation desktop clickable no-hover-enlarge">
     <fa-icon [icon]="faChevronDown">Next week</fa-icon>
   </div>
 </div>

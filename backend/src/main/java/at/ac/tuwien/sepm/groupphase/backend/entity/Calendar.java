@@ -36,6 +36,10 @@ public class Calendar extends BaseEntity {
     @Nullable
     private String description;
 
+    @ToString.Exclude
+    @Lob
+    private Byte[] coverImage;
+
     public Calendar(String name, List<Organization> organizations, String description) {
         this.name = name;
         this.organizations = organizations;
