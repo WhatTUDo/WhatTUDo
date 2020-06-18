@@ -218,7 +218,7 @@ a {
   }
 }
 
-button {
+button, input[type=button] {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -229,13 +229,14 @@ button {
   padding: 4pt 8pt;
 
   transition: transform 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
-  color: $black;
   border: none;
   border-radius: $rounded-radius;
   box-sizing: border-box;
   box-shadow: 1px 1px 2px var(--shadow);
   background-image: var(--button-gradient);
-  background-color: var(--background);
+
+  background-color: var(--text);
+  color: var(--background);
 
   user-select: none;
 
@@ -266,18 +267,22 @@ button {
   }
 
   &.button-green {
+    color: var($black);
     background-color: $green;
   }
 
   &.button-red {
+    color: var($black);
     background-color: $red;
   }
 
   &.button-blue {
+    color: var($black);
     background-color: $blue;
   }
 
   &.button-yellow {
+    color: var($black);
     background-color: $yellow;
   }
 
@@ -285,11 +290,6 @@ button {
     border: 1.25pt solid var(--text);
     color: var(--text);
     background-image: none;
-  }
-
-  &.button-solid {
-    background-color: var(--text);
-    color: var(--background);
   }
 
   &.full-width-form-button {

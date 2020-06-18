@@ -11,6 +11,6 @@
       <input type="radio" name="newEvent" [value]="i" (click)="onSelect(i)" [checked]="i === selectedDateIndex">
       {{getEventDateAndTimeString(reducedEvent)}}
     </label>
-    <button type="submit" class="button-solid" [disabled]="selectedDateIndex === null">Update</button>
+    <button type="submit" [disabled]="selectedDateIndex === null">Update</button>
   </form>
 </div>

@@ -17,7 +17,7 @@
   <div class="input-button-combo">
     <input type="file" name="organization-avatar"
            id="organization-avatar" accept="{{this.globals.allowedAvatarMimeTypes.join(',')}}">
-    <button type="submit" class="button-solid no-hover-enlarge no-shadow">Upload</button>
+    <button type="submit" class="no-hover-enlarge no-shadow">Upload</button>
   </div>
 </form>
 
@@ -29,7 +29,7 @@
     <div class="input-button-combo">
       <input #organizationName [(ngModel)]="organization.name" class="form-control" id="organization.name" type=text>
       <button (click)="onSubmit(organizationName.value)"
-              class="submit-button button-solid">Update
+              class="submit-button">Update
       </button>
     </div>
   </div>
