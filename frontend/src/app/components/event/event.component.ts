@@ -17,6 +17,7 @@ import {Calendar} from "../../dtos/calendar";
 import {CalendarService} from "../../services/calendar.service";
 import {OrganizationService} from "../../services/organization.service";
 import {AttendanceStatusPossibilities} from "../../dtos/AttendanceStatusPossibilities";
+import {Globals} from "../../global/globals";
 
 @Component({
     selector: 'app-event',
@@ -51,6 +52,7 @@ export class EventComponent implements OnInit {
                 private feedbackService: FeedbackService,
                 private attendanceStatusService: AttendanceStatusService,
                 private authService: AuthService,
+                public globals: Globals,
                 private route: ActivatedRoute) {
         let id: number = Number(this.route.snapshot.paramMap.get('id'));
         this.loadCalendarEvent(id);
@@ -185,10 +187,6 @@ export class EventComponent implements OnInit {
         array.push(label1, label2);
 
         return array;
-    }
-
-    getEventPromoImageLink(eventId: number) {
-        return this.eventService.getEventPromoImageLink(eventId);
     }
 
     getOrganizationAvatarLink(organizationId: number, size: number) {

@@ -3,7 +3,6 @@
 :host {
   position: fixed;
   bottom: 0;
-  padding: 16pt;
 
   width: 100%;
 
@@ -16,6 +15,7 @@
 .feedback-container {
   background-color: $green;
   z-index: 100;
+  padding: 4pt;
 
   @media screen and (min-width: $mobile-breakpoint) {
     border-radius: $rounded-radius;

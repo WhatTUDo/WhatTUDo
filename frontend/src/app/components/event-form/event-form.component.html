@@ -7,14 +7,16 @@
   <h2>{{this.title}}</h2>
   <div class="row">
     <div class="col-md-8">
-      <img class="event-promo-image mobile-full-width" src="{{getEventPromoImageLink(event.id)}}">
-      <form *ngIf="event">
+      <img class="event-promo-image mobile-full-width"
+           src="{{calendarEvent.coverImageUrl}}">
+      <form *ngIf="calendarEvent" (ngSubmit)="uploadImage()">
         <label for="event-promo-image-upload">
-          Avatar
+          PromoImage
         </label>
         <div class="input-button-combo">
           <input type="file" name="event-promo-image-upload"
-                 id="event-promo-image-upload" accept="{{this.globals.allowedPromoImageMimeTypes.join(',')}}">
+                 id="event-promo-image-upload" accept="{{this.globals.allowedPromoImageMimeTypes.join(',')}}"
+                 (change)="selectImage($event)">
           <button type="submit" class="no-hover-enlarge">Upload</button>
         </div>
       </form>
@@ -23,18 +25,18 @@
       <div class="form-group">
 
         <label for="event.calendarId">Calendar: * </label>
-        <select [(ngModel)]="event.calendarId" class="form-control" id="event.calendarId">
-          <option *ngFor="let cal of editableCalendars" [selected]="cal.id === event.calendarId"
+        <select [(ngModel)]="calendarEvent.calendarId" class="form-control" id="event.calendarId">
+          <option *ngFor="let cal of editableCalendars" [selected]="cal.id === calendarEvent.calendarId"
                   value="{{cal.id}}">{{cal.name}}</option>
         </select>
         <hr>
 
         <label for="event.name">Name: *</label>
-        <input [(ngModel)]="event.name" class="form-control" id="event.name" type="text">
+        <input [(ngModel)]="calendarEvent.name" class="form-control" id="event.name" type="text">
         <hr>
 
         <label for="event.description">Description:</label>
-        <textarea [(ngModel)]="event.description" class="form-control" id="event.description" type="text">
+        <textarea [(ngModel)]="calendarEvent.description" class="form-control" id="event.description" type="text">
         </textarea>
         <hr>
 
@@ -42,7 +44,7 @@
           <div class="col-sm-6 mat-datepicker-container">
             <mat-form-field>
               <mat-label for="event.startDateTime">Start Date & Time</mat-label>
-              <input [(ngModel)]="event.startDateTime" [ngxMatDatetimePicker]="startDateTimePicker"
+              <input [(ngModel)]="calendarEvent.startDateTime" [ngxMatDatetimePicker]="startDateTimePicker"
                      id="event.startDateTime"
                      (change)="getEventConflicts()"
                      matInput>
@@ -59,7 +61,7 @@
           <div class="col-sm-6 mat-datepicker-container">
             <mat-form-field>
               <mat-label for="event.endDateTime">End Date & Time</mat-label>
-              <input [(ngModel)]="event.endDateTime" [ngxMatDatetimePicker]="endDateTimePicker"
+              <input [(ngModel)]="calendarEvent.endDateTime" [ngxMatDatetimePicker]="endDateTimePicker"
                      id="event.endDateTime"
                      (change)="getEventConflicts()"
                      matInput>
@@ -89,15 +91,15 @@
       <hr>
 
       <label for="location-picker">Location</label>
-      <input [(ngModel)]="event.location" id="location" name="location" type="hidden">
+      <input [(ngModel)]="calendarEvent.location" id="location" name="location" type="hidden">
       <div id="location-picker">
         <app-event-location (locationSaved)="saveLocationToEvent($event)"
-                            [location]="event.location"></app-event-location>
+                            [location]="calendarEvent.location"></app-event-location>
       </div>
       <hr>
       <button (click)="onSubmit()" class="button-green clickable btn-lg">Submit</button>
       <br/>
-      <button (click) = "deleteEvent()" class="button-red clickable btn-lg">Delete</button>
+      <button (click)="deleteEvent()" class="button-red clickable btn-lg">Delete</button>
     </div>
     <div class="col-md-4">
       <h4>Suggestions</h4>
@@ -108,7 +110,8 @@
       <div class="suggestions-container">
         <div class="suggestion-item" *ngIf="conflictExists">
           <app-event-conflict-resolver
-            [event]="event" [collisionResponse]="collisionResponse" (change)="updateFromConflictResolver($event)">
+            [event]="calendarEvent" [collisionResponse]="collisionResponse"
+            (change)="updateFromConflictResolver($event)">
           </app-event-conflict-resolver>
         </div>
       </div>

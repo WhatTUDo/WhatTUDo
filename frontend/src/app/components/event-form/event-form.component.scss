@@ -39,6 +39,8 @@ form {
   background-color: var(--shadow);
   border-radius: $rounded-radius;
   margin-bottom: 8pt;
+  object-fit: cover;
+  filter: blur();
 }
 
 .event-form-container {

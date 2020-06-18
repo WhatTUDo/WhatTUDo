@@ -1,6 +1,7 @@
 <div class="promo-event-list">
   <div *ngFor="let event of eventList" class="promo-event">
-    <div class="promo-event-details clickable no-hover-enlarge" routerLink="event/{{event.id}}">
+    <div class="promo-event-details clickable no-hover-enlarge" routerLink="event/{{event.id}}"
+         [style.background-image]="'url('+globals.backendUri+this.event.coverImageUrl.slice(1)+')'">
       <div class="promo-event-time">{{getEventDateAndTimeString(event)}}</div>
       <div class="promo-event-name">{{event.name}}</div>
       <div class="message" *ngIf="event.description">{{event.description}}</div>

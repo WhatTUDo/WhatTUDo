@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {EventService} from "../../services/event.service";
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-promo-event-list',
@@ -12,7 +13,8 @@ export class PromoEventListComponent implements OnInit {
 
   @Input() eventList: CalendarEvent[];
 
-  constructor(private eventService: EventService) {
+  constructor(private eventService: EventService,
+              public globals: Globals) {
   }
 
   ngOnInit(): void {

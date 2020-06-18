@@ -34,7 +34,7 @@ export class EventFormComponent implements OnInit {
     stepMinute: 5
   }
 
-  event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null, null, null, null);
+  calendarEvent: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null, null, null, null);
   title: String = "NEW EVENT"
 
   conflictExists: boolean = false;
@@ -52,6 +52,7 @@ export class EventFormComponent implements OnInit {
   faCircle = faCircle;
   faCheckCircle = faCheckCircle;
   collisionResponse: CollisionResponse;
+  private selectedImage: File;
 
   constructor(
     private eventService: EventService,
@@ -65,11 +66,12 @@ export class EventFormComponent implements OnInit {
     if (id) {
       this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
         if (event) {
-          this.event = event;
+          this.calendarEvent = event;
           this.isUpdate = true;
           this.title = "UPDATE EVENT";
           this.getEventLabels(id);
           this.ev_id = id;
+          this.calendarEvent.coverImageUrl = globals.backendUri+this.calendarEvent.coverImageUrl.slice(1);
         }
       });
     } else {
@@ -77,7 +79,7 @@ export class EventFormComponent implements OnInit {
     }
     const calendarId = +this.route.snapshot.queryParamMap?.get('calendarId');
     if (calendarId) {
-      this.event.calendarId = calendarId;
+      this.calendarEvent.calendarId = calendarId;
     }
     this.getAllEditableCalendars()
   }
@@ -118,11 +120,11 @@ export class EventFormComponent implements OnInit {
   }
 
   onSubmit() {
-    let validationIsPassed = this.validateFormInput(this.event);
+    let validationIsPassed = this.validateFormInput(this.calendarEvent);
     if (validationIsPassed) {
       // submit to eventService
       if (this.isUpdate) {
-        this.eventService.putEvent(this.event).subscribe(response => {
+        this.eventService.putEvent(this.calendarEvent).subscribe(response => {
             this.feedbackService.displaySuccess("Updated Event!", response.toString());
             console.log("Updated event: " + response);
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
@@ -136,7 +138,7 @@ export class EventFormComponent implements OnInit {
           });
       } else {
 
-        this.eventService.postEvent(this.event).subscribe(response => {
+        this.eventService.postEvent(this.calendarEvent).subscribe(response => {
             console.log("Saved event: " + response);
             this.feedbackService.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
@@ -153,9 +155,9 @@ export class EventFormComponent implements OnInit {
   }
 
   deleteEvent() {
-    if (confirm(`You are deleting "${this.event.name}". Are you sure?`)) {
-      this.eventService.deleteEvent(this.event.id).subscribe(() => {
-        this.feedbackService.displaySuccess("Successfully deleted", "Event " + this.event.name + " is deleted");
+    if (confirm(`You are deleting "${this.calendarEvent.name}". Are you sure?`)) {
+      this.eventService.deleteEvent(this.calendarEvent.id).subscribe(() => {
+        this.feedbackService.displaySuccess("Successfully deleted", "Event " + this.calendarEvent.name + " is deleted");
       }, err => {
         console.warn(err);
         this.feedbackService.displayError("Error", err.error.message);
@@ -179,7 +181,7 @@ export class EventFormComponent implements OnInit {
     if (!event.endDateTime) {
       errors.push(new Error("An end date and time must be specified!"));
     }
-    if (!this.event.location) {
+    if (!this.calendarEvent.location) {
       errors.push(new Error("A location must be specified!"));
     }
     if (!event.calendarId) {
@@ -200,9 +202,9 @@ export class EventFormComponent implements OnInit {
   }
 
   saveLocationToEvent(location: Location) {
-    this.event.location = location;
-    if (this.event.location) {
-      console.log("Saved location with name: ", this.event.location.name);
+    this.calendarEvent.location = location;
+    if (this.calendarEvent.location) {
+      console.log("Saved location with name: ", this.calendarEvent.location.name);
     }
 
   }
@@ -219,10 +221,10 @@ export class EventFormComponent implements OnInit {
 
 
   getEventConflicts() {
-    if (this.event.startDateTime && this.event.endDateTime) {
-      let helperEvent = this.event;
-      helperEvent.name = this.event.name ? this.event.name : "";
-      helperEvent.description = this.event.description ? this.event.description : "";
+    if (this.calendarEvent.startDateTime && this.calendarEvent.endDateTime) {
+      let helperEvent = this.calendarEvent;
+      helperEvent.name = this.calendarEvent.name ? this.calendarEvent.name : "";
+      helperEvent.description = this.calendarEvent.description ? this.calendarEvent.description : "";
       this.eventCollisionService.getEventCollisions(helperEvent).subscribe((collisionResponse) => {
         this.collisionResponse = collisionResponse;
         this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
@@ -237,12 +239,19 @@ export class EventFormComponent implements OnInit {
   }
 
   updateFromConflictResolver(dates: Date[]) {
-    this.event.startDateTime = dates[0];
-    this.event.endDateTime = dates[1];
+    this.calendarEvent.startDateTime = dates[0];
+    this.calendarEvent.endDateTime = dates[1];
     this.conflictExists = false;
   }
 
-  getEventPromoImageLink(id) {
-    return this.eventService.getEventPromoImageLink(id);
+  selectImage(event) {
+    this.selectedImage = event.target.files.item(0);
+  }
+
+  uploadImage() {
+    this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe(resp => {
+      // @ts-ignore
+      this.calendarEvent.coverImageUrl = resp.url;
+    });
   }
 }

@@ -13,6 +13,7 @@ export class CalendarEvent {
     public labels: Array<Label>,
     public comments: Array<EventComment>,
     public calendarId: number,
+    public coverImageUrl: string,
     public canEdit?: Boolean,
     public canDelete?: Boolean
   ) {
