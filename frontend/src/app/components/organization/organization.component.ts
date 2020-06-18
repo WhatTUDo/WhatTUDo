@@ -21,7 +21,9 @@ export class OrganizationComponent implements OnInit {
   organizationCalendars: Calendar[] = [];
   organizationMembers: User[];
   editableCalendars: Calendar[];
+  roles : string[] = ["Moderator", "Member"];
   pickedCalendarId: number;
+  pickedRole: string;
   calendarAddExpanded: boolean = false;
   userAddExpanded : boolean = false;
   faChevronLeft = faChevronLeft;
@@ -55,6 +57,7 @@ export class OrganizationComponent implements OnInit {
   onSubmitAddMember(){
     this.addMembership();
     this.userAddExpanded = false;
+    delete this.pickedRole;
   }
   onSubmitAddCalendar(calId: number) {
     this.addCalendar(calId);
@@ -77,6 +80,10 @@ export class OrganizationComponent implements OnInit {
 
   selectCalendar(calId: number) {
     this.pickedCalendarId = calId;
+  }
+
+  selectRole(role: string){
+    this.pickedRole = role;
   }
 
   removeCalendar(calId: number) {
@@ -156,6 +163,4 @@ export class OrganizationComponent implements OnInit {
     });
 
     }
-
-
 }

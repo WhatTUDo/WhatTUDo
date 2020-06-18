@@ -106,9 +106,10 @@ export class OrganizationService {
   }
 
   addMembership(orgaId: number, userId: number, role: string): Observable<any> {
-    let params = new HttpParams();
-    params = params.set('userId', String(userId))
-      .set('role', role);
-    return this.httpClient.put(this.organizationBaseUri + `/addMembership/${orgaId}`,{},{params: params});
+    // let params = new HttpParams();
+    // params = params.set('userId', String(userId))
+    //   .set('role', role);
+    let url = "?userId=" + userId + "&role=" + role;
+    return this.httpClient.put(this.organizationBaseUri + '/addMembership/'+orgaId+url, {});
   }
 }

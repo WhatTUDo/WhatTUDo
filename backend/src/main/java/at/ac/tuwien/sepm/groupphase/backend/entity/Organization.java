@@ -31,7 +31,7 @@ public class Organization extends BaseEntity {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE})
+    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Set<OrganizationMembership> memberships = new HashSet<>();
 
     @ToString.Exclude

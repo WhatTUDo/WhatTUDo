@@ -58,21 +58,23 @@
       </div>
         <div class="form-group">
           <label class="control-label" for="role">Role</label>
-          <div>
-            <input autocomplete="role" class="form-control" formControlName="role"
-                   id="role"
-                   type="text">
+          <div class="input-button-combo">
+            <select #selectedRole [ngModel]="selectRole(selectedRole.value)" class="form-control"
+                  formControlName="role"  id="role">
+              <option *ngFor="let role of roles"
+                      value="{{role}}">{{role}}</option>
+            </select>
             <div *ngIf="addMemberForm.controls.role.errors" class="jasmine-errored">
               <small *ngIf="addMemberForm.controls.role.errors.pattern"
                      class="form-text text-warning">Please enter a role!
               </small>
             </div>
+            <button (click)="onSubmitAddMember()"
+                    class="button-solid no-hover-enlarge">Submit
+            </button>
           </div>
         </div>
       </form>
-      <button (click)="onSubmitAddMember()"
-                class="button-solid no-hover-enlarge">Submit
-        </button>
     </div>
     <div class="organization-member-list">
       <div *ngFor="let member of organizationMembers" class="organization-member">

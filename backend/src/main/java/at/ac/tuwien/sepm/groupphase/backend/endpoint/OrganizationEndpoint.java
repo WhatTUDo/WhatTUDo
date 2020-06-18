@@ -195,8 +195,10 @@ public class OrganizationEndpoint {
         try {
             ApplicationUser applicationUser = userService.findUserById(userId);
             Organization organization = organizationService.findById(id);
-
-            return organizationMapper.organizationToOrganizationDto(organizationService.addMembership(applicationUser,organization, role));
+            if(role.equals("Moderator")){
+                role = "MOD";
+            }
+            return organizationMapper.organizationToOrganizationDto(organizationService.addMembership(applicationUser,organization, role.toUpperCase()));
         }catch (NotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }catch (ServiceException e){
