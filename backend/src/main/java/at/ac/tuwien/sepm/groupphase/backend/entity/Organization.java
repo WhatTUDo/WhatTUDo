@@ -1,6 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,12 +28,12 @@ public class Organization extends BaseEntity {
         joinColumns = @JoinColumn(name = "organization_id"),
         inverseJoinColumns = @JoinColumn(name = "calendar_id")
     )
-
     private List<Calendar> calendars = new ArrayList<>(); //FIXME: Use *Set*. Currently returning duplicates.
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE})
+    @Fetch(FetchMode.SELECT)
+    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Set<OrganizationMembership> memberships = new HashSet<>();
 
     @ToString.Exclude

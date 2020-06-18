@@ -174,6 +174,7 @@ public class SimpleOrganizationService implements OrganizationService {
         }
     }
 
+    @Transactional
     @Override
     public Organization addMembership(ApplicationUser user, Organization organization, String role) throws ServiceException {
         try {

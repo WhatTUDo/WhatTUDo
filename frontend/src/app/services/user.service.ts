@@ -73,13 +73,13 @@ export class UserService {
     return this.httpClient.get<CalendarEvent[]>(this.globals.backendUri + "users/recommendedEvents/" + userId);
   }
 
-  addToOrganizationWithRole(userId: number, organizationId: number, role: string): Observable<User> {
-    return this.httpClient.delete<User>(
-      this.globals.backendUri + `users/${userId}/roles?orgaId=${organizationId}&role=${role}`
-    );
-  }
 
   removeFromOrganization(userId: number, organizationId: number): Observable<User> {
     return this.httpClient.delete<User>(this.globals.backendUri + `users/${userId}/roles?orgaId=${organizationId}`);
   }
+
+  getUserByName(name: string) : Observable<User>{
+    return this.httpClient.get<User>(this.usersBaseUri+'/getByName/'+name);
+  }
+
 }
