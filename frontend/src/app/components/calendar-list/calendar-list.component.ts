@@ -10,6 +10,7 @@ import {FeedbackService} from "../../services/feedback.service";
 import {SubscriptionService} from "../../services/subscription.service";
 import {Organization} from '../../dtos/organization';
 import {SubscriptionDto} from "../../dtos/subscriptionDto";
+import {Globals} from "../../global/globals";
 
 
 @Component({
@@ -41,7 +42,8 @@ export class CalendarListComponent implements OnInit {
     private organizationService: OrganizationService,
     private subscriptionService: SubscriptionService,
     private feedbackService: FeedbackService,
-    public authService: AuthService) {
+    public authService: AuthService,
+    private globals: Globals) {
     this.getAllCalendars().then();
 
   }
@@ -55,7 +57,9 @@ export class CalendarListComponent implements OnInit {
       cal.organizationIds.forEach(id => organizationIdSet.add(id));
     })
     for (const id of organizationIdSet) {
-      this.organizationsMap.set(id, await this.organizationService.getById(id).toPromise())
+      let org = await this.organizationService.getById(id).toPromise();
+      org.coverImageUrl = this.globals.backendUri+org.coverImageUrl.slice(1);
+      this.organizationsMap.set(id, org)
     }
   }
 
