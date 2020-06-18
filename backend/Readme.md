@@ -1,4 +1,4 @@
-# Backend Template for SEPM Group Phase
+# Backend Template for WhatTUDo
 
 ## How to run it
 
