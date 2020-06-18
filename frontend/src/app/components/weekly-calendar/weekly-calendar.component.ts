@@ -145,7 +145,7 @@ export class WeeklyCalendarComponent implements OnInit {
 
   getWeek(offset = 0) {
     const weekOffset = (this.getToday().getDay() - 1 + 7) % 7;
-    const offsetWeeks = Math.floor(offset + weekOffset);
+    const offsetWeeks = Math.floor((offset + weekOffset)/7);
     let currentWeekDates = [];
     let today = this.getToday();
 
