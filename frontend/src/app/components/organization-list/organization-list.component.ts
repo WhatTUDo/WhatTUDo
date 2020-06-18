@@ -4,6 +4,8 @@ import {Organization} from "../../dtos/organization";
 import {faChevronLeft, faCog, faPlus, faTimes, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dtos/user";
+import {ActivatedRoute} from "@angular/router";
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-organization-list',
@@ -23,7 +25,8 @@ export class OrganizationListComponent implements OnInit {
 
   constructor(
     private organizationService: OrganizationService,
-    private userService: UserService
+    private userService: UserService,
+    private globals: Globals
   ) {
   }
 
@@ -44,6 +47,7 @@ export class OrganizationListComponent implements OnInit {
     this.organizationService.getAll().subscribe(organizations => {
       this.organizations = organizations;
       organizations.forEach(org => {
+        org.coverImageUrl = this.globals.backendUri+org.coverImageUrl.slice(1);
         this.organizationService.getMembers(org.id).subscribe(users => {
           this.organizationUserAvatars.set(org, users.map(user => {
             return this.getGravatarLink(user.email, 64)

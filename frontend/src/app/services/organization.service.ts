@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Organization} from '../dtos/organization';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpRequest} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {User} from "../dtos/user";
 
@@ -101,5 +101,22 @@ export class OrganizationService {
     if (!organizationId) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
     return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
     //TODO: Implement this after backend is done.
+  }
+
+  uploadOrganizationAvatar(organizationId: number, file: File) {
+    const formData: FormData = new FormData();
+
+    formData.append('imagefile', file);
+
+    const req = new HttpRequest('POST', `${this.organizationBaseUri}/${organizationId}/cover`,
+      formData, {
+        responseType: 'json'
+      });
+
+    return this.httpClient.request(req);
+  }
+
+  getOrganizationAvatar(organizationId: number) {
+    return this.httpClient.get(`${this.organizationBaseUri}/${organizationId}/cover`)
   }
 }

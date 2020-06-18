@@ -12,7 +12,7 @@
   </div>
   <div class="">
     <div *ngFor="let org of this.organizations" class="organization">
-      <img alt="" class="avatar avatar-small" src="{{getOrganizationAvatarLink(org.id, 256)}}">
+      <img alt="" class="avatar avatar-small" src="{{org.coverImageUrl}}">
       <div class="organization-details clickable no-hover-enlarge" routerLink='/organization/{{org.id}}'>
         <div class="organization-name">{{org.name}}</div>
         <div class="organization-member-avatars">

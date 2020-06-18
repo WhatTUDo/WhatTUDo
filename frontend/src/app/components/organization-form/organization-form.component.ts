@@ -15,6 +15,7 @@ export class OrganizationFormComponent implements OnInit {
   organization: Organization;
   isUpdate: boolean;
   faChevronLeft = faChevronLeft;
+  private selectedImage: File;
 
   constructor(private organizationService: OrganizationService,
               public globals: Globals,
@@ -27,6 +28,7 @@ export class OrganizationFormComponent implements OnInit {
     if (id) {
       this.organizationService.getById(id).subscribe((organization: Organization) => {
         this.organization = organization;
+        this.organization.coverImageUrl = this.globals.backendUri+this.organization.coverImageUrl.slice(1);
         this.isUpdate = true;
       });
     } else {
@@ -70,5 +72,16 @@ export class OrganizationFormComponent implements OnInit {
 
   getOrganizationAvatarLink(organizationId: number, size: number) {
     return this.organizationService.getOrganizationAvatarLink(organizationId, size);
+  }
+
+  selectImage(event) {
+    this.selectedImage = event.target.files.item(0);
+  }
+
+  uploadImage() {
+    this.organizationService.uploadOrganizationAvatar(this.organization.id, this.selectedImage).subscribe(resp => {
+      // @ts-ignore
+      this.organization.coverImageUrl = resp.url;
+    });
   }
 }

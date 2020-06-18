@@ -7,6 +7,7 @@ import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
 import {User} from "../../dtos/user";
 import {UserService} from "../../services/user.service";
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-organization',
@@ -31,7 +32,8 @@ export class OrganizationComponent implements OnInit {
   constructor(private organizationService: OrganizationService,
               private calendarService: CalendarService,
               private userService: UserService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private globals: Globals) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadOrganization(id);
     this.getAllEditableCalendars();
@@ -87,6 +89,7 @@ export class OrganizationComponent implements OnInit {
   private loadOrganization(id: number) {
     this.organizationService.getById(id).subscribe((organization: Organization) => {
       this.organization = organization;
+      this.organization.coverImageUrl = this.globals.backendUri+this.organization.coverImageUrl.slice(1);
       for (let calID of organization.calendarIds) {
         this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
           this.organizationCalendars.push(cal);
