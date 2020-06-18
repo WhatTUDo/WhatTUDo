@@ -57,7 +57,6 @@ export class OrganizationComponent implements OnInit {
   onSubmitAddMember(){
     this.addMembership();
     this.userAddExpanded = false;
-    delete this.pickedRole;
   }
   onSubmitAddCalendar(calId: number) {
     this.addCalendar(calId);
