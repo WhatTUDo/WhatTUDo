@@ -1,5 +1,5 @@
 <div class="contextual-control">
-  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span *ngIf="organization&&isUpdate">Edit Team: {{organization.name}}</span>
   <span *ngIf="organization&&!isUpdate">New Team{{organization.name ? ": " + organization.name : ''}}</span>
@@ -17,7 +17,7 @@
   <div class="input-button-combo">
     <input type="file" name="organization-avatar"
            id="organization-avatar" accept="{{this.globals.allowedAvatarMimeTypes.join(',')}}">
-    <button type="submit" class="no-hover-enlarge no-shadow">Upload</button>
+    <button type="submit" class="no-hover-enlarge">Upload</button>
   </div>
 </form>
 

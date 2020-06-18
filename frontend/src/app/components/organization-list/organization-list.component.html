@@ -1,19 +1,19 @@
 <div class="contextual-control">
-  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
+  <span id="back-button"><a class="clickable no-hover-enlarge" href="/"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
 </div>
 
 <div class="centered-two-third">
   <div class="title-icon-button-combo">
     <h2>Organizations</h2>
-    <div class="icon-button clickable no-hover-enlarge no-shadow">
+    <div class="icon-button clickable no-hover-enlarge">
       <fa-icon [icon]="faPlus" routerLink="/form/organization"></fa-icon>
     </div>
   </div>
   <div class="">
     <div *ngFor="let org of this.organizations" class="organization">
       <img alt="" class="avatar avatar-small" src="{{getOrganizationAvatarLink(org.id, 256)}}">
-      <div class="organization-details clickable no-hover-enlarge no-shadow" routerLink='/organization/{{org.id}}'>
+      <div class="organization-details clickable no-hover-enlarge" routerLink='/organization/{{org.id}}'>
         <div class="organization-name">{{org.name}}</div>
         <div class="organization-member-avatars">
           <img alt="" class="avatar avatar-ultra-small" *ngFor="let avatar of organizationUserAvatars.get(org)"
@@ -21,12 +21,12 @@
         </div>
       </div>
       <div class="organization-buttons">
-        <fa-icon *ngIf="org.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
+        <fa-icon *ngIf="org.canEdit" [icon]="faCog" class="clickable no-hover-enlarge"
                  routerLink="/form/organization/{{org.id}}">
           Edit Calendar
         </fa-icon>
         <fa-icon *ngIf="org.canDelete" (click)="onClickedDelete(org.id)" [icon]="faTimesCircle"
-                 class="clickable no-hover-enlarge no-shadow">
+                 class="clickable no-hover-enlarge">
           Remove Calendar
         </fa-icon>
       </div>

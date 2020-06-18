@@ -3,7 +3,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {CalendarService} from '../../services/calendar.service';
 import {Calendar} from '../../dtos/calendar';
 import {Router} from '@angular/router';
-import {faChevronLeft, faCog, faTimesCircle, faPlus, faBookmark} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faCog, faTimesCircle, faPlus, faBookmark, faCircleNotch} from "@fortawesome/free-solid-svg-icons";
 import {OrganizationService} from '../../services/organization.service';
 import {AuthService} from "../../services/auth.service";
 import {FeedbackService} from "../../services/feedback.service";
@@ -29,7 +29,8 @@ export class CalendarListComponent implements OnInit {
   faCog = faCog;
   faPlus = faPlus;
   faBookmark = faBookmark;
-  private otherCalenderFilteredBy: string = "";
+  faCircleNotch = faCircleNotch;
+  otherCalenderFilteredBy: string = "";
 
 
   constructor(

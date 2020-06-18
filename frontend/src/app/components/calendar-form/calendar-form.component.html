@@ -1,5 +1,5 @@
 <div class="contextual-control">
-  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
+  <span id="back-button"><a class="clickable no-hover-enlarge" href="/"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
   <span *ngIf="calendar">Calendar: {{calendar.name}}</span>
 </div>
@@ -36,7 +36,7 @@
           </mat-form-field>
         </div>
         <button (click)="onSubmit()"
-                class="update button-clickable always-black full-width-form-button no-hover-enlarge no-shadow"
+                class="update button-clickable always-black full-width-form-button no-hover-enlarge"
                 title="Update calendar">
           Submit
         </button>

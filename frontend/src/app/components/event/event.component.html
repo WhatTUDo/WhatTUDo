@@ -1,6 +1,6 @@
 <div *ngIf="calendarEvent">
   <div class="contextual-control">
-    <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+    <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
       [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
     <span>Event: {{calendarEvent.name}}</span>
   </div>
@@ -8,8 +8,8 @@
     <div>
       <div class="title-icon-button-combo">
         <h2>Event</h2>
-        <div class="icon-button clickable no-hover-enlarge no-shadow">
-          <fa-icon *ngIf="calendarEvent.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
+        <div class="icon-button clickable no-hover-enlarge">
+          <fa-icon *ngIf="calendarEvent.canEdit" [icon]="faCog" class="clickable no-hover-enlarge"
                    routerLink="/form/event/{{id}}">
             Edit
           </fa-icon>
@@ -61,12 +61,12 @@
         </div>
       </div>
       <div class="calendar-info">
-        <div class="calendar-name clickable no-hover-enlarge no-shadow" routerLink="/calendar/{{calendar.id}}">
+        <div class="calendar-name clickable no-hover-enlarge" routerLink="/calendar/{{calendar.id}}">
           <fa-icon [icon]="faCalendar"></fa-icon>
           {{calendar.name}}
         </div>
         <div class="calendar-organizations">
-          <div class="organization-info clickable no-hover-enlarge no-shadow" *ngFor="let org of calendarOrganizations"
+          <div class="organization-info clickable no-hover-enlarge" *ngFor="let org of calendarOrganizations"
                routerLink="/organization/{{org.id}}">
             <img alt="" class="avatar avatar-medium" src="{{getOrganizationAvatarLink(org.id, 256)}}">
             <div class="organization-details">

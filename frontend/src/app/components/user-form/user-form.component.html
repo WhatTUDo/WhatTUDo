@@ -1,5 +1,5 @@
 <div class="contextual-control">
-  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span *ngIf="user&&user.name">Edit User: {{user.name}}</span>
 </div>
@@ -49,8 +49,8 @@
     </div>
 
     <div class="user-action-container">
-      <div (click)="update()" class="user-action primary-action clickable no-hover-enlarge no-shadow">Update</div>
-      <div (click)="clearForm()" class="user-action clickable no-hover-enlarge no-shadow">Cancel</div>
+      <div (click)="update()" class="user-action primary-action clickable no-hover-enlarge">Update</div>
+      <div (click)="clearForm()" class="user-action clickable no-hover-enlarge">Cancel</div>
     </div>
   </form>
   <div>
@@ -84,15 +84,15 @@
         </div>
       </div>
       <div class="user-action-container">
-        <div (click)="changePassword()" class="user-action primary-action clickable no-hover-enlarge no-shadow">Change
+        <div (click)="changePassword()" class="user-action primary-action clickable no-hover-enlarge">Change
           Password
         </div>
-        <div (click)="clearForm()" class="user-action clickable no-hover-enlarge no-shadow">Cancel</div>
+        <div (click)="clearForm()" class="user-action clickable no-hover-enlarge">Cancel</div>
       </div>
 
     </form>
     <div class="user-action-container">
-      <div class="user-action dangerous clickable no-hover-enlarge no-shadow">Delete Account</div>
+      <div class="user-action dangerous clickable no-hover-enlarge">Delete Account</div>
     </div>
   </div>
 </div>

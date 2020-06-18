@@ -34,6 +34,9 @@ export class WeeklyCalendarComponent implements OnInit {
   /** min row count for an event so that there's place for text. */
   viewMinRows = 8;
 
+  /** color classes to add **/
+  calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
+
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
   dateLocale: string;
@@ -229,5 +232,9 @@ export class WeeklyCalendarComponent implements OnInit {
    */
   private calcRow(sec) {
     return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
+  }
+
+  getCalendarColor(event: CalendarEvent) {
+    return this.calendarColors[event.calendarId % this.calendarColors.length];
   }
 }
