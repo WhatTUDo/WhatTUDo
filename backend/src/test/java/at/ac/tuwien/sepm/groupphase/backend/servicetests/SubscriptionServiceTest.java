@@ -10,6 +10,9 @@ import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.service.SubscriptionService;
 import at.ac.tuwien.sepm.groupphase.backend.service.UserService;
 import org.aspectj.weaver.ast.Or;
+import org.junit.After;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +61,7 @@ public class SubscriptionServiceTest {
         assertNotNull(savedSubscription);
         assertEquals(newSubscription.getUser().getName(), savedSubscription.getUser().getName());
         assertEquals(newSubscription.getCalendar().getName(), savedSubscription.getCalendar().getName());
+        organizationService.delete(organization.getId());
     }
 
     @Test
@@ -71,6 +75,8 @@ public class SubscriptionServiceTest {
         assertThrows(NotFoundException.class, () -> {
             subscriptionService.create(new Subscription(0, savedUser, newCalendar));
         });
+        organizationService.delete(organization.getId());
+
     }
 
     @Test
@@ -84,6 +90,8 @@ public class SubscriptionServiceTest {
         assertThrows(NotFoundException.class, () -> {
             subscriptionService.create(new Subscription(0, newUser, savedCalendar));
         });
+        organizationService.delete(organization.getId());
+
     }
 
     @Test
@@ -103,6 +111,8 @@ public class SubscriptionServiceTest {
         assertEquals(savedSubscription.getId(), retrievedSubscription.getId());
         assertEquals(savedSubscription.getUser().getName(), retrievedSubscription.getUser().getName());
         assertEquals(savedSubscription.getCalendar().getName(), retrievedSubscription.getCalendar().getName());
+        organizationService.delete(organization.getId());
+
     }
 
 
@@ -119,7 +129,73 @@ public class SubscriptionServiceTest {
         List<Subscription> subscriptions = subscriptionService.getSubscriptionsByUser(savedUser);
         assertNotEquals(0, subscriptions.size());
         assertEquals(subscriptions.get(0).getUser().getName(), savedSubscription.getUser().getName());
+        organizationService.delete(organization.getId());
+
     }
 
+    @Test
+    public void saveSubscription_thenRetrieveAllByCalendar_shouldReturnListWithSubscriptionIncluded() {
+        Organization organization = organizationService.create(new Organization("TestOrga"));
+        List<Organization> organizations = new ArrayList<>();
+        organizations.add(organization);
+        Calendar savedCalendar = calendarService.save(new Calendar("TestCal", organizations, "Lorem Ipsum"));
+        ApplicationUser savedUser = userService.saveNewUser(new ApplicationUser("TestName", "test@mail.com", "alligator1"));
+        assertNotNull(savedCalendar);
+        assertNotNull(savedUser);
+        Subscription savedSubscription = subscriptionService.create(new Subscription(0, savedUser, savedCalendar));
+        List<Subscription> subscriptions = subscriptionService.getSubscriptionsForCalendar(savedCalendar);
+        assertNotEquals(0, subscriptions.size());
+        assertEquals(subscriptions.get(0).getUser().getName(), savedSubscription.getUser().getName());
+        organizationService.delete(organization.getId());
 
+    }
+
+    @Test
+    public void retrieveAllByCalendar_shouldReturnEmptyList() {
+        Organization organization = organizationService.create(new Organization("TestOrga"));
+        List<Organization> organizations = new ArrayList<>();
+        organizations.add(organization);
+        Calendar savedCalendar = calendarService.save(new Calendar("TestCal", organizations, "Lorem Ipsum"));
+        ApplicationUser savedUser = userService.saveNewUser(new ApplicationUser("TestName", "test@mail.com", "alligator1"));
+        assertNotNull(savedCalendar);
+        assertNotNull(savedUser);
+        //note: no sub save
+        List<Subscription> subscriptions = subscriptionService.getSubscriptionsForCalendar(savedCalendar);
+        assertEquals(0, subscriptions.size());
+        organizationService.delete(organization.getId());
+
+    }
+
+    @Test
+    public void saveSubscription_thenDelete_thenRetrieveAllByUser_shouldReturnEmptyList() {
+        Organization organization = organizationService.create(new Organization("TestOrga"));
+        List<Organization> organizations = new ArrayList<>();
+        organizations.add(organization);
+        Calendar savedCalendar = calendarService.save(new Calendar("TestCal", organizations, "Lorem Ipsum"));
+        ApplicationUser savedUser = userService.saveNewUser(new ApplicationUser("TestName", "test@mail.com", "alligator1"));
+        assertNotNull(savedCalendar);
+        assertNotNull(savedUser);
+
+        Subscription newSubscription = new Subscription(0, savedUser, savedCalendar);
+        Subscription savedSubscription = subscriptionService.create(newSubscription);
+        subscriptionService.delete(savedSubscription);
+        List<Subscription> subscriptions = subscriptionService.getSubscriptionsByUser(savedUser);
+        assertEquals(0, subscriptions.size());
+        organizationService.delete(organization.getId());
+    }
+
+    @Test
+    public void deleteUnsavedSubscription_shouldThrowNotFoundException() {
+        Organization organization = organizationService.create(new Organization("TestOrga"));
+        List<Organization> organizations = new ArrayList<>();
+        organizations.add(organization);
+        Calendar savedCalendar = calendarService.save(new Calendar("TestCal", organizations, "Lorem Ipsum"));
+        ApplicationUser savedUser = userService.saveNewUser(new ApplicationUser("TestName", "test@mail.com", "alligator1"));
+        assertNotNull(savedCalendar);
+        assertNotNull(savedUser);
+
+        Subscription newSubscription = new Subscription(0, savedUser, savedCalendar);
+        assertThrows(NotFoundException.class, () -> subscriptionService.delete(newSubscription));
+        organizationService.delete(organization.getId());
+    }
 }

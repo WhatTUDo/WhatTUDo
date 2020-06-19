@@ -42,12 +42,15 @@ public class SimpleSubscriptionService implements SubscriptionService {
     }
 
     @Override
-    public Subscription delete(Subscription subscription) throws ServiceException {
+    public Subscription delete(Subscription subscription) throws ServiceException, NotFoundException {
         try {
+            getById(subscription.getId());
             subscriptionRepository.delete(subscription);
             return subscription;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new NotFoundException(e.getMessage());
         }
     }
 
