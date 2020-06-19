@@ -221,5 +221,9 @@ export class CalendarListComponent implements OnInit {
     this.calendarSearchResult = [];
     this.searchActive = false;
   }
+
+  isSubscribed(id: number) {
+    return Boolean(this.subscribedCalendars.find(sc => sc.id === id));
+  }
 }
 
