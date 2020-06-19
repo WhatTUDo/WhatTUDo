@@ -1,5 +1,5 @@
 <div class="grid-one-third">
-  <app-weekly-calendar class="grid-item-1-2" [subscribedOnly]="subscribedOnly"></app-weekly-calendar>
+  <app-weekly-calendar class="grid-item-1-2" [view]="view"></app-weekly-calendar>
   <div *ngIf="!authService.isLoggedIn()">
     <h2>Upcoming Events</h2>
     <app-promo-event-list *ngIf="recommendedEvents&&recommendedEvents.length>0"
@@ -16,10 +16,14 @@
       There isn't any event that we can recommend you right now. Mark more events you are interested in, so that we can
       generate better suggestions.
     </div>
-    <button *ngIf="!subscribedOnly" (click)="toggleSubscribedOnly()">Show Subscribed Calendar
+    <button  (click)="chooseView(0)">Show Subscribed Calendar
       Events
     </button>
-    <button *ngIf="subscribedOnly" (click)="toggleSubscribedOnly()">Show All Calendar Events
+    <button (click)="chooseView(1)">Attending Events
+    </button>
+    <button (click)="chooseView(2)">Interested Events
+    </button>
+    <button  (click)="chooseView(3)">Show All Calendar Events
     </button>
   </div>
 </div>

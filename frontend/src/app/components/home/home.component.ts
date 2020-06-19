@@ -4,7 +4,7 @@ import {UserService} from "../../services/user.service";
 import {Globals} from "../../global/globals";
 import {EventService} from "../../services/event.service";
 import {CalendarEvent} from "../../dtos/calendar-event";
-import {WeeklyCalendarComponent} from "../weekly-calendar/weekly-calendar.component";
+import {falseIfMissing} from 'protractor/built/util';
 
 
 @Component({
@@ -17,8 +17,8 @@ export class HomeComponent implements OnInit {
   currentTime: string;
   userId: number;
   recommendedEvents: CalendarEvent[];
-  subscribedOnly: boolean = false;
-
+  subscribedOnly: boolean= false;
+  view: boolean[] = [false, false, false, true];
   constructor(public authService: AuthService,
               private userService: UserService,
               private eventService: EventService,
@@ -63,4 +63,18 @@ export class HomeComponent implements OnInit {
   toggleSubscribedOnly() {
     this.subscribedOnly = !this.subscribedOnly;
   }
+
+  chooseView(viewNr: number){
+    if(viewNr == 0){
+      this.view = [true, false, false, false];
+    }else if(viewNr == 1) {
+      this.view = [false, true, false, false];
+    }else if(viewNr == 2){
+      this.view= [false, false, true , false];
+    }else if(viewNr == 3){
+      this.view = [false, false, false, true];
+    }
+  }
+
+
 }

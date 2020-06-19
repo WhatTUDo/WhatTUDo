@@ -7,6 +7,7 @@ import {SubscriptionService} from "../../services/subscription.service";
 import {Globals} from "../../global/globals";
 import {Calendar} from "../../dtos/calendar";
 import {AuthService} from "../../services/auth.service";
+import {AttendanceStatusService} from '../../services/attendance-status.service';
 
 @Component({
   selector: 'app-weekly-calendar',
@@ -42,6 +43,11 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
 
   @Input("subscribedOnly") filterIsActive:boolean;
   subscribeCalendarIds: number[];
+  attendingEvents: CalendarEvent[];
+  interestedEvents: CalendarEvent[];
+
+  @Input("view") filter: boolean[];
+
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
@@ -56,7 +62,8 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
     private eventService: EventService,
     private subscriptionService: SubscriptionService,
     private authService: AuthService,
-    private globals: Globals
+    private globals: Globals,
+    private attendanceStatusService: AttendanceStatusService
   ) {
     this.dateLocale = globals.dateLocale;
   }
@@ -71,10 +78,15 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
           this.subscribeCalendarIds = calendars.map(cal => {
             return cal.id
           });
-        })
+        });
+        this.attendanceStatusService.getEventsUserIsAttending(user.id).subscribe((events) =>{
+          this.attendingEvents = events;
+        });
+        this.attendanceStatusService.getEventsUserIsInterestedIn(user.id).subscribe((events) =>{
+          this.interestedEvents = events;
+        });
       })
     }
-
     this.loadEvents();
     this.updateDatetime();
     setInterval(_ => {
@@ -102,7 +114,7 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
   }
 
   loadEvents() {
-    if (this.filterIsActive) {
+    if (this.filter[0]) {
       let filteredEventsOfTheWeek = new Map<String, CalendarEvent[]>();
       this.eventsOfTheWeek.forEach((events, day) => {
         let filteredEvents = events.filter(event => {
@@ -111,10 +123,16 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
         filteredEventsOfTheWeek.set(day, filteredEvents);
       });
       this.eventsOfTheWeek = filteredEventsOfTheWeek;
-    } else {
+    } else if(this.filter[1]){
+         this.loadEventsOfThisWeek(this.attendingEvents);
+    }else if(this.filter[2]){
+      this.loadEventsOfThisWeek(this.interestedEvents);
+    }
+    else if(this.filter[3]) {
       this.loadAllEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     }
   }
+
 
   /**
    * Calls Service to load Events for the week.
@@ -124,23 +142,28 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
   loadAllEventsForWeek(from: Date, to: Date) {
     this.eventService.getMultipleEvents(from, to).subscribe((events: Array<CalendarEvent>) => {
       events.forEach(event => {
-        let startDate = new Date(event.startDateTime)
+
+
+      });
+       this.loadEventsOfThisWeek(events);
+    });
+  }
+
+  loadEventsOfThisWeek(events: CalendarEvent[]){
+    this.displayingWeek.forEach((day: Date) => {
+      let keyISOString = this.getMidnight(day).toISOString();
+      this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
+        let startDate = new Date(event.startDateTime);
         let endDate = new Date(event.endDateTime);
 
         event.startDateTime = startDate;
         event.endDateTime = endDate;
-      });
-      this.displayingWeek.forEach((day: Date) => {
-        let keyISOString = this.getMidnight(day).toISOString()
-        this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
-          const isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
-          const isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
-          return isAfterMidnight && isBeforeEndOfDay;
-        }));
-      })
-    });
+        const isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
+        const isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
+        return isAfterMidnight && isBeforeEndOfDay;
+      }));
+    })
   }
-
   updateDatetime() {
     const today = this.getToday();
     this.currentMonth = today.toLocaleString(this.globals.dateLocale, {month: 'long'});
@@ -259,7 +282,7 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
   private updateOffsettedDates() {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
-    this.loadAllEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+    this.loadEvents();
   }
 
   /**
