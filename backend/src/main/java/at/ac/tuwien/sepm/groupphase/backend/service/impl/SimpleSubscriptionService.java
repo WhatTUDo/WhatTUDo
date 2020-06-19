@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
@@ -35,16 +36,21 @@ public class SimpleSubscriptionService implements SubscriptionService {
             return subscriptionRepository.save(subscription);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new NotFoundException(e.getMessage());
         }
     }
 
     @Override
-    public Subscription delete(Subscription subscription) throws ServiceException {
+    public Subscription delete(Subscription subscription) throws ServiceException, NotFoundException {
         try {
+            getById(subscription.getId());
             subscriptionRepository.delete(subscription);
             return subscription;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new NotFoundException(e.getMessage());
         }
     }
 
