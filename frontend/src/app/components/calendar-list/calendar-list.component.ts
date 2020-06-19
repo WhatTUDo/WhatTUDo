@@ -109,7 +109,7 @@ export class CalendarListComponent implements OnInit {
       this.subscriptionService.create(subscription).subscribe(savedSub => {
         if (savedSub.calendarId != 0 && savedSub.userName != null) {
           this.feedbackService.displaySuccess("Subscribed!", "You subscribed successfully to this calendar!");
-          let calendar = this.managedCalendars.filter(cal => {
+          let calendar = this.calendars.filter(cal => {
             return cal.id == calendarId
           }).pop();
           this.subscribedCalendars.push(calendar);
@@ -132,7 +132,7 @@ export class CalendarListComponent implements OnInit {
             });
           })
         } else {
-
+          this.feedbackService.displayError("Subscription Error!", "Could not find a unique Subscription!");
         }
       })
     })
