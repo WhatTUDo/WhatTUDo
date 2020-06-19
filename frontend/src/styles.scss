@@ -316,6 +316,10 @@ input, select, textarea {
   background-color: var(--shadow) !important;
   color: var(--text) !important;
 
+  option {
+    background-color: var(--background) !important;
+  }
+
   &.no-outline {
     outline: none !important;
   }
