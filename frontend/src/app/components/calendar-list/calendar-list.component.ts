@@ -36,13 +36,14 @@ export class CalendarListComponent implements OnInit {
   faPlus = faPlus;
   faBookmark = faBookmark;
   faCircleNotch = faCircleNotch;
-  otherCalenderFilteredBy: string = "";
 
   loading: boolean = true;
 
   subscribedCalendars: Calendar[] = [];
   managedCalendars: Calendar[] = [];
-  otherCalendars: Calendar[];
+  otherCalendars: Calendar[] = [];
+  calendarSearchResult: Calendar[] = [];
+  searchActive: boolean = false;
 
   //TODO: Get filter form out of commit history.
 
@@ -164,24 +165,61 @@ export class CalendarListComponent implements OnInit {
     })
   }
 
-  getOtherCalendars() {
-    let calenders = this.otherCalendars;
-    if (this.otherCalenderFilteredBy) {
-      calenders = calenders.filter(cal => {
-        const nameMatched = cal.name.toLowerCase().match(this.otherCalenderFilteredBy.toLowerCase());
-        const orgMatched = cal.organizationIds.find(orgId =>
-          this.organizationsMap.get(orgId).name.toLowerCase().match(this.otherCalenderFilteredBy.toLowerCase())
-        )
-        return nameMatched || orgMatched;
-      })
+  onSubmit() {
+    let formValue = this.searchForm.value;
+    if (!formValue.name) {
+      this.calendarSearchResult = [];
+      this.searchActive = false;
+      return
     }
-    return calenders;
+    let validationIsPassed = this.validateFormInput(formValue);
+    if (validationIsPassed) {
+      // submit to service
+      console.log("search");
+      this.calendarService.searchCalendars(formValue.name).subscribe(async (list) => {
+        this.calendarSearchResult = list;
+        let organizationIdSet = new Set<number>();
+        this.calendarSearchResult.forEach(cal => {
+          cal.organizationIds.forEach(id => organizationIdSet.add(id));
+        })
+        for (const id of organizationIdSet) {
+          if (!this.organizationsMap.get(id)) {
+            this.organizationsMap.set(id, await this.organizationService.getById(id).toPromise())
+          }
+        }
+      });
+      this.searchActive = true;
+    }
   }
 
-  filter(event: Event) {
-    // @ts-ignore
-    this.otherCalenderFilteredBy = event.target.value;
+
+  /**
+   *
+   * @param formValue
+   * returns true/false depending on whether validation succeeds.
+   */
+  validateFormInput(formValue: any) {
+    let errors: Array<Error> = new Array<Error>();
+    if ((formValue.name == "")) {
+      errors.push(new Error("Nothing was given to search."));
+    }
+
+    if (errors.length > 0) {
+      console.warn(errors);
+      let errorMessage = "";
+      for (let error of errors) {
+        errorMessage += error.message + " ";
+      }
+      alert(errorMessage);
+      this.calendarSearchResult = [];
+      return false;
+    }
+    return true;
+  }
+
+  clearSearch() {
+    this.calendarSearchResult = [];
+    this.searchActive = false;
   }
 }
-
 

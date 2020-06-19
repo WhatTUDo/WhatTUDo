@@ -16,7 +16,44 @@
     </h3>
   </div>
   <div *ngIf="!loading">
-    <div *ngIf="authService.isLoggedIn()">
+    <form class="filter input-button-combo" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+      <label for="calendar.name"></label>
+      <input class="form-control" formControlName="name" id="calendar.name" placeholder="Filter..." type="text">
+      <button type="reset" *ngIf="searchActive" (click)="clearSearch()" class="button-red flat-right-side">Clear</button>
+      <button type="submit" >Filter</button>
+    </form>
+    <div *ngIf="searchActive">
+      <div *ngFor="let cal of this.calendarSearchResult" class="calendar">
+        <div class="calendar-details">
+          <div class="clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+            <div class="calendar-name">{{cal.name}}</div>
+            <div class="calendar-description">{{cal.description}}</div>
+          </div>
+          <div>
+            <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
+              <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-hover-enlarge">
+                <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
+                <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="calendar-buttons">
+          <fa-icon (click)="onClickUnsubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
+                   class="subscribed clickable no-hover-enlarge">Unsubscribe
+          </fa-icon>
+          <fa-icon *ngIf="cal.canEdit" [icon]="faCog" class="clickable no-hover-enlarge"
+                   routerLink="/form/calendar/{{cal.id}}">
+            Edit Calendar
+          </fa-icon>
+          <fa-icon *ngIf="cal.canEdit" (click)="delete(cal.id)" [icon]="faTimesCircle"
+                   class="clickable no-hover-enlarge">
+            Remove Calendar
+          </fa-icon>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="authService.isLoggedIn() && !searchActive">
       <h3>My Calendars</h3>
       <div *ngIf="subscribedCalendars.length===0">You have no subscribed calenders yet.</div>
       <div *ngFor="let cal of this.subscribedCalendars" class="calendar">
@@ -49,7 +86,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="authService.isLoggedIn() && managedCalendars.length!==0">
+    <div *ngIf="authService.isLoggedIn() && managedCalendars.length!==0 && !searchActive">
       <h3>Calendars Managed by me</h3>
       <div *ngFor="let cal of this.managedCalendars" class="calendar">
         <div class="calendar-details">
@@ -81,20 +118,17 @@
         </div>
       </div>
     </div>
-    <div *ngIf="getOtherCalendars().length > 0 || otherCalenderFilteredBy">
+    <div *ngIf="otherCalendars.length > 0 && !searchActive">
       <h3 *ngIf="authService.isLoggedIn()">All Calendars</h3>
-      <div class="filter">
-        <label for="calendar.name"></label>
-        <input class="form-control" (input)="filter($event)" id="calendar.name" placeholder="Filter..." type="text">
-      </div>
-      <div *ngFor="let cal of getOtherCalendars()" class="calendar">
+      <div *ngFor="let cal of otherCalendars" class="calendar">
         <div class="calendar-details">
           <div class="clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
             <div class="calendar-name">{{cal.name}}</div>
             <div class="calendar-description">{{cal.description}}</div>
           </div>
           <div>
-            <div *ngFor="let orgId of cal.organizationIds" class="calendar-organizations" routerLink="/organization/{{orgId}}">
+            <div *ngFor="let orgId of cal.organizationIds" class="calendar-organizations"
+                 routerLink="/organization/{{orgId}}">
               <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-hover-enlarge">
                 <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
                 <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
