@@ -89,7 +89,35 @@ public class SubscriptionEndpointTest {
         ApplicationUser user = userRepository.findByName("Person 1").get();
         List<SubscriptionDto> subscriptionDtos = subscriptionEndpoint.getSubscriptionsForuser(user.getId());
 
-        assertEquals(0, subscriptionDtos.size());
+        assert (!subscriptionDtos.contains(deleted));
+        clean();
+    }
+
+    @WithMockUser(username = "Person 1")
+    @Test
+    public void getSubscriptionsForUser_shouldReturnSubscriptionListForUser() {
+        SubscriptionDto saved = subscriptionEndpoint.create(createMockDtoWithData());
+        ApplicationUser user = userRepository.findByName(saved.getUserName()).get();
+        List<SubscriptionDto> subscriptionDtos = subscriptionEndpoint.getSubscriptionsForuser(user.getId());
+        assertNotEquals(0, subscriptionDtos.size());
+
+        subscriptionDtos.forEach(dto -> {
+            assertEquals(user.getName(), dto.getUserName());
+        });
+        clean();
+    }
+
+    @WithMockUser(username = "Person 1")
+    @Test
+    public void getSubscriptionsForCalendar_shouldReturnSubscriptionListForCalendar() {
+        SubscriptionDto saved = subscriptionEndpoint.create(createMockDtoWithData());
+        Calendar calendar = calendarRepository.findById(saved.getCalendarId()).get();
+        List<SubscriptionDto> subscriptionDtos = subscriptionEndpoint.getSubscriptionsForCalendar(saved.calendarId);
+        assertNotEquals(0, subscriptionDtos.size());
+
+        subscriptionDtos.forEach(dto -> {
+            assertEquals(calendar.getId(), dto.getCalendarId());
+        });
         clean();
     }
 }
