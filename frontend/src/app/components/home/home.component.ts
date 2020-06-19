@@ -4,6 +4,7 @@ import {UserService} from "../../services/user.service";
 import {Globals} from "../../global/globals";
 import {EventService} from "../../services/event.service";
 import {CalendarEvent} from "../../dtos/calendar-event";
+import {WeeklyCalendarComponent} from "../weekly-calendar/weekly-calendar.component";
 
 
 @Component({
@@ -16,6 +17,7 @@ export class HomeComponent implements OnInit {
   currentTime: string;
   userId: number;
   recommendedEvents: CalendarEvent[];
+  subscribedOnly: boolean = false;
 
   constructor(public authService: AuthService,
               private userService: UserService,
@@ -56,5 +58,9 @@ export class HomeComponent implements OnInit {
         }).slice(0, 5);
       })
     }
+  }
+
+  toggleSubscribedOnly() {
+    this.subscribedOnly = !this.subscribedOnly;
   }
 }

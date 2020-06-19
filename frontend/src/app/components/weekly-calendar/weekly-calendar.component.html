@@ -85,8 +85,5 @@
 <div (click)="addOneWeek()" class="calendar-navigation desktop clickable no-hover-enlarge">
   <fa-icon [icon]="faChevronDown">Next week</fa-icon>
 </div>
-<div>
-  <h3>Subscriptions</h3>
-  <button (click)="filterSubscribedEvents()" *ngIf="!filterIsActive">Show Subscribed Calendar Events</button>
-  <button (click)="filterSubscribedEvents()" *ngIf="filterIsActive">Show All Calendar Events</button>
-</div>
+
+
