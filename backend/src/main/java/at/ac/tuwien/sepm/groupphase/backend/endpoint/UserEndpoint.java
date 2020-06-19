@@ -37,6 +37,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -51,6 +52,23 @@ public class UserEndpoint {
     private final OrganizationMapper organizationMapper;
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
+
+    @PreAuthorize("permitAll()")
+    @GetMapping
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all users")
+    public List<LoggedInUserDto> getAllUsers() {
+        try {
+            List<ApplicationUser> users = userService.getAllUsers();
+
+            return users.stream().map(userMapper::applicationUserToUserDto).collect(Collectors.toList());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+        }
+    }
 
     @PreAuthorize("permitAll()")
     @PostMapping

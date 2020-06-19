@@ -50,6 +50,11 @@ public class CustomUserDetailService implements UserService {
         return userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
+    @Override
+    public List<ApplicationUser> getAllUsers() {
+        return userRepository.findAll();
+    }
+
     @Override // TODO: Move encoding to mapper?
     public ApplicationUser saveNewUser(ApplicationUser user) throws ServiceException, ValidationException {
         try {

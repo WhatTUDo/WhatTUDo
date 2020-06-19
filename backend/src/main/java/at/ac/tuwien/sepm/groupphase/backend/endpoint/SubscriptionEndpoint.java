@@ -49,7 +49,9 @@ public class SubscriptionEndpoint {
     @ApiOperation(value = "Create a new Subscription", authorizations = {@Authorization(value = "apiKey")})
     public SubscriptionDto create(@RequestBody SubscriptionDto subscriptionDto) {
         try {
-            return subscriptionMapper.subscriptionToSubscriptionDto(subscriptionService.create(subscriptionMapper.subscriptionDtoToSubscription(subscriptionDto)));
+            Subscription subscription = subscriptionMapper.subscriptionDtoToSubscription(subscriptionDto);
+            Subscription savedSubscription = subscriptionService.create(subscription);
+            return subscriptionMapper.subscriptionToSubscriptionDto(savedSubscription);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {

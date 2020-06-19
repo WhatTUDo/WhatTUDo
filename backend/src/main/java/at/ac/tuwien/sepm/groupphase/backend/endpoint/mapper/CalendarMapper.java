@@ -54,6 +54,7 @@ public abstract class CalendarMapper {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         calendarDto.setCanEdit(permissionEvaluator.hasPermission(authentication, calendar, "MOD"));
         calendarDto.setCanDelete(permissionEvaluator.hasPermission(authentication, calendar, "MOD"));
+        calendarDto.setCanCreateEvents(permissionEvaluator.hasPermission(authentication, calendar, "MEMBER"));
     }
 
     public abstract Calendar calendarCreateDtoToCalendar(CalendarCreateDto calendarCreateDto);
