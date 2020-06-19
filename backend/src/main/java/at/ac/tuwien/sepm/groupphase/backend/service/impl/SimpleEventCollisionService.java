@@ -155,31 +155,13 @@ public class SimpleEventCollisionService implements EventCollisionService {
     public List<LocalDateTime[]> getAlternativeDateSuggestions(Event event, Integer initialScore) throws ServiceException, ValidationException {
         Map<LocalDateTime[], Integer> rec = new HashMap<>();
         Event help = new Event(event.getName(), event.getStartDateTime(), event.getEndDateTime(), event.getCalendar());
-        for (int i = 1; i < 7; i++) {
-            help.setStartDateTime(event.getStartDateTime().plusDays(i));
-            help.setEndDateTime(event.getEndDateTime().plusDays(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
-
-            help.setStartDateTime(event.getStartDateTime().minusDays(i));
-            help.setEndDateTime(event.getEndDateTime().minusDays(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
-        }
-
-        for (int i = 1; i < 3; i++) {
-            help.setStartDateTime(event.getStartDateTime().plusWeeks(i));
-            help.setEndDateTime(event.getEndDateTime().plusWeeks(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
-
-            help.setStartDateTime(event.getStartDateTime().minusWeeks(i));
-            help.setEndDateTime(event.getEndDateTime().minusWeeks(i));
-            recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
-        }
-
         for (int i = 1; i < 3; i++) {
             if (event.getStartDateTime().getHour() < 22) {
                 help.setStartDateTime(event.getStartDateTime().plusHours(i));
                 help.setEndDateTime(event.getEndDateTime().plusHours(i));
-                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+                if (help.getStartDateTime().isAfter(LocalDateTime.now())) {
+                    recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+                }
             }
 
             if (event.getStartDateTime().getHour() > 8) {
@@ -188,10 +170,34 @@ public class SimpleEventCollisionService implements EventCollisionService {
                 if (help.getStartDateTime().isAfter(LocalDateTime.now())) {
                     recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
                 }
-
             }
-
         }
+        for (int i = 1; i < 7; i++) {
+            help.setStartDateTime(event.getStartDateTime().plusDays(i));
+            help.setEndDateTime(event.getEndDateTime().plusDays(i));
+            if (help.getStartDateTime().isAfter(LocalDateTime.now())) {
+                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+            }
+            help.setStartDateTime(event.getStartDateTime().minusDays(i));
+            help.setEndDateTime(event.getEndDateTime().minusDays(i));
+            if (help.getStartDateTime().isAfter(LocalDateTime.now())) {
+                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+            }
+        }
+
+        for (int i = 1; i < 3; i++) {
+            help.setStartDateTime(event.getStartDateTime().plusWeeks(i));
+            help.setEndDateTime(event.getEndDateTime().plusWeeks(i));
+            if (help.getStartDateTime().isAfter(LocalDateTime.now())) {
+                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+            }
+            help.setStartDateTime(event.getStartDateTime().minusWeeks(i));
+            help.setEndDateTime(event.getEndDateTime().minusWeeks(i));
+            if (help.getStartDateTime().isAfter(LocalDateTime.now())) {
+                recommendationLookup(getEventCollisions(help, initialScore, 12L), help, rec);
+            }
+        }
+
         if (rec.isEmpty()) {
             throw new ServiceException("Unfortunately we couldn't find any suggestions.");
         }
