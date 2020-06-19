@@ -15,6 +15,14 @@ import java.util.Optional;
 public interface UserService extends UserDetailsService {
 
     /**
+     * Gets all users
+     *
+     * @return all users
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    List<ApplicationUser> getAllUsers();
+
+    /**
      * Save new user into db.
      *
      * @param user New User with unencoded password (directly from Endpoint)
