@@ -1,7 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {faChevronLeft, faTimesCircle, faPlus, faCog} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faTimesCircle, faPlus, faCog, faKey, faRedoAlt} from "@fortawesome/free-solid-svg-icons";
 import {LabelService} from "../../services/label.service";
 import {Label} from "../../dtos/label";
+import {UserService} from "../../services/user.service";
+import {User} from "../../dtos/user";
+import {ChangeUserPasswordDto} from "../../dtos/ChangeUserPasswordDto";
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -14,12 +17,17 @@ export class AdminDashboardComponent implements OnInit {
   faTimesCircle = faTimesCircle;
   faPlus = faPlus;
   faCog = faCog;
+  faKey = faKey;
+  faRedoAlt = faRedoAlt;
   labels: Label[];
   newLabelName: string;
   addLabelExpanded: boolean = false;
+  users: User[];
 
-  constructor(private labelService: LabelService) {
+  constructor(private labelService: LabelService,
+              private userService: UserService) {
     this.loadAllLabels()
+    this.getAllUsers()
   }
 
   ngOnInit(): void {
@@ -46,5 +54,32 @@ export class AdminDashboardComponent implements OnInit {
 
   toggleAddLabelExpanded() {
     this.addLabelExpanded = !this.addLabelExpanded;
+  }
+
+  getAllUsers() {
+    this.userService.getAllUsers().subscribe((users) => {
+      this.users = users;
+    })
+  }
+
+  getGravatarLink(email, size) {
+    return this.userService.getGravatarLink(email, size);
+  }
+
+  generatePassword(): string {
+    const c = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return Array.apply(null, Array(4)).map(function () {
+      return Array.apply(null, Array(3)).map(function () {
+        return c.charAt(Math.random() * c.length);
+      }).join('');
+    }).join('-');
+  }
+
+  resetPassword(username: string) {
+    const password = this.generatePassword();
+    const changeUserPasswordDto = new ChangeUserPasswordDto(username, null, null, password);
+    this.userService.changePwd(changeUserPasswordDto).subscribe((user) => {
+      alert(`Password of "${username}" changed to: \n${password}`)
+    })
   }
 }
