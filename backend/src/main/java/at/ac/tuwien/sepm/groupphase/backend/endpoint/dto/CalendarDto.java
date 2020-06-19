@@ -8,15 +8,20 @@ import lombok.*;
 import java.util.List;
 
 @Data
-//@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CalendarDto extends PermissionDto {
+    @NonNull
     private Integer id;
+    @NonNull
     private String name;
+    @NonNull
     private List<Integer> organizationIds;
+    @NonNull
     private List<Integer> eventIds;
+    @NonNull
     private String description;
+    private boolean canCreateEvents;
 
     @JsonProperty("coverImageUrl")
     private String calculateCoverImageUrl() {

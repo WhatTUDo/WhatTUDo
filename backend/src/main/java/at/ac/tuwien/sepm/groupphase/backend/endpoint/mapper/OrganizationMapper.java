@@ -42,8 +42,9 @@ public abstract class OrganizationMapper {
     @BeforeMapping
     protected void mapPermissions(Organization organization, @MappingTarget OrganizationDto organizationDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        organizationDto.setCanEdit(permissionEvaluator.hasPermission(authentication, organization, "MOD"));
-        organizationDto.setCanDelete(permissionEvaluator.hasPermission(authentication, organization, "MOD"));
+        organizationDto.setCanEdit(permissionEvaluator.hasPermission(authentication, organization, "ADMIN"));
+        organizationDto.setCanDelete(permissionEvaluator.hasPermission(authentication, organization, "ADMIN"));
+        organizationDto.setCanCreateCalendar(permissionEvaluator.hasPermission(authentication, organization, "MOD"));
     }
 
     public abstract Organization organizationDtoToOrganization(OrganizationDto organizationDto);

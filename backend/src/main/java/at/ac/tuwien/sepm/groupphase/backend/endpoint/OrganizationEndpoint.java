@@ -49,7 +49,7 @@ public class OrganizationEndpoint {
     private final UserService userService;
 
 
-    @PreAuthorize("hasPermission(#dto, 'MOD')")
+    @PreAuthorize("hasPermission(#dto, 'ADMIN')")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -116,7 +116,7 @@ public class OrganizationEndpoint {
     }
 
 
-    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'ADMIN')")
     @DeleteMapping(value = "/{id}")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -186,7 +186,7 @@ public class OrganizationEndpoint {
 
     }
 
-    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'ADMIN')")
     @PutMapping(value = "/addMembership/{id}")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -222,7 +222,7 @@ public class OrganizationEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'ADMIN')")
     @CrossOrigin
     @PostMapping("/{id}/cover")
     @ResponseStatus(HttpStatus.OK)
