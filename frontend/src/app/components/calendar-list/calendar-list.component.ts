@@ -4,12 +4,12 @@ import {CalendarService} from '../../services/calendar.service';
 import {Calendar} from '../../dtos/calendar';
 import {Router} from '@angular/router';
 import {
-  faChevronLeft,
-  faCog,
-  faTimesCircle,
-  faPlus,
   faBookmark,
-  faCircleNotch
+  faChevronLeft,
+  faCircleNotch,
+  faCog,
+  faPlus,
+  faTimesCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {OrganizationService} from '../../services/organization.service';
 import {AuthService} from "../../services/auth.service";
@@ -42,7 +42,7 @@ export class CalendarListComponent implements OnInit {
 
   subscribedCalendars: Calendar[] = [];
   managedCalendars: Calendar[] = [];
-  calendars: Calendar[] = [];
+  otherCalendars: Calendar[];
 
   //TODO: Get filter form out of commit history.
 
@@ -54,25 +54,29 @@ export class CalendarListComponent implements OnInit {
     private feedbackService: FeedbackService,
     public authService: AuthService,
     private globals: Globals) {
-    this.getAllCalendars().then(() => {
+    this.getAllCalendars().then((calendars) => {
       this.loadSubscriptions().then(() => {
-        console.log(this.subscribedCalendars);
-        this.managedCalendars = this.calendars.filter(
+        this.managedCalendars = calendars.filter(
           cal => {
             return (cal.canEdit || cal.canDelete) && !this.subscribedCalendars.find(sc => sc.id === cal.id);
           }
         );
-      }).finally(() => {
-        this.loading = false;
-      });
+      })
+      this.otherCalendars = calendars.filter(
+        cal => {
+          return !(cal.canEdit || cal.canDelete) && !this.subscribedCalendars.find(sc => sc.id === cal.id);
+        }
+      )
+    }).finally(() => {
+      this.loading = false;
     });
 
   }
 
-  async getAllCalendars() {
-    this.calendars = await this.calendarService.getAllCalendars().toPromise();
+  async getAllCalendars(): Promise<Calendar[]> {
+    let calendars: Calendar[] = await this.calendarService.getAllCalendars().toPromise();
     let organizationIdSet = new Set<number>();
-    this.calendars.forEach(cal => {
+    calendars.forEach(cal => {
       cal.organizationIds.forEach(id => organizationIdSet.add(id));
     })
     for (const id of organizationIdSet) {
@@ -80,6 +84,7 @@ export class CalendarListComponent implements OnInit {
       org.coverImageUrl = this.globals.backendUri + org.coverImageUrl.slice(1);
       this.organizationsMap.set(id, org)
     }
+    return calendars;
   }
 
   ngOnInit(): void {
@@ -93,7 +98,9 @@ export class CalendarListComponent implements OnInit {
   }
 
   delete(id: number): void {
-    if (confirm(`You are deleting calendar "${this.calendars.find(c => c.id === id).name}". Are you sure?`)) {
+    if (confirm(`You are deleting calendar "${this.otherCalendars
+      .concat(this.managedCalendars).concat(this.subscribedCalendars)
+      .find(c => c.id === id).name}". Are you sure?`)) {
       this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
         this.getAllCalendars();
       });
@@ -104,14 +111,25 @@ export class CalendarListComponent implements OnInit {
 
   onClickSubscribe(calendarId: number) {
     this.authService.getUser().subscribe(user => {
-      let userName = user.name;
-      let subscription = new SubscriptionDto(0, userName, calendarId);
+      let subscription = new SubscriptionDto(0, user.name, calendarId);
       this.subscriptionService.create(subscription).subscribe(savedSub => {
         if (savedSub.calendarId != 0 && savedSub.userName != null) {
           this.feedbackService.displaySuccess("Subscribed!", "You subscribed successfully to this calendar!");
-          let calendar = this.calendars.filter(cal => {
-            return cal.id == calendarId
-          }).pop();
+
+          let calendar = this.managedCalendars.find(cal => {
+            return cal.id === calendarId
+          });
+          this.managedCalendars = this.managedCalendars.filter(cal => {
+            return cal.id !== calendarId
+          });
+          if (!calendar) {
+            calendar = this.otherCalendars.find(cal => {
+              return cal.id === calendarId
+            });
+            this.otherCalendars = this.otherCalendars.filter(cal => {
+              return cal.id !== calendarId
+            });
+          }
           this.subscribedCalendars.push(calendar);
         }
       })
@@ -122,13 +140,21 @@ export class CalendarListComponent implements OnInit {
     this.authService.getUser().subscribe(user => {
       this.subscriptionService.getSubscriptionsForUser(user.id).subscribe(subscriptions => {
         let filteredSubscriptions = subscriptions.filter(sub => {
-          return sub.calendarId == calendarId
+          return sub.calendarId === calendarId
         });
-        if (filteredSubscriptions.length == 1) {
+        if (filteredSubscriptions.length === 1) {
           this.subscriptionService.delete(filteredSubscriptions.pop().id).subscribe(deletedSubscription => {
             this.feedbackService.displaySuccess("Unsubscribed!", "You successfully unsubscribed from this calendar!");
+            let calendar = this.subscribedCalendars.find(cal => {
+              return cal.id === calendarId
+            });
+            if (calendar.canEdit || calendar.canDelete) {
+              this.managedCalendars.push(calendar);
+            } else {
+              this.otherCalendars.push(calendar);
+            }
             this.subscribedCalendars = this.subscribedCalendars.filter(cal => {
-              return cal.id != calendarId
+              return cal.id !== calendarId
             });
           })
         } else {
@@ -139,10 +165,7 @@ export class CalendarListComponent implements OnInit {
   }
 
   getOtherCalendars() {
-    let calenders = this.calendars.filter(
-      cal => !this.subscribedCalendars.find(sc => sc.id === cal.id) &&
-        !this.managedCalendars.find(mc => mc.id === cal.id)
-    )
+    let calenders = this.otherCalendars;
     if (this.otherCalenderFilteredBy) {
       calenders = calenders.filter(cal => {
         const nameMatched = cal.name.toLowerCase().match(this.otherCalenderFilteredBy.toLowerCase());

@@ -36,7 +36,7 @@ export class FeedbackHandlerComponent implements OnInit {
   static technicalInformation: String;
   static state: State;
   static isVisible: Boolean;
-  static dismissAfter = 5_000;
+  static dismissAfter = 2_500;
   faTimes = faTimes;
 
   constructor() {

@@ -21,8 +21,9 @@
       <div *ngIf="subscribedCalendars.length===0">You have no subscribed calenders yet.</div>
       <div *ngFor="let cal of this.subscribedCalendars" class="calendar">
         <div class="calendar-details">
-          <div routerLink="/calendar/{{cal.id}}">
-            <div class="calendar-name clickable no-hover-enlarge">{{cal.name}}</div>
+          <div class="clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+            <div class="calendar-name">{{cal.name}}</div>
+            <div class="calendar-description">{{cal.description}}</div>
           </div>
           <div>
             <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
@@ -52,8 +53,9 @@
       <h3>Calendars Managed by me</h3>
       <div *ngFor="let cal of this.managedCalendars" class="calendar">
         <div class="calendar-details">
-          <div routerLink="/calendar/{{cal.id}}">
-            <div class="calendar-name clickable no-hover-enlarge">{{cal.name}}</div>
+          <div class="clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+            <div class="calendar-name">{{cal.name}}</div>
+            <div class="calendar-description">{{cal.description}}</div>
           </div>
           <div>
             <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
@@ -87,11 +89,12 @@
       </div>
       <div *ngFor="let cal of getOtherCalendars()" class="calendar">
         <div class="calendar-details">
-          <div routerLink="/calendar/{{cal.id}}">
-            <div class="calendar-name clickable no-hover-enlarge">{{cal.name}}</div>
+          <div class="clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+            <div class="calendar-name">{{cal.name}}</div>
+            <div class="calendar-description">{{cal.description}}</div>
           </div>
           <div>
-            <div *ngFor="let orgId of cal.organizationIds" routerLink="/organization/{{orgId}}">
+            <div *ngFor="let orgId of cal.organizationIds" class="calendar-organizations" routerLink="/organization/{{orgId}}">
               <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-hover-enlarge">
                 <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
                 <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>

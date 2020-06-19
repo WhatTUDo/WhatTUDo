@@ -20,17 +20,24 @@
       font-weight: $f-bold;
       font-size: 24pt;
     }
-  }
 
-  .organization-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4pt;
-
-    > .avatar {
-      margin-right: 4pt;
+    .calendar-description {
+      margin-bottom: 4pt;
     }
+
   }
+
+
+    .organization-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4pt;
+
+      > .avatar {
+        margin-right: 4pt;
+      }
+    }
+
 
   .calendar-buttons {
     margin-left: auto;
