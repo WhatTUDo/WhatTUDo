@@ -40,8 +40,8 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
     /**
      * Searches for a partial match in Name, ignoring the case.
      *
-     * @param name
-     * @return
+     * @param name search term.
+     * @return List of event that match.
      */
     List<Event> findByNameContainingIgnoreCase(String name);
 

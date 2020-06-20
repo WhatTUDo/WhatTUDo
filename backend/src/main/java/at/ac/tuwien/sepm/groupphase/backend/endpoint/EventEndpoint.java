@@ -247,7 +247,7 @@ public class EventEndpoint {
     @CrossOrigin
     @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Get Cover Image", authorizations = {@Authorization(value = "apiKey")})
     public @ResponseBody
     byte[] getCoverImage(@PathVariable int id) {
         try {
@@ -264,7 +264,7 @@ public class EventEndpoint {
     @CrossOrigin
     @PostMapping("/{id}/cover")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Set Cover Image", authorizations = {@Authorization(value = "apiKey")})
     public EventDto setCoverImage(@PathVariable int id, @RequestParam("imagefile") MultipartFile file) {
         try {
             Event event = eventService.setCoverImage(eventService.findById(id), file.getBytes());
