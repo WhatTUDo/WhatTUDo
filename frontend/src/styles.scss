@@ -53,11 +53,12 @@ html, body {
 }
 
 .container {
-  padding: 0 12pt;
+  padding: 0 8pt;
 
   max-width: 100%;
 
   @media screen and (min-width: $mobile-breakpoint) {
+    padding: 0 24pt;
     max-width: 1380pt;
     margin: 0 auto;
   }
