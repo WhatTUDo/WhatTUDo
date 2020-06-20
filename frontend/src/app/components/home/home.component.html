@@ -24,5 +24,17 @@
     </button>
     <button  (click)="chooseView(3)">Show All Calendar Events
     </button>
+
+
+    <div class="calendar-toolbar">
+      <div class="clickable no-hover-enlarge subscription-checkbox" (click)="toggleSubscribedOnly()">
+        <fa-icon [icon]="faCheckSquare" *ngIf="subscribedOnly" role="checkbox" aria-checked="false"></fa-icon>
+        <fa-icon [icon]="faSquare" *ngIf="!subscribedOnly" role="checkbox" aria-checked="true"></fa-icon>
+        Show Only Subscribed Calendars
+      </div>
+      <div class="clickable no-hover-enlarge search-button" routerLink="/event-search">
+        <fa-icon [icon]="faSearch"></fa-icon>
+      </div>
+    </div>
   </div>
 </div>

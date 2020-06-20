@@ -13,6 +13,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @Configuration
@@ -23,6 +24,7 @@ public class SwaggerConfig {
     @Bean
     public Docket apiDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
+            .directModelSubstitute(LocalDateTime.class, String.class)
             .select()
             .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
             .paths(PathSelectors.any())

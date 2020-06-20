@@ -230,11 +230,26 @@ public class EventEndpoint {
     }
 
     @PreAuthorize("permitAll()")
+    @Transactional
+    @GetMapping("/search")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Search Name or Description of Events", authorizations = {@Authorization(value = "apiKey")})
+    public List<EventDto> searchNameAndDescription(@RequestParam(name = "name") String searchTerm) {
+        try {
+            return eventMapper.eventListToeventDtoList(eventService.findNameOrDescriptionBySearchTerm(searchTerm));
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
     @CrossOrigin
     @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
-    public @ResponseBody byte[] getCoverImage(@PathVariable int id) {
+    @ApiOperation(value = "Get Cover Image", authorizations = {@Authorization(value = "apiKey")})
+    public @ResponseBody
+    byte[] getCoverImage(@PathVariable int id) {
         try {
             Byte[] coverImageBlob = eventService.findById(id).getCoverImage();
             byte[] byteArray = new byte[coverImageBlob.length];
@@ -249,7 +264,7 @@ public class EventEndpoint {
     @CrossOrigin
     @PostMapping("/{id}/cover")
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation(value = "Edit event", authorizations = {@Authorization(value = "apiKey")})
+    @ApiOperation(value = "Set Cover Image", authorizations = {@Authorization(value = "apiKey")})
     public EventDto setCoverImage(@PathVariable int id, @RequestParam("imagefile") MultipartFile file) {
         try {
             Event event = eventService.setCoverImage(eventService.findById(id), file.getBytes());
