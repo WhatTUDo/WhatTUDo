@@ -115,6 +115,19 @@ public class OrganizationEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
+    @GetMapping(value = "/search")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Search Organizations with name (or name fragment)", authorizations = {@Authorization(value = "apiKey")})
+    public List<OrganizationDto> searchOrganizationNames(@RequestParam("name") String name) {
+        try {
+            return organizationMapper.organizationListToorganizationDtoList(organizationService.searchForName(name));
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
 
     @PreAuthorize("hasPermission(#id, 'ORGA', 'ADMIN')")
     @DeleteMapping(value = "/{id}")
