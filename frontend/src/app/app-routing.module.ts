@@ -21,6 +21,7 @@ import {OrganizationListComponent} from "./components/organization-list/organiza
 import {ExplanationComponent} from "./components/explanation/explanation.component";
 import {UserRegistrationComponent} from "./components/user-registration/user-registration.component";
 import {AdminDashboardComponent} from "./components/admin-dashboard/admin-dashboard.component";
+import {EventSearchComponent} from "./components/event-search/event-search.component";
 
 
 const routes: Routes = [
@@ -28,6 +29,7 @@ const routes: Routes = [
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
   {path: 'event/:id', component: EventComponent},
+  {path: 'event-search', component: EventSearchComponent},
   {path: 'login', component: LoginComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'organization/:id', component: OrganizationComponent},

@@ -231,11 +231,11 @@ public class EventEndpoint {
 
     @PreAuthorize("permitAll()")
     @Transactional
-    @GetMapping("/search={search}")
+    @GetMapping("/search")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Search Name or Description of Events", authorizations = {@Authorization(value = "apiKey")})
-    public List<EventDto> searchNameAndDescription(@PathVariable(value = "search") String searchTerm) {
+    public List<EventDto> searchNameAndDescription(@RequestParam(name = "name") String searchTerm) {
         try {
             return eventMapper.eventListToeventDtoList(eventService.findNameOrDescriptionBySearchTerm(searchTerm));
         } catch (ServiceException e) {
