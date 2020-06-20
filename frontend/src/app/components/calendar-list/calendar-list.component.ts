@@ -165,7 +165,7 @@ export class CalendarListComponent implements OnInit {
     })
   }
 
-  onSubmit() {
+  onSubmitSearch() {
     let formValue = this.searchForm.value;
     if (!formValue.name) {
       this.calendarSearchResult = [];

@@ -26,7 +26,8 @@
       Name
     </label>
     <div class="input-button-combo">
-      <input #organizationName [(ngModel)]="organization.name" class="form-control" id="organization.name" type=text>
+      <input #organizationName [(ngModel)]="organization.name" [ngModelOptions]="{standalone: true}"
+             class="form-control" id="organization.name" type=text>
       <button (click)="onSubmit(organizationName.value)"
               class="submit-button">Update
       </button>

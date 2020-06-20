@@ -5,16 +5,13 @@
 }
 
 nav {
-  height: 72pt;
-
-  a {
-    font-size: 2rem;
-  }
+  font-size: 24pt;
 }
 
 .brand-box {
   background-color: var(--text);
   color: var(--background);
+  font-size: 24pt;
   font-weight: $f-bold;
   padding: 4pt 8pt;
 }

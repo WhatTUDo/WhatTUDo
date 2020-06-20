@@ -91,6 +91,15 @@ public interface OrganizationService {
     List<Organization> findByName(String name) throws ServiceException;
 
     /**
+     * Searches Organization Name properties for the given string. Ignores case.
+     *
+     * @param name Term for which search is performed.
+     * @return List of Organizations whose name contains the search term.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    List<Organization> searchForName(String name) throws ServiceException;
+
+    /**
      * Find members of organization with id id.
      *
      * @param id id of organization whose members are returned

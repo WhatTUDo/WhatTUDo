@@ -29,7 +29,6 @@ export class ErrorInterceptor implements HttpInterceptor {
         catchError((error: HttpResponse<any>) => {
           if (error instanceof HttpErrorResponse) {
             try {
-              error = error.error;
               switch (error.status) {
                 case 401:
                   this.feedbackService.displayError('Wrong Credentials', 'Check if your username and password are entered corrected.');
