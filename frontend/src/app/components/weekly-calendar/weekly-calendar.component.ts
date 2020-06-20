@@ -59,12 +59,12 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
     private globals: Globals
   ) {
     this.dateLocale = globals.dateLocale;
-  }
-
-  ngOnInit(): void {
     this.displayingDate = this.getDate(this.offset);
     this.displayingWeek = this.getWeek(this.offset);
 
+  }
+
+  ngOnInit(): void {
     if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe(user => {
         this.subscriptionService.getSubscribedCalendars(user.id).subscribe(calendars => {

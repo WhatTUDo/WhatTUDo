@@ -30,6 +30,9 @@
   }
 }
 
+mat-form-field {
+  --text: $black !important;
+}
 
 html, body {
   background-color: var(--background);

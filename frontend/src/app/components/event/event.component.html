@@ -60,7 +60,7 @@
           </button>
         </div>
       </div>
-      <div class="calendar-info">
+      <div class="calendar-info" *ngIf="calendar">
         <div class="calendar-name clickable no-hover-enlarge" routerLink="/calendar/{{calendar.id}}">
           <fa-icon [icon]="faCalendar"></fa-icon>
           {{calendar.name}}
