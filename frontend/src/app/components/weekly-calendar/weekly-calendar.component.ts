@@ -41,14 +41,14 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
   /** color classes to add **/
   calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
 
+
+  @Input("subscribedOnly") filterIsActive: boolean;
   subscribeCalendarIds: number[];
-  attendingEvents: CalendarEvent[];
-  interestedEvents: CalendarEvent[];
-
-  @Input("view") filter: boolean[];
-
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
+
+
+
 
   dateLocale: string;
 
@@ -77,12 +77,6 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
           this.subscribeCalendarIds = calendars.map(cal => {
             return cal.id
           });
-        });
-        this.attendanceStatusService.getEventsUserIsAttending(user.id).subscribe((events) =>{
-          this.attendingEvents = events;
-        });
-        this.attendanceStatusService.getEventsUserIsInterestedIn(user.id).subscribe((events) =>{
-          this.interestedEvents = events;
         });
       })
     }
