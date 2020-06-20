@@ -54,7 +54,7 @@ public class LocationEndpointTest {
     @Autowired
     LocationMapper mapper;
 
-    /*
+
 
     @WithMockUser(username = "User 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
@@ -135,7 +135,7 @@ public class LocationEndpointTest {
         assertEquals(finalLocation.getLongitude(), locationDtoChanges.getLongitude());
 
     }
-    */
+
 
 }
 
