@@ -18,7 +18,8 @@
   <div *ngIf="!loading">
     <form class="filter input-button-combo" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
       <label for="calendar.name"></label>
-      <input class="form-control" formControlName="name" id="calendar.name" placeholder="Filter..." type="text">
+      <input class="form-control" formControlName="name" id="calendar.name" placeholder="Filter..." value=""
+             type="text">
       <button type="reset" *ngIf="searchActive" (click)="clearSearch()" class="button-red flat-right-side">Clear
       </button>
       <button type="submit">Filter</button>

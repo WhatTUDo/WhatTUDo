@@ -115,6 +115,9 @@ export class OrganizationListComponent implements OnInit {
   }
 
   clearSearch() {
+    this.searchForm = new FormGroup({
+      name: new FormControl('')
+    });
     this.organizationSearchResult = [];
     this.searchActive = false;
   }

@@ -47,8 +47,6 @@ export class CalendarListComponent implements OnInit {
   calendarSearchResult: Calendar[] = [];
   searchActive: boolean = false;
 
-  //TODO: Get filter form out of commit history.
-
   constructor(
     private calendarService: CalendarService,
     private router: Router,
@@ -220,6 +218,9 @@ export class CalendarListComponent implements OnInit {
   }
 
   clearSearch() {
+    this.searchForm = new FormGroup({
+      name: new FormControl('')
+    });
     this.calendarSearchResult = [];
     this.searchActive = false;
   }
