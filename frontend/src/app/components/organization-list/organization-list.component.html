@@ -17,12 +17,12 @@
     <button type="submit" >Filter</button>
   </form>
   <div class="">
-    <div *ngFor="let org of this.organizations" class="organization">
+    <div *ngFor="let org of searchActive?organizationSearchResult:organizations" class="organization">
       <img alt="" class="avatar avatar-small" src="{{org.coverImageUrl}}">
       <div class="organization-details clickable no-hover-enlarge" routerLink='/organization/{{org.id}}'>
         <div class="organization-name">{{org.name}}</div>
         <div class="organization-member-avatars">
-          <img alt="" class="avatar avatar-ultra-small" *ngFor="let avatar of organizationUserAvatars.get(org)"
+          <img alt="" class="avatar avatar-ultra-small" *ngFor="let avatar of organizationUserAvatars.get(org.id)"
                src="{{avatar}}">
         </div>
       </div>
