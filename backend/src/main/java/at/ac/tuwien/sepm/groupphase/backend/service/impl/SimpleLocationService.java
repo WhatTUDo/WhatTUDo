@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
+import at.ac.tuwien.sepm.groupphase.backend.events.event.EventUpdateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotAllowedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class SimpleLocationService implements LocationService {
+    private final ApplicationEventPublisher publisher;
     private final LocationRepository locationRepository;
     private final EventRepository eventRepository;
     private final Validator validator;
@@ -61,9 +64,16 @@ public class SimpleLocationService implements LocationService {
     @Override
     public Location update(Location location) {
         try {
-            validator.validateLocation(location);
-            Location toUpdate = this.findById(location.getId());
-            return locationRepository.save(toUpdate);
+            Optional<Location> found = locationRepository.findById(location.getId());
+            if (found.isPresent()) {
+                validator.validateLocation(location);
+                //TODO: publisher.publishEvent(new EventUpdateEvent(savedEvent.getName()));
+                return locationRepository.save(location);
+            } else {
+                throw new NotFoundException("No location found with id " + location.getId());
+            }
+        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
+            throw new ValidationException(e.getMessage());
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
@@ -72,7 +82,7 @@ public class SimpleLocationService implements LocationService {
     @Override
     public void delete(Integer id) {
         try {
-            if (id == null) throw new ValidationException("Id is not defined");
+            if (id == null || id <= 0) throw new ValidationException("Id is not defined");
             Location toDelete = this.findById(id);
             List<Event> elist = toDelete.getEvents();
 

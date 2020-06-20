@@ -216,7 +216,7 @@ public class Validator {
     public void validateLocation(Location location) {
         List<Exception> exceptions = new ArrayList<>();
         if (location==null) {
-            exceptions.add(new ValidationException("Location must not be null"));
+            throw new ValidationException("Location must not be null");
         }
         if (location.getName().isBlank()) {
             exceptions.add(new ValidationException("Name must not be empty"));
