@@ -1,3 +1,23 @@
 @import "../../../var.scss";
 
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
+  margin: 16pt 8pt 8pt 8pt;
+  font-size: 16pt;
+
+  .subscription-checkbox {
+    display: flex;
+    align-items: center;
+    font-variant: all-small-caps;
+
+    [role="checkbox"] {
+      margin-right: 4pt;
+
+      position: relative;
+      top: 1pt;
+    }
+  }
+}

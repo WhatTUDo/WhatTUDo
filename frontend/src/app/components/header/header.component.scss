@@ -12,6 +12,13 @@ nav {
   }
 }
 
+.brand-box {
+  background-color: var(--text);
+  color: var(--background);
+  font-weight: $f-bold;
+  padding: 4pt 8pt;
+}
+
 .collapse-button {
   @media screen and (min-width: $mobile-breakpoint) {
     display: none;

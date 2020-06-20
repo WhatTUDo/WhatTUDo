@@ -1,7 +1,6 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventDeleteEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventUpdateEvent;
@@ -202,6 +201,16 @@ public class SimpleEventService implements EventService {
             return eventRepository.findByCalendarId(id);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<Event> findNameOrDescriptionBySearchTerm(String searchterm) throws ServiceException {
+        try {
+            return eventRepository.findByNameContainingIgnoreCase(searchterm);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
     }
 

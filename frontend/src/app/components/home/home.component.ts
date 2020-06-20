@@ -4,7 +4,8 @@ import {UserService} from "../../services/user.service";
 import {Globals} from "../../global/globals";
 import {EventService} from "../../services/event.service";
 import {CalendarEvent} from "../../dtos/calendar-event";
-import {WeeklyCalendarComponent} from "../weekly-calendar/weekly-calendar.component";
+import {faCheckSquare, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faSquare} from "@fortawesome/free-regular-svg-icons";
 
 
 @Component({
@@ -18,6 +19,10 @@ export class HomeComponent implements OnInit {
   userId: number;
   recommendedEvents: CalendarEvent[];
   subscribedOnly: boolean = false;
+
+  faSearch = faSearch;
+  faCheckSquare = faCheckSquare;
+  faSquare = faSquare;
 
   constructor(public authService: AuthService,
               private userService: UserService,

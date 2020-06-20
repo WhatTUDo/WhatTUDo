@@ -14,6 +14,8 @@ import org.springframework.security.access.PermissionEvaluator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public abstract class EventMapper {
     @Autowired
@@ -42,6 +44,8 @@ public abstract class EventMapper {
         Calendar cal = calendarRepository.findById(eventDto.getCalendarId()).orElseThrow(() -> new NotFoundException("No Calendar with this ID"));
         event.setCalendar(cal);
     }
+
+    public abstract List<EventDto> eventListToeventDtoList(List<Event> eventList);
 
    /* CalendarService calendarService;
 

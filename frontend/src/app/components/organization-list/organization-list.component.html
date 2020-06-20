@@ -10,6 +10,12 @@
       <fa-icon [icon]="faPlus" routerLink="/form/organization"></fa-icon>
     </div>
   </div>
+  <form class="filter input-button-combo" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <label for="organization.name"></label>
+    <input class="form-control" formControlName="name" id="organization.name" placeholder="Filter…" value="" type="text">
+    <button type="reset" *ngIf="searchActive" (click)="clearSearch()" class="button-red flat-right-side">Clear</button>
+    <button type="submit" >Filter</button>
+  </form>
   <div class="">
     <div *ngFor="let org of this.organizations" class="organization">
       <img alt="" class="avatar avatar-small" src="{{org.coverImageUrl}}">

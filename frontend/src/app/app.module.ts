@@ -46,6 +46,7 @@ import {ExplanationComponent} from './components/explanation/explanation.compone
 import {EventConflictResolverComponent} from './components/event-conflict-resolver/event-conflict-resolver.component';
 import {AdminDashboardComponent} from './components/admin-dashboard/admin-dashboard.component';
 import {MatRadioModule} from "@angular/material/radio";
+import { EventSearchComponent } from './components/event-search/event-search.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import {MatRadioModule} from "@angular/material/radio";
     ExplanationComponent,
     UserRegistrationComponent,
     EventConflictResolverComponent,
-    AdminDashboardComponent
+    AdminDashboardComponent,
+    EventSearchComponent
   ],
   imports: [
     BrowserModule,
