@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {faChevronLeft, faTimesCircle, faPlus, faCog, faKey, faRedoAlt} from "@fortawesome/free-solid-svg-icons";
+import {faChevronLeft, faTimesCircle, faPlus, faCog, faKey, faRedoAlt, faTimes} from "@fortawesome/free-solid-svg-icons";
 import {LabelService} from "../../services/label.service";
 import {Label} from "../../dtos/label";
 import {UserService} from "../../services/user.service";
@@ -19,10 +19,12 @@ export class AdminDashboardComponent implements OnInit {
   faCog = faCog;
   faKey = faKey;
   faRedoAlt = faRedoAlt;
+  faTimes = faTimes;
   labels: Label[];
   newLabelName: string;
   addLabelExpanded: boolean = false;
   users: User[];
+
 
   constructor(private labelService: LabelService,
               private userService: UserService) {

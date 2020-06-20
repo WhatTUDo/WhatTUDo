@@ -89,6 +89,10 @@ img {
 a {
   color: $blue;
 
+  &.plain {
+    color: inherit !important;
+  }
+
   &:hover, &:focus {
     color: transparentize($blue, 0.75);
     text-decoration: none;

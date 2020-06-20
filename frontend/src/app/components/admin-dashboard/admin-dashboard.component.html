@@ -32,10 +32,11 @@
     <div class="title-icon-button-combo">
       <h2>Event Labels</h2>
       <div class="icon-button clickable no-hover-enlarge" (click)="toggleAddLabelExpanded()">
-        <fa-icon [icon]="faPlus">Add Label</fa-icon>
+        <fa-icon *ngIf="!addLabelExpanded" [icon]="faPlus">Add Label</fa-icon>
+        <fa-icon *ngIf="addLabelExpanded" [icon]="faTimes"></fa-icon>
       </div>
     </div>
-    <form (keyup.enter)="onSubmit()" class="form input-button-combo">
+    <form (keyup.enter)="onSubmit()" class="form input-button-combo add-label-section" *ngIf="addLabelExpanded">
       <label for="label.name"></label>
       <input class="form-control" [(ngModel)]="newLabelName" id="label.name" placeholder="New Label" type="text">
       <button class="no-hover-enlarge" type="submit">Create</button>
@@ -59,7 +60,9 @@
     </div>
   </div>
   <div>
-    <h2>Admin</h2>
-    <div></div>
+    <a href="http://hasthelargehadroncolliderdestroyedtheworldyet.com" class="plain">
+      <h2>Has this Angular frontend crashed yet?</h2>
+      <div>No.</div>
+    </a>
   </div>
 </div>

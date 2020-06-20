@@ -1,5 +1,13 @@
 @import "../../../var.scss";
 
+.add-label-section {
+  margin-bottom: 8pt;
+
+  label {
+    display: none;
+  }
+}
+
 #label-container {
   margin-bottom: 12pt;
   align-items: center;
