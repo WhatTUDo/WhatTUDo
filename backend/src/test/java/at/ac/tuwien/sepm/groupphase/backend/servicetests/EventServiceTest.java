@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.groupphase.backend.servicetests;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
@@ -10,21 +9,17 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
-import org.hibernate.service.spi.ServiceException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Optional;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -108,6 +103,18 @@ public class EventServiceTest {
         Event eventEntity = eventRepository.save(new Event("Delete Event Test", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
 
         service.delete(eventEntity.getId());
+    }
+
+    @Test
+    public void search_Event_returnsEventList() {
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 1", Collections.singletonList(new Organization())));
+        Event savedEvent1 = service.save(new Event("Findme 1", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
+        Event savedEvent2 = service.save(new Event("Findme 2", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
+
+        List<Event> foundEvents = service.findNameOrDescriptionBySearchTerm("find");
+
+        assertNotEquals(0, foundEvents.size());
+
     }
 
 

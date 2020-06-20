@@ -10,6 +10,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
+import at.ac.tuwien.sepm.groupphase.backend.service.specification.EventSpecification;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -202,6 +204,16 @@ public class SimpleEventService implements EventService {
             return eventRepository.findByCalendarId(id);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<Event> findNameOrDescriptionBySearchTerm(String searchterm) throws ServiceException {
+        try {
+            return eventRepository.findByNameContainingIgnoreCase(searchterm);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
     }
 
