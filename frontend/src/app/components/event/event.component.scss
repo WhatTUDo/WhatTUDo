@@ -29,7 +29,8 @@
   height: $mobile-object-full-height;
 
   @media (screen and min-width: $mobile-breakpoint) {
-    height: 100%
+    min-height: $mobile-object-full-height;
+    height: calc(100vh - 160pt);
   }
 
   border-radius: $rounded-radius;

@@ -29,16 +29,16 @@
           <option *ngFor="let cal of editableCalendars" [selected]="cal.id === calendarEvent.calendarId"
                   value="{{cal.id}}">{{cal.name}}</option>
         </select>
-        <hr>
+
 
         <label for="event.name">Name *</label>
         <input [(ngModel)]="calendarEvent.name" class="form-control" id="event.name" type="text">
-        <hr>
+
 
         <label for="event.description">Description</label>
         <textarea [(ngModel)]="calendarEvent.description" class="form-control" id="event.description" type="text">
         </textarea>
-        <hr>
+
 
         <div class="mat-form-container">
           <div class="row">
@@ -83,7 +83,7 @@
           </div>
 
         </div>
-        <hr>
+
         <label for="label-picker">Labels</label>
 
         <div id="label-picker">
@@ -94,7 +94,7 @@
           </div>
         </div>
       </div>
-      <hr>
+
 
       <label for="location-picker">Location</label>
       <input [(ngModel)]="calendarEvent.location" id="location" name="location" type="hidden">
@@ -102,7 +102,7 @@
         <app-event-location (locationSaved)="saveLocationToEvent($event)"
                             [location]="calendarEvent.location"></app-event-location>
       </div>
-      <hr>
+
       <div class="row col-md-8 button-row">
         <button (click)="onSubmit()" class="button-green clickable">Submit</button>
         <button (click)="deleteEvent()" class="button-red clickable">Delete</button>

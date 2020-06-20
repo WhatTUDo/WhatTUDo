@@ -59,8 +59,7 @@ export class UserService {
   }
 
   getGravatarLink(email: String, size: number) {
-    // Return base64 of a 1x1px transparent gif if no email is given.
-    if (!email) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+    if (!email) email = '';
     const gravatarHash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${gravatarHash}?s=${Math.trunc(size)}&d=identicon`;
   }

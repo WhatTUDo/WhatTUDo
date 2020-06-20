@@ -11,6 +11,10 @@ form {
   }
 }
 
+input:not([matInput]), select, textarea {
+  margin-bottom: 16pt;
+}
+
 #label-picker {
   display: flex;
   margin-bottom: 12pt;
@@ -154,8 +158,10 @@ form {
 }
 
 .button-row {
+  margin-top: 8pt;
+  margin-bottom: 16pt;
+
   button {
     margin-right: 8pt;
-    margin-bottom: 16pt;
   }
 }

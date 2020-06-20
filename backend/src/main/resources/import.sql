@@ -85,17 +85,17 @@ VALUES (1, 1, 'MOD'),
 
 
 INSERT INTO EVENT (ID, END_DATE_TIME, NAME, START_DATE_TIME, CALENDAR_ID, CREATED_AT, UPDATED_AT)
-VALUES (1, '2020-06-16 18:00:00', 'Grillparty der FS Architektur', '2020-06-16 12:00:00', 1, CURRENT_TIMESTAMP(),
+VALUES (1, '2020-06-23 18:00:00', 'Grillparty der FS Architektur', '2020-06-23 12:00:00', 1, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (2, '2020-06-18 20:00:00', 'Online-Beratung', '2020-06-18 19:00:00', 2, CURRENT_TIMESTAMP(),
+       (2, '2020-06-25 20:00:00', 'Online-Beratung', '2020-06-25 19:00:00', 2, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (3, '2020-06-15 11:30:00', 'Gemeinsames Fruehstueck mit den Fachschaften', '2020-06-15 09:00:00', 7,
+       (3, '2020-06-22 11:30:00', 'Gemeinsames Frühstueck mit den Fachschaften', '2020-06-22 09:00:00', 7,
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (4, '2020-06-19 18:00:00', 'Feier zum 150.Gruendungstag', '2020-06-19 12:00:00', 4, CURRENT_TIMESTAMP(),
+       (4, '2020-06-26 18:00:00', 'Feier zum 150. Gründungstag', '2020-06-26 12:00:00', 4, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (5, '2020-06-22 21:00:00', 'Seminar zum ES-Tut', '2020-06-22 19:30:00', 3, CURRENT_TIMESTAMP(),
+       (5, '2020-06-27 21:00:00', 'Seminar zum ES-Tut', '2020-06-27 19:30:00', 3, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (6, '2020-06-19 15:00:00', 'Tutorium zum Thema Studienabschluss', '2020-06-15 14:00:00', 5, CURRENT_TIMESTAMP(),
+       (6, '2020-06-23 15:00:00', 'Tutorium zum Thema Studienabschluss', '2020-06-22 14:00:00', 5, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP());
 
 INSERT INTO LABEL (ID, NAME, CREATED_AT, UPDATED_AT)

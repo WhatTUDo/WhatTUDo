@@ -76,6 +76,7 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
   height: $mobile-object-full-height;
 
   @media (screen and min-width: $mobile-breakpoint) {
+    min-height: $mobile-object-full-height;
     height: $desktop-object-full-height;
   }
 
