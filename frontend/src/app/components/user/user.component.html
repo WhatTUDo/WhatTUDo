@@ -3,7 +3,7 @@
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
   <span *ngIf="user">User: {{user.name}}</span>
 </div>
-<div *ngIf="user" class="centered-one-third">
+<div *ngIf="user" class="grid-one-third">
   <div>
     <h2>You</h2>
     <div class="user-info">
@@ -11,20 +11,6 @@
       <div class="user-details">
         <div class="name">{{user.name}}</div>
         <div class="email">{{user.email}}</div>
-      </div>
-    </div>
-    <div class="user-organization-list">
-      <div *ngFor="let org of userInOrganizations" class="user-organization">
-        <img alt="" class="avatar avatar-small clickable no-hover-enlarge"
-             src="{{getOrganizationAvatarLink(org.id, 128)}}" routerLink="/organization/{{org.id}}">
-        <div class="user-organization-details clickable no-hover-enlarge"
-             routerLink="/organization/{{org.id}}">
-          <div class="user-organization-name">{{org.name}}</div>
-          <!--          <div class="user-organization-role">{{org.role}}</div>-->
-        </div>
-        <div class="clickable no-hover-enlarge user-exit-organization-button">
-          <fa-icon (click)="removeSelfFromOrg(org.id)" [icon]="faSignOutAlt"></fa-icon>
-        </div>
       </div>
     </div>
     <div class="user-action-container">
@@ -35,5 +21,25 @@
         Sign out
       </div>
     </div>
+  </div>
+  <div class="user-organization-list">
+    <div *ngFor="let org of userInOrganizations" class="user-organization">
+      <img alt="" class="avatar avatar-small clickable no-hover-enlarge"
+           src="{{getOrganizationAvatarLink(org.id, 128)}}" routerLink="/organization/{{org.id}}">
+      <div class="user-organization-details clickable no-hover-enlarge"
+           routerLink="/organization/{{org.id}}">
+        <div class="user-organization-name">{{org.name}}</div>
+        <!--          <div class="user-organization-role">{{org.role}}</div>-->
+      </div>
+      <div class="clickable no-hover-enlarge user-exit-organization-button">
+        <fa-icon (click)="removeSelfFromOrg(org.id)" [icon]="faSignOutAlt"></fa-icon>
+      </div>
+    </div>
+  </div>
+  <div>
+    <h3>Attending</h3>
+    <app-promo-event-list [eventList]="attendingEvents"></app-promo-event-list>
+    <h3>Interested</h3>
+    <app-promo-event-list [eventList]="interestedEvents"></app-promo-event-list>
   </div>
 </div>

@@ -108,12 +108,13 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
     }, 500)
   }
 
+
   ngOnChanges(changes: SimpleChanges) {
     this.loadEvents();
   }
 
   loadEvents() {
-    if (this.filter[0]) {
+    if (this.filterIsActive) {
       let filteredEventsOfTheWeek = new Map<String, CalendarEvent[]>();
       this.eventsOfTheWeek.forEach((events, day) => {
         let filteredEvents = events.filter(event => {
@@ -122,16 +123,10 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
         filteredEventsOfTheWeek.set(day, filteredEvents);
       });
       this.eventsOfTheWeek = filteredEventsOfTheWeek;
-    } else if(this.filter[1]){
-         this.loadEventsOfThisWeek(this.attendingEvents);
-    }else if(this.filter[2]){
-      this.loadEventsOfThisWeek(this.interestedEvents);
-    }
-    else if(this.filter[3]) {
+    } else {
       this.loadAllEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     }
   }
-
 
   /**
    * Calls Service to load Events for the week.
@@ -141,28 +136,23 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
   loadAllEventsForWeek(from: Date, to: Date) {
     this.eventService.getMultipleEvents(from, to).subscribe((events: Array<CalendarEvent>) => {
       events.forEach(event => {
-
-
-      });
-       this.loadEventsOfThisWeek(events);
-    });
-  }
-
-  loadEventsOfThisWeek(events: CalendarEvent[]){
-    this.displayingWeek.forEach((day: Date) => {
-      let keyISOString = this.getMidnight(day).toISOString();
-      this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
-        let startDate = new Date(event.startDateTime);
+        let startDate = new Date(event.startDateTime)
         let endDate = new Date(event.endDateTime);
 
         event.startDateTime = startDate;
         event.endDateTime = endDate;
-        const isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
-        const isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
-        return isAfterMidnight && isBeforeEndOfDay;
-      }));
-    })
+      });
+      this.displayingWeek.forEach((day: Date) => {
+        let keyISOString = this.getMidnight(day).toISOString()
+        this.eventsOfTheWeek.set(keyISOString, events.filter(event => {
+          const isAfterMidnight = event.endDateTime.getTime() > this.getMidnight(day).getTime();
+          const isBeforeEndOfDay = event.startDateTime.getTime() < this.getEndOfDay(day).getTime();
+          return isAfterMidnight && isBeforeEndOfDay;
+        }));
+      })
+    });
   }
+
   updateDatetime() {
     const today = this.getToday();
     this.currentMonth = today.toLocaleString(this.globals.dateLocale, {month: 'long'});

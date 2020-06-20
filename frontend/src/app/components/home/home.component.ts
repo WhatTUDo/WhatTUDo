@@ -4,7 +4,6 @@ import {UserService} from "../../services/user.service";
 import {Globals} from "../../global/globals";
 import {EventService} from "../../services/event.service";
 import {CalendarEvent} from "../../dtos/calendar-event";
-import {falseIfMissing} from 'protractor/built/util';
 import {faCheckSquare, faSearch} from "@fortawesome/free-solid-svg-icons";
 import {faSquare} from "@fortawesome/free-regular-svg-icons";
 
@@ -19,7 +18,6 @@ export class HomeComponent implements OnInit {
   currentTime: string;
   userId: number;
   recommendedEvents: CalendarEvent[];
-  view: boolean[] = [false, false, false, true];
   subscribedOnly: boolean = false;
 
   faSearch = faSearch;
@@ -67,21 +65,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  toggleSubscribedOnly(){
+  toggleSubscribedOnly() {
     this.subscribedOnly = !this.subscribedOnly;
   }
-
-  chooseView(viewNr: number){
-    if(viewNr == 0){
-      this.view = [true, false, false, false];
-    }else if(viewNr == 1) {
-      this.view = [false, true, false, false];
-    }else if(viewNr == 2){
-      this.view= [false, false, true , false];
-    }else if(viewNr == 3){
-      this.view = [false, false, false, true];
-    }
-  }
-
-
 }
