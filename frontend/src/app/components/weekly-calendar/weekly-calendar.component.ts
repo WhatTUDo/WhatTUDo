@@ -21,10 +21,13 @@ export class WeeklyCalendarComponent extends CalendarBase implements OnInit, OnC
   /** color classes to add **/
   calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
 
+
+  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
+
+
   @Input("subscribedOnly") filterIsActive: boolean;
   subscribeCalendarIds: number[];
 
-  eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
   constructor(
     public eventService: EventService,
@@ -52,6 +55,7 @@ export class WeeklyCalendarComponent extends CalendarBase implements OnInit, OnC
       this.updateDatetime();
     }, 1000);
   }
+
 
   ngOnChanges(changes: SimpleChanges) {
     this.loadEvents();

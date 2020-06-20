@@ -230,13 +230,19 @@ public class Validator {
         if (location.getLatitude()>180 || location.getLatitude()<-180) {
             exceptions.add(new ValidationException("Invalid Latitude"));
         }
-        if (location.getLongitude()>180 || location.getLongitude()<-180) {
+        if (location.getLongitude() > 180 || location.getLongitude() < -180) {
             exceptions.add(new ValidationException("Invalid Longitude"));
         }
 
         if (!exceptions.isEmpty()) {
             String summary = createExceptionSummaryString(exceptions);
             throw new ValidationException(summary);
+        }
+    }
+
+    public void validateSearchTerm(String searchTerm) {
+        if (searchTerm.equals(null) || searchTerm == "") {
+            throw new ValidationException("Search String cannot be null or Empty!");
         }
     }
 }
