@@ -26,6 +26,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -354,6 +355,68 @@ public class EventEndpointTest {
         }
         if (!b) {
             fail();
+        }
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    public void searchForEvents_whenNoEventsAreSaved_shouldReturnEmptyList() {
+        List<EventDto> eventDtos = endpoint.searchNameAndDescription("find");
+
+        assertEquals(0, eventDtos.size());
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    public void searchForEvents_returnsListOfEvents() {
+        Organization orga;
+        Calendar calendar;
+        orga = new Organization("Test Organization2");
+        orga.setId(1);
+        calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
+        calendar.setId(1);
+
+        EventDto eventDto = new EventDto(10, "FindMe", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+        EventDto returnedEvent = endpoint.post(eventDto);
+
+        List<EventDto> eventDtos = endpoint.searchNameAndDescription("find");
+
+        assertNotEquals(0, eventDtos.size());
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    public void searchForEvents_whenSearchTermMatchesNothing_shouldReturnEmptyList() {
+        Organization orga;
+        Calendar calendar;
+        orga = new Organization("Test Organization3");
+        orga.setId(1);
+        calendar = new Calendar("Test Calendar3", Collections.singletonList(orga));
+        calendar.setId(1);
+
+        EventDto eventDto = new EventDto(10, "FindMe", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+        EventDto returnedEvent = endpoint.post(eventDto);
+        List<EventDto> eventDtos = endpoint.searchNameAndDescription("nothing will be found");
+
+        assertEquals(0, eventDtos.size());
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    public void searchForEvents_whenSearchTermisNullOrEmpty_HttpStatusUnprocessableEntityIsThrown() {
+        Organization orga;
+        Calendar calendar;
+        orga = new Organization("Test Organization4");
+        orga.setId(1);
+        calendar = new Calendar("Test Calendar4", Collections.singletonList(orga));
+        calendar.setId(1);
+
+        EventDto eventDto = new EventDto(10, "FindMe", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId());
+        EventDto returnedEvent = endpoint.post(eventDto);
+        try {
+            List<EventDto> eventDtos = endpoint.searchNameAndDescription("");
+        } catch (ResponseStatusException e) {
+            assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.getStatus());
         }
     }
 

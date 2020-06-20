@@ -240,6 +240,8 @@ public class EventEndpoint {
             return eventMapper.eventListToeventDtoList(eventService.findNameOrDescriptionBySearchTerm(searchTerm));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
     }
 
