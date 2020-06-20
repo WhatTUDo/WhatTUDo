@@ -30,6 +30,9 @@
   }
 }
 
+mat-form-field {
+  --text: $black !important;
+}
 
 html, body {
   background-color: var(--background);
@@ -50,11 +53,12 @@ html, body {
 }
 
 .container {
-  padding: 0 12pt;
+  padding: 0 8pt;
 
   max-width: 100%;
 
   @media screen and (min-width: $mobile-breakpoint) {
+    padding: 0 24pt;
     max-width: 1380pt;
     margin: 0 auto;
   }
@@ -88,6 +92,10 @@ img {
 
 a {
   color: $blue;
+
+  &.plain {
+    color: inherit !important;
+  }
 
   &:hover, &:focus {
     color: transparentize($blue, 0.75);

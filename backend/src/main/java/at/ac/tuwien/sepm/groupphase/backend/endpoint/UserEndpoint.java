@@ -53,7 +53,7 @@ public class UserEndpoint {
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
 
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('SYSADMIN')")
     @GetMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)

@@ -4,16 +4,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-variant: all-small-caps;
 
   margin: 16pt 8pt 8pt 8pt;
   font-size: 16pt;
 
-  .subscription-checkbox {
+  .action {
     display: flex;
     align-items: center;
-    font-variant: all-small-caps;
 
-    [role="checkbox"] {
+    fa-icon {
       margin-right: 4pt;
 
       position: relative;

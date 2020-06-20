@@ -16,7 +16,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 export class OrganizationListComponent implements OnInit {
 
   organizations: Organization[];
-  organizationUserAvatars: Map<Organization, string[]> = new Map();
+  organizationUserAvatars: Map<number, string[]> = new Map();
 
   searchForm = new FormGroup({
     name: new FormControl('')
@@ -56,7 +56,7 @@ export class OrganizationListComponent implements OnInit {
       organizations.forEach(org => {
         org.coverImageUrl = this.globals.backendUri+org.coverImageUrl.slice(1);
         this.organizationService.getMembers(org.id).subscribe(users => {
-          this.organizationUserAvatars.set(org, users.map(user => {
+          this.organizationUserAvatars.set(org.id, users.map(user => {
             return this.getGravatarLink(user.email, 64)
           }))
         })
@@ -84,8 +84,10 @@ export class OrganizationListComponent implements OnInit {
     if (validationIsPassed) {
       // submit to service
       console.log("search");
-      //TODO: Organization Search
-      this.searchActive = true;
+      this.organizationService.searchOrganization(formValue.name).subscribe((searchResult) => {
+        this.organizationSearchResult = searchResult;
+        this.searchActive = true;
+      })
     }
   }
 

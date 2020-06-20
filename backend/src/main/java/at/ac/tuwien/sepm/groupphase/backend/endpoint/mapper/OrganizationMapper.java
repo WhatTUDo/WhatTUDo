@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -81,5 +82,6 @@ public abstract class OrganizationMapper {
         return new OrganizationDto(organization.getId(), organization.getName(), calendarIds);
     }*/
 
+    public abstract List<OrganizationDto> organizationListToorganizationDtoList(List<Organization> organizationList);
 
 }

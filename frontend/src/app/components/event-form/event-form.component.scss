@@ -131,13 +131,17 @@ form {
   //border: 2pt solid $black;
 
   .mat-datepicker-container {
+    display: flex;
+    justify-content: center;
     padding: 8pt;
 
     mat-form-field {
+      --text: $black !important;
       font-family: inherit !important;
 
       input {
         background: transparent !important;
+        color: $black !important;
       }
     }
   }
@@ -146,5 +150,12 @@ form {
     color: $black !important;
     border-top: 2pt solid $black;
     background-color: $white !important;
+  }
+}
+
+.button-row {
+  button {
+    margin-right: 8pt;
+    margin-bottom: 16pt;
   }
 }

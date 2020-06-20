@@ -82,4 +82,8 @@ export class UserService {
     return this.httpClient.get<User>(this.usersBaseUri+'/getByName/'+name);
   }
 
+  getAllUsers(): Observable<User[]> {
+    return this.httpClient.get<User[]>(this.usersBaseUri);
+  }
+
 }
