@@ -17,6 +17,6 @@ public interface CalendarRepository extends JpaRepository<Calendar, Integer> {
      * @param nameString String to be tested against all calendar-names if these contain nameString.
      * @return list of all calendar entries that contain nameString.
      */
-    List<Calendar> findAllByNameContains(String nameString);
+    List<Calendar> findAllByNameContainingIgnoreCase(String nameString);
 
 }
