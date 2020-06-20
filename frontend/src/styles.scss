@@ -415,7 +415,14 @@ iframe {
   justify-content: space-between;
 
   .icon-button {
-    font-size: 32pt;
     color: var(--secondary);
+  }
+
+  h1 + .icon-button, h2 + .icon-button {
+    font-size: 32pt;
+  }
+
+  h3 + .icon-button, h4 + .icon-button, h5 + .icon-button, h6 + .icon-button {
+    font-size: 16pt;
   }
 }

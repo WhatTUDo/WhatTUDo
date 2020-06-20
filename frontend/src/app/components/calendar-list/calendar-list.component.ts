@@ -9,7 +9,8 @@ import {
   faCircleNotch,
   faCog,
   faPlus,
-  faTimesCircle
+  faTimesCircle,
+  faFileDownload
 } from "@fortawesome/free-solid-svg-icons";
 import {OrganizationService} from '../../services/organization.service';
 import {AuthService} from "../../services/auth.service";
@@ -36,6 +37,7 @@ export class CalendarListComponent implements OnInit {
   faPlus = faPlus;
   faBookmark = faBookmark;
   faCircleNotch = faCircleNotch;
+  faFileDownload = faFileDownload;
 
   loading: boolean = true;
 

@@ -19,8 +19,9 @@
     <form class="filter input-button-combo" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
       <label for="calendar.name"></label>
       <input class="form-control" formControlName="name" id="calendar.name" placeholder="Filter..." type="text">
-      <button type="reset" *ngIf="searchActive" (click)="clearSearch()" class="button-red flat-right-side">Clear</button>
-      <button type="submit" >Filter</button>
+      <button type="reset" *ngIf="searchActive" (click)="clearSearch()" class="button-red flat-right-side">Clear
+      </button>
+      <button type="submit">Filter</button>
     </form>
     <div *ngIf="searchActive">
       <div *ngFor="let cal of this.calendarSearchResult" class="calendar">
@@ -39,10 +40,12 @@
           </div>
         </div>
         <div class="calendar-buttons">
-          <fa-icon (click)="onClickUnsubscribe(cal.id)" *ngIf="authService.isLoggedIn() && isSubscribed(cal.id)" [icon]="faBookmark"
+          <fa-icon (click)="onClickUnsubscribe(cal.id)" *ngIf="authService.isLoggedIn() && isSubscribed(cal.id)"
+                   [icon]="faBookmark"
                    class="subscribed clickable no-hover-enlarge">Unsubscribe
           </fa-icon>
-          <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()  && !isSubscribed(cal.id)" [icon]="faBookmark"
+          <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()  && !isSubscribed(cal.id)"
+                   [icon]="faBookmark"
                    class="clickable no-hover-enlarge">Subscribe
           </fa-icon>
           <fa-icon *ngIf="cal.canEdit" [icon]="faCog" class="clickable no-hover-enlarge"
@@ -57,7 +60,12 @@
       </div>
     </div>
     <div *ngIf="authService.isLoggedIn() && !searchActive">
-      <h3>My Calendars</h3>
+      <div class="title-icon-button-combo">
+        <h3>My Calendars</h3>
+        <div class="icon-button clickable no-hover-enlarge" *ngIf="subscribedCalendars.length!==0">
+          <fa-icon [icon]="faFileDownload"></fa-icon>
+        </div>
+      </div>
       <div *ngIf="subscribedCalendars.length===0">You have no subscribed calenders yet.</div>
       <div *ngFor="let cal of this.subscribedCalendars" class="calendar">
         <div class="calendar-details">

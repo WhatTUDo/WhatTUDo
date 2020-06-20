@@ -36,7 +36,7 @@
       </div>
       <div *ngIf="organization.canEdit"
            (click)="userAddExpanded = !userAddExpanded"
-           class="icon-button clickable no-hover-enlarge no-shadow">
+           class="icon-button clickable no-hover-enlarge">
         <fa-icon *ngIf="!userAddExpanded" [icon]="faPlus"></fa-icon>
         <fa-icon *ngIf="userAddExpanded" [icon]="faTimes"></fa-icon>
       </div>
