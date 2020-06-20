@@ -41,7 +41,6 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
   /** color classes to add **/
   calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
 
-  @Input("subscribedOnly") filterIsActive:boolean;
   subscribeCalendarIds: number[];
   attendingEvents: CalendarEvent[];
   interestedEvents: CalendarEvent[];

@@ -17,7 +17,6 @@ export class HomeComponent implements OnInit {
   currentTime: string;
   userId: number;
   recommendedEvents: CalendarEvent[];
-  subscribedOnly: boolean= false;
   view: boolean[] = [false, false, false, true];
   constructor(public authService: AuthService,
               private userService: UserService,
@@ -60,9 +59,6 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  toggleSubscribedOnly() {
-    this.subscribedOnly = !this.subscribedOnly;
-  }
 
   chooseView(viewNr: number){
     if(viewNr == 0){
