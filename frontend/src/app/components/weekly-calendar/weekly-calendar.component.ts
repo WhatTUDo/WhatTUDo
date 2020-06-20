@@ -193,6 +193,11 @@ export class WeeklyCalendarComponent implements OnInit, OnChanges {
     this.updateOffsettedDates();
   }
 
+  resetOffset(){
+    this.offset = 0;
+    this.updateOffsettedDates();
+  }
+
   getToday() {
     let today = new Date(Date.now());
     today.setHours(0, 0, 0, 0);
