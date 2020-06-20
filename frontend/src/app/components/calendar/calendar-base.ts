@@ -1,5 +1,7 @@
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {EventService} from "../../services/event.service";
+import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {Globals} from "../../global/globals";
 
 export class CalendarBase {
   /** Change view… variables to configure: */
@@ -14,14 +16,25 @@ export class CalendarBase {
   viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
 
   /** min row count for an event so that there's place for text. */
-  viewMinRows = 8;
+  viewMinRows = 10;
 
   offset = 0;
 
   displayingDate: Date;
   displayingWeek: Date[]; // Starts at a monday.
 
-  constructor(public eventService: EventService) {
+  dateLocale: string;
+
+  faChevronUp = faChevronUp;
+  faChevronDown = faChevronDown;
+  faChevronLeft = faChevronLeft;
+  faChevronRight = faChevronRight;
+  faPlus = faPlus;
+
+  constructor(public eventService: EventService, public globals: Globals) {
+    this.dateLocale = this.globals.dateLocale;
+    this.displayingDate = this.getDate(this.offset);
+    this.displayingWeek = this.getWeek(this.offset);
   }
 
   getWeek(offset = 0) {

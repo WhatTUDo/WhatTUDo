@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Calendar} from '../../dtos/calendar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
-import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faPlus} from '@fortawesome/free-solid-svg-icons';
 import {CalendarEvent} from '../../dtos/calendar-event';
 import {EventService} from '../../services/event.service';
 import {Globals} from "../../global/globals";
@@ -26,24 +25,13 @@ export class CalendarComponent extends CalendarBase implements OnInit {
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
-  dateLocale: string;
-
-  faChevronUp = faChevronUp;
-  faChevronDown = faChevronDown;
-  faChevronLeft = faChevronLeft;
-  faChevronRight = faChevronRight;
-  faPlus = faPlus;
-  // currentDate: number;
-  // currentMonth: String;
-  // currentYear: number;
-
   constructor(
     public eventService: EventService,
+    public globals: Globals,
     private calendarService: CalendarService,
     private route: ActivatedRoute,
-    private globals: Globals
   ) {
-    super(eventService);
+    super(eventService, globals);
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) => {
       this.events = events;
@@ -57,24 +45,6 @@ export class CalendarComponent extends CalendarBase implements OnInit {
   }
 
   ngOnInit(): void {
-    this.displayingDate = this.getDate(this.offset);
-    this.displayingWeek = this.getWeek(this.offset);
-
-    setInterval(_ => {
-      Array.from(document.getElementsByClassName('calendar-event'))
-        .forEach(event => {
-          const time = event.getElementsByClassName('calendar-event-time')[0];
-          const name = event.getElementsByClassName('calendar-event-name')[0];
-          // @ts-ignore
-          if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
-            // @ts-ignore
-            time.innerText = '…';
-            // @ts-ignore
-            name.innerText = '…';
-          }
-
-        });
-    }, 500);
   }
 
   /**

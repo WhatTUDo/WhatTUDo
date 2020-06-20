@@ -18,7 +18,6 @@ export class WeeklyCalendarComponent extends CalendarBase implements OnInit, OnC
   currentMonth: String;
   currentYear: number;
 
-
   /** color classes to add **/
   calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
 
@@ -27,23 +26,13 @@ export class WeeklyCalendarComponent extends CalendarBase implements OnInit, OnC
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
-  dateLocale: string;
-
-  faChevronUp = faChevronUp;
-  faChevronDown = faChevronDown;
-  faChevronLeft = faChevronLeft;
-  faChevronRight = faChevronRight;
-
   constructor(
     public eventService: EventService,
+    public globals: Globals,
     private subscriptionService: SubscriptionService,
     private authService: AuthService,
-    private globals: Globals
   ) {
-    super(eventService);
-    this.dateLocale = globals.dateLocale;
-    this.displayingDate = this.getDate(this.offset);
-    this.displayingWeek = this.getWeek(this.offset);
+    super(eventService, globals);
   }
 
   ngOnInit(): void {
@@ -62,21 +51,6 @@ export class WeeklyCalendarComponent extends CalendarBase implements OnInit, OnC
     setInterval(_ => {
       this.updateDatetime();
     }, 1000);
-
-    setInterval(_ => {
-      Array.from(document.getElementsByClassName('calendar-event'))
-        .forEach(event => {
-          const time = event.getElementsByClassName('calendar-event-time')[0];
-          const name = event.getElementsByClassName('calendar-event-name')[0];
-          // @ts-ignore
-          if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
-            // @ts-ignore
-            time.innerText = '…';
-            // @ts-ignore
-            name.innerText = '…';
-          }
-        })
-    }, 500)
   }
 
   ngOnChanges(changes: SimpleChanges) {
