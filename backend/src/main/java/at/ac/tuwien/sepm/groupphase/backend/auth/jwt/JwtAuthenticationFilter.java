@@ -70,7 +70,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Authentication authResult
     ) throws IOException {
         ApplicationUser user = ((ApplicationUser) authResult.getPrincipal());
-        response.getWriter().write(jwtTokenizer.getAuthToken(user.getUsername(), user.getAuthorityStrings()));
+        response.getWriter().write(jwtTokenizer.getAuthTokenPrefixed(user.getUsername(), user.getAuthorityStrings()));
         log.info("Successfully authenticated user {} for auhtorities {}", user.getUsername(), user.getAuthorityStrings());
     }
 }

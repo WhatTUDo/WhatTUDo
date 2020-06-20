@@ -105,6 +105,11 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.sf.biweekly</groupId>
+            <artifactId>biweekly</artifactId>
+            <version>0.6.3</version>
+        </dependency>
         <!-- dev-tools -->
         <dependency>
             <groupId>org.projectlombok</groupId>
