@@ -36,7 +36,9 @@ public abstract class EventMapper {
 
     @BeforeMapping
     protected void mapLocation(Event event, @MappingTarget EventDto eventDto){
-        eventDto.setLocationId(event.getLocation().getId());
+        if (event.getLocation() != null) {
+            eventDto.setLocationId(event.getLocation().getId());
+        }
     }
 
     @BeforeMapping
