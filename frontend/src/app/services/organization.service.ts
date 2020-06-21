@@ -11,7 +11,7 @@ import {User} from '../dtos/user';
 
 export class OrganizationService {
 
-  private organizationBaseUri: string = this.globals.backendUri + 'organizations';
+  private organizationBaseUri: string = this.globals.backendUri + '/organizations';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }

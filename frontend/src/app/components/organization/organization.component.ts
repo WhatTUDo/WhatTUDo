@@ -111,7 +111,7 @@ export class OrganizationComponent implements OnInit {
   private loadOrganization(id: number) {
     this.organizationService.getById(id).subscribe((organization: Organization) => {
       this.organization = organization;
-      this.organization.coverImageUrl = this.globals.backendUri+this.organization.coverImageUrl.slice(1);
+      this.organization.coverImageUrl = this.globals.backendUri+this.organization.coverImageUrl;
       for (let calID of organization.calendarIds) {
         this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
           this.organizationCalendars.push(cal);

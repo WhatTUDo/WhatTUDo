@@ -10,7 +10,7 @@ import {CreateCalendar} from "../dtos/CreateCalendar";
   providedIn: 'root'
 })
 export class CalendarService {
-  private calendarBaseUri: string = this.globals.backendUri + 'calendars';
+  private calendarBaseUri: string = this.globals.backendUri + '/calendars';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }

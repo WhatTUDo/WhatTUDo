@@ -10,7 +10,7 @@ import {SubscriptionDto} from "../dtos/subscriptionDto";
 })
 export class SubscriptionService {
 
-  private subscriptionUri = this.globals.backendUri + "subscription";
+  private subscriptionUri = this.globals.backendUri + "/subscription";
 
   constructor(
     private httpClient: HttpClient,

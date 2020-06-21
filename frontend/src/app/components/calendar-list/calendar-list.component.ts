@@ -82,7 +82,7 @@ export class CalendarListComponent implements OnInit {
     })
     for (const id of organizationIdSet) {
       let org = await this.organizationService.getById(id).toPromise();
-      org.coverImageUrl = this.globals.backendUri + org.coverImageUrl.slice(1);
+      org.coverImageUrl = this.globals.backendUri + org.coverImageUrl;
       this.organizationsMap.set(id, org)
     }
     return calendars;

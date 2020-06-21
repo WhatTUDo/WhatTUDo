@@ -11,7 +11,7 @@ form {
   }
 }
 
-input:not([matInput]), select, textarea {
+input:not([matInput]):not(.input-button-combo input), select, textarea {
   margin-bottom: 16pt;
 }
 
@@ -68,7 +68,7 @@ input:not([matInput]), select, textarea {
       color: var(--text);
 
       ::placeholder {
-        color: var(--placeholder); //TODO: Make a placeholder var0
+        color: var(--placeholder);
       }
 
       .form-row {
