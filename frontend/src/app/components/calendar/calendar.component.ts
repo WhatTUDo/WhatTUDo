@@ -57,7 +57,7 @@ export class CalendarComponent extends CalendarBase implements OnInit {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) => {
       this.events = events;
-      this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+      this.loadAllEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
     });
     this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
@@ -74,7 +74,7 @@ export class CalendarComponent extends CalendarBase implements OnInit {
    * @param from: Start date of week
    * @param to: End date of week
    */
-  loadEventsForWeek(from: Date, to: Date) {
+  loadAllEventsForWeek(from: Date, to: Date) {
     this.events.forEach(event => {
       let startDate = new Date(event.startDateTime);
       let endDate = new Date(event.endDateTime);
