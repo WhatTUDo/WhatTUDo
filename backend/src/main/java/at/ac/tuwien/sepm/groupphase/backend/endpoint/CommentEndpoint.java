@@ -51,10 +51,10 @@ public class CommentEndpoint {
         }
     }
 
-    //@PreAuthorize("hasRole('MOD')") // FIXME: to user who wrote this comment or higher role than user
+    @PreAuthorize("hasRole('MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/{id}/")
     @ApiOperation(value = "Delete comment", authorizations = {@Authorization(value = "apiKey")})
     public void delete(@PathVariable("id") Integer id) {
         try {
@@ -68,7 +68,7 @@ public class CommentEndpoint {
         }
     }
 
-   // @PreAuthorize("hasRole('SYSADMIN')")  FIXME: set to normal user and higher roles if I forgot to fix this myself plz
+    @PreAuthorize("authentication.name != null")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -87,7 +87,7 @@ public class CommentEndpoint {
         }
     }
 
-   // @PreAuthorize("hasRole('MOD')")  //FIXME: should be the user who wrote it
+    @PreAuthorize("#dto.username == authentication.name")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @PutMapping

@@ -98,7 +98,7 @@
       <div *ngFor="let comment of comments" class="comment-div">
 
         <app-event-comment [comment]="comment"></app-event-comment>
-        <div><fa-icon *ngIf="(calendarEvent.canEdit) || (this.user.name == this.comment.username)" (click)="deleteComment(this.comment.id)" [icon]="faTimesCircle" class="clickable no-hover-enlarge">delete</fa-icon>
+        <div><fa-icon *ngIf="(calendarEvent.canEdit)" (click)="deleteComment(this.comment.id)" [icon]="faTimesCircle" class="clickable no-hover-enlarge">delete</fa-icon>
         </div>
 
       </div>
