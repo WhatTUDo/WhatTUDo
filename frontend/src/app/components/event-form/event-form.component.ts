@@ -13,7 +13,8 @@ import {CollisionResponse} from "../../dtos/collision-response";
 import {EventCollisionService} from "../../services/event-collision.service";
 import {Label} from '../../dtos/label';
 import {Globals} from "../../global/globals";
-//import {LocationService} from "../../services/location.service";
+import {LocationService} from "../../services/location.service";
+
 
 @Component({
   selector: 'app-event-form',
@@ -53,13 +54,14 @@ export class EventFormComponent implements OnInit {
   faCheckCircle = faCheckCircle;
   collisionResponse: CollisionResponse;
   private selectedImage: File;
+  location: Location;
 
   constructor(
     private eventService: EventService,
     private eventCollisionService: EventCollisionService,
     private calendarService: CalendarService,
     private feedbackService: FeedbackService,
- //   private locationService: LocationService,
+    private locationService: LocationService,
     public globals: Globals,
     private route: ActivatedRoute,
     private router: Router) {
@@ -72,15 +74,6 @@ export class EventFormComponent implements OnInit {
           this.getEventLabels(id);
           this.ev_id = id;
           this.calendarEvent.coverImageUrl = globals.backendUri + this.calendarEvent.coverImageUrl;
-          this.calendarEvent.location = {
-            id: null,
-            name: "NullIsland",
-            address: "Atlantic Ocean",
-            zip: "1234",
-            latitude: 0,
-            longitude: 0,
-            eventIds: []
-          } as Location
         }
       });
     } else {
@@ -130,6 +123,7 @@ export class EventFormComponent implements OnInit {
 
   onSubmit() {
     let validationIsPassed = this.validateFormInput(this.calendarEvent);
+    console.log(JSON.stringify(this.calendarEvent));
     if (validationIsPassed) {
       // submit to eventService
       if (this.isUpdate) {
@@ -190,7 +184,7 @@ export class EventFormComponent implements OnInit {
     if (!event.endDateTime) {
       errors.push(new Error("An end date and time must be specified!"));
     }
-    if (!this.calendarEvent.location) {
+    if (!this.location) {
       errors.push(new Error("A location must be specified!"));
     }
     if (!event.calendarId) {
@@ -211,11 +205,14 @@ export class EventFormComponent implements OnInit {
   }
 
   saveLocationToEvent(location: Location) {
-    this.calendarEvent.location = location;
-    if (this.calendarEvent.location) {
-      console.log("Saved location with name: ", this.calendarEvent.location.name);
+    if (location) {
+      this.locationService.create(location).subscribe((location) => {
+        this.location = location;
+        this.calendarEvent.locationId = location.id;
+      })
+    } else {
+      this.location = null;
     }
-
   }
 
   getAllEditableCalendars() {
@@ -243,7 +240,7 @@ export class EventFormComponent implements OnInit {
         }
       });
     } else {
-      this.feedbackService.displayWarning("Event Collision", "A Start and End date must be specified")!
+      this.feedbackService.displayWarning("Event Collision", "A Start and End date must be specified");
     }
   }
 

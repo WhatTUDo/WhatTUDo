@@ -9,5 +9,5 @@ export class Globals {
 
   readonly allowedAvatarMimeTypes: string[] = ['image/jpeg']; // 'image/png', 'image/gif', 'image/svg+xml'
   readonly allowedPromoImageMimeTypes: string[] = ['image/jpeg']; // 'image/png', 'image/svg+xml'
-  dateLocale: string = 'de-AT';
+  dateLocale: string = 'en-US';
 }

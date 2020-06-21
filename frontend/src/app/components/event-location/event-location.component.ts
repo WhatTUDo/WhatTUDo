@@ -3,6 +3,7 @@ import {EventService} from "../../services/event.service";
 import {Location} from "../../dtos/location";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {faMapMarked} from "@fortawesome/free-solid-svg-icons";
+import {LocationService} from "../../services/location.service";
 
 @Component({
   selector: 'app-event-location',
@@ -13,6 +14,7 @@ export class EventLocationComponent implements OnInit, OnChanges {
 
   @Output() locationSaved = new EventEmitter<Location>();
   @Input() location: Location;
+  @Input() editable: boolean = true;
   searchComplete = false
   addressSelected = false;
   selectionComplete = false;
@@ -22,20 +24,23 @@ export class EventLocationComponent implements OnInit, OnChanges {
   faMapMarked = faMapMarked;
 
   constructor(private eventService: EventService,
+              private locationService: LocationService,
               private sanitizer: DomSanitizer) {
   }
 
   ngOnInit(): void {
-    console.log("WTF is happening");
-    console.log(JSON.stringify(this.location));
     if (this.location) {
       this.createPreviewURL(this.location);
+    } else {
+      this.previewURL = null;
     }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.location) {
       this.createPreviewURL(this.location);
+    } else {
+      this.previewURL = null;
     }
   }
 
@@ -69,16 +74,18 @@ export class EventLocationComponent implements OnInit, OnChanges {
   }
 
   private createPreviewURL(previewLocation: Location) {
-    if (!(previewLocation.latitude && previewLocation.latitude)) {
+    previewLocation.latitude = +previewLocation.latitude;
+    previewLocation.longitude = +previewLocation.longitude;
+    if (!(previewLocation.latitude && previewLocation.longitude)) {
       this.previewURL = null;
       return;
     }
 
-    let upperBBoxLat: number = previewLocation.latitude - (-0.0002);
-    let lowerBBoxLat: number = previewLocation.latitude - 0.0002;
-    let upperBBoxLon: number = previewLocation.longitude - (-0.0002);
-    let lowerBBoxLon: number = previewLocation.longitude - 0.0002;
-    let previewString: string = "https://www.openstreetmap.org/export/embed.html?bbox=" + lowerBBoxLon + "%2C" + lowerBBoxLat + "%2C" + upperBBoxLon + "%2C" + upperBBoxLat + "&amp;layer=mapnik&amp;marker=" + previewLocation.longitude + "%2C" + previewLocation.latitude;
+    let upperBBoxLat: string = (previewLocation.latitude + 0.0002).toFixed(5);
+    let lowerBBoxLat: string = (previewLocation.latitude - 0.0002).toFixed(5);
+    let upperBBoxLon: string = (previewLocation.longitude + 0.0002).toFixed(5);
+    let lowerBBoxLon: string = (previewLocation.longitude - 0.0002).toFixed(5);
+    let previewString: string = "//www.openstreetmap.org/export/embed.html?bbox=" + lowerBBoxLon + "%2C" + lowerBBoxLat + "%2C" + upperBBoxLon + "%2C" + upperBBoxLat + "&amp;layer=mapnik&amp;marker=" + previewLocation.longitude.toFixed(5) + "%2C" + previewLocation.latitude.toFixed(5);
 
     this.previewURL = this.sanitizer.bypassSecurityTrustResourceUrl(previewString)
   }

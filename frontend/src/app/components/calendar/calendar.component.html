@@ -1,11 +1,11 @@
-<div class="contextual-control clickable no-hover-enlarge" (click)="resetOffset()">
+<div class="contextual-control">
   <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span *ngIf="calendar">Calendar: {{calendar.name}}</span>
 </div>
 
 <div *ngIf="calendar" class="title-icon-button-combo desktop">
-  <h2 class="heading desktop" id="weekly-cal-heading">
+  <h2 class="heading desktop clickable no-hover-enlarge" (click)="resetOffset()" id="weekly-cal-heading">
   <span id="weekly-cal-month">
     {{displayingWeek[3].toLocaleString(dateLocale, {month: 'long'})}}
   </span>
@@ -13,7 +13,7 @@
     {{displayingWeek[3].getFullYear()}}
   </span>
   </h2>
-  <h2 class="heading mobile">
+  <h2 class="heading mobile clickable no-hover-enlarge" (click)="resetOffset()">
     {{calendar.name}}
   </h2>
   <div>

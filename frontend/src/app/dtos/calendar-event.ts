@@ -9,7 +9,7 @@ export class CalendarEvent {
     public description: string,
     public startDateTime: Date,
     public endDateTime: Date,
-    public location: Location,
+    public locationId: number,
     public labels: Array<Label>,
     public comments: Array<EventComment>,
     public calendarId: number,

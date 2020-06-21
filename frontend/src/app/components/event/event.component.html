@@ -85,12 +85,8 @@
           </div>
         </div>
       </div>
-      <div class="event-location">
-        <div class="event-location-map-container">
-          <iframe id="open-street-map-iframe"
-                  src="//www.openstreetmap.org/export/embed.html?bbox=16.36812955141068%2C48.19411795494773%2C16.371696889400486%2C48.19578432955719&amp;layer=mapnik"></iframe>
-        </div>
-        <small><a href="https://www.openstreetmap.org/#map=19/48.19495/16.36991">View Larger Map</a></small>
+      <div class="event-location" *ngIf="location">
+       <app-event-location [location]="location" [editable]="false"></app-event-location>
       </div>
     </div>
     <div>

@@ -96,7 +96,7 @@ img {
 hr {
   margin: 16pt 24pt;
   border: 0;
-  border-top: 1pt solid var(--text);
+  border-top: 1pt solid var(--shadow);
 }
 
 a {
@@ -124,12 +124,8 @@ a {
     color: inherit;
   }
 
-  span::after {
+  span:not(:last-of-type)::after {
     content: " | ";
-  }
-
-  span:last-of-type::after {
-    content: none;
   }
 
   a {

@@ -18,6 +18,7 @@ import {CalendarService} from "../../services/calendar.service";
 import {OrganizationService} from "../../services/organization.service";
 import {AttendanceStatusPossibilities} from "../../dtos/AttendanceStatusPossibilities";
 import {Globals} from "../../global/globals";
+import {LocationService} from "../../services/location.service";
 
 @Component({
   selector: 'app-event',
@@ -34,6 +35,7 @@ export class EventComponent implements OnInit {
   comments: Array<EventComment>;
   public calendarEvent: CalendarEvent;
   public eventComment: EventComment;
+  location: Location;
   calendar: Calendar;
   calendarOrganizations: Organization[] = [];
   participants = {
@@ -56,6 +58,7 @@ export class EventComponent implements OnInit {
               private organizationService: OrganizationService,
               private feedbackService: FeedbackService,
               private attendanceStatusService: AttendanceStatusService,
+              private locationService: LocationService,
               private authService: AuthService,
               public globals: Globals,
               private route: ActivatedRoute) {
@@ -64,10 +67,11 @@ export class EventComponent implements OnInit {
     if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user) => {
         this.user = user;
-        this.attendanceStatusService.getStatus(user.id, id ).subscribe((status:AttendanceDto) => {
+        this.attendanceStatusService.getStatus(user.id, id).subscribe((status: AttendanceDto) => {
             this.attendanceStatus = status;
-            if(status != null){
-            this.userParticipationStatus = status.status;}
+            if (status != null) {
+              this.userParticipationStatus = status.status;
+            }
           }
         );
       });
@@ -91,25 +95,25 @@ export class EventComponent implements OnInit {
       this.feedbackService.displayWarning(`Login Required.`, 'You can only do this after you logged in.');
       return;
     }
-    this.attendanceStatusService.create(new AttendanceDto(null,this.user.name, this.id, status)).subscribe((attendance) => {
-      this.attendanceStatus = attendance;
-      this.getParticipants();
+    this.attendanceStatusService.create(new AttendanceDto(null, this.user.name, this.id, status)).subscribe((attendance) => {
+        this.attendanceStatus = attendance;
+        this.getParticipants();
       }
     );
   }
 
 
-  public addComment(input : string) {
-        if(input.length > 0){
+  public addComment(input: string) {
+    if (input.length > 0) {
 
-         this.eventComment2.username = this.user.name;
-         this.eventComment2.eventId = this.id;
-         this.eventComment2.text = input;
+      this.eventComment2.username = this.user.name;
+      this.eventComment2.eventId = this.id;
+      this.eventComment2.text = input;
 
-         this.eventService.createComment(this.eventComment2).subscribe(comments => {
-      this.getComments(this.id).push(this.eventComment2);
-    });
-  }
+      this.eventService.createComment(this.eventComment2).subscribe(comments => {
+        this.getComments(this.id).push(this.eventComment2);
+      });
+    }
   }
 
   getEventLabels(id: number) {
@@ -119,7 +123,6 @@ export class EventComponent implements OnInit {
   }
 
 
-
   /**
    * Loads Event with ID from Service.
    * @param id
@@ -127,11 +130,15 @@ export class EventComponent implements OnInit {
   private loadCalendarEvent(id: number) {
     this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
       this.calendarEvent = event;
-      let location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 12.1234, 13.9876);
+      // this.location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 48.199747,16.367543);
       this.calendarEvent.comments = this.getComments(id);
       this.calendarEvent.labels = this.getLabels();
-      this.calendarEvent.location = location;
       this.calendarEvent.description = event.description;
+      if (event.locationId) {
+        this.locationService.getById(event.locationId).subscribe((location) => {
+          this.location = location;
+        })
+      }
       this.participants = this.getParticipants();
       this.calendarService.getCalendarById(event.calendarId).subscribe(cal => {
         this.calendar = cal;
@@ -170,20 +177,20 @@ export class EventComponent implements OnInit {
 
 
   resetParticipation() {
-      this.attendanceStatusService.deleteStatus(this.attendanceStatus.id).subscribe(()=>{
-        this.userParticipationStatus = null;
-        this.getParticipants();
-      }, error =>{
-        console.warn(error);
-        this.feedbackService.displayError("Error", error.error.message);
-      });
+    this.attendanceStatusService.deleteStatus(this.attendanceStatus.id).subscribe(() => {
+      this.userParticipationStatus = null;
+      this.getParticipants();
+    }, error => {
+      console.warn(error);
+      this.feedbackService.displayError("Error", error.error.message);
+    });
   }
 
   private getComments(id: number) {
     this.eventService.getEventComments(id).subscribe(comments => {
       this.comments = comments;
     });
-        return this.comments;
+    return this.comments;
   }
 
   deleteComment(commentid: number): void {
@@ -192,7 +199,7 @@ export class EventComponent implements OnInit {
         this.getComments(this.id);
       });
     }
-   }
+  }
 
   private getLabels() {
 
