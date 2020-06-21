@@ -51,6 +51,7 @@ public class SimpleCommentService implements CommentService {
         Optional<Comment> found = commentRepository.findById(id);
         if (found.isPresent()) {
             Comment comment = found.get();
+
             //TODO  publisher.publishEvent(new EventFindComment(organization.getName())); ???
             return comment;
         } else {

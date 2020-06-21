@@ -13,6 +13,7 @@ import java.util.List;
 public class CommentDto extends BaseDto {
     private Integer id;
     private String text;
-    private Integer userId;
+    private String username;
     private Integer eventId;
+    private LocalDateTime updateDateTime;
 }

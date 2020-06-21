@@ -16,6 +16,7 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -37,7 +38,8 @@ public abstract class CommentMapper {
             .orElseThrow(() -> new NotFoundException("This comment does not exist in the database"));
 
         commentDto.setEventId(comEntity.getEvent().getId());
-        commentDto.setUserId(comEntity.getUser().getId());
+        commentDto.setUsername(comEntity.getUser().getName());
+        commentDto.setUpdateDateTime(comEntity.getUpdateDateTime());
     }
 
     public abstract Comment commentDtoToComment(CommentDto commentDto);
@@ -53,7 +55,7 @@ public abstract class CommentMapper {
         comment.setEvent(eventEntity);
 
 
-        ApplicationUser userEntity = userRepository.findById(commentDto.getUserId())
+        ApplicationUser userEntity = userRepository.findByName(commentDto.getUsername())
             .orElseThrow(() -> new NotFoundException("The user for this comment does not exist in the database"));
 
         comment.setUser(userEntity);

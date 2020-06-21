@@ -95,12 +95,12 @@
     </div>
     <div>
       <h2>Comments</h2>
-      <div *ngFor="let comment of calendarEvent.comments" class="comment-div">
+      <div *ngFor="let comment of comments" class="comment-div">
+
         <app-event-comment [comment]="comment"></app-event-comment>
       </div>
       <div id="comment-area">
-        <label for="comment-textarea">
-          Comments are disabled in the current version.
+        <label for="comment-textarea">disabled
         </label>
         <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"
                   disabled="disabled"></textarea>

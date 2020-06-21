@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {EventComment} from "../../dtos/event-comment";
+import {User} from "../../dtos/user";
 
 import {faThumbsDown, faThumbsUp, faUserCircle, faReply, faClock} from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
@@ -26,7 +27,8 @@ export class EventCommentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.author = "Testguy";
+
+    this.author = this.comment.username;
   }
 
   public vote(isUpvote: boolean) {

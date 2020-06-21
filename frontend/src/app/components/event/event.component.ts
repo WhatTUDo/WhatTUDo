@@ -31,6 +31,7 @@ export class EventComponent implements OnInit {
   user: User = null;
   userParticipationStatus: AttendanceStatusPossibilities;
   labels: Array<Label>;
+  comments: Array<EventComment>;
   public calendarEvent: CalendarEvent;
   calendar: Calendar;
   calendarOrganizations: Organization[] = [];
@@ -67,6 +68,7 @@ export class EventComponent implements OnInit {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
 
     this.getEventLabels(this.id);
+    this.getComments(this.id);
 
   }
 
@@ -103,6 +105,9 @@ export class EventComponent implements OnInit {
     });
   }
 
+
+
+
   /**
    * Loads Event with ID from Service.
    * @param id
@@ -111,7 +116,7 @@ export class EventComponent implements OnInit {
     this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
       this.calendarEvent = event;
       let location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 12.1234, 13.9876);
-      this.calendarEvent.comments = this.getComments();
+      this.calendarEvent.comments = this.getComments(id);
       this.calendarEvent.labels = this.getLabels();
       this.calendarEvent.location = location;
       this.calendarEvent.description = event.description;
@@ -158,19 +163,11 @@ export class EventComponent implements OnInit {
     this.getParticipants();
   }
 
-  private getComments() {
-    let comment1 = new EventComment(null, null, 'Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.\n' +
-      '\n');
-    let comment2 = new EventComment(null, null, 'Bring to the table win-win survival strategies to ensure proactive domination. At the end of the day, going forward, a new normal that has evolved from generation X is on the runway heading towards a streamlined cloud solution. User generated content in real-time will have multiple touchpoints for offshoring.\n' +
-      '\n');
-    let comment3 = new EventComment(null, null, 'Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.\n' +
-      '\n');
-
-   //, 0.85 , 0.66 , 0.91
-    let array = new Array<EventComment>();
-    // array.push(comment1, comment2, comment3);
-
-    return array;
+  private getComments(id: number) {
+    this.eventService.getEventComments(id).subscribe(comments => {
+      this.comments = comments;
+    });
+        return this.comments;
   }
 
   private getLabels() {

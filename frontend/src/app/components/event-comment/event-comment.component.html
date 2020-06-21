@@ -1,14 +1,14 @@
 <div class="comment-item">
 
   <div class="conmment-content">
-    {{this.comment.content}}
+    {{this.comment.text}}
   </div>
   <div class="comment-metadata">
     <div class="comment-author">
-      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;@{{this.author}}
+      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;@ {{this.comment.username}}
     </div>
     <div class="comment-time">
-      <fa-icon [icon]="faClock"></fa-icon>&ensp;an hour ago
+      <fa-icon [icon]="faClock"></fa-icon>&ensp;{{this.comment.updateDateTime}}
     </div>
   </div>
   <!--  <div class="comment-buttons">-->

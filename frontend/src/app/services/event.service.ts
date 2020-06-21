@@ -42,6 +42,12 @@ export class EventService {
     return this.httpClient.get<Array<Label>>(this.eventBaseUri + '/' + id + '/' + 'labels');
   }
 
+  getEventComments(id: number): Observable<EventComment[]> {
+
+    console.log('Get event comments');
+    return this.httpClient.get<Array<EventComment>>(this.eventBaseUri + '/' + id + '/' + 'comments');
+  }
+
   addLabels(id: number, labelselect: Array<Label>) {
 
     console.log('add  labels');

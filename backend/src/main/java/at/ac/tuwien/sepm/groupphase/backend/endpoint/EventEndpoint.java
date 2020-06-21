@@ -247,7 +247,6 @@ public class EventEndpoint {
 
             (commentService.findByEventId(id)).forEach(it -> results.add(commentMapper.commentToCommentDto(it)));
 
-
             return results;
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
