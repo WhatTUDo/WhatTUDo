@@ -4,9 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.config.properties.SecurityProperties
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,11 +25,13 @@ import java.util.Optional;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private final SecurityProperties securityProperties;
     private final UserRepository userRepository;
+    private final JwtTokenizer jwtTokenizer;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, SecurityProperties securityProperties, UserRepository userRepository) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, SecurityProperties securityProperties, UserRepository userRepository, JwtTokenizer jwtTokenizer) {
         super(authenticationManager);
         this.securityProperties = securityProperties;
         this.userRepository = userRepository;
+        this.jwtTokenizer = jwtTokenizer;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         } else if (!token.startsWith("Bearer ")) {
             throw new IllegalArgumentException("Token must start with 'Bearer'");
         } else {
-            String username = getUsername(token);
+            String username = jwtTokenizer.getUsernameForAuth(token);
             if (username == null || username.isEmpty()) {
                 throw new IllegalArgumentException("Token contains no user");
             } else {
@@ -66,14 +66,5 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 return Optional.of(new UsernamePasswordAuthenticationToken(username, null, authorities));
             }
         }
-    }
-
-    private String getUsername(String token) {
-        return Jwts.parserBuilder()
-            .setSigningKey(securityProperties.getJwtSecret().getBytes())
-            .build()
-            .parseClaimsJws(token.replace(securityProperties.getAuthTokenPrefix(), ""))
-            .getBody()
-            .getSubject();
     }
 }

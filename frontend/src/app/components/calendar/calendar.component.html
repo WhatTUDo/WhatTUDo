@@ -16,8 +16,13 @@
   <h2 class="heading mobile">
     {{calendar.name}}
   </h2>
-  <div (click)="redirectToAddEvent(calendar.id)" class="icon-button clickable no-hover-enlarge">
-    <fa-icon [icon]="faPlus"></fa-icon>
+  <div>
+    <div (click)="redirectToAddEvent(calendar.id)" class="icon-button clickable no-hover-enlarge">
+      <fa-icon [icon]="faPlus"></fa-icon>
+    </div>
+    <div class="icon-button clickable no-hover-enlarge">
+      <fa-icon [icon]="faLink" (click)="copyCalendarUrlToClipboard(calendar.id)"></fa-icon>
+    </div>
   </div>
 </div>
 
