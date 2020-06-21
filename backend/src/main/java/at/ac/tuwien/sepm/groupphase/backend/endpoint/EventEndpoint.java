@@ -1,12 +1,15 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CommentDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LabelDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CommentMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.LabelMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.service.CommentService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +48,8 @@ public class EventEndpoint {
     private final EventMapper eventMapper;
     private final LabelService labelService;
     private final LabelMapper labelMapper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
 
     @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
@@ -231,15 +236,35 @@ public class EventEndpoint {
 
     @PreAuthorize("permitAll()")
     @Transactional
-    @GetMapping("/search={search}")
+    @GetMapping(value = "/{id}/comments")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get Comments by Event Id", authorizations = {@Authorization(value = "apiKey")})
+    public List<CommentDto> getCommentsByEventId(@PathVariable(value = "id") int id) {
+        try {
+
+            List<CommentDto> results = new ArrayList<>();
+
+            (commentService.findByEventId(id)).forEach(it -> results.add(commentMapper.commentToCommentDto(it)));
+
+            return results;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+
+    }
+
+    @GetMapping("/search")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "Search Name or Description of Events", authorizations = {@Authorization(value = "apiKey")})
-    public List<EventDto> searchNameAndDescription(@PathVariable(value = "search") String searchTerm) {
+    public List<EventDto> searchNameAndDescription(@RequestParam(name = "name") String searchTerm) {
         try {
             return eventMapper.eventListToeventDtoList(eventService.findNameOrDescriptionBySearchTerm(searchTerm));
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
     }
 
@@ -252,8 +277,14 @@ public class EventEndpoint {
     byte[] getCoverImage(@PathVariable int id) {
         try {
             Byte[] coverImageBlob = eventService.findById(id).getCoverImage();
-            byte[] byteArray = new byte[coverImageBlob.length];
-            for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            byte[] byteArray;
+            if (coverImageBlob != null) {
+                byteArray = new byte[coverImageBlob.length];
+                for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            } else {
+                byteArray = new byte[0];
+            }
+
             return byteArray;
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);

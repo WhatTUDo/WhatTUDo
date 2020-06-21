@@ -14,7 +14,6 @@ import java.util.List;
 @Entity
 @Table
 @Data
-//@NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Calendar extends BaseEntity {

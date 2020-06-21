@@ -10,7 +10,7 @@ import {User} from '../dtos/user';
 })
 export class AttendanceStatusService {
 
-  private attendanceUri: string = this.globals.backendUri + 'attendance';
+  private attendanceUri: string = this.globals.backendUri + '/attendance';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
@@ -30,6 +30,24 @@ export class AttendanceStatusService {
 
   getUsersDecliningEvent(id: number): Observable<any[]> {
     return this.httpClient.get<any[]>(this.attendanceUri + '/getDeclined/' + id);
+  }
+
+  getEventsUserIsInterestedIn(id : number) : Observable<any[]> {
+    return this.httpClient.get<any[]>(this.attendanceUri+'/userInterested/'+id);
+  }
+
+
+  getEventsUserIsAttending(id : number) : Observable<any[]> {
+    return this.httpClient.get<any[]>(this.attendanceUri+'/userAttending/'+id);
+  }
+
+  deleteStatus(id: number){
+    return this.httpClient.delete(this.attendanceUri + '/'+id);
+  }
+
+  getStatus(userId: number,
+            eventId: number) : Observable<any>{
+    return this.httpClient.get<any>(this.attendanceUri+ '/getStatus/'+userId+'/'+eventId);
   }
 
 }

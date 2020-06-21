@@ -55,7 +55,7 @@ export class FeedbackHandlerComponent implements OnInit {
   }
 
   static displayServerError(error) {
-    this.displayError(`Server Error`, null, error.status + ': ' + error.message);
+    this.displayError(`Server Error`, error.message, error.status);
   }
 
   private static displayMessage(header: string, message: string, state: State = State.Neutral, technicalInformation: string = null) {

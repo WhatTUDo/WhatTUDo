@@ -182,5 +182,34 @@ public class SimpleAttendanceService implements AttendanceService {
         }
     }
 
+    @Override
+    public void deleteStatus(Integer id) throws ServiceException {
+        try {
+            attendanceRepository.deleteById(id);
+        } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public AttendanceStatus getStatus(Integer userId, Integer eventId) throws ServiceException {
+        try {
+            Optional<ApplicationUser> applicationUser = userRepository.findById(userId);
+            if (applicationUser.isEmpty()) {
+                throw new NotFoundException("User Not Found!");
+            }
+            List<AttendanceStatus> list = attendanceRepository.getByUser(applicationUser.get());
+            for (AttendanceStatus a : list) {
+                if (a.getEvent().getId().equals(eventId)) {
+                    return a;
+                }
+            }
+            return null;
+        } catch (PersistenceException |IllegalArgumentException e){
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+
 
 }

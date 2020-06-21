@@ -48,7 +48,7 @@ public class CalendarServiceTest {
     }
 
     @Test
-    public void saveNewCalendar_sadreturnsCalendar() {
+    public void saveNewCalendar_withDescription_returnsCalendar() {
 
         Calendar calendar = new Calendar("save", Collections.singletonList(createOrga()), "Description");
         Calendar saved = calendarService.save(calendar);

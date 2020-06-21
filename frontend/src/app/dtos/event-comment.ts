@@ -1,9 +1,11 @@
 export class EventComment {
   constructor(
     public id: number,
-    public authorID: number,
-    public content: string,
-    public rating: number
+    public text: string,
+    public username: string,
+    public eventId: number,
+    public updateDateTime: Date
+
   ) {
 
   }

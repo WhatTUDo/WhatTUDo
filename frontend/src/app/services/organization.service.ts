@@ -11,7 +11,7 @@ import {User} from '../dtos/user';
 
 export class OrganizationService {
 
-  private organizationBaseUri: string = this.globals.backendUri + 'organizations';
+  private organizationBaseUri: string = this.globals.backendUri + '/organizations';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
@@ -126,5 +126,11 @@ export class OrganizationService {
 
   getOrganizationAvatar(organizationId: number) {
     return this.httpClient.get(`${this.organizationBaseUri}/${organizationId}/cover`)
+  }
+
+  searchOrganization(name: string) {
+    let params = new HttpParams();
+    params = params.set('name', name);
+    return this.httpClient.get<Organization[]>(`${this.organizationBaseUri}/search`, {params: params});
   }
 }

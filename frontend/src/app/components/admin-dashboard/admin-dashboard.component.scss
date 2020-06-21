@@ -1,5 +1,13 @@
 @import "../../../var.scss";
 
+.add-label-section {
+  margin-bottom: 8pt;
+
+  label {
+    display: none;
+  }
+}
+
 #label-container {
   margin-bottom: 12pt;
   align-items: center;
@@ -21,6 +29,36 @@
     margin-left: auto;
     display: flex;
     align-items: center;
+    flex-wrap: nowrap;
+
+    * {
+      font-size: 16pt;
+      margin-left: 4pt;
+    }
+  }
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16pt;
+
+  .user-details {
+    margin-left: 8pt;
+
+    .user-name {
+      font-weight: $f-bold;
+      font-size: 16pt;
+    }
+
+    .user-email {
+      color: var(--secondary);
+    }
+  }
+
+  .user-buttons {
+    margin-left: auto;
+    display: flex;
     flex-wrap: nowrap;
 
     * {

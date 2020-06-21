@@ -21,7 +21,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    const authUri = this.globals.backendUri + 'api/v1/authentication';
+    const authUri = this.globals.backendUri + '/api/v1/authentication';
 
     // Do a different 401 for auth.
     if (req.url === authUri) {
@@ -29,7 +29,6 @@ export class ErrorInterceptor implements HttpInterceptor {
         catchError((error: HttpResponse<any>) => {
           if (error instanceof HttpErrorResponse) {
             try {
-              error = error.error;
               switch (error.status) {
                 case 401:
                   this.feedbackService.displayError('Wrong Credentials', 'Check if your username and password are entered corrected.');

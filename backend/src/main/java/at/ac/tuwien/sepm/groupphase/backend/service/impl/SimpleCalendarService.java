@@ -70,7 +70,7 @@ public class SimpleCalendarService implements CalendarService {
     @Override
     public List<Calendar> findByName(String name) throws ServiceException {
         try {
-            return calendarRepository.findAllByNameContains(name);
+            return calendarRepository.findAllByNameContainingIgnoreCase(name);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }

@@ -59,6 +59,8 @@ public class SimpleEventService implements EventService {
         }
     }
 
+
+
     @Override
     public Event save(Event event) {
         validator.validateNewEvent(event);
@@ -80,6 +82,7 @@ public class SimpleEventService implements EventService {
             throw new ServiceException(e.getMessage());
         }
     }
+
 
     @Override
     public Event findById(int id) {
@@ -206,11 +209,13 @@ public class SimpleEventService implements EventService {
 
     @Override
     @Transactional
-    public List<Event> findNameOrDescriptionBySearchTerm(String searchterm) throws ServiceException {
+    public List<Event> findNameOrDescriptionBySearchTerm(String searchterm) throws ServiceException, ValidationException {
         try {
             return eventRepository.findByNameContainingIgnoreCase(searchterm);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
+        } catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
         }
     }
 

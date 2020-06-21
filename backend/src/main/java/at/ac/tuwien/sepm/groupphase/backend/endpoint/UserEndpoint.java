@@ -53,7 +53,7 @@ public class UserEndpoint {
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
 
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('SYSADMIN')")
     @GetMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -87,12 +87,12 @@ public class UserEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('SYSADMIN') || #dto.name == authentication.name")
-    @PutMapping
+    @PreAuthorize("hasRole('SYSADMIN') || #name == authentication.name")
+    @PutMapping(value = "/{name}")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("update user")
-    public LoggedInUserDto updateUser(@RequestBody LoggedInUserDto dto) {
+    public LoggedInUserDto updateUser(@PathVariable(value = "name") String name,@RequestBody LoggedInUserDto dto) {
         try {
             return userMapper.applicationUserToUserDto(userService.updateUser(userMapper.loggedInUserDtoToApplicationUser(dto)));
         } catch (ServiceException e) {

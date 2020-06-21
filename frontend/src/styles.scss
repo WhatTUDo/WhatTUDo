@@ -30,15 +30,21 @@
   }
 }
 
+mat-form-field {
+  --text: $black !important;
+}
 
 html, body {
   background-color: var(--background);
   color: var(--text);
 
   height: 100%;
-  margin: 0;
+  min-height: 540pt;
 
+  min-width: 240pt;
   max-width: 100%;
+
+  margin: 0;
 
   font-family: $font-stack;
   font-weight: $f-regular;
@@ -50,11 +56,12 @@ html, body {
 }
 
 .container {
-  padding: 0 12pt;
+  padding: 0 8pt;
 
   max-width: 100%;
 
   @media screen and (min-width: $mobile-breakpoint) {
+    padding: 0 24pt;
     max-width: 1380pt;
     margin: 0 auto;
   }
@@ -86,8 +93,18 @@ img {
   display: block;
 }
 
+hr {
+  margin: 16pt 24pt;
+  border: 0;
+  border-top: 1pt solid var(--text);
+}
+
 a {
   color: $blue;
+
+  &.plain {
+    color: inherit !important;
+  }
 
   &:hover, &:focus {
     color: transparentize($blue, 0.75);
@@ -257,22 +274,22 @@ button, input[type=button] {
   }
 
   &.button-green {
-    color: var($black);
+    color: $black;
     background-color: $green;
   }
 
   &.button-red {
-    color: var($black);
+    color: $black;
     background-color: $red;
   }
 
   &.button-blue {
-    color: var($black);
+    color: $black;
     background-color: $blue;
   }
 
   &.button-yellow {
-    color: var($black);
+    color: $black;
     background-color: $yellow;
   }
 

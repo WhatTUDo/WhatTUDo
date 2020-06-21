@@ -137,4 +137,29 @@ public class AttendanceEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping(value = "/{id}")
+    public void deleteStatus(@PathVariable(value = "id") Integer id){
+        try {
+            attendanceService.deleteStatus(id);
+        }catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+
+    }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @GetMapping(value = "/getStatus/{userId}/{eventId}")
+    public StatusDto getStatus(@PathVariable(value = "userId") Integer userId, @PathVariable(value = "eventId") Integer eventId){
+        try {
+            return statusMapper.applicationStatusToStatusDto(this.attendanceService.getStatus(userId, eventId));
+        }catch (ServiceException e){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,e.getMessage(),e);
+        }
+    }
+
+
 }

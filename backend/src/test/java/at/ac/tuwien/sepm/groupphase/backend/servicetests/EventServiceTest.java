@@ -55,6 +55,19 @@ public class EventServiceTest {
     }
 
     @Test
+    public void save_withDescription_shouldReturn_sameEvent() {
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 1", Collections.singletonList(new Organization()),"Description"));
+        Event eventEntity = new Event("Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
+        Event gottenEvent = service.save(new Event("Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
+
+        assertEquals(eventEntity.getName(), gottenEvent.getName());
+        assertEquals(eventEntity.getEndDateTime(), gottenEvent.getEndDateTime());
+        assertEquals(eventEntity.getStartDateTime(), gottenEvent.getStartDateTime());
+        assertEquals(eventEntity.getCalendar(), gottenEvent.getCalendar());
+        assertEquals(eventEntity.getDescription(),gottenEvent.getDescription());
+    }
+
+    @Test
     public void save_thenRead_shouldReturn_sameEvent() {
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 2", Collections.singletonList(new Organization())));
         Event eventEntity = new Event("Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);

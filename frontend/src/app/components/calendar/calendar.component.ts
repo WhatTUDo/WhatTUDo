@@ -14,35 +14,23 @@ import {CalendarEvent} from '../../dtos/calendar-event';
 import {EventService} from '../../services/event.service';
 import {Globals} from "../../global/globals";
 import {FeedbackService} from "../../services/feedback.service";
+import {CalendarBase} from "./calendar-base";
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent extends CalendarBase implements OnInit {
 
   id: number;
   calendar: Calendar;
   events: CalendarEvent[] = [];
 
-  displayingDate: Date;
-  displayingWeek: Date[]; // Starts at a monday.
-  offset = 0;
+  /** color classes to add **/
+  calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
 
-  /** Change view… variables to configure: */
-  /** number of rows. */
-  viewBeginningAtRow = 1;
-  viewEndingAtRow = 64;
-  viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
-
-  /** when the start and end of the grid represents. */
-  viewBeginningAtTime = 8 * (60 * 60);
-  viewEndingAtTime = 24 * (60 * 60) - 1;
-  viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
-
-  /** min row count for an event so that there's place for text. */
-  viewMinRows = 8;
+  color: String;
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
 
@@ -59,51 +47,27 @@ export class CalendarComponent implements OnInit {
   currentYear: number;
 
   constructor(
-    private eventService: EventService,
+    public eventService: EventService,
+    public globals: Globals,
     private calendarService: CalendarService,
     private route: ActivatedRoute,
     private globals: Globals,
     private feedbackService: FeedbackService
   ) {
+    super(eventService, globals);
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) => {
       this.events = events;
       this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
-      this.updateDatetime();
-      setInterval(_ => {
-        this.updateDatetime();
-      }, 1000);
-
     });
     this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
-    }, err => {
-      console.warn(err);
+      this.color = this.calendarColors[this.calendar.id % this.calendarColors.length];
     });
     this.dateLocale = globals.dateLocale;
   }
 
   ngOnInit(): void {
-
-    this.displayingDate = this.getDate(this.offset);
-    this.displayingWeek = this.getWeek(this.offset);
-
-
-    setInterval(_ => {
-      Array.from(document.getElementsByClassName('calendar-event'))
-        .forEach(event => {
-          const time = event.getElementsByClassName('calendar-event-time')[0];
-          const name = event.getElementsByClassName('calendar-event-name')[0];
-         // @ts-ignore
-          if (event.offsetHeight < time.scrollHeight + name.scrollHeight) {
-            // @ts-ignore
-            time.innerText = '…';
-            // @ts-ignore
-            name.innerText = '…';
-          }
-
-        });
-    }, 500);
   }
 
   /**
@@ -112,17 +76,6 @@ export class CalendarComponent implements OnInit {
    * @param to: End date of week
    */
   loadEventsForWeek(from: Date, to: Date) {
-    // for (const eventId of this.calendar.eventIds) {
-    //   this.eventService.getEvent(eventId).subscribe((event: CalendarEvent) => {
-    //     const startDate = new Date(event.startDateTime);
-    //     const endDate = new Date(event.endDateTime);
-    //     event.startDateTime = startDate;
-    //     event.endDateTime = endDate;
-    //     this.events.push(event);
-    //   }, error => {
-    //     console.warn('Event does not exist');
-    //   });
-    // }
     this.events.forEach(event => {
       let startDate = new Date(event.startDateTime);
       let endDate = new Date(event.endDateTime);
@@ -138,122 +91,6 @@ export class CalendarComponent implements OnInit {
         return isAfterMidnight && isBeforeEndOfDay;
       }));
     });
-  }
-  updateDatetime() {
-    const today = this.getToday();
-    this.currentMonth = today.toLocaleString(this.globals.dateLocale, {month: 'long'});
-    this.currentDate = today.getDate();
-    this.currentYear = today.getFullYear();
-  }
-  getWeek(offset = 0) {
-    const offsetWeeks = Math.round(offset / 7);
-    const currentWeekDates = [];
-    const today = this.getToday();
-
-    const beginOfWeek = new Date(today);
-    // % is remainder and not mod in js. Therefore -1%7=-1. This is a workaround.
-    const weekOffset = (today.getDay() - 1 + 7) % 7;
-    beginOfWeek.setDate(beginOfWeek.getDate() - weekOffset);
-
-    const date = new Date(beginOfWeek);
-    date.setDate(date.getDate() + offsetWeeks * 7);
-    for (let i = 0; i <= 6; i++) {
-      currentWeekDates.push(new Date(date));
-      date.setDate(date.getDate() + 1);
-    }
-    return currentWeekDates;
-  }
-
-  getDate(offset = 0) {
-    const date = this.getToday();
-    date.setDate(date.getDate() + offset);
-    return date;
-  }
-
-  addOneWeek() {
-    this.offset += 7;
-    this.updateOffsettedDates();
-  }
-
-  minusOneWeek() {
-    this.offset -= 7;
-    this.updateOffsettedDates();
-  }
-
-  addOneDay() {
-    this.offset++;
-    this.updateOffsettedDates();
-  }
-
-  minusOneDay() {
-    this.offset--;
-    this.updateOffsettedDates();
-  }
-
-  getToday() {
-    const today = new Date(Date.now());
-    today.setHours(0, 0, 0, 0);
-    return today;
-  }
-
-  isToday(date: Date) {
-    return this.getToday().toDateString() == date.toDateString();
-  }
-
-  /**
-   * Generate the CSS grid numbers for displaying the event at the right time.
-   * Change this.view… variables to configure behavior.
-   * @param event to display
-   * @param forDate the displayed date
-   */
-  getDisplayRows(event: CalendarEvent, forDate: Date) {
-    const startsOnToday = this.isOnSameDay(event.startDateTime, forDate);
-    const endsOnToday = this.isOnSameDay(event.endDateTime, forDate);
-    const startSecond = startsOnToday ? this.getSecondOffsetFromMidnight(event.startDateTime) : 0;
-    const endSecond = endsOnToday ? this.getSecondOffsetFromMidnight(event.endDateTime) : 24 * 60 * 60;
-
-    let startRow = Math.max(Math.floor(this.calcRow(startSecond)), this.viewBeginningAtRow);
-    let endRow = Math.min(Math.floor(this.calcRow(endSecond)), this.viewEndingAtRow);
-
-    if (endRow - startRow < this.viewMinRows) {
-      const delta = this.viewMinRows - (endRow - startRow);
-      const endRowOffset = delta + endRow > this.viewEndingAtRow ? this.viewEndingAtRow - endRow : delta;
-      const startRowOffset = delta - endRowOffset;
-      startRow += startRowOffset;
-      endRow += endRowOffset;
-    }
-    return `${startRow}/${endRow}`
-  }
-
-  isOnSameDay(date1: Date, date2: Date) {
-    let dateA = new Date(date1);
-    let dateB = new Date(date2);
-    return dateA.toDateString() === dateB.toDateString();
-  }
-
-  getSecondOffsetFromMidnight(date: Date) {
-    let dateObject = new Date(date);
-    return dateObject.getSeconds() + (60 * dateObject.getMinutes()) + (60 * 60 * dateObject.getHours());
-  }
-
-  getMidnight(date: Date) {
-    const midnight = new Date(date);
-    midnight.setHours(0, 0, 0, 0);
-    return midnight;
-  }
-
-  getEndOfDay(date: Date) {
-    const endOfDay = new Date(date);
-    endOfDay.setHours(23, 59, 50);
-    return endOfDay;
-  }
-
-  getDisplayTimeString(event: CalendarEvent) {
-    if (this.isOnSameDay(event.startDateTime, event.endDateTime)) {
-      return this.eventService.getDisplayTimeString(event);
-    } else {
-      return this.eventService.getEventDateAndTimeString(event);
-    }
   }
 
   redirectToAddEvent(id: number) {

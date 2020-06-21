@@ -4,6 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.AttendanceStatus;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
 import org.aspectj.weaver.ast.Not;
 import org.hibernate.service.spi.ServiceException;
 
@@ -37,13 +38,64 @@ public interface AttendanceService {
      */
     List<Event> getEventByUser(ApplicationUser user) throws ServiceException;
 
+    /**
+     *
+     * @param userId
+     * @return
+     * @throws ServiceException
+     * @throws NotFoundException
+     */
     List<Event> getEventUserIsAttending(Integer userId) throws ServiceException, NotFoundException;
 
+    /**
+     *
+     * @param userId
+     * @return
+     * @throws ServiceException
+     * @throws NotFoundException
+     */
     List<Event> getEventUserIsInterested(Integer userId) throws ServiceException, NotFoundException;
 
+    /**
+     *
+     * @param eventId
+     * @return
+     * @throws ServiceException
+     * @throws NotFoundException
+     */
     List<ApplicationUser> getUsersAttendingEvent(Integer eventId) throws ServiceException, NotFoundException;
 
+    /**
+     *
+     * @param eventId
+     * @return
+     * @throws ServiceException
+     * @throws NotFoundException
+     */
     List<ApplicationUser> getUsersInterestedInEvent(Integer eventId) throws ServiceException, NotFoundException;
 
+    /**
+     *
+     * @param eventId
+     * @return
+     * @throws ServiceException
+     * @throws NotFoundException
+     */
     List<ApplicationUser> getUsersDecliningEvent(Integer eventId) throws ServiceException, NotFoundException;
+
+    /**
+     *
+     * @param id
+     * @throws ServiceException
+     */
+    void deleteStatus(Integer id) throws ServiceException;
+
+    /**
+     *
+     * @param userId
+     * @param eventId
+     * @return
+     * @throws ServiceException
+     */
+    AttendanceStatus getStatus(Integer userId, Integer eventId) throws ServiceException;
 }
