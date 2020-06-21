@@ -4,6 +4,11 @@ import {OrganizationService} from '../../services/organization.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Globals} from "../../global/globals";
+import {FormControl, FormGroup} from '@angular/forms';
+import {UserService} from '../../services/user.service';
+import {AuthService} from '../../services/auth.service';
+import {User} from '../../dtos/user';
+import {FeedbackService} from '../../services/feedback.service';
 
 @Component({
   selector: 'app-organization-form',
@@ -15,10 +20,13 @@ export class OrganizationFormComponent implements OnInit {
   organization: Organization;
   isUpdate: boolean;
   faChevronLeft = faChevronLeft;
+  private selectedImage: File;
+
 
   constructor(private organizationService: OrganizationService,
               public globals: Globals,
               private route: ActivatedRoute,
+              private feedbackService: FeedbackService,
               private router: Router) {
   }
 
@@ -27,6 +35,7 @@ export class OrganizationFormComponent implements OnInit {
     if (id) {
       this.organizationService.getById(id).subscribe((organization: Organization) => {
         this.organization = organization;
+        this.organization.coverImageUrl = this.globals.backendUri+this.organization.coverImageUrl.slice(1);
         this.isUpdate = true;
       });
     } else {
@@ -68,7 +77,16 @@ export class OrganizationFormComponent implements OnInit {
         });
   }
 
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
+  selectImage(event) {
+    this.selectedImage = event.target.files.item(0);
   }
+
+  uploadImage() {
+    this.organizationService.uploadOrganizationAvatar(this.organization.id, this.selectedImage).subscribe(resp => {
+      // @ts-ignore
+      this.organization.coverImageUrl = resp.url;
+    });
+  }
+
+
 }

@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {AuthRequest} from "../dtos/auth-request";
 import {Observable} from "rxjs";
 import {CalendarEvent} from "../dtos/calendar-event";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams, HttpRequest} from "@angular/common/http";
 import {Globals} from "../global/globals";
 import {EventComment} from "../dtos/event-comment";
 import {Label} from "../dtos/label";
@@ -21,7 +21,7 @@ export class EventService {
 
   deleteEvent(eventId: number) {
     console.log("Delete Event", CalendarEvent);
-    return this.httpClient.delete(this.eventBaseUri + '/'+eventId);
+    return this.httpClient.delete(this.eventBaseUri + '/' + eventId);
   }
 
   getEventsByCalendarId(id: number): Observable<Array<CalendarEvent>> {
@@ -184,10 +184,26 @@ export class EventService {
     return string
   }
 
-  getEventPromoImageLink(eventId: number) {
-    // Return base64 of a 1x1px transparent gif if no organizationId is given.
-    if (!eventId) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
-    return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-    //TODO: Implement this after backend is done.
+  uploadEventCover(eventId: number, file: File) {
+    const formData: FormData = new FormData();
+
+    formData.append('imagefile', file);
+
+    const req = new HttpRequest('POST', `${this.eventBaseUri}/${eventId}/cover`,
+      formData, {
+        responseType: 'json'
+      });
+
+    return this.httpClient.request(req);
+  }
+
+  getEventCover(eventId: number) {
+    return this.httpClient.get(`${this.eventBaseUri}/${eventId}/cover`)
+  }
+
+  searchEvent(name: string) {
+    let params = new HttpParams();
+    params = params.set('name', name);
+    return this.httpClient.get<CalendarEvent[]>(`${this.eventBaseUri}/search`, {params: params});
   }
 }

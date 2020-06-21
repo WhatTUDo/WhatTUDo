@@ -22,9 +22,8 @@ export class SubscriptionService {
     return this.httpClient.post<SubscriptionDto>(this.subscriptionUri + "/", subscription);
   }
 
-  delete(subscription: SubscriptionDto): Observable<void> {
-    // return this.httpClient.delete<SubscriptionDto>(this.subscriptionUri + "/"); //FIXME
-    return new Observable<void>();
+  delete(subscriptionId: number): Observable<SubscriptionDto> {
+    return this.httpClient.delete<SubscriptionDto>(this.subscriptionUri + "/" + subscriptionId);
   }
 
   getSubscribedCalendars(userId: number): Observable<Array<Calendar>> {
@@ -33,5 +32,13 @@ export class SubscriptionService {
 
   getCalendarSubscribers(calendarId: number): Observable<Array<Calendar>> {
     return this.httpClient.get<Array<Calendar>>(this.subscriptionUri + "/users/" + calendarId);
+  }
+
+  getSubscriptionsForCalendar(calendarId: number): Observable<Array<SubscriptionDto>> {
+    return this.httpClient.get<Array<SubscriptionDto>>(this.subscriptionUri + "/for/calendar/" + calendarId);
+  }
+
+  getSubscriptionsForUser(userId: number): Observable<Array<SubscriptionDto>> {
+    return this.httpClient.get<Array<SubscriptionDto>>(this.subscriptionUri + "/for/user/" + userId);
   }
 }

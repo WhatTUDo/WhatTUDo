@@ -84,9 +84,9 @@ public interface EventService {
      * @param event  - to add the labels to
      * @param labels to be added to this event
      * @return the updated event
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
      */
-    Event addLabels(Event event, Collection<Label> labels);
+    Event addLabels(Event event, Collection<Label> labels) throws ServiceException;
 
     /**
      * Remove labels from an event.
@@ -94,9 +94,9 @@ public interface EventService {
      * @param event  - to remove the labels from
      * @param labels to be removed from this event
      * @return the updated event
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
      */
-    Event removeLabels(Event event, Collection<Label> labels);
+    Event removeLabels(Event event, Collection<Label> labels) throws ServiceException;
 
     /**
      * Update labels from an event. Set those as the events labels
@@ -104,18 +104,36 @@ public interface EventService {
      * @param event  - to set the labels to
      * @param labels to be set for this event
      * @return the updated event
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
      */
-    Event updateLabels(Event event, Collection<Label> labels);
+    Event updateLabels(Event event, Collection<Label> labels) throws ServiceException;
 
+    /**
+     * Performs a text search and returns all Events that match the search term.
+     *
+     * @param searchterm: String for which the search is performed.
+     * @return List of Events whose Name or Description properties contain the searchterm String.
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
+     */
+    List<Event> findNameOrDescriptionBySearchTerm(String searchterm) throws ServiceException;
+
+
+    /**
+     * Returns a List of Events belonging to a Calendar with the given Id.
+     *
+     * @param id
+     * @return List of Events
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
+     */
     List<Event> getByCalendarId(Integer id) throws ServiceException;
 
     /**
      * Sets the cover image of this event
-      *@param event to set the image to
+     *
+     * @param event     to set the image to
      * @param imageBlob as byte array
      * @return the updated event
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
      */
-    Event setCoverImage(Event event, byte[] imageBlob);
+    Event setCoverImage(Event event, byte[] imageBlob) throws ServiceException;
 }

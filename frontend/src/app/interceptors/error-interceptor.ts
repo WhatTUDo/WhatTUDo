@@ -49,18 +49,23 @@ export class ErrorInterceptor implements HttpInterceptor {
       catchError((error: HttpResponse<any>) => {
         if (error instanceof HttpErrorResponse) {
           try {
+            error = error.error;
             switch (error.status) {
               case 400:
               case 405:
+                // @ts-ignore
                 this.feedbackService.displayError('Oops. This should not have happened.', 'We are not sending a correct request to the server. Contact us, we are glad to fix this.', error.status + ': ' + error.message);
                 break
               case 401:
+                // @ts-ignore
                 this.feedbackService.displayError('Login Required.', 'You can only do this after you logged in.', error.status + ': ' + error.message);
                 break
               case 403:
+                // @ts-ignore
                 this.feedbackService.displayError('Permission Denied.', 'You are not allow to do that.', error.status + ': ' + error.message);
                 break
               case 404:
+                // @ts-ignore
                 this.feedbackService.displayError('This does not exist.', 'We cannot find what you are looking for in our database.', error.status + ': ' + error.message);
                 break
               default:

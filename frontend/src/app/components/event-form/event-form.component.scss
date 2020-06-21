@@ -11,6 +11,10 @@ form {
   }
 }
 
+input:not([matInput]), select, textarea {
+  margin-bottom: 16pt;
+}
+
 #label-picker {
   display: flex;
   margin-bottom: 12pt;
@@ -39,6 +43,8 @@ form {
   background-color: var(--shadow);
   border-radius: $rounded-radius;
   margin-bottom: 8pt;
+  object-fit: cover;
+  filter: blur();
 }
 
 .event-form-container {
@@ -129,13 +135,17 @@ form {
   //border: 2pt solid $black;
 
   .mat-datepicker-container {
+    display: flex;
+    justify-content: center;
     padding: 8pt;
 
     mat-form-field {
+      --text: $black !important;
       font-family: inherit !important;
 
       input {
         background: transparent !important;
+        color: $black !important;
       }
     }
   }
@@ -144,5 +154,14 @@ form {
     color: $black !important;
     border-top: 2pt solid $black;
     background-color: $white !important;
+  }
+}
+
+.button-row {
+  margin-top: 8pt;
+  margin-bottom: 16pt;
+
+  button {
+    margin-right: 8pt;
   }
 }

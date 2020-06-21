@@ -9,7 +9,7 @@ import lombok.NonNull;
 import javax.persistence.*;
 
 @Entity
-@Table
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "calendar_id"}))
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

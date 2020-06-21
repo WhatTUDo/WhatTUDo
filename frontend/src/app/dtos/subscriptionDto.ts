@@ -1,6 +1,7 @@
 export class SubscriptionDto {
 
-  constructor(public userName: String,
+  constructor(public id = 0,
+              public userName: String,
               public calendarId: number) {
   }
 }

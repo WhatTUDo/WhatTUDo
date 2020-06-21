@@ -15,7 +15,8 @@
           </fa-icon>
         </div>
       </div>
-      <div class="event-promo-container mobile-full-width" [style.background-image]="'url('+getEventPromoImageLink(id)+')'">
+      <div class="event-promo-container mobile-full-width"
+           [style.background-image]="'url('+globals.backendUri+calendarEvent.coverImageUrl.slice(1)+')'">
         <div class="event-promo-details">
           <div class="event-time">{{getEventDateAndTimeString()}}</div>
           <div class="event-name">{{calendarEvent.name}}</div>
@@ -31,7 +32,7 @@
         </div>
       </div>
       <div>
-        <div class="participation-status grid-one-third also-on-mobile no-gap">
+        <div class="participation-status actions-one-third">
           <div class="participation-status-item"
                [style.color]="userParticipationStatus===AttendanceStatusPossibilities.ATTENDING?'var(--accent)':undefined">
             <div class="participation-count">{{participants.attending.length}}</div>
@@ -48,19 +49,27 @@
             <div class="participation-label">Declined</div>
           </div>
         </div>
-        <div class="participation-button-container grid-one-third also-on-mobile no-gap">
-          <button (click)="participate(AttendanceStatusPossibilities.ATTENDING)" class="button-blue btn-lg">
+        <div class="participation-button-container actions-one-third">
+          <button *ngIf="userParticipationStatus!==AttendanceStatusPossibilities.ATTENDING"
+                  (click)="participate(AttendanceStatusPossibilities.ATTENDING)" class="button-blue" [style.order]="1">
             Attend
           </button>
-          <button (click)="participate(AttendanceStatusPossibilities.INTERESTED)" class="button-yellow btn-lg">
+          <button *ngIf="userParticipationStatus!==AttendanceStatusPossibilities.INTERESTED"
+                  (click)="participate(AttendanceStatusPossibilities.INTERESTED)" class="button-yellow"
+                  [style.order]="2">
             Interested
           </button>
-          <button (click)="participate(AttendanceStatusPossibilities.DECLINED)" class="button-red btn-lg">
+          <button *ngIf="userParticipationStatus!==AttendanceStatusPossibilities.DECLINED"
+                  (click)="participate(AttendanceStatusPossibilities.DECLINED)" class="button-red" [style.order]="3">
             Decline
+          </button>
+          <button *ngIf="userParticipationStatus !== null"
+                  (click)="resetParticipation()" [style.order]="userParticipationStatus?userParticipationStatus:3">
+            Reset
           </button>
         </div>
       </div>
-      <div class="calendar-info">
+      <div class="calendar-info" *ngIf="calendar">
         <div class="calendar-name clickable no-hover-enlarge" routerLink="/calendar/{{calendar.id}}">
           <fa-icon [icon]="faCalendar"></fa-icon>
           {{calendar.name}}

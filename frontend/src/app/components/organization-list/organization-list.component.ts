@@ -4,6 +4,9 @@ import {Organization} from "../../dtos/organization";
 import {faChevronLeft, faCog, faPlus, faTimes, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {UserService} from "../../services/user.service";
 import {User} from "../../dtos/user";
+import {ActivatedRoute} from "@angular/router";
+import {Globals} from "../../global/globals";
+import {FormControl, FormGroup} from "@angular/forms";
 
 @Component({
   selector: 'app-organization-list',
@@ -13,7 +16,13 @@ import {User} from "../../dtos/user";
 export class OrganizationListComponent implements OnInit {
 
   organizations: Organization[];
-  organizationUserAvatars: Map<Organization, string[]> = new Map();
+  organizationUserAvatars: Map<number, string[]> = new Map();
+
+  searchForm = new FormGroup({
+    name: new FormControl('')
+  });
+  searchActive: boolean = false;
+  organizationSearchResult: Organization[] = [];
 
   faChevronLeft = faChevronLeft;
   faCog = faCog;
@@ -23,7 +32,8 @@ export class OrganizationListComponent implements OnInit {
 
   constructor(
     private organizationService: OrganizationService,
-    private userService: UserService
+    private userService: UserService,
+    private globals: Globals
   ) {
   }
 
@@ -44,8 +54,9 @@ export class OrganizationListComponent implements OnInit {
     this.organizationService.getAll().subscribe(organizations => {
       this.organizations = organizations;
       organizations.forEach(org => {
+        org.coverImageUrl = this.globals.backendUri+org.coverImageUrl.slice(1);
         this.organizationService.getMembers(org.id).subscribe(users => {
-          this.organizationUserAvatars.set(org, users.map(user => {
+          this.organizationUserAvatars.set(org.id, users.map(user => {
             return this.getGravatarLink(user.email, 64)
           }))
         })
@@ -59,5 +70,57 @@ export class OrganizationListComponent implements OnInit {
 
   getGravatarLink(email, size) {
     return this.userService.getGravatarLink(email, size);
+  }
+
+
+  onSubmit() {
+    let formValue = this.searchForm.value;
+    if (!formValue.name) {
+      this.organizationSearchResult = [];
+      this.searchActive = false;
+      return
+    }
+    let validationIsPassed = this.validateFormInput(formValue);
+    if (validationIsPassed) {
+      // submit to service
+      console.log("search");
+      this.organizationService.searchOrganization(formValue.name).subscribe((searchResult) => {
+        this.organizationSearchResult = searchResult;
+        this.searchActive = true;
+      })
+    }
+  }
+
+
+  /**
+   *
+   * @param formValue
+   * returns true/false depending on whether validation succeeds.
+   */
+  validateFormInput(formValue: any) {
+    let errors: Array<Error> = new Array<Error>();
+    if ((formValue.name == "")) {
+      errors.push(new Error("Nothing was given to search."));
+    }
+
+    if (errors.length > 0) {
+      console.warn(errors);
+      let errorMessage = "";
+      for (let error of errors) {
+        errorMessage += error.message + " ";
+      }
+      alert(errorMessage);
+      this.organizationSearchResult = [];
+      return false;
+    }
+    return true;
+  }
+
+  clearSearch() {
+    this.searchForm = new FormGroup({
+      name: new FormControl('')
+    });
+    this.organizationSearchResult = [];
+    this.searchActive = false;
   }
 }

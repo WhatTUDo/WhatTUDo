@@ -14,6 +14,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper(componentModel = "spring")
@@ -60,5 +61,7 @@ public abstract class SubscriptionMapper {
     }
 
     public abstract SubscriptionDto subscriptionToSubscriptionDto(Subscription subscription);
+
+    public abstract List<SubscriptionDto> subscriptionDtoList(List<Subscription> subscriptionList);
 
 }

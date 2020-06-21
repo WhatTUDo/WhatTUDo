@@ -23,8 +23,15 @@
   align-items: flex-end;
 
   background-color: var(--shadow);
+  background-size: cover;
+  background-repeat: no-repeat;
 
-  height: 40em;
+  height: $mobile-object-full-height;
+
+  @media (screen and min-width: $mobile-breakpoint) {
+    min-height: $mobile-object-full-height;
+    height: calc(100vh - 160pt);
+  }
 
   border-radius: $rounded-radius;
 
@@ -52,22 +59,22 @@
 
 .details-stack {
   > *:not(h2) {
-    margin-bottom: 32pt;
+    margin-bottom: 16pt;
   }
 }
+
+.actions-one-third {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 
 .participation-button-container {
   text-align: center;
   width: 100%;
 
   button {
-    margin: 0 8pt;
-  }
-
-  @media (screen and min-width: $mobile-breakpoint) {
-    button {
-      margin: 0 16pt;
-    }
+    margin: 0 4pt;
   }
 }
 

@@ -10,7 +10,7 @@
   align-items: center;
 
   width: 100%;
-  margin-bottom: 16pt;
+  margin: 0 8pt 16pt;
 
   .calendar-details {
     width: 100%;
@@ -20,17 +20,23 @@
       font-weight: $f-bold;
       font-size: 24pt;
     }
-  }
 
-  .organization-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4pt;
-
-    > .avatar {
-      margin-right: 4pt;
+    .calendar-description {
+      margin-bottom: 4pt;
     }
+
   }
+
+    .organization-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4pt;
+
+      > .avatar {
+        margin-right: 4pt;
+      }
+    }
+
 
   .calendar-buttons {
     margin-left: auto;

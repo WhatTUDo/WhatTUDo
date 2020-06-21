@@ -32,4 +32,13 @@ export class AttendanceStatusService {
     return this.httpClient.get<any[]>(this.attendanceUri + '/getDeclined/' + id);
   }
 
+  getEventsUserIsInterestedIn(id : number) : Observable<any[]> {
+    return this.httpClient.get<any[]>(this.attendanceUri+'/userInterested/'+id);
+  }
+
+
+  getEventsUserIsAttending(id : number) : Observable<any[]> {
+    return this.httpClient.get<any[]>(this.attendanceUri+'/userAttending/'+id);
+  }
+
 }

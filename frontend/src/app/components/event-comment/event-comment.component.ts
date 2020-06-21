@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
 import {EventComment} from "../../dtos/event-comment";
 
 import {faThumbsDown, faThumbsUp, faUserCircle, faReply, faClock} from "@fortawesome/free-solid-svg-icons";

@@ -5,17 +5,16 @@
   <span *ngIf="organization&&!isUpdate">New Team{{organization.name ? ": " + organization.name : ''}}</span>
 </div>
 
-<h2>{{isUpdate ? "Edit" : "Create"}} Organization</h2>
-<div class="avatar-container" *ngIf="organization">
-  <img alt="" class="avatar avatar-medium" src="{{getOrganizationAvatarLink(organization.id, 256)}}">
-</div>
-
-<form *ngIf="organization" class="centered-one-third">
+<form *ngIf="organization" class="centered-one-third" (ngSubmit)="uploadImage()">
+  <h2>{{isUpdate ? "Edit" : "Create"}} Organization</h2>
+  <div class="avatar-container" *ngIf="organization">
+    <img alt="" class="avatar avatar-medium" src="{{organization.coverImageUrl}}">
+  </div>
   <label for="organization-avatar">
     Avatar
   </label>
   <div class="input-button-combo">
-    <input type="file" name="organization-avatar"
+    <input type="file" name="organization-avatar" (change)="selectImage($event)"
            id="organization-avatar" accept="{{this.globals.allowedAvatarMimeTypes.join(',')}}">
     <button type="submit" class="no-hover-enlarge">Upload</button>
   </div>
@@ -27,7 +26,8 @@
       Name
     </label>
     <div class="input-button-combo">
-      <input #organizationName [(ngModel)]="organization.name" class="form-control" id="organization.name" type=text>
+      <input #organizationName [(ngModel)]="organization.name" [ngModelOptions]="{standalone: true}"
+             class="form-control" id="organization.name" type=text>
       <button (click)="onSubmit(organizationName.value)"
               class="submit-button">Update
       </button>

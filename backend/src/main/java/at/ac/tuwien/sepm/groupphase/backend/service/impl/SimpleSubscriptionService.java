@@ -13,11 +13,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.PersistenceException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -34,14 +36,33 @@ public class SimpleSubscriptionService implements SubscriptionService {
             return subscriptionRepository.save(subscription);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new NotFoundException(e.getMessage());
         }
     }
 
     @Override
-    public Subscription delete(Subscription subscription) throws ServiceException {
+    public Subscription delete(Subscription subscription) throws ServiceException, NotFoundException {
         try {
+            getById(subscription.getId());
             subscriptionRepository.delete(subscription);
             return subscription;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new NotFoundException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Subscription getById(Integer id) throws ServiceException, NotFoundException {
+        try {
+            Optional<Subscription> foundSubscription = subscriptionRepository.findById(id);
+            if (foundSubscription.isPresent()) {
+                return foundSubscription.get();
+            } else {
+                throw new NotFoundException("Could not retrieve Subscription with ID " + id);
+            }
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
@@ -68,11 +89,22 @@ public class SimpleSubscriptionService implements SubscriptionService {
 
     @Override
     public List<ApplicationUser> getSubscribedUsersForCalendar(Calendar calendar) throws ServiceException, NotFoundException {
-        return null;
+        List<Subscription> subscriptions = this.getSubscriptionsForCalendar(calendar);
+        List<ApplicationUser> users = new ArrayList<>();
+
+        subscriptions.forEach(subscription -> {
+            users.add(subscription.getUser());
+        });
+        return users;
     }
 
     @Override
     public List<Calendar> getSubsribedCalendarsForUser(ApplicationUser user) throws ServiceException, NotFoundException {
-        return null;
+        List<Subscription> subscriptions = this.getSubscriptionsByUser(user);
+        List<Calendar> calendars = new ArrayList<>();
+        subscriptions.forEach(subscription -> {
+            calendars.add(subscription.getCalendar());
+        });
+        return calendars;
     }
 }

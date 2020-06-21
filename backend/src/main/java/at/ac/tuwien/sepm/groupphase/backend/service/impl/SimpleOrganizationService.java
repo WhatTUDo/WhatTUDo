@@ -135,6 +135,14 @@ public class SimpleOrganizationService implements OrganizationService {
         }
     }
 
+    @Override
+    public List<Organization> searchForName(String name) throws ServiceException {
+        try {
+            return organizationRepository.findByNameContainingIgnoreCase(name);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
 
     public Organization removeCalendars(Organization organization, Collection<Calendar> calendars) {
         try {
@@ -174,6 +182,7 @@ public class SimpleOrganizationService implements OrganizationService {
         }
     }
 
+    @Transactional
     @Override
     public Organization addMembership(ApplicationUser user, Organization organization, String role) throws ServiceException {
         try {

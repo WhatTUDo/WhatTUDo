@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Organization} from '../dtos/organization';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpRequest} from '@angular/common/http';
 import {Globals} from '../global/globals';
-import {User} from "../dtos/user";
+import {User} from '../dtos/user';
 
 @Injectable({
   providedIn: 'root'
@@ -58,8 +58,8 @@ export class OrganizationService {
    * @param id
    */
   deleteOrganization(id: number): Observable<number> {
-    console.log("Delete Organization with ID ", id);
-    return this.httpClient.delete<number>(this.organizationBaseUri + "/" + id);
+    console.log('Delete Organization with ID ', id);
+    return this.httpClient.delete<number>(this.organizationBaseUri + '/' + id);
   }
 
   /**
@@ -84,7 +84,7 @@ export class OrganizationService {
     params = params.set('id', String(calendarId));
     return this.httpClient.delete(this.organizationBaseUri + `/${organizationId}/calendars`, {
       params: params
-    })
+    });
   }
 
   /**
@@ -101,5 +101,36 @@ export class OrganizationService {
     if (!organizationId) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
     return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
     //TODO: Implement this after backend is done.
+  }
+
+  addMembership(orgaId: number, userId: number, role: string): Observable<any> {
+    // let params = new HttpParams();
+    // params = params.set('userId', String(userId))
+    //   .set('role', role);
+    let url = "?userId=" + userId + "&role=" + role;
+    return this.httpClient.put(this.organizationBaseUri + '/addMembership/'+orgaId+url, {});
+  }
+
+  uploadOrganizationAvatar(organizationId: number, file: File) {
+    const formData: FormData = new FormData();
+
+    formData.append('imagefile', file);
+
+    const req = new HttpRequest('POST', `${this.organizationBaseUri}/${organizationId}/cover`,
+      formData, {
+        responseType: 'json'
+      });
+
+    return this.httpClient.request(req);
+  }
+
+  getOrganizationAvatar(organizationId: number) {
+    return this.httpClient.get(`${this.organizationBaseUri}/${organizationId}/cover`)
+  }
+
+  searchOrganization(name: string) {
+    let params = new HttpParams();
+    params = params.set('name', name);
+    return this.httpClient.get<Organization[]>(`${this.organizationBaseUri}/search`, {params: params});
   }
 }

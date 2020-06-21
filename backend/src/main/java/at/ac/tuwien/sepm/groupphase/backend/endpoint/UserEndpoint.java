@@ -37,6 +37,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -51,6 +52,23 @@ public class UserEndpoint {
     private final OrganizationMapper organizationMapper;
     private final UserRepository userRepository;
     private final OrganizationRepository organizationRepository;
+
+    @PreAuthorize("hasRole('SYSADMIN')")
+    @GetMapping
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get all users")
+    public List<LoggedInUserDto> getAllUsers() {
+        try {
+            List<ApplicationUser> users = userService.getAllUsers();
+
+            return users.stream().map(userMapper::applicationUserToUserDto).collect(Collectors.toList());
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+        }
+    }
 
     @PreAuthorize("permitAll()")
     @PostMapping
@@ -163,6 +181,20 @@ public class UserEndpoint {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
+
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @GetMapping("/getByName/{name}")
+    @ApiOperation(value = "Get user by name", authorizations = {@Authorization(value = "apiKey")})
+    public LoggedInUserDto getUserByName(@PathVariable(value = "name") String name){
+     try  { ApplicationUser applicationUser = userService.getUserByName(name);
+        return userMapper.applicationUserToUserDto(applicationUser);
+     } catch (ServiceException e){
+         throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+     }
+    }
+
 
 
     @PreAuthorize("permitAll()")

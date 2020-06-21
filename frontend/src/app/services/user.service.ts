@@ -29,7 +29,8 @@ export class UserService {
     let reducedElement = {
       'id': null,
       'name': user.name,
-      'email': user.email
+      'email': user.email,
+      'password': user.password
     };
 
     return this.httpClient.post(this.usersBaseUri, reducedElement);
@@ -58,8 +59,7 @@ export class UserService {
   }
 
   getGravatarLink(email: String, size: number) {
-    // Return base64 of a 1x1px transparent gif if no email is given.
-    if (!email) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
+    if (!email) email = '';
     const gravatarHash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${gravatarHash}?s=${Math.trunc(size)}&d=identicon`;
   }
@@ -72,13 +72,17 @@ export class UserService {
     return this.httpClient.get<CalendarEvent[]>(this.globals.backendUri + "users/recommendedEvents/" + userId);
   }
 
-  addToOrganizationWithRole(userId: number, organizationId: number, role: string): Observable<User> {
-    return this.httpClient.delete<User>(
-      this.globals.backendUri + `users/${userId}/roles?orgaId=${organizationId}&role=${role}`
-    );
-  }
 
   removeFromOrganization(userId: number, organizationId: number): Observable<User> {
     return this.httpClient.delete<User>(this.globals.backendUri + `users/${userId}/roles?orgaId=${organizationId}`);
   }
+
+  getUserByName(name: string) : Observable<User>{
+    return this.httpClient.get<User>(this.usersBaseUri+'/getByName/'+name);
+  }
+
+  getAllUsers(): Observable<User[]> {
+    return this.httpClient.get<User[]>(this.usersBaseUri);
+  }
+
 }

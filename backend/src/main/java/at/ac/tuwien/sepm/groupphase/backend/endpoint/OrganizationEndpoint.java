@@ -49,7 +49,7 @@ public class OrganizationEndpoint {
     private final UserService userService;
 
 
-    @PreAuthorize("hasPermission(#dto, 'MOD')")
+    @PreAuthorize("hasPermission(#dto, 'ADMIN')")
     @PutMapping
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -115,8 +115,21 @@ public class OrganizationEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
+    @GetMapping(value = "/search")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Search Organizations with name (or name fragment)", authorizations = {@Authorization(value = "apiKey")})
+    public List<OrganizationDto> searchOrganizationNames(@RequestParam("name") String name) {
+        try {
+            return organizationMapper.organizationListToorganizationDtoList(organizationService.searchForName(name));
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
 
-    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'ADMIN')")
     @DeleteMapping(value = "/{id}")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -186,16 +199,19 @@ public class OrganizationEndpoint {
 
     }
 
-    @PreAuthorize("hasPermission(#orgaId, 'ORGA', 'MOD')")
-    @PutMapping("/addMembership")
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'ADMIN')")
+    @PutMapping(value = "/addMembership/{id}")
     @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
     @ApiOperation(value = "create membership", authorizations = {@Authorization(value = "apiKey")})
-    public OrganizationDto addMembership(@PathVariable(value = "userId") Integer userId, @PathVariable(value = "orgaId") Integer orgaId, @PathVariable(value = "role") String role ){
+    public OrganizationDto addMembership(@PathVariable(value = "id") Integer id,@RequestParam(value = "userId") Integer userId, @RequestParam(value = "role") String role ){
         try {
             ApplicationUser applicationUser = userService.findUserById(userId);
-            Organization organization = organizationService.findById(orgaId);
-
-            return organizationMapper.organizationToOrganizationDto(organizationService.addMembership(applicationUser,organization, role));
+            Organization organization = organizationService.findById(id);
+            if(role.equals("Moderator")){
+                role = "MOD";
+            }
+            return organizationMapper.organizationToOrganizationDto(organizationService.addMembership(applicationUser,organization, role.toUpperCase()));
         }catch (NotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }catch (ServiceException e){
@@ -211,15 +227,20 @@ public class OrganizationEndpoint {
     public @ResponseBody byte[] getCoverImage(@PathVariable int id) {
         try {
             Byte[] coverImageBlob = organizationService.findById(id).getCoverImage();
-            byte[] byteArray = new byte[coverImageBlob.length];
-            for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            byte[] byteArray;
+            if (coverImageBlob != null) {
+                byteArray = new byte[coverImageBlob.length];
+                for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            } else {
+                byteArray = new byte[0];
+            }
             return byteArray;
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
 
-    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'ADMIN')")
     @CrossOrigin
     @PostMapping("/{id}/cover")
     @ResponseStatus(HttpStatus.OK)

@@ -4,6 +4,8 @@ import {UserService} from "../../services/user.service";
 import {Globals} from "../../global/globals";
 import {EventService} from "../../services/event.service";
 import {CalendarEvent} from "../../dtos/calendar-event";
+import {faCheckSquare, faSearch} from "@fortawesome/free-solid-svg-icons";
+import {faSquare} from "@fortawesome/free-regular-svg-icons";
 
 
 @Component({
@@ -16,6 +18,11 @@ export class HomeComponent implements OnInit {
   currentTime: string;
   userId: number;
   recommendedEvents: CalendarEvent[];
+  subscribedOnly: boolean = false;
+
+  faSearch = faSearch;
+  faCheckSquare = faCheckSquare;
+  faSquare = faSquare;
 
   constructor(public authService: AuthService,
               private userService: UserService,
@@ -56,5 +63,9 @@ export class HomeComponent implements OnInit {
         }).slice(0, 5);
       })
     }
+  }
+
+  toggleSubscribedOnly() {
+    this.subscribedOnly = !this.subscribedOnly;
   }
 }
