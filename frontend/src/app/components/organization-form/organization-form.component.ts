@@ -35,7 +35,7 @@ export class OrganizationFormComponent implements OnInit {
     if (id) {
       this.organizationService.getById(id).subscribe((organization: Organization) => {
         this.organization = organization;
-        this.organization.coverImageUrl = this.globals.backendUri+this.organization.coverImageUrl.slice(1);
+        this.organization.coverImageUrl = this.globals.backendUri+this.organization.coverImageUrl;
         this.isUpdate = true;
       });
     } else {

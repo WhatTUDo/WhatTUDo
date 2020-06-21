@@ -63,7 +63,7 @@ public class LocationEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('SYSADMIN')")
+    @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
@@ -81,7 +81,7 @@ public class LocationEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('SYSADMIN')")
+    @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @PutMapping
@@ -97,7 +97,7 @@ public class LocationEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('SYSADMIN')")
+    @PreAuthorize("permitAll()")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")

@@ -60,7 +60,7 @@ public class LocationEndpointTest {
     @Test
     public void save_shouldReturn_sameLocation() throws Exception {
         List<Integer> eventIds = Collections.emptyList();
-        LocationDto locationDto = new LocationDto(1, "Test Name", "Test Adress", "1100", 1, 1, eventIds);
+        LocationDto locationDto = new LocationDto(1, "Test Name", "Test address", "1100", 1, 1, eventIds);
         LocationDto returnedLocation = endpoint.create(locationDto);
 
         assertEquals(locationDto.getName(), returnedLocation.getName());
@@ -75,7 +75,7 @@ public class LocationEndpointTest {
     public void save_thenRead_shouldReturn_sameLocation() {
 
         List<Integer> eventIds = Collections.emptyList();
-        LocationDto locationDto = new LocationDto(1, "Test Name", "Test Adress", "1100", 1, 1, eventIds);
+        LocationDto locationDto = new LocationDto(1, "Test Name", "Test address", "1100", 1, 1, eventIds);
         LocationDto returnedLocation = endpoint.create(locationDto);
         LocationDto gottenLocation = endpoint.getById(returnedLocation.getId());
 
@@ -92,8 +92,8 @@ public class LocationEndpointTest {
     @Test
     public void save_withoutCorrectParam_shouldReturn_ResponseStatusException() {
         List<Integer> eventIds = Collections.emptyList();
-        LocationDto locationDto1 = new LocationDto(null, "", "Test Adress", "1100", 1, 1, eventIds);
-        LocationDto locationDto2 = new LocationDto(null, "Test Name", "Test Adress", "1100", 1, 200, eventIds);
+        LocationDto locationDto1 = new LocationDto(null, "", "Test address", "1100", 1, 1, eventIds);
+        LocationDto locationDto2 = new LocationDto(null, "Test Name", "Test address", "1100", 1, 200, eventIds);
 
         assertThrows(ResponseStatusException.class, () -> endpoint.create(locationDto1));
         assertThrows(ResponseStatusException.class, () -> endpoint.create(locationDto2));
@@ -104,7 +104,7 @@ public class LocationEndpointTest {
     @Test
     public void delete_savedEvent_findBYIdReturnsResponseException() {
         List<Integer> eventIds = Collections.emptyList();
-        LocationDto locationDto = new LocationDto(1, "Test Name", "Test Adress", "1100", 1, 1, eventIds);
+        LocationDto locationDto = new LocationDto(1, "Test Name", "Test address", "1100", 1, 1, eventIds);
         LocationDto returnedLocation = endpoint.create(locationDto);
         endpoint.delete(returnedLocation.getId());
         assertThrows(ResponseStatusException.class, () -> endpoint.getById(returnedLocation.getId()));
@@ -116,7 +116,7 @@ public class LocationEndpointTest {
     @Test
     public void updateEntityValues_shouldReturn_correctChanges() {
         List<Integer> eventIds = Collections.emptyList();
-        LocationDto locationDto = new LocationDto(1, "Test Name", "Test Adress", "1100", 1, 1, eventIds);
+        LocationDto locationDto = new LocationDto(1, "Test Name", "Test address", "1100", 1, 1, eventIds);
         LocationDto returnedLocation = endpoint.create(locationDto);
 
         assertEquals(locationDto.getName(), returnedLocation.getName());
@@ -125,7 +125,7 @@ public class LocationEndpointTest {
         assertEquals(locationDto.getLatitude(), returnedLocation.getLatitude());
         assertEquals(locationDto.getLongitude(), returnedLocation.getLongitude());
 
-        LocationDto locationDtoChanges = new LocationDto(returnedLocation.getId(), "Test Name 2", "Test Adress 2", "1102", 2, 2, eventIds);
+        LocationDto locationDtoChanges = new LocationDto(returnedLocation.getId(), "Test Name 2", "Test address 2", "1102", 2, 2, eventIds);
         LocationDto finalLocation = endpoint.update(locationDtoChanges);
 
         assertEquals(finalLocation.getName(), locationDtoChanges.getName());

@@ -13,6 +13,7 @@ import {CollisionResponse} from "../../dtos/collision-response";
 import {EventCollisionService} from "../../services/event-collision.service";
 import {Label} from '../../dtos/label';
 import {Globals} from "../../global/globals";
+import {LocationService} from "../../services/location.service";
 
 @Component({
   selector: 'app-event-form',
@@ -35,7 +36,6 @@ export class EventFormComponent implements OnInit {
   }
 
   calendarEvent: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null, null, null, null);
-  title: String = "NEW EVENT"
 
   conflictExists: boolean = false;
 
@@ -59,6 +59,7 @@ export class EventFormComponent implements OnInit {
     private eventCollisionService: EventCollisionService,
     private calendarService: CalendarService,
     private feedbackService: FeedbackService,
+    private locationService: LocationService,
     public globals: Globals,
     private route: ActivatedRoute,
     private router: Router) {
@@ -68,10 +69,18 @@ export class EventFormComponent implements OnInit {
         if (event) {
           this.calendarEvent = event;
           this.isUpdate = true;
-          this.title = "UPDATE EVENT";
           this.getEventLabels(id);
           this.ev_id = id;
-          this.calendarEvent.coverImageUrl = globals.backendUri+this.calendarEvent.coverImageUrl.slice(1);
+          this.calendarEvent.coverImageUrl = globals.backendUri + this.calendarEvent.coverImageUrl;
+          this.calendarEvent.location = {
+            id: null,
+            name: "NullIsland",
+            address: "Atlantic Ocean",
+            zip: "1234",
+            latitude: 0,
+            longitude: 0,
+            eventIds: []
+          } as Location
         }
       });
     } else {

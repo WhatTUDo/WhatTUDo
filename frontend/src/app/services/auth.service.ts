@@ -13,7 +13,7 @@ import {Organization} from '../dtos/organization';
 })
 export class AuthService {
 
-  private authBaseUri: string = this.globals.backendUri + 'api/v1/authentication';
+  private authBaseUri: string = this.globals.backendUri + '/api/v1/authentication';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
@@ -64,7 +64,7 @@ export class AuthService {
   }
 
   getUser(): Observable<User> | null {
-    if (this.isLoggedIn()) return this.httpClient.get<User>(this.globals.backendUri + "users/user");
+    if (this.isLoggedIn()) return this.httpClient.get<User>(this.globals.backendUri + "/users/user");
     else return null;
   }
 

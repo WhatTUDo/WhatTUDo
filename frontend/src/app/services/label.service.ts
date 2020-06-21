@@ -10,7 +10,7 @@ import {Globals} from "../global/globals";
 })
 export class LabelService {
 
-  private labelBaseUri: string = this.globals.backendUri + 'labels';
+  private labelBaseUri: string = this.globals.backendUri + '/labels';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
