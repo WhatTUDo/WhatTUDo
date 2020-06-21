@@ -64,7 +64,7 @@
       <div class="title-icon-button-combo">
         <h3>My Calendars</h3>
         <div class="icon-button clickable no-hover-enlarge" *ngIf="subscribedCalendars.length!==0">
-          <fa-icon [icon]="faFileDownload"></fa-icon>
+          <fa-icon [icon]="faLink" (click)="copyPersonalUrlToClipboard()"></fa-icon>
         </div>
       </div>
       <div *ngIf="subscribedCalendars.length===0">You have no subscribed calenders yet.</div>
@@ -84,6 +84,9 @@
           </div>
         </div>
         <div class="calendar-buttons">
+          <div class="icon-button clickable no-hover-enlarge">
+            <fa-icon [icon]="faLink" (click)="copyCalendarUrlToClipboard(cal.id)"></fa-icon>
+          </div>
           <fa-icon (click)="onClickUnsubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
                    class="subscribed clickable no-hover-enlarge">Unsubscribe
           </fa-icon>
@@ -116,6 +119,9 @@
           </div>
         </div>
         <div class="calendar-buttons">
+          <div class="icon-button clickable no-hover-enlarge">
+            <fa-icon [icon]="faLink" (click)="copyCalendarUrlToClipboard(cal.id)"></fa-icon>
+          </div>
           <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
                    class="clickable no-hover-enlarge">Subscribe
           </fa-icon>
@@ -131,7 +137,12 @@
       </div>
     </div>
     <div *ngIf="otherCalendars.length > 0 && !searchActive">
-      <h3 *ngIf="authService.isLoggedIn()">All Calendars</h3>
+      <div class="title-icon-button-combo">
+        <h3>All Calendars</h3>
+        <div class="icon-button clickable no-hover-enlarge" *ngIf="subscribedCalendars.length!==0">
+          <fa-icon [icon]="faLink" (click)="copyAllCalendarsUrlToClipboard()()"></fa-icon>
+        </div>
+      </div>
       <div *ngFor="let cal of otherCalendars" class="calendar">
         <div class="calendar-details">
           <div class="clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
@@ -149,6 +160,9 @@
           </div>
         </div>
         <div class="calendar-buttons">
+          <div class="icon-button clickable no-hover-enlarge">
+            <fa-icon [icon]="faLink" (click)="copyCalendarUrlToClipboard(cal.id)"></fa-icon>
+          </div>
           <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()" [icon]="faBookmark"
                    class="clickable no-hover-enlarge">subscribe
           </fa-icon>

@@ -2,10 +2,18 @@ import {Component, OnInit} from '@angular/core';
 import {Calendar} from '../../dtos/calendar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
-import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp, faPlus} from '@fortawesome/free-solid-svg-icons';
+import {
+  faLink,
+  faChevronDown,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
+  faPlus
+} from '@fortawesome/free-solid-svg-icons';
 import {CalendarEvent} from '../../dtos/calendar-event';
 import {EventService} from '../../services/event.service';
 import {Globals} from "../../global/globals";
+import {FeedbackService} from "../../services/feedback.service";
 
 @Component({
   selector: 'app-calendar',
@@ -45,6 +53,7 @@ export class CalendarComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
   faPlus = faPlus;
+  faLink = faLink;
   currentDate: number;
   currentMonth: String;
   currentYear: number;
@@ -53,7 +62,8 @@ export class CalendarComponent implements OnInit {
     private eventService: EventService,
     private calendarService: CalendarService,
     private route: ActivatedRoute,
-    private globals: Globals
+    private globals: Globals,
+    private feedbackService: FeedbackService
   ) {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
     this.eventService.getEventsByCalendarId(this.id).subscribe((events: CalendarEvent[]) => {
@@ -258,5 +268,25 @@ export class CalendarComponent implements OnInit {
 
   private calcRow(sec) {
     return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
+  }
+
+  copyCalendarUrlToClipboard(calendarId: number) {
+    const icalUrl = this.globals.backendUri + "ical/calendar/" + calendarId;
+    this.copyMessage(icalUrl)
+    this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
+  }
+
+  copyMessage(val: string){
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 }

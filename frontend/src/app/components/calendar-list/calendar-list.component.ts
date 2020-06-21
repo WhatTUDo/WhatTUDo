@@ -10,7 +10,7 @@ import {
   faCog,
   faPlus,
   faTimesCircle,
-  faFileDownload
+  faLink
 } from "@fortawesome/free-solid-svg-icons";
 import {OrganizationService} from '../../services/organization.service';
 import {AuthService} from "../../services/auth.service";
@@ -19,6 +19,7 @@ import {SubscriptionService} from "../../services/subscription.service";
 import {Organization} from '../../dtos/organization';
 import {SubscriptionDto} from "../../dtos/subscriptionDto";
 import {Globals} from "../../global/globals";
+import {ICalService} from "../../services/ical.service";
 
 
 @Component({
@@ -37,7 +38,7 @@ export class CalendarListComponent implements OnInit {
   faPlus = faPlus;
   faBookmark = faBookmark;
   faCircleNotch = faCircleNotch;
-  faFileDownload = faFileDownload;
+  faLink = faLink;
 
   loading: boolean = true;
 
@@ -53,6 +54,7 @@ export class CalendarListComponent implements OnInit {
     private organizationService: OrganizationService,
     private subscriptionService: SubscriptionService,
     private feedbackService: FeedbackService,
+    private iCalService: ICalService,
     public authService: AuthService,
     private globals: Globals) {
     this.getAllCalendars().then((calendars) => {
@@ -227,6 +229,40 @@ export class CalendarListComponent implements OnInit {
 
   isSubscribed(id: number) {
     return Boolean(this.subscribedCalendars.find(sc => sc.id === id));
+  }
+
+  copyPersonalUrlToClipboard() {
+    this.iCalService.getUserIcalToken().subscribe(icalToken => {
+      const icalUrl = this.globals.backendUri + "ical/user?token=" + icalToken;
+      this.copyMessage(icalUrl)
+      this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
+    })
+  }
+
+  copyCalendarUrlToClipboard(calendarId: number) {
+    const icalUrl = this.globals.backendUri + "ical/calendar/" + calendarId;
+    this.copyMessage(icalUrl)
+    this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
+  }
+
+  copyAllCalendarsUrlToClipboard() {
+    const icalUrl = this.globals.backendUri + "ical/";
+    this.copyMessage(icalUrl)
+    this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
+  }
+
+  copyMessage(val: string){
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
   }
 }
 
