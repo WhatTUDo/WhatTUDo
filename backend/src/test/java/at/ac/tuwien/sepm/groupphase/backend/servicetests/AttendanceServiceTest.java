@@ -228,5 +228,29 @@ public class AttendanceServiceTest {
         assert (users.size() == 1);
     }
 
+    @Test
+    public void deleteStatus(){
+        ApplicationUser user = userRepository.save(new ApplicationUser("Panda", "panda@animal.com", "savethepandas"));
+        Calendar calendar = calendarRepository.save(new Calendar("Animals", Collections.singletonList(organization)));
+        Event event = eventRepository.save(new Event("Panda Day", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
+        AttendanceStatus attendanceStatus= attendanceService.create(new AttendanceStatus(user, event, AttendanceStatusPossibilities.ATTENDING));
+
+        attendanceService.deleteStatus(attendanceStatus.getId());
+
+        assert (null == attendanceService.getStatus(user.getId(), event.getId()));
+    }
+
+    @Test
+    public void getUserStatus(){
+        ApplicationUser user = userRepository.save(new ApplicationUser("Pope Francis", "spam@god.com", "godisdead4realthistime"));
+        Calendar calendar = calendarRepository.save(new Calendar("Test", Collections.singletonList(organization)));
+        Event event = eventRepository.save(new Event("Test event", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
+       AttendanceStatus attendanceStatus= attendanceService.create(new AttendanceStatus(user, event, AttendanceStatusPossibilities.ATTENDING));
+
+        assertEquals(AttendanceStatusPossibilities.ATTENDING, attendanceService.getStatus(user.getId(), event.getId()).getStatus());
+        attendanceService.deleteStatus(attendanceStatus.getId());
+        assert (null == attendanceService.getStatus(user.getId(), event.getId()));
+    }
+
 
 }

@@ -47,6 +47,7 @@ export class EventComponent implements OnInit {
   faCalendar = faCalendar;
   faTimesCircle = faTimesCircle;
   AttendanceStatusPossibilities = AttendanceStatusPossibilities;
+  attendanceStatus: AttendanceDto;
   eventComment2: EventComment = new EventComment(null, null, null, null, null);
 
   constructor(private eventService: EventService,
@@ -63,6 +64,12 @@ export class EventComponent implements OnInit {
     if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user) => {
         this.user = user;
+        this.attendanceStatusService.getStatus(user.id, id ).subscribe((status:AttendanceDto) => {
+            this.attendanceStatus = status;
+            if(status != null){
+            this.userParticipationStatus = status.status;}
+          }
+        );
       });
     }
   }
@@ -84,8 +91,9 @@ export class EventComponent implements OnInit {
       this.feedbackService.displayWarning(`Login Required.`, 'You can only do this after you logged in.');
       return;
     }
-    this.attendanceStatusService.create(new AttendanceDto(this.user.name, this.id, status)).subscribe((attendance) => {
-        this.getParticipants();
+    this.attendanceStatusService.create(new AttendanceDto(null,this.user.name, this.id, status)).subscribe((attendance) => {
+      this.attendanceStatus = attendance;
+      this.getParticipants();
       }
     );
   }
@@ -109,7 +117,6 @@ export class EventComponent implements OnInit {
       this.labels = labels;
     });
   }
-
 
 
 
@@ -163,9 +170,13 @@ export class EventComponent implements OnInit {
 
 
   resetParticipation() {
-    // TODO: Do something with backend.
-    this.userParticipationStatus = null;
-    this.getParticipants();
+      this.attendanceStatusService.deleteStatus(this.attendanceStatus.id).subscribe(()=>{
+        this.userParticipationStatus = null;
+        this.getParticipants();
+      }, error =>{
+        console.warn(error);
+        this.feedbackService.displayError("Error", error.error.message);
+      });
   }
 
   private getComments(id: number) {

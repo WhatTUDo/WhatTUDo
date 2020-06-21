@@ -41,4 +41,13 @@ export class AttendanceStatusService {
     return this.httpClient.get<any[]>(this.attendanceUri+'/userAttending/'+id);
   }
 
+  deleteStatus(id: number){
+    return this.httpClient.delete(this.attendanceUri + '/'+id);
+  }
+
+  getStatus(userId: number,
+            eventId: number) : Observable<any>{
+    return this.httpClient.get<any>(this.attendanceUri+ '/getStatus/'+userId+'/'+eventId);
+  }
+
 }
