@@ -108,7 +108,7 @@ export class EventService {
       "endDateTime": event.endDateTime,
       "name": event.name,
       "startDateTime": event.startDateTime,
-      "location": event.location
+      "location": event.locationId
     }
     return this.httpClient.post(this.eventBaseUri, reducedElement);
   }
@@ -125,7 +125,7 @@ export class EventService {
       "endDateTime": event.endDateTime,
       "name": event.name,
       "startDateTime": event.startDateTime,
-      "location": event.location
+      "location": event.locationId
     }
 
     return this.httpClient.put(this.eventBaseUri, reducedElement);

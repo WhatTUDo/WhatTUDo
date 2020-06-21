@@ -48,19 +48,27 @@ export class EventLocationComponent implements OnInit, OnChanges {
     this.selectionComplete = false;
     let element: any = document.getElementById('addressSearch');
     let value = element.value;
+    this.locationService.searchName(value).subscribe(resultsForName => {
+      this.searchResults = resultsForName;
+
+      this.locationService.searchAddress(value).subscribe(resultsForAddress => {
+        resultsForAddress.forEach(result => {
+          if (!this.searchResults.includes(result)) {
+            this.searchResults.push(result);
+          }
+        })
+      })
+    })
     this.eventService.searchLocationInAPI(value).subscribe(results => {
       this.searchResults = results;
       this.searchComplete = true;
-      console.log(results);
-    }, err => {
-      console.warn(err);
-    })
+    });
   }
 
   addressClicked(result: any) {
     let specificName = result.address.address29 ? result.address29 : result.address.road
     let locationAddress = result.address.road + " " + result.address.postcode + " " + result.address.city;
-    let location: Location = new Location(null, specificName, locationAddress, result.address.postcode, result.lat, result.lon);
+    let location: Location = new Location(null, specificName, locationAddress, result.address.postcode, result.lat, result.lon, []);
     this.selectedLocation = location;
     console.log(location);
     this.createPreviewURL(this.selectedLocation);

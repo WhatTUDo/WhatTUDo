@@ -135,7 +135,7 @@ export class EventComponent implements OnInit {
       this.calendarEvent.labels = this.getLabels();
       this.calendarEvent.description = event.description;
       if (event.locationId) {
-        this.locationService.getById(event.locationId).subscribe((location) => {
+        this.locationService.getLocation(event.locationId).subscribe((location) => {
           this.location = location;
         })
       }

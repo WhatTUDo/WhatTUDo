@@ -206,7 +206,7 @@ export class EventFormComponent implements OnInit {
 
   saveLocationToEvent(location: Location) {
     if (location) {
-      this.locationService.create(location).subscribe((location) => {
+      this.locationService.saveLocation(location).subscribe((location) => {
         this.location = location;
         this.calendarEvent.locationId = location.id;
       })
