@@ -44,9 +44,9 @@ export class UserService {
    * Puts user to Server --> Update user
    * @param user updated version of user to be saved
    */
-  putUser(user: User): Observable<any> {
+  putUser(oldUsername: string,user: User): Observable<any> {
     console.log('Put user to Server', user);
-    return this.httpClient.put(this.usersBaseUri, user);
+    return this.httpClient.put(this.usersBaseUri+'/'+oldUsername, user);
   }
 
   /**

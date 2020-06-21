@@ -199,7 +199,7 @@ public class OrganizationEndpoint {
 
     }
 
-    @PreAuthorize("hasPermission(#id, 'ORGA', 'ADMIN')")
+    @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
     @PutMapping(value = "/addMembership/{id}")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)

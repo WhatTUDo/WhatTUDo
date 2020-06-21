@@ -59,15 +59,16 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
   }
 
   public update() {
+    let newuser : User = new User(this.user.id, "", "");
     if (this.updateForm.valid) {
       if (this.updateForm.controls.username) {
         if(this.updateForm.controls.username.value != ""){
-        this.user.name = this.updateForm.controls.username.value;}
+        newuser.name = this.updateForm.controls.username.value;}
       } else if (this.updateForm.controls.email) {
         if(this.updateForm.controls.email.value != ""){
-          this.user.email = this.updateForm.controls.email.value;}
+          newuser.email = this.updateForm.controls.email.value;}
       }
-      this.userService.putUser(this.user).subscribe((user: any) => {
+      this.userService.putUser(this.user.name,newuser).subscribe((user: any) => {
         this.user = user;
         this.feedbackService.displaySuccess('Successfully updated', 'Successfully updated');
 

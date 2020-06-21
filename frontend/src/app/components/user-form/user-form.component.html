@@ -20,18 +20,18 @@
         <h4>User Info</h4>
       </div>
       <div>
-<!--        <div class="form-group">-->
-<!--          <label class="control-label" for="username">Username</label>-->
-<!--          <div>-->
-<!--            <input autocomplete="username" class="form-control" formControlName="username" id="username"-->
-<!--                   type="text">-->
-<!--            <div *ngIf="updateForm.controls.username.errors" class="jasmine-errored">-->
-<!--              <small *ngIf="updateForm.controls.username.errors.maxLength"-->
-<!--                     class="form-text text-warning">This username is too long!-->
-<!--              </small>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
+        <div class="form-group">
+          <label class="control-label" for="username">Username</label>
+          <div>
+            <input autocomplete="username" class="form-control" formControlName="username" id="username"
+                   type="text">
+            <div *ngIf="updateForm.controls.username.errors" class="jasmine-errored">
+              <small *ngIf="updateForm.controls.username.errors.maxLength"
+                     class="form-text text-warning">This username is too long!
+              </small>
+            </div>
+          </div>
+        </div>
         <div class="form-group">
           <label class="control-label" for="email">Email</label>
           <div>
@@ -57,7 +57,7 @@
     <div>
       <h4>Security</h4>
     </div>
-    <form (ngSubmit)="update()" [formGroup]="changePwdForm" class="form-horizontal">
+    <form (ngSubmit)="changePassword()" [formGroup]="changePwdForm" class="form-horizontal">
       <div class="form-group">
         <label class="control-label" for="currentPassword">Current password</label>
         <div>
