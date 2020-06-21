@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Table
 @Data
-@NoArgsConstructor
+//@NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Event extends BaseEntity {
@@ -56,5 +56,17 @@ public class Event extends BaseEntity {
     @ToString.Exclude
     @OneToMany(mappedBy = "event", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+
+    public Event(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, Calendar calendar, Location location) {
+        this.name = name;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.calendar = calendar;
+        this.location = location;
+    }
+
+    public Event() {
+    }
 }
 

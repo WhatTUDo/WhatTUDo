@@ -17,6 +17,7 @@ public class EventDto extends PermissionDto {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private Integer calendarId;
+    private Integer locationId;
 
     @JsonProperty("coverImageUrl")
     private String calculateCoverImageUrl() {

@@ -55,7 +55,8 @@ public class SimpleLocationService implements LocationService {
     public Location save(Location location) throws ServiceException, ValidationException {
         try {
             validator.validateLocation(location);
-            return locationRepository.save(location);
+            Optional<Location> found = locationRepository.findByAddressAndZip(location.getAddress(), location.getZip());
+            return found.orElseGet(() -> locationRepository.save(location));
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }

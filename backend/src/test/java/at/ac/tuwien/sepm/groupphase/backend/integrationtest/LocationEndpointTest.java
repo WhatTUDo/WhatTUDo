@@ -55,10 +55,9 @@ public class LocationEndpointTest {
     LocationMapper mapper;
 
 
-
     @WithMockUser(username = "User 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
-    public void save_shouldReturn_sameLocation() throws Exception {
+    public void save_shouldReturn_sameLocation() {
         List<Integer> eventIds = Collections.emptyList();
         LocationDto locationDto = new LocationDto(1, "Test Name", "Test address", "1100", 1, 1, eventIds);
         LocationDto returnedLocation = endpoint.create(locationDto);
@@ -99,10 +98,10 @@ public class LocationEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.create(locationDto2));
     }
 
-
+    @Transactional
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
-    public void delete_savedEvent_findBYIdReturnsResponseException() {
+    public void delete_savedEvent_findByIdReturnsResponseException() {
         List<Integer> eventIds = Collections.emptyList();
         LocationDto locationDto = new LocationDto(1, "Test Name", "Test address", "1100", 1, 1, eventIds);
         LocationDto returnedLocation = endpoint.create(locationDto);

@@ -47,6 +47,8 @@ public class UserEndpointRecommendationTest {
     @Autowired
     CalendarRepository calendarRepository;
 
+    @Autowired
+    LocationRepository locationRepository;
 
     @Autowired
     AttendanceRepository attendanceRepository;
@@ -71,7 +73,7 @@ public class UserEndpointRecommendationTest {
         txstatus.setRollbackOnly();
     }
 
-   @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
@@ -79,6 +81,7 @@ public class UserEndpointRecommendationTest {
         orga.setId(1);
         ApplicationUser user = userService.getUserByName("Person 1");
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(orga)));
+        Location location = new Location("Test Location", "Test Adress", "Zip", 0, 0);
         List<Label> labels1 = new ArrayList<>();
         List<Label> labels2 = new ArrayList<>();
         List<Label> labels3 = new ArrayList<>();
@@ -86,9 +89,9 @@ public class UserEndpointRecommendationTest {
         List<Event> events2 = new ArrayList<>();
         Label label1 = new Label("TestLabel1");
         Label label2 = new Label("TestLabel2");
-        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
-        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
-        Event event3 = new Event("Test Event 3", LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(21), calendar);
+        Event event1 = new Event("Test Event 1", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar, location);
+        Event event2 = new Event("Test  Event 2", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar, location);
+        Event event3 = new Event("Test Event 3", LocalDateTime.now().plusDays(20), LocalDateTime.now().plusDays(21), calendar, location);
         events1.add(event1);
         events1.add(event3);
         events2.add(event1);
@@ -102,6 +105,11 @@ public class UserEndpointRecommendationTest {
         event3.setLabels(labels3);
         label1.setEvents(events1);
         label2.setEvents(events2);
+        event1.setLocation(location);
+        event2.setLocation(location);
+        event3.setLocation(location);
+        location.setEvents(List.of(event1,event2,event3));
+        locationRepository.save(location);
         eventRepository.save(event1);
         eventRepository.save(event2);
         eventRepository.save(event3);
@@ -113,7 +121,7 @@ public class UserEndpointRecommendationTest {
         List<EventDto> recommendedEvent = userEndpoint.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
         assert (recommendedEvent.size() > 0);
-        assertEquals (recommendedEvent.get(0).getId(), event3.getId());
+        assertEquals(recommendedEvent.get(0).getId(), event3.getId());
 
     }
 
