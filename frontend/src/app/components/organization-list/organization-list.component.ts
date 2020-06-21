@@ -64,10 +64,6 @@ export class OrganizationListComponent implements OnInit {
     })
   }
 
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
-  }
-
   getGravatarLink(email, size) {
     return this.userService.getGravatarLink(email, size);
   }

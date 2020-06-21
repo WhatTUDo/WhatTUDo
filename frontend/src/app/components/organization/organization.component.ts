@@ -134,10 +134,6 @@ export class OrganizationComponent implements OnInit {
     }
   }
 
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
-  }
-
   removeFromOrg(userId: number, organizationId: number) {
     if (
       confirm(`You are removing "${

@@ -8,7 +8,7 @@
 <form *ngIf="organization" class="centered-one-third" (ngSubmit)="uploadImage()">
   <h2>{{isUpdate ? "Edit" : "Create"}} Organization</h2>
   <div class="avatar-container" *ngIf="organization">
-    <img alt="" class="avatar avatar-medium" src="{{organization.coverImageUrl}}">
+    <img alt="" class="avatar avatar-large" src="{{organization.coverImageUrl}}">
   </div>
   <label for="organization-avatar">
     Avatar

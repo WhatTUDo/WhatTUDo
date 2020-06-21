@@ -7,7 +7,7 @@
   <div>
     <h2>This Team</h2>
     <div class="organization-info">
-      <img alt="" class="avatar avatar-medium" src="{{organization.coverImageUrl}}">
+      <img alt="" class="avatar avatar-large" src="{{organization.coverImageUrl}}">
       <div class="organization-details">
         <div class="organization-name">{{organization.name}}</div>
       </div>
@@ -73,7 +73,7 @@
     </div>
     <div class="organization-member-list">
       <div *ngFor="let member of organizationMembers" class="organization-member">
-        <img alt="" class="avatar avatar-small" src="{{getGravatarLink(member.email, 256)}}">
+        <img alt="" class="avatar avatar-medium" src="{{getGravatarLink(member.email, 256)}}">
         <div class="organization-member-details">
           <div class="organization-member-name">{{member.name}}</div>
           <!--          <div class="organization-member-role">{{member.role}}</div>-->
