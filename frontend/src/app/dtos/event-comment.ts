@@ -6,7 +6,6 @@ export class EventComment {
     public eventId: number,
     public updateDateTime: Date
 
-   // public rating: number
   ) {
 
   }

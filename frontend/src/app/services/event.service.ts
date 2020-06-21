@@ -31,6 +31,12 @@ export class EventService {
     return this.httpClient.delete(this.commentBaseUri + '/' + commentId);
   }
 
+
+  createComment(eventComment : EventComment) {
+    console.log("Create Comment", eventComment);
+   return this.httpClient.post<EventComment>(this.commentBaseUri + '/', eventComment);
+   }
+
   getEventsByCalendarId(id: number): Observable<Array<CalendarEvent>> {
     console.log("Load Multiple Events by Calendar id");
     return this.httpClient.get<Array<CalendarEvent>>(this.eventBaseUri + '/calendarId/' + id);

@@ -33,6 +33,7 @@ export class EventComponent implements OnInit {
   labels: Array<Label>;
   comments: Array<EventComment>;
   public calendarEvent: CalendarEvent;
+  public eventComment: EventComment;
   calendar: Calendar;
   calendarOrganizations: Organization[] = [];
   participants = {
@@ -46,6 +47,7 @@ export class EventComponent implements OnInit {
   faCalendar = faCalendar;
   faTimesCircle = faTimesCircle;
   AttendanceStatusPossibilities = AttendanceStatusPossibilities;
+  eventComment2: EventComment = new EventComment(null, null, null, null, null);
 
   constructor(private eventService: EventService,
               private labelService: LabelService,
@@ -69,7 +71,7 @@ export class EventComponent implements OnInit {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
 
     this.getEventLabels(this.id);
-    this.getComments(this.id);
+    this.comments = this.getComments(this.id);
 
   }
 
@@ -88,16 +90,19 @@ export class EventComponent implements OnInit {
     );
   }
 
-  public addComment() {
-    let textArea: any = document.getElementById('comment-area');
-    if (textArea) {
-      let comment = textArea.value;
-      if (comment || comment.length > 0) {
-        console.log('Comments aren\'t live yet, but here\'s what you wrote: ' + comment);
-      } else {
-        console.log('Could not read comment!');
-      }
-    }
+
+  public addComment(input : string) {
+        if(input.length > 0){
+
+         this.eventComment2.username = this.user.name;
+         this.eventComment2.eventId = this.id;
+         this.eventComment2.text = input;
+
+         this.eventService.createComment(this.eventComment2).subscribe(comments => {
+      this.getComments(this.id).push(this.eventComment2);
+    });
+}
+
   }
 
   getEventLabels(id: number) {
