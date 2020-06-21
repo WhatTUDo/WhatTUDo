@@ -8,7 +8,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class EventDto extends PermissionDto {
@@ -18,9 +17,23 @@ public class EventDto extends PermissionDto {
     private LocalDateTime endDateTime;
     private Integer calendarId;
     private Integer locationId;
+    private String description;
 
     @JsonProperty("coverImageUrl")
     private String calculateCoverImageUrl() {
         return EventEndpoint.BASE_URL + "/" + this.id + "/cover";
     }
+
+    public EventDto() {
+    }
+
+    public EventDto(Integer id, String name, LocalDateTime startDateTime, LocalDateTime endDateTime, Integer calendarId, Integer locationId) {
+        this.id = id;
+        this.name = name;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.calendarId = calendarId;
+        this.locationId = locationId;
+    }
+
 }

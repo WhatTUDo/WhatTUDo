@@ -95,6 +95,29 @@ public class EventEndpointTest {
         assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
     }
 
+    @WithMockUser(username = "User 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    public void save_withDescription_shouldReturn_sameEvent() {
+        Organization orga;
+        Calendar calendar;
+        orga = new Organization("Test Organization2", "Description");
+        orga.setId(1);
+        calendar = new Calendar("Test Calendar2", Collections.singletonList(orga));
+        calendar.setId(1);
+        Location location = locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
+
+
+        EventDto eventDto = new EventDto(1, "Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId(), location.getId(), "Description");
+
+        EventDto returnedEvent = endpoint.post(eventDto);
+        assertEquals(eventDto.getName(), returnedEvent.getName());
+        assertEquals(eventDto.getEndDateTime(), returnedEvent.getEndDateTime());
+        assertEquals(eventDto.getStartDateTime(), returnedEvent.getStartDateTime());
+        assertEquals(eventDto.getCalendarId(), returnedEvent.getCalendarId());
+        assertEquals(eventDto.getDescription(), returnedEvent.getDescription());
+    }
+
+
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void save_thenRead_shouldReturn_sameEvent() {
