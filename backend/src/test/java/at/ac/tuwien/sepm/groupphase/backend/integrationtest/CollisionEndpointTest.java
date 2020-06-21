@@ -34,10 +34,11 @@ public class CollisionEndpointTest {
     EventRepository eventRepository;
 
     @Autowired
-    EventCollisionEndpoint eventCollisionEndpoint;
+    LocationRepository locationRepository;
 
     @Autowired
-    LocationRepository locationRepository;
+    EventCollisionEndpoint eventCollisionEndpoint;
+
 
 
     @WithMockUser
@@ -46,6 +47,7 @@ public class CollisionEndpointTest {
         Organization orga = new Organization("Test Organization");
         Calendar calendar =  calendarRepository.save(new Calendar("Calendar test", Collections.singletonList(orga)));
         Location location =  locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
+
         Event event = eventRepository.save(new Event("Event colliding 1", LocalDateTime.of(2021, 8, 8, 10, 0),
             LocalDateTime.of(2021, 8, 8, 11, 0), calendar));
         Event event1 = eventRepository.save(new Event("Event colliding 2", LocalDateTime.of(2021, 8, 8, 9, 45),

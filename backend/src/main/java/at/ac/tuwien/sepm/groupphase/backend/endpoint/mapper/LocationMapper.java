@@ -16,6 +16,7 @@ import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -26,8 +27,6 @@ public abstract class LocationMapper {
     @Autowired
     protected EventRepository eventRepository;
 
-    public abstract LocationDto locationToLocationDto(Location location);
-
     @BeforeMapping
     protected void mapEvents(Location location, @MappingTarget LocationDto locationDto) {
         Location locEntity = locationRepository.findById(location.getId())
@@ -36,11 +35,13 @@ public abstract class LocationMapper {
         locationDto.setEventIds(locEntity.getEvents().stream().map(Event::getId).collect(Collectors.toList()));
     }
 
-    public abstract Location locationDtoToLocation(LocationDto locationDto);
+    public abstract LocationDto locationToLocationDto(Location location);
 
     @BeforeMapping
     public void mapEvents(LocationDto locationDto, @MappingTarget Location location) {
         location.setEvents(eventRepository.findAllById(locationDto.getEventIds()));
     }
+
+    public abstract Location locationDtoToLocation(LocationDto locationDto);
 
 }

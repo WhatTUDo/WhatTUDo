@@ -15,6 +15,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.LocationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,9 +52,22 @@ public class LocationEndpointTest {
     @Autowired
     UserRepository userRepository;
 
+
     @Autowired
     LocationMapper mapper;
 
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    public void getAllLocations_shouldReturn_All() {
+        List<Integer> eventIds = Collections.emptyList();
+        LocationDto locationDto1 = new LocationDto(1, "Abermals ne location", "Bahnstraße 2", "1100", 1, 1, eventIds);
+        LocationDto locationDto2 = new LocationDto(2, "die sollte nicht gefunden werden", "Blubplatz 15", "1100", 1, 1, eventIds);
+        endpoint.create(locationDto1);
+        endpoint.create(locationDto2);
+        List<LocationDto> foundLocations = endpoint.getAllLocations();
+        assert (foundLocations.size() >= 2);
+    }
 
     @WithMockUser(username = "User 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
@@ -133,6 +147,40 @@ public class LocationEndpointTest {
         assertEquals(finalLocation.getLatitude(), locationDtoChanges.getLatitude());
         assertEquals(finalLocation.getLongitude(), locationDtoChanges.getLongitude());
 
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    public void findByName_shouldReturn_correctLocation() {
+        List<Integer> eventIds = Collections.emptyList();
+        LocationDto locationDto1 = new LocationDto(1, "Test Name", "Test address", "1100", 1, 1, eventIds);
+        LocationDto locationDto2 = new LocationDto(2, "Nicht findbar", "Test address", "1100", 1, 1, eventIds);
+        LocationDto returnedLocation1 = endpoint.create(locationDto1);
+        LocationDto returnedLocation2 = endpoint.create(locationDto2);
+
+        List<LocationDto> foundLocation = endpoint.searchLocationNames("Test");
+        assert (foundLocation.size() > 0);
+        assertEquals(locationDto1.getName(), foundLocation.get(0).getName());
+
+        List<LocationDto> nonFound = endpoint.searchLocationNames("Brotbackstube");
+        assert (nonFound.size() == 0);
+    }
+
+    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @Test
+    public void findByAddress_shouldReturn_correctLocation() {
+        List<Integer> eventIds = Collections.emptyList();
+        LocationDto locationDto1 = new LocationDto(1, "Alteshaus", "Haustraße 25/7/5", "1100", 1, 1, eventIds);
+        LocationDto locationDto2 = new LocationDto(2, "Nicht findbares Haus", "keine Adresse", "1100", 1, 1, eventIds);
+        LocationDto returnedLocation1 = endpoint.create(locationDto1);
+        LocationDto returnedLocation2 = endpoint.create(locationDto2);
+
+        List<LocationDto> foundLocation = endpoint.searchLocationAddress("Haustraße");
+        assert (foundLocation.size() > 0);
+        assertEquals(locationDto1.getName(), foundLocation.get(0).getName());
+
+        List<LocationDto> nonFound = endpoint.searchLocationAddress("Brotbackstube");
+        assert (nonFound.size() == 0);
     }
 
 

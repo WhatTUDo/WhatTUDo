@@ -8,6 +8,8 @@ import at.ac.tuwien.sepm.groupphase.backend.service.ICalService;
 import at.ac.tuwien.sepm.groupphase.backend.service.SubscriptionService;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
+import biweekly.io.TimezoneAssignment;
+import biweekly.io.TimezoneInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
@@ -18,6 +20,7 @@ import javax.transaction.Transactional;
 import java.sql.Date;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -54,6 +57,9 @@ public class SimpleICalService implements ICalService {
     @Transactional
     ICalendar toCalendar(String name, List<VEvent> events) {
         ICalendar iCalendar = new ICalendar();
+        TimezoneInfo tzinfo = new TimezoneInfo();
+        tzinfo.setDefaultTimezone(TimezoneAssignment.download(TimeZone.getDefault(), true));
+        iCalendar.setTimezoneInfo(tzinfo);
         iCalendar.setProductId("WhatTUDo");
         iCalendar.setName(name);
         events.forEach(iCalendar::addEvent);
