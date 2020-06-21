@@ -69,6 +69,12 @@ export class CalendarComponent extends CalendarBase implements OnInit {
   ngOnInit(): void {
   }
 
+   updateOffsettedDates() {
+    this.displayingDate = this.getDate(this.offset);
+    this.displayingWeek = this.getWeek(this.offset);
+    this.loadAllEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+  }
+
   /**
    * Calls Service to load Events for the week.
    * @param from: Start date of week
