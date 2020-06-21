@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface LocationService {
 
@@ -55,6 +56,25 @@ public interface LocationService {
      * @throws ServiceException if something goes wrong during data processing.
      */
     void delete(Integer id);
+
+
+    /**
+     * Searches Location Name properties for the given string. Ignores case.
+     *
+     * @param name Term for which search is performed.
+     * @return List of locations whose name contains the search term.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    List<Location> searchForName(String name) throws ServiceException;
+
+    /**
+     * Searches Location Address properties for the given string. Ignores case.
+     *
+     * @param address Term for which search is performed.
+     * @return List of locations whose address contains the search term.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    List<Location> searchForAddress(String address) throws ServiceException;
 
 
 }

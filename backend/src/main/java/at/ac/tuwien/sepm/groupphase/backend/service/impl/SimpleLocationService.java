@@ -105,5 +105,23 @@ public class SimpleLocationService implements LocationService {
         }
     }
 
+    @Override
+    public List<Location> searchForName(String name) throws ServiceException {
+        try {
+            return locationRepository.findByNameContainingIgnoreCase(name);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Location> searchForAddress(String address) throws ServiceException {
+        try {
+            return locationRepository.findByAddressContainingIgnoreCase(address);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
 
 }

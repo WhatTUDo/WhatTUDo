@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.LocationRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +34,9 @@ public class CollisionEndpointTest {
     EventRepository eventRepository;
 
     @Autowired
+    LocationRepository locationRepository;
+
+    @Autowired
     EventCollisionEndpoint eventCollisionEndpoint;
 
 
@@ -41,7 +45,8 @@ public class CollisionEndpointTest {
     public void getEventCollisionsAndSuggestions() {
         Organization orga = new Organization("Test Organization");
         Calendar calendar = (new Calendar("Calendar test", Collections.singletonList(orga)));
-        Location location = new Location("Test Location", "Test Adress", "Zip", 0, 0);
+        Location location = locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
+
         calendarRepository.save(calendar);
         Event event = eventRepository.save(new Event("Event colliding 1", LocalDateTime.of(2021, 8, 8, 10, 0),
             LocalDateTime.of(2021, 8, 8, 11, 0), calendar));

@@ -1,7 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LocationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LocationDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.OrganizationDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.LabelMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.LocationMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
@@ -114,5 +116,37 @@ public class LocationEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
+    @GetMapping(value = "/searchName")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Search location with name (or name fragment)", authorizations = {@Authorization(value = "apiKey")})
+    public List<LocationDto> searchLocationNames(@RequestParam("name") String name) {
+        try {
+            List<Location> locations = locationService.searchForName(name);
+            List<LocationDto> locationDtos = new ArrayList<>();
+            locations.forEach(location -> locationDtos.add(locationMapper.locationToLocationDto(location)));
+            return locationDtos;
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
 
+    @PreAuthorize("permitAll()")
+    @GetMapping(value = "/searchAddress")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Search location with address (or name fragment)", authorizations = {@Authorization(value = "apiKey")})
+    public List<LocationDto> searchLocationAddress(@RequestParam("address") String address) {
+        try {
+            List<Location> locations = locationService.searchForAddress(address);
+            List<LocationDto> locationDtos = new ArrayList<>();
+            locations.forEach(location -> locationDtos.add(locationMapper.locationToLocationDto(location)));
+            return locationDtos;
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    //organizationListToorganizationDtoList
 }

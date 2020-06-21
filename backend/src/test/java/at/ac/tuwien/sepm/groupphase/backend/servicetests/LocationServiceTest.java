@@ -23,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -102,7 +103,7 @@ public class LocationServiceTest {
     public void getAll_returnsAll() {
         service.save(new Location("Audimax", "2. Aufgang dann rechts", "1180", 13.53, 1.8));
         service.save(new Location("Audmaximus","1.Aufgang dann links","1180",-180,180));
-        assert(service.getAll().size() == 2);
+        assert (service.getAll().size() >= 2);
 
     }
 
@@ -113,10 +114,34 @@ public class LocationServiceTest {
         updatedLocation.setId(location.getId());
         Location returnedLocation = service.update(updatedLocation);
 
-        assertEquals(updatedLocation.getName(),returnedLocation.getName());
-        assertEquals(returnedLocation.getId(),location.getId());
+        assertEquals(updatedLocation.getName(), returnedLocation.getName());
+        assertEquals(returnedLocation.getId(), location.getId());
 
 
+    }
+
+    @Test
+    public void findByName_shouldReturn_correctLocation() {
+        Location location1 = repository.save(new Location("Alteshaus", "Haustraße 25/7/5", "1010", 1, 2));
+        Location location2 = repository.save(new Location("Neueshaus", "Haustraße 25/7/5", "1010", 1, 2));
+        List<Location> foundLocation = service.searchForName("Alteshaus");
+        assert (foundLocation.size() > 0);
+        assertEquals(location1.getName(), foundLocation.get(0).getName());
+
+        List<Location> nonFound = service.searchForName("Brotbackstube");
+        assert (nonFound.size() == 0);
+    }
+
+    @Test
+    public void findByAddress_shouldReturn_correctLocation() {
+        Location location1 = repository.save(new Location("Alteshaus", "Haustraße 25/7/5", "1010", 1, 2));
+        Location location2 = repository.save(new Location("Neueshaus", "Haustraße 25/7/6", "1010", 1, 2));
+        List<Location> foundLocation = service.searchForAddress("Haustraße 25");
+        assert (foundLocation.size() > 0);
+        assertEquals(location1.getName(), foundLocation.get(0).getName());
+
+        List<Location> nonFound = service.searchForAddress("Milchstraße 15");
+        assert (nonFound.size() == 0);
     }
 
 
