@@ -27,9 +27,6 @@ export class CalendarComponent extends CalendarBase implements OnInit {
   calendar: Calendar;
   events: CalendarEvent[] = [];
 
-  /** color classes to add **/
-  calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
-
   color: String;
 
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();

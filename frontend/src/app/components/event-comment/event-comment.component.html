@@ -1,42 +1,28 @@
 <div class="comment-item">
 
   <div class="conmment-content">
-    {{this.comment.text}}
+    {{comment.text}}
   </div>
   <div class="comment-metadata">
     <div class="comment-author">
-      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;@ {{this.comment.username}}
+      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;{{comment.username}}
     </div>
     <div class="comment-time">
-      <fa-icon [icon]="faClock"></fa-icon>&ensp;{{this.comment.updateDateTime}}
+      <fa-icon [icon]="faClock"></fa-icon>&ensp;{{getDisplayDateAndTimeStringFromDate(comment.updateDateTime)}}
     </div>
 
-    <div *ngIf="this.user == this.author">
+    <div *ngIf="user == author">
       <fa-icon [icon]="faCog" (click)="changeEditCommentState()" class="clickable no-hover-enlarge"></fa-icon>
     </div>
 
-    <div *ngIf="this.pushedEdit == true">
+    <div *ngIf="pushedEdit == true">
       <label for="comment-textarea">
       </label>
-      <textarea  class="no-outline" id="comment-textarea" name="comment" #njf
-      >{{this.comment.text}}</textarea>
+      <textarea class="no-outline" id="comment-textarea" name="comment" #njf>{{comment.text}}</textarea>
       <button (click)="editComment(njf.value)" class="full-width-form-button no-hover-enlarge btn-lg">Send
       </button>
     </div>
 
 
   </div>
-  <!--  <div class="comment-buttons">-->
-  <!--    <button (click)="vote(true)" class="button-green icon-button">-->
-  <!--      <fa-icon [icon]="faThumbsUp"></fa-icon>-->
-  <!--    </button>-->
-  <!--    <div class="rating-percentage">{{this.comment.rating * 100 + '%'}}</div>-->
-  <!--    <button (click)="vote(false)" class="button-red icon-button">-->
-  <!--      <fa-icon [icon]="faThumbsDown"></fa-icon>-->
-  <!--    </button>-->
-  <!--    <button (click)="respondButtonClicked()" class="button-blue icon-button response-button">-->
-  <!--      <fa-icon [icon]="faReply"></fa-icon>-->
-  <!--    </button>-->
-  <!--  </div>-->
-
 </div>

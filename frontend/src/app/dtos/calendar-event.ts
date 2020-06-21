@@ -1,5 +1,4 @@
 import {Label} from "./label";
-import {Location} from "./location";
 import {EventComment} from "./event-comment";
 
 export class CalendarEvent {

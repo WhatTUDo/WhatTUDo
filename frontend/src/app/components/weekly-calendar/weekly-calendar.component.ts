@@ -18,16 +18,10 @@ export class WeeklyCalendarComponent extends CalendarBase implements OnInit, OnC
   currentMonth: String;
   currentYear: number;
 
-  /** color classes to add **/
-  calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
-
-
   eventsOfTheWeek: Map<String, CalendarEvent[]> = new Map<String, CalendarEvent[]>();
-
 
   @Input("subscribedOnly") filterIsActive: boolean;
   subscribeCalendarIds: number[];
-
 
   constructor(
     public eventService: EventService,

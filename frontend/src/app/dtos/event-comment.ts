@@ -5,8 +5,6 @@ export class EventComment {
     public username: string,
     public eventId: number,
     public updateDateTime: Date
-
   ) {
-
   }
 }

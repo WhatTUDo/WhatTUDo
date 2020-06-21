@@ -8,6 +8,7 @@ import {Organization} from "../../dtos/organization";
 import {OrganizationService} from "../../services/organization.service";
 import {CalendarEvent} from '../../dtos/calendar-event';
 import {AttendanceStatusService} from '../../services/attendance-status.service';
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-user',
@@ -28,7 +29,8 @@ export class UserComponent implements OnInit {
               private userService: UserService,
               private organizationService: OrganizationService,
               private attendanceStatusService: AttendanceStatusService,
-              private router: Router) {
+              private router: Router,
+              public globals: Globals) {
     if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user: User) => {
           if (!user) {
@@ -69,9 +71,5 @@ export class UserComponent implements OnInit {
       this.userService.removeFromOrganization(this.user.id, organizationId).subscribe((user) => {
       })
     }
-  }
-
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
   }
 }

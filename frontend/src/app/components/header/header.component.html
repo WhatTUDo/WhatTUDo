@@ -30,10 +30,10 @@
         <fa-icon [icon]="faSignOutAlt">Logout</fa-icon>
       </a>
       <img *ngIf="authService.isLoggedIn()" alt=""
-           class="avatar avatar-small clickable no-hover-enlarge"
+           class="avatar avatar-medium clickable no-hover-enlarge"
            routerLink="/user" src="{{getGravatarLink(userEmail, 128)}}">
       <div *ngIf="!authService.isLoggedIn()"
-           class="sign-in-avatar avatar avatar-small clickable no-hover-enlarge" routerLink="/login">
+           class="sign-in-avatar avatar avatar-medium clickable no-hover-enlarge" routerLink="/login">
         <fa-icon [icon]="faSignInAlt">Login</fa-icon>
       </div>
     </div>

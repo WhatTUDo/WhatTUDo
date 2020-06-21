@@ -18,6 +18,9 @@ export class CalendarBase {
   /** min row count for an event so that there's place for text. */
   viewMinRows = 10;
 
+  /** color classes to add **/
+  calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
+
   offset = 0;
 
   displayingDate: Date;

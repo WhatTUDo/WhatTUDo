@@ -7,6 +7,7 @@ import {AuthService} from '../../services/auth.service';
 import {faThumbsDown, faThumbsUp, faUserCircle, faReply, faClock,
 faCog, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-event-comment',
@@ -30,7 +31,8 @@ export class EventCommentComponent implements OnInit {
   faTimesCircle = faTimesCircle;
 
   constructor(private eventService: EventService,
-              private authService: AuthService) {
+              private authService: AuthService,
+  public globals: Globals) {
  if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user) => {
         this.user = user.name;
@@ -64,10 +66,6 @@ export class EventCommentComponent implements OnInit {
     }
   }
 
-  public respondButtonClicked() {
-    console.log("You clicked the respond button!");
-  }
-
   public editComment(input : string) {
         if(input.length > 0){
 
@@ -78,6 +76,10 @@ export class EventCommentComponent implements OnInit {
           this.pushedEdit = false;
     });
   }
+  }
+
+  getDisplayDateAndTimeStringFromDate(date: Date) {
+    return this.eventService.getDisplayDateAndTimeStringFromDate(date);
   }
 
 }

@@ -8,7 +8,7 @@
     <h2>Users</h2>
     <div class="user-list">
       <div *ngFor="let user of users" class="user">
-        <img alt="" class="avatar avatar-small" src="{{getGravatarLink(user.email, 256)}}">
+        <img alt="" class="avatar avatar-medium" src="{{getGravatarLink(user.email, 256)}}">
         <div class="user-details">
           <div class="user-name">{{user.name}}</div>
           <div class="user-email">{{user.email}}</div>

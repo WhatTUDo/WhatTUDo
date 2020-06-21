@@ -7,7 +7,7 @@
   <div>
     <h2>You</h2>
     <div class="user-info">
-      <img alt="" class="avatar avatar-medium" src="{{getGravatarLink(user.email, 256)}}">
+      <img alt="" class="avatar avatar-large" src="{{getGravatarLink(user.email, 256)}}">
       <div class="user-details">
         <div class="name">{{user.name}}</div>
         <div class="email">{{user.email}}</div>
@@ -26,8 +26,8 @@
     <h2>My Teams</h2>
     <div class="user-organization-list">
       <div *ngFor="let org of userInOrganizations" class="user-organization">
-        <img alt="" class="avatar avatar-small clickable no-hover-enlarge"
-             src="{{getOrganizationAvatarLink(org.id, 128)}}" routerLink="/organization/{{org.id}}">
+        <img alt="" class="avatar avatar-medium clickable no-hover-enlarge"
+             src="{{globals.backendUri+org.coverImageUrl}}" routerLink="/organization/{{org.id}}">
         <div class="user-organization-details clickable no-hover-enlarge"
              routerLink="/organization/{{org.id}}">
           <div class="user-organization-name">{{org.name}}</div>
