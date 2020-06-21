@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
@@ -79,6 +80,26 @@ public class UserEndpointTest {
         userRepository.save(user);
 
         assertEquals(organization.getName(), userEndpoint.getOrganizationOfUser(user.getId()).get(0).getName());
+    }
+
+    @WithMockUser(username = "user 1")
+    @Test
+    public void updateUserName(){
+        ApplicationUser user = userRepository.save(new ApplicationUser("user 1", "user@test.at", "usertest"));
+
+        LoggedInUserDto updatedUser = userEndpoint.updateUser("user 1", new LoggedInUserDto(user.getId(), "user 3", ""));
+
+        assertEquals("user 3", userRepository.findById(user.getId()).get().getName());
+    }
+
+    @WithMockUser(username = "user email")
+    @Test
+    public void updateUserEmail(){
+        ApplicationUser user = userRepository.save(new ApplicationUser("user email", "useremail@test.at", "usertest"));
+
+        LoggedInUserDto updatedUser = userEndpoint.updateUser("user email", new LoggedInUserDto(user.getId(), "", "useremail1@test.at"));
+
+        assertEquals("useremail1@test.at", userRepository.findById(user.getId()).get().getEmail());
     }
 
 
