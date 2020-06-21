@@ -51,7 +51,6 @@ export class CalendarComponent extends CalendarBase implements OnInit {
     public globals: Globals,
     private calendarService: CalendarService,
     private route: ActivatedRoute,
-    private globals: Globals,
     private feedbackService: FeedbackService
   ) {
     super(eventService, globals);
@@ -95,16 +94,6 @@ export class CalendarComponent extends CalendarBase implements OnInit {
 
   redirectToAddEvent(id: number) {
     location.replace(`/form/event?calendarId=${id}`);
-  }
-
-  private updateOffsettedDates() {
-    this.displayingDate = this.getDate(this.offset);
-    this.displayingWeek = this.getWeek(this.offset);
-    this.loadEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
-  }
-
-  private calcRow(sec) {
-    return ((sec - this.viewBeginningAtTime) / this.viewTimespan * this.viewRowCount) + this.viewBeginningAtRow;
   }
 
   copyCalendarUrlToClipboard(calendarId: number) {
