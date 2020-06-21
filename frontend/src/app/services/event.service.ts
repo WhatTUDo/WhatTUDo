@@ -13,9 +13,9 @@ import {Label} from "../dtos/label";
 
 export class EventService {
 
-  private eventBaseUri: string = this.globals.backendUri + 'events';
-  private labelBaseUri: string = this.globals.backendUri + 'labels';
-  private commentBaseUri: string = this.globals.backendUri + 'comments';
+  private eventBaseUri: string = this.globals.backendUri + '/events';
+  private labelBaseUri: string = this.globals.backendUri + '/labels';
+  private commentBaseUri: string = this.globals.backendUri + '/comments';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
@@ -103,7 +103,6 @@ export class EventService {
    */
   postEvent(event: CalendarEvent): Observable<any> {
     console.log("Post Event to Server", CalendarEvent);
-    //TODO: Implement POST call
     let reducedElement = {
       "calendarId": event.calendarId,
       "endDateTime": event.endDateTime,
@@ -111,7 +110,6 @@ export class EventService {
       "startDateTime": event.startDateTime,
       "location": event.location
     }
-
     return this.httpClient.post(this.eventBaseUri, reducedElement);
   }
 

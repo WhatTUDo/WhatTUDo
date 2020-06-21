@@ -4,10 +4,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.EventCollisionEndpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CollisionResponseDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventCollisionDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.EventCollision;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +41,7 @@ public class CollisionEndpointTest {
     public void getEventCollisionsAndSuggestions() {
         Organization orga = new Organization("Test Organization");
         Calendar calendar = (new Calendar("Calendar test", Collections.singletonList(orga)));
+        Location location = new Location("Test Location", "Test Adress", "Zip", 0, 0);
         calendarRepository.save(calendar);
         Event event = eventRepository.save(new Event("Event colliding 1", LocalDateTime.of(2021, 8, 8, 10, 0),
             LocalDateTime.of(2021, 8, 8, 11, 0), calendar));
@@ -51,7 +49,7 @@ public class CollisionEndpointTest {
             LocalDateTime.of(2021, 8, 8, 11, 0), calendar));
 
         CollisionResponseDto eventCollisionDto = eventCollisionEndpoint.getEventCollisions(new EventDto(1, "Event saving", LocalDateTime.of(2021, 8, 8, 10, 0),
-            LocalDateTime.of(2021, 8, 8, 11, 0), calendar.getId()));
+            LocalDateTime.of(2021, 8, 8, 11, 0), calendar.getId(), location.getId()));
 
         assert (eventCollisionDto.getEventCollisions() != null);
         assert (eventCollisionDto.getDateSuggestions() != null);

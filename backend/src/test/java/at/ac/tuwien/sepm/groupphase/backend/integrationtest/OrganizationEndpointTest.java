@@ -58,6 +58,17 @@ public class OrganizationEndpointTest {
         assertEquals(organizationDto.getName(), createdDto.getName());
     }
 
+    @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
+    @Test
+    public void createNewOrganisation_withDescription_shouldReturnNewOrganization() {
+        OrganizationDto organizationDto = new OrganizationDto(0, "test with Description", new ArrayList<>(), "Description");
+
+        OrganizationDto createdDto = endpoint.createOrganization(organizationDto);
+
+        assertEquals(organizationDto.getName(), createdDto.getName());
+        assertEquals(organizationDto.getDescription(), createdDto.getDescription());
+    }
+
     @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void getAllOrganisations_shouldReturnListOfOrganizations() {
@@ -149,12 +160,13 @@ public class OrganizationEndpointTest {
         assertEquals(organizationDto.getName(), createdDto.getName());
 
 
-        assert(endpoint.getOrganizationMembers(createdDto.getId()).isEmpty());
+        assert (endpoint.getOrganizationMembers(createdDto.getId()).isEmpty());
 
     }
+
     @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
     @Test
-    public void addMemberToNonExistentOrg_throwsNotFound(){
+    public void addMemberToNonExistentOrg_throwsNotFound() {
         assertThrows(NotFoundException.class, () -> endpoint.addMembership(1, 0, "MOD"));
     }
 

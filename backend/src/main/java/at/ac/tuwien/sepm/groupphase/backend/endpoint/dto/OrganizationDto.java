@@ -7,7 +7,6 @@ import lombok.*;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class OrganizationDto extends PermissionDto {
@@ -19,9 +18,22 @@ public class OrganizationDto extends PermissionDto {
     private List<Integer> calendarIds;
 
     private boolean canCreateCalendar;
+    private String description;
 
     @JsonProperty("coverImageUrl")
     private String calculateCoverImageUrl() {
         return OrganizationEndpoint.BASE_URL + "/" + this.id + "/cover";
     }
+
+    public OrganizationDto() {
+    }
+
+    public OrganizationDto(Integer id, String name, List<Integer> calendarIds, String description) {
+        this.id = id;
+        this.name = name;
+        this.calendarIds = calendarIds;
+        this.description = description;
+    }
+
+
 }

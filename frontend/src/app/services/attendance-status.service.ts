@@ -10,7 +10,7 @@ import {User} from '../dtos/user';
 })
 export class AttendanceStatusService {
 
-  private attendanceUri: string = this.globals.backendUri + 'attendance';
+  private attendanceUri: string = this.globals.backendUri + '/attendance';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }

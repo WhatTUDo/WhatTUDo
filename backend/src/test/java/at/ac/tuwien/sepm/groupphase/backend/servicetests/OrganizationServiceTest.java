@@ -57,6 +57,16 @@ public class OrganizationServiceTest {
     }
 
     @Test
+    public void save_withDescription_shouldReturn_correctOrganization() {
+        Organization orgaEntity = new Organization("Test Organization Service with Description","Description");
+        Organization organization = organizationRepository.save(orgaEntity);
+
+        assertEquals(orgaEntity.getName(), organization.getName());
+        assertEquals(orgaEntity.getDescription(), organization.getDescription());
+
+    }
+
+    @Test
     public void edit_nonSavedOrganization_shouldThrow_NotFoundException() {
         Integer improbableId = 123456;
         Organization updatedOrganization = new Organization("UpdatedTestName");

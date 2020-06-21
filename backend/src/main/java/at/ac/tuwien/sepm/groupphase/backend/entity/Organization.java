@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 import lombok.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table
 @Data
-@NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Organization extends BaseEntity {
@@ -39,5 +39,16 @@ public class Organization extends BaseEntity {
     @ToString.Exclude
     @Lob
     private Byte[] coverImage;
+
+    @Nullable
+    private String description;
+
+    public Organization() {
+    }
+
+    public Organization(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
 

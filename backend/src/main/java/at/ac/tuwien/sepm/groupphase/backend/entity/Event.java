@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -14,7 +15,6 @@ import java.util.List;
 @Entity
 @Table
 @Data
-@NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Event extends BaseEntity {
@@ -56,5 +56,29 @@ public class Event extends BaseEntity {
     @ToString.Exclude
     @OneToMany(mappedBy = "event", orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
+
+    @Nullable
+    private String description;
+
+    public Event(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, Calendar calendar, Location location) {
+        this.name = name;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.calendar = calendar;
+        this.location = location;
+    }
+
+    public Event(String name, LocalDateTime startDateTime, LocalDateTime endDateTime, Calendar calendar, Location location, String description) {
+        this.name = name;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.calendar = calendar;
+        this.location = location;
+        this.description = description;
+    }
+
+
+    public Event() {
+    }
 }
 

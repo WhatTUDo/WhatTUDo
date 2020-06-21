@@ -10,7 +10,7 @@ import {HttpClient} from "@angular/common/http";
 })
 export class EventCollisionService {
 
-  private eventCollisionBaseUri: string = this.globals.backendUri + 'collision';
+  private eventCollisionBaseUri: string = this.globals.backendUri + '/collision';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }

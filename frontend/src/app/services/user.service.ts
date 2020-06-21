@@ -14,7 +14,7 @@ import {ChangeUserPasswordDto} from '../dtos/ChangeUserPasswordDto';
 
 export class UserService {
 
-  private usersBaseUri: string = this.globals.backendUri + 'users';
+  private usersBaseUri: string = this.globals.backendUri + '/users';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
@@ -37,7 +37,7 @@ export class UserService {
   }
 
   changePwd(changeUserPasswordDto: ChangeUserPasswordDto): Observable<User> {
-    return this.httpClient.put<User>(this.globals.backendUri + 'changePwd', changeUserPasswordDto);
+    return this.httpClient.put<User>(this.globals.backendUri + '/changePwd', changeUserPasswordDto);
   }
 
   /**
@@ -65,16 +65,16 @@ export class UserService {
   }
 
   getUserOrganization(userId: number): Observable<Organization[]> {
-    return this.httpClient.get<Organization[]>(this.globals.backendUri + "users/organizations/" + userId);
+    return this.httpClient.get<Organization[]>(this.globals.backendUri + "/users/organizations/" + userId);
   }
 
   getRecommendedEvents(userId: number): Observable<CalendarEvent[]> {
-    return this.httpClient.get<CalendarEvent[]>(this.globals.backendUri + "users/recommendedEvents/" + userId);
+    return this.httpClient.get<CalendarEvent[]>(this.globals.backendUri + "/users/recommendedEvents/" + userId);
   }
 
 
   removeFromOrganization(userId: number, organizationId: number): Observable<User> {
-    return this.httpClient.delete<User>(this.globals.backendUri + `users/${userId}/roles?orgaId=${organizationId}`);
+    return this.httpClient.delete<User>(this.globals.backendUri + `/users/${userId}/roles?orgaId=${organizationId}`);
   }
 
   getUserByName(name: string) : Observable<User>{

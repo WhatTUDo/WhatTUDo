@@ -54,7 +54,7 @@ export class OrganizationListComponent implements OnInit {
     this.organizationService.getAll().subscribe(organizations => {
       this.organizations = organizations;
       organizations.forEach(org => {
-        org.coverImageUrl = this.globals.backendUri+org.coverImageUrl.slice(1);
+        org.coverImageUrl = this.globals.backendUri+org.coverImageUrl;
         this.organizationService.getMembers(org.id).subscribe(users => {
           this.organizationUserAvatars.set(org.id, users.map(user => {
             return this.getGravatarLink(user.email, 64)
