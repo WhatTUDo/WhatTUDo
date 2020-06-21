@@ -60,6 +60,11 @@ export class WeeklyCalendarComponent extends CalendarBase implements OnInit, OnC
   ngOnChanges(changes: SimpleChanges) {
     this.loadEvents();
   }
+  updateOffsettedDates() {
+    this.displayingDate = this.getDate(this.offset);
+    this.displayingWeek = this.getWeek(this.offset);
+    this.loadEvents();
+  }
 
   loadEvents() {
     if (this.filterIsActive) {

@@ -150,10 +150,8 @@ export class CalendarBase {
     }
   }
 
-  private updateOffsettedDates() {
-    this.displayingDate = this.getDate(this.offset);
-    this.displayingWeek = this.getWeek(this.offset);
-    this.loadAllEventsForWeek(this.displayingWeek[0], this.displayingWeek[6]);
+   updateOffsettedDates() {
+   //Overwrite me
   }
 
   loadAllEventsForWeek(from: Date, to: Date) {
