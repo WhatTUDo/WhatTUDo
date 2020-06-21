@@ -102,9 +102,9 @@ public class AttendanceEndpointTest {
     @Test
     public void getStatus() {
         Organization orga = new Organization("Test Organization");
-        Calendar calendar = calendarRepository.save(new Calendar("Calendar test 1", Collections.singletonList(orga)));
-        Event event = eventRepository.save(new Event("Attend Event 1", LocalDateTime.of(2021, 8, 8, 15, 0), LocalDateTime.of(2021, 8, 8, 17, 0), calendar));
-        ApplicationUser applicationUser = userRepository.save(new ApplicationUser("testUser 1", "testUser1@testing.test", "testtest"));
+        Calendar calendar = calendarRepository.save(new Calendar("Calendar test 3", Collections.singletonList(orga)));
+        Event event = eventRepository.save(new Event("Attend Event 3", LocalDateTime.of(2021, 8, 8, 15, 0), LocalDateTime.of(2021, 8, 8, 17, 0), calendar));
+        ApplicationUser applicationUser = userRepository.save(new ApplicationUser("testUser 3", "testUser3@testing.test", "testtest"));
         StatusDto statusDto = new StatusDto(applicationUser.getUsername(), event.getId(), AttendanceStatusPossibilities.ATTENDING);
         statusDto = attendanceEndpoint.create(statusDto);
         assertEquals(AttendanceStatusPossibilities.ATTENDING, attendanceEndpoint.getStatus(applicationUser.getId(), event.getId()).getStatus());
