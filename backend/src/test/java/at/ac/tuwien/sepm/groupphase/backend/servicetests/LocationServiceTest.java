@@ -12,6 +12,7 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LocationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -37,6 +44,8 @@ public class LocationServiceTest {
     LocationService service;
     @Autowired
     LocationRepository repository;
+
+
 
     @Test
     public void save_shouldReturn_sameLocation() {
@@ -68,7 +77,6 @@ public class LocationServiceTest {
     }
 
 
-
     @Test
     public void save_withoutCorrectParam_shouldReturn_ValidationException() {
 
@@ -81,7 +89,7 @@ public class LocationServiceTest {
         assertThrows(ValidationException.class, () -> service.save(location3));
         assertThrows(ValidationException.class, () -> service.save(null));
     }
-
+    @Transactional
     @Test
     public void delete_nonSavedEvent_IdNotGenerated_throwsValidationException() {
         assertThrows(ValidationException.class, () -> service.delete(0));
@@ -97,15 +105,22 @@ public class LocationServiceTest {
         assertThrows(NotFoundException.class, () -> service.findById(location.getId()));
     }
 
-
     @Test
     public void getAll_returnsAll() {
         service.save(new Location("Audimax", "2. Aufgang dann rechts", "1180", 13.53, 1.8));
         service.save(new Location("Audmaximus","1.Aufgang dann links","1180",-180,180));
-        assert(service.getAll().size() == 2);
+        assert( !service.getAll().isEmpty());
+        boolean b=false;
+        for (Location l: service.getAll()) {
+            if(l.getName().equals("Audimax") || l.getName().equals("Audimaximus")){
+                b = true;
+            }
+        }
+        if(!b){
+            fail();
+        }
 
     }
-
     @Test
     public void save_thenUpdated_thenRead_shouldReturn_updatedLocation() {
         Location location = repository.save(new Location("Alteshaus", "Haustraße 25/7/5", "1010", 1, 2));

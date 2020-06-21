@@ -109,7 +109,7 @@ public class OrganizationEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Person 1",   authorities = {"ADMIN_1","MOD_1", "MEMBER_1"})
     @Test
     public void save_thenEdit_shouldReturn_newOrganization() {
         Organization organization = (new Organization("Test Organization 1"));
@@ -122,7 +122,7 @@ public class OrganizationEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Person 1",   authorities = {"ADMIN_1","MOD_1", "MEMBER_1"})
     @Test
     public void edit_withoutName_shouldThrow_ResponseStatusException() {
         Organization organization = (new Organization("Test Organization 1"));
@@ -167,7 +167,7 @@ public class OrganizationEndpointTest {
     @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
     @Test
     public void addMemberToNonExistentOrg_throwsNotFound() {
-        assertThrows(NotFoundException.class, () -> endpoint.addMembership(1, 0, "MOD"));
+        assertThrows(NotFoundException.class, () -> endpoint.addMembership(0, 0, "MOD"));
     }
 
 

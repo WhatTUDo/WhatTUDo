@@ -98,7 +98,7 @@ public class AttendanceEndpointTest {
 
         assertEquals(null, attendanceEndpoint.getStatus(applicationUser.getId(), event.getId()));
     }
-    @WithMockUser(username = "testUser 1")
+    @WithMockUser(username = "testUser 3")
     @Test
     public void getStatus() {
         Organization orga = new Organization("Test Organization");
