@@ -33,7 +33,7 @@ export class EventService {
 
 
   createComment(eventComment : EventComment) {
-    console.log("Create Comment", eventComment);
+    console.log("Create Comment", EventComment);
    return this.httpClient.post<EventComment>(this.commentBaseUri + '/', eventComment);
    }
 
@@ -69,7 +69,6 @@ export class EventService {
       .subscribe(response => {
         console.log(response);
       });
-
 
   }
 

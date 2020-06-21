@@ -101,8 +101,7 @@ export class EventComponent implements OnInit {
          this.eventService.createComment(this.eventComment2).subscribe(comments => {
       this.getComments(this.id).push(this.eventComment2);
     });
-}
-
+  }
   }
 
   getEventLabels(id: number) {
