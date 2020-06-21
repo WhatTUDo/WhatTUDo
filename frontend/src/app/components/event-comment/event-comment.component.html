@@ -10,6 +10,21 @@
     <div class="comment-time">
       <fa-icon [icon]="faClock"></fa-icon>&ensp;{{this.comment.updateDateTime}}
     </div>
+
+    <div *ngIf="this.user.name == this.author">
+      <fa-icon [icon]="faCog" (click)="changeEditCommentState()" class="clickable no-hover-enlarge"></fa-icon>
+    </div>
+
+    <div *ngIf="this.pushedEdit == true">
+      <label for="comment-textarea">
+      </label>
+      <textarea  class="no-outline" id="comment-textarea" name="comment" #njf
+      >{{this.comment.text}}</textarea>
+      <button (click)="editComment(njf.value)" class="full-width-form-button no-hover-enlarge btn-lg">Send
+      </button>
+    </div>
+
+
   </div>
   <!--  <div class="comment-buttons">-->
   <!--    <button (click)="vote(true)" class="button-green icon-button">-->
