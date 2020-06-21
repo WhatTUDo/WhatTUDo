@@ -60,6 +60,8 @@ public class SimpleEventService implements EventService {
         }
     }
 
+
+
     @Override
     public Event save(Event event) {
         validator.validateNewEvent(event);
@@ -81,6 +83,7 @@ public class SimpleEventService implements EventService {
             throw new ServiceException(e.getMessage());
         }
     }
+
 
     @Override
     public Event findById(int id) {

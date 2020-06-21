@@ -3,9 +3,9 @@ package at.ac.tuwien.sepm.groupphase.backend.entity;
 import lombok.*;
 import org.hibernate.annotations.Cascade;
 import org.springframework.lang.NonNull;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import javax.transaction.Transactional;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -47,5 +47,9 @@ public class Event extends BaseEntity {
     @ToString.Exclude
     @Lob
     private Byte[] coverImage;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "event", orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 }
 

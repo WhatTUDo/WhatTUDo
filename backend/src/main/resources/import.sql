@@ -109,3 +109,9 @@ VALUES (1, 1),
        (2, 2),
        (1, 4);
 
+INSERT INTO COMMENT (ID, CREATED_AT, UPDATED_AT, TEXT, EVENT_ID, USER_ID)
+VALUES (1, '2020-06-15 11:30:00', '2020-06-15 13:30:00', 'War toll! Hat Spaß gemacht!', 1, 1),
+       (2, '2020-06-15 15:30:00', '2020-06-15 17:30:00', 'Das Event war schon?!', 1, 2),
+       (3, '2020-06-15 15:30:00', '2020-06-15 17:30:00', 'Electronic Arts Inc. is a global leader in digital interactive entertainment. EA develops and delivers games, content and online services for Internet-connected consoles, mobile devices and personal computers. EA has more than 300 million registered players around the world.',
+       1,1);
+

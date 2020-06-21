@@ -1,12 +1,15 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CommentDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LabelDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CommentMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.LabelMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.service.CommentService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +48,8 @@ public class EventEndpoint {
     private final EventMapper eventMapper;
     private final LabelService labelService;
     private final LabelMapper labelMapper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
 
     @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
@@ -221,6 +226,26 @@ public class EventEndpoint {
             List<LabelDto> results = new ArrayList<>();
 
             (labelService.findByEventId(id)).forEach(it -> results.add(labelMapper.labelToLabelDto(it)));
+
+
+            return results;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @Transactional
+    @GetMapping(value = "/{id}/comments")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get Comments by Event Id", authorizations = {@Authorization(value = "apiKey")})
+    public List<CommentDto> getCommentsByEventId(@PathVariable(value = "id") int id) {
+        try {
+
+            List<CommentDto> results = new ArrayList<>();
+
+            (commentService.findByEventId(id)).forEach(it -> results.add(commentMapper.commentToCommentDto(it)));
 
 
             return results;
