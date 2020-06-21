@@ -51,10 +51,10 @@ public class CommentEndpoint {
         }
     }
 
-    @PreAuthorize("hasRole('MOD')")
+    //@PreAuthorize("hasRole('MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping(value = "/{id}/")
+    @DeleteMapping(value = "/{id}")
     @ApiOperation(value = "Delete comment", authorizations = {@Authorization(value = "apiKey")})
     public void delete(@PathVariable("id") Integer id) {
         try {

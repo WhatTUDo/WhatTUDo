@@ -17,7 +17,7 @@ export class EventCommentComponent implements OnInit {
 
   @Input() comment: EventComment;
 
-  public user: User;
+  public user: String;
   public author: string;
   public rating: number;
   public pushedEdit: boolean;
@@ -31,19 +31,21 @@ export class EventCommentComponent implements OnInit {
 
   constructor(private eventService: EventService,
               private authService: AuthService) {
-
-
-    if (this.authService.isLoggedIn()) {
+ if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user) => {
-        this.user = user;
+        this.user = user.name;
       });
     }
+
+
   }
 
   ngOnInit(): void {
 
     this.author = this.comment.username;
     this.pushedEdit = false;
+
+
   }
 
   public vote(isUpvote: boolean) {

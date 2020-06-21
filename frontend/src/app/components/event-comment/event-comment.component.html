@@ -11,7 +11,7 @@
       <fa-icon [icon]="faClock"></fa-icon>&ensp;{{this.comment.updateDateTime}}
     </div>
 
-    <div *ngIf="this.user.name == this.author">
+    <div *ngIf="this.user == this.author">
       <fa-icon [icon]="faCog" (click)="changeEditCommentState()" class="clickable no-hover-enlarge"></fa-icon>
     </div>
 

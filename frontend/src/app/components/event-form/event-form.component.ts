@@ -13,7 +13,7 @@ import {CollisionResponse} from "../../dtos/collision-response";
 import {EventCollisionService} from "../../services/event-collision.service";
 import {Label} from '../../dtos/label';
 import {Globals} from "../../global/globals";
-import {LocationService} from "../../services/location.service";
+//import {LocationService} from "../../services/location.service";
 
 @Component({
   selector: 'app-event-form',
@@ -59,7 +59,7 @@ export class EventFormComponent implements OnInit {
     private eventCollisionService: EventCollisionService,
     private calendarService: CalendarService,
     private feedbackService: FeedbackService,
-    private locationService: LocationService,
+ //   private locationService: LocationService,
     public globals: Globals,
     private route: ActivatedRoute,
     private router: Router) {
