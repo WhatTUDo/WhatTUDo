@@ -5,30 +5,22 @@ import {CalendarEvent} from "../dtos/calendar-event";
 import {HttpClient, HttpParams, HttpRequest} from "@angular/common/http";
 import {Globals} from "../global/globals";
 import {EventComment} from "../dtos/event-comment";
-import {Label} from "../dtos/label";
 
 @Injectable({
-  providedIn: 'root'
+providedIn: 'root'
 })
 
 export class EventService {
 
-  private eventBaseUri: string = this.globals.backendUri + 'events';
-  private labelBaseUri: string = this.globals.backendUri + 'labels';
-  private commentBaseUri: string = this.globals.backendUri + 'comments';
+private eventBaseUri: string = this.globals.backendUri + 'events';
+private labelBaseUri: string = this.globals.backendUri + 'labels';
 
-  constructor(private httpClient: HttpClient, private globals: Globals) {
+constructor(private httpClient: HttpClient, private globals: Globals) {
   }
 
   deleteEvent(eventId: number) {
     console.log("Delete Event", CalendarEvent);
     return this.httpClient.delete(this.eventBaseUri + '/' + eventId);
-  }
-
-
-  deleteComment(commentId: number) {
-    console.log("Delete Comment", EventComment);
-    return this.httpClient.delete(this.commentBaseUri + '/' + commentId);
   }
 
   getEventsByCalendarId(id: number): Observable<Array<CalendarEvent>> {

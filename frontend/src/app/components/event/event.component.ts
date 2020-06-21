@@ -6,7 +6,7 @@ import {Label} from '../../dtos/label';
 import {EventService} from '../../services/event.service';
 import {LabelService} from '../../services/label.service';
 import {ActivatedRoute} from '@angular/router';
-import {faCalendar, faChevronLeft, faCog, faTag} from '@fortawesome/free-solid-svg-icons';
+import {faCalendar, faChevronLeft, faCog, faTag, faTimesCircle} from '@fortawesome/free-solid-svg-icons';
 import {AttendanceStatusService} from '../../services/attendance-status.service';
 import {AuthService} from '../../services/auth.service';
 import {AttendanceDto} from '../../dtos/AttendanceDto';
@@ -44,6 +44,7 @@ export class EventComponent implements OnInit {
   faTag = faTag;
   faCog = faCog;
   faCalendar = faCalendar;
+  faTimesCircle = faTimesCircle;
   AttendanceStatusPossibilities = AttendanceStatusPossibilities;
 
   constructor(private eventService: EventService,
@@ -169,6 +170,14 @@ export class EventComponent implements OnInit {
     });
         return this.comments;
   }
+
+  deleteComment(commentid: number): void {
+    if (confirm(`You are deleting the selected comment. Are you sure?`)) {
+      this.eventService.deleteComment(commentid).subscribe(() => {
+        this.getComments(this.id);
+      });
+    }
+   }
 
   private getLabels() {
 
