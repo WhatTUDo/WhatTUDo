@@ -106,11 +106,49 @@
   border-radius: $rounded-radius;
   background-color: var(--shadow);
 
-  .calendar-name {
-    text-align: center;
+  .calendar-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     padding: 8pt 0 4pt;
-    font-weight: $f-bold;
-    font-size: 24pt;
+
+    > .avatar {
+      box-sizing: border-box;
+
+      margin-right: 8pt;
+
+      border: 2pt solid transparent;
+
+      &.blue {
+        border-color: $blue;
+      }
+
+      &.green {
+        border-color: $green;
+      }
+
+      &.yellow {
+        border-color: $yellow;
+      }
+
+      &.orange {
+        border-color: $orange;
+      }
+
+      &.red {
+        border-color: $red;
+      }
+
+      &.violet {
+        border-color: $violet;
+      }
+    }
+
+    .calendar-name {
+      font-weight: $f-bold;
+      font-size: 24pt;
+    }
   }
 
   .organization-info {

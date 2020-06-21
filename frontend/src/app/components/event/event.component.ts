@@ -34,7 +34,6 @@ export class EventComponent implements OnInit {
   labels: Array<Label>;
   comments: Array<EventComment>;
   public calendarEvent: CalendarEvent;
-  public eventComment: EventComment;
   location: Location;
   calendar: Calendar;
   calendarOrganizations: Organization[] = [];
@@ -50,7 +49,10 @@ export class EventComponent implements OnInit {
   faTimesCircle = faTimesCircle;
   AttendanceStatusPossibilities = AttendanceStatusPossibilities;
   attendanceStatus: AttendanceDto;
-  eventComment2: EventComment = new EventComment(null, null, null, null, null);
+  newEventComment: EventComment = new EventComment(null, null, null, null, null);
+
+  /** color classes to add **/
+  calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
 
   constructor(private eventService: EventService,
               private labelService: LabelService,
@@ -82,8 +84,7 @@ export class EventComponent implements OnInit {
     this.id = parseInt(this.route.snapshot.paramMap.get('id'));
 
     this.getEventLabels(this.id);
-    this.comments = this.getComments(this.id);
-
+    this.getComments(this.id);
   }
 
   public getEventDateAndTimeString() {
@@ -106,12 +107,13 @@ export class EventComponent implements OnInit {
   public addComment(input: string) {
     if (input.length > 0) {
 
-      this.eventComment2.username = this.user.name;
-      this.eventComment2.eventId = this.id;
-      this.eventComment2.text = input;
+      this.newEventComment.username = this.user.name;
+      this.newEventComment.eventId = this.id;
+      this.newEventComment.text = input;
 
-      this.eventService.createComment(this.eventComment2).subscribe(comments => {
-        this.getComments(this.id).push(this.eventComment2);
+      this.eventService.createComment(this.newEventComment).subscribe((comments) => {
+        comments.updateDateTime = new Date(comments.updateDateTime)
+        this.comments.push(comments);
       });
     }
   }
@@ -131,8 +133,6 @@ export class EventComponent implements OnInit {
     this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
       this.calendarEvent = event;
       // this.location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 48.199747,16.367543);
-      this.calendarEvent.comments = this.getComments(id);
-      this.calendarEvent.labels = this.getLabels();
       this.calendarEvent.description = event.description;
       if (event.locationId) {
         this.locationService.getLocation(event.locationId).subscribe((location) => {
@@ -187,10 +187,12 @@ export class EventComponent implements OnInit {
   }
 
   private getComments(id: number) {
-    this.eventService.getEventComments(id).subscribe(comments => {
-      this.comments = comments;
+    this.eventService.getEventComments(id).subscribe((comments) => {
+      this.comments = comments.map((comment) => {
+        const updateDateTime = new Date(comment.updateDateTime);
+        return {...comment, updateDateTime: updateDateTime} as EventComment;
+      });
     });
-    return this.comments;
   }
 
   deleteComment(commentid: number): void {
@@ -201,18 +203,7 @@ export class EventComponent implements OnInit {
     }
   }
 
-  private getLabels() {
-
-    let label1 = new Label(null, 'Party', null);
-    let label2 = new Label(null, 'Festl', null);
-    let array = new Array<Label>();
-
-    array.push(label1, label2);
-
-    return array;
-  }
-
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
+  getCalendarColor(calendarId: number) {
+    return this.calendarColors[calendarId % this.calendarColors.length];
   }
 }

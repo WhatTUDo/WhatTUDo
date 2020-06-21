@@ -372,6 +372,15 @@ iframe {
   }
 
   &.avatar-small {
+    height: 32pt;
+    width: 32pt;
+
+    fa-icon {
+      font-size: 32pt;
+    }
+  }
+
+  &.avatar-medium {
     height: 48pt;
     width: 48pt;
 
@@ -380,7 +389,7 @@ iframe {
     }
   }
 
-  &.avatar-medium {
+  &.avatar-large {
     height: 72pt;
     width: 72pt;
 
@@ -424,11 +433,19 @@ iframe {
 
 .title-icon-button-combo {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
 
   .icon-button {
+    display: flex;
+    flex-wrap: nowrap;
+
     color: var(--secondary);
+
+    > * {
+      margin-left: 8pt;
+    }
   }
 
   h1 + .icon-button, h2 + .icon-button {

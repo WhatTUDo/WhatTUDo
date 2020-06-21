@@ -70,41 +70,39 @@
         </div>
       </div>
       <div class="calendar-info" *ngIf="calendar">
-        <div class="calendar-name clickable no-hover-enlarge" routerLink="/calendar/{{calendar.id}}">
-          <fa-icon [icon]="faCalendar"></fa-icon>
-          {{calendar.name}}
+        <div class="calendar-title clickable no-hover-enlarge" routerLink="/calendar/{{calendar.id}}">
+          <img alt="" class="avatar avatar-medium" src="{{globals.backendUri+calendar.coverImageUrl}}"
+               [ngClass]="getCalendarColor(calendar.id)">
+          <div class="calendar-name">
+            {{calendar.name}}
+          </div>
         </div>
         <div class="calendar-organizations">
           <div class="organization-info clickable no-hover-enlarge" *ngFor="let org of calendarOrganizations"
                routerLink="/organization/{{org.id}}">
-            <img alt="" class="avatar avatar-medium" src="{{getOrganizationAvatarLink(org.id, 256)}}">
+            <img alt="" class="avatar avatar-small" src="{{globals.backendUri+org.coverImageUrl}}">
             <div class="organization-details">
               <div class="organization-name">{{org.name}}</div>
-              <div>This is where a short description of the organization should go.</div>
             </div>
           </div>
         </div>
       </div>
       <div class="event-location" *ngIf="location">
-       <app-event-location [location]="location" [editable]="false"></app-event-location>
+        <app-event-location [location]="location" [editable]="false"></app-event-location>
       </div>
     </div>
     <div>
       <h2>Comments</h2>
       <div *ngFor="let comment of comments" class="comment-div">
-
         <app-event-comment [comment]="comment"></app-event-comment>
-        <div><fa-icon *ngIf="(calendarEvent.canEdit)" (click)="deleteComment(this.comment.id)" [icon]="faTimesCircle" class="clickable no-hover-enlarge">delete</fa-icon>
-        </div>
-
       </div>
 
 
-      <div *ngIf="user != null"  id="comment-area">
+      <div *ngIf="user != null" id="comment-area">
         <label for="comment-textarea">
         </label>
-        <textarea  class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…" #njf
-                 ></textarea>
+        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…" #njf
+        ></textarea>
         <button (click)="addComment(njf.value)" class="full-width-form-button no-hover-enlarge btn-lg">Send
         </button>
       </div>

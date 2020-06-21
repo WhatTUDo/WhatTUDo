@@ -20,6 +20,7 @@ import {Organization} from '../../dtos/organization';
 import {SubscriptionDto} from "../../dtos/subscriptionDto";
 import {Globals} from "../../global/globals";
 import {ICalService} from "../../services/ical.service";
+import {CalendarEvent} from "../../dtos/calendar-event";
 
 
 @Component({
@@ -48,6 +49,9 @@ export class CalendarListComponent implements OnInit {
   calendarSearchResult: Calendar[] = [];
   searchActive: boolean = false;
 
+  /** color classes to add **/
+  calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
+
   constructor(
     private calendarService: CalendarService,
     private router: Router,
@@ -56,7 +60,7 @@ export class CalendarListComponent implements OnInit {
     private feedbackService: FeedbackService,
     private iCalService: ICalService,
     public authService: AuthService,
-    private globals: Globals) {
+    public globals: Globals) {
     this.getAllCalendars().then((calendars) => {
       this.loadSubscriptions().then(() => {
         this.managedCalendars = calendars.filter(
@@ -263,6 +267,10 @@ export class CalendarListComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
+  }
+
+  getCalendarColor(calendarId: number) {
+    return this.calendarColors[calendarId % this.calendarColors.length];
   }
 }
 

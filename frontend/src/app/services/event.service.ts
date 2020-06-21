@@ -50,21 +50,18 @@ export class EventService {
 
 
   getAllLabels(): Observable<Label[]> {
-
     console.log('Get all labels');
     return this.httpClient.get<Array<Label>>(this.labelBaseUri);
   }
 
   getEventLabels(id: number): Observable<Label[]> {
-
     console.log('Get event labels');
     return this.httpClient.get<Array<Label>>(this.eventBaseUri + '/' + id + '/' + 'labels');
   }
 
   getEventComments(id: number): Observable<EventComment[]> {
-
     console.log('Get event comments');
-    return this.httpClient.get<Array<EventComment>>(this.eventBaseUri + '/' + id + '/' + 'comments');
+    return this.httpClient.get<EventComment[]>(this.eventBaseUri + '/' + id + '/' + 'comments');
   }
 
   addLabels(id: number, labelselect: Array<Label>) {
@@ -108,7 +105,7 @@ export class EventService {
       "endDateTime": event.endDateTime,
       "name": event.name,
       "startDateTime": event.startDateTime,
-      "location": event.locationId
+      "locationId": event.locationId
     }
     return this.httpClient.post(this.eventBaseUri, reducedElement);
   }
@@ -125,7 +122,7 @@ export class EventService {
       "endDateTime": event.endDateTime,
       "name": event.name,
       "startDateTime": event.startDateTime,
-      "location": event.locationId
+      "locationId": event.locationId
     }
 
     return this.httpClient.put(this.eventBaseUri, reducedElement);
@@ -204,6 +201,15 @@ export class EventService {
       minute: 'numeric'
     }).replace(":00", "")
     return string
+  }
+
+  public getDisplayDateAndTimeStringFromDate(date: Date) {
+    return date.toLocaleTimeString(this.globals.dateLocale, {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
   }
 
   uploadEventCover(eventId: number, file: File) {
