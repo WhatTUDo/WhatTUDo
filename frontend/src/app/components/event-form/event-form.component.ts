@@ -268,6 +268,7 @@ export class EventFormComponent implements OnInit {
     this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe(resp => {
       // @ts-ignore
       if (resp.url != null) {
+        // @ts-ignore
         this.calendarEvent.coverImageUrl = resp.url;
       }
     });

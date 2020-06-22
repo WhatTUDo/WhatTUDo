@@ -77,9 +77,8 @@ export class EventLocationComponent implements OnInit, OnChanges {
 
   }
 
-  addressClicked(result: any) {
-    this.selectedLocation = this.parseLocation(result);
-    console.log(location);
+  addressClicked(result: Location) {
+    this.selectedLocation = result;
     this.createPreviewURL(this.selectedLocation);
     this.addressSelected = true;
   }
@@ -123,8 +122,8 @@ export class EventLocationComponent implements OnInit, OnChanges {
     let specificName = this.createSpecifiNameForApiResult(result);
     let locationAddress = result.address.road + " " + result.address.postcode + " " + result.address.city;
     let postcode = result.address.postcode ? result.address.postcode : "no zip";
-    let location: Location = new Location(null, specificName, locationAddress, postcode, result.lat, result.lon, []);
-    return location;
+    let newLocation: Location = new Location(null, specificName, locationAddress, postcode, result.lat, result.lon, []);
+    return newLocation;
   }
 
   private createSpecifiNameForApiResult(result): string {
