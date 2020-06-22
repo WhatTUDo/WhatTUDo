@@ -30,7 +30,7 @@ export class EventComponent implements OnInit {
 
   id: number;
   user: User = null;
-  userParticipationStatus: AttendanceStatusPossibilities;
+  userParticipationStatus: AttendanceStatusPossibilities = undefined;
   labels: Array<Label>;
   comments: Array<EventComment>;
   public calendarEvent: CalendarEvent;
@@ -61,7 +61,7 @@ export class EventComponent implements OnInit {
               private feedbackService: FeedbackService,
               private attendanceStatusService: AttendanceStatusService,
               private locationService: LocationService,
-              private authService: AuthService,
+              public authService: AuthService,
               public globals: Globals,
               private route: ActivatedRoute) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
@@ -70,11 +70,11 @@ export class EventComponent implements OnInit {
       this.authService.getUser().subscribe((user) => {
         this.user = user;
         this.attendanceStatusService.getStatus(user.id, id).subscribe((status: AttendanceDto) => {
+            console.log(status);
             this.attendanceStatus = status;
-            if (status != null) {
-              console.info(status.status);
-              this.userParticipationStatus = status.status;
-            }
+
+            this.userParticipationStatus = status?.status;
+            console.log(this.userParticipationStatus);
           }
         );
       });
@@ -132,15 +132,18 @@ export class EventComponent implements OnInit {
    */
   private loadCalendarEvent(id: number) {
     this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
-      this.calendarEvent = event;
-      // this.location = new Location(null, 'Fachschaft Informatik', 'Treitlstraße 3', '1050', 48.199747,16.367543);
+      this.calendarEvent = {
+        ...event,
+        startDateTime: new Date(event.startDateTime),
+        endDateTime: new Date(event.endDateTime)
+      };
       this.calendarEvent.description = event.description;
       if (event.locationId) {
         this.locationService.getLocation(event.locationId).subscribe((location) => {
           this.location = location;
         })
       }
-      this.participants = this.getParticipants();
+      this.getParticipants();
       this.calendarService.getCalendarById(event.calendarId).subscribe(cal => {
         this.calendar = cal;
         cal.organizationIds.forEach(id => {
@@ -157,25 +160,13 @@ export class EventComponent implements OnInit {
     this.attendanceStatusService.getUsersAttendingEvent(this.id).subscribe((users: User[]) => {
       this.participants.attending = users;
 
-        if (users.find(u => u.id === this.user.id)) {
-          this.userParticipationStatus = AttendanceStatusPossibilities.ATTENDING;
-        }
-
     });
     this.attendanceStatusService.getUsersInterestedInEvent(this.id).subscribe((users: User[]) => {
       this.participants.interested = users;
-     if (users.find(u => u.id === this.user.id)) {
-        this.userParticipationStatus = AttendanceStatusPossibilities.INTERESTED;}
-
     });
     this.attendanceStatusService.getUsersDecliningEvent(this.id).subscribe((users: User[]) => {
       this.participants.declined = users;
-     if (users.find(u => u.id === this.user.id)) {
-        this.userParticipationStatus = AttendanceStatusPossibilities.DECLINED;
-      }
     });
-    this.userParticipationStatus = null;
-    return this.participants;
   }
 
 
@@ -208,5 +199,9 @@ export class EventComponent implements OnInit {
 
   getCalendarColor(calendarId: number) {
     return this.calendarColors[calendarId % this.calendarColors.length];
+  }
+
+  eventEndsAfterNow() {
+    return this.calendarEvent.endDateTime >= new Date(Date.now());
   }
 }
