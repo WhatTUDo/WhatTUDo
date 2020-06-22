@@ -66,7 +66,7 @@ export class OrganizationComponent implements OnInit {
   onSubmitAddCalendar(calId: number) {
     this.addCalendar(calId);
     this.calendarAddExpanded = false;
-    delete this.pickedCalendarId;
+    this.pickedCalendarId = null;
   }
 
   addCalendar(calId: number) {

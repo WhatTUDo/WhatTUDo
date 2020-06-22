@@ -4,10 +4,6 @@ import {OrganizationService} from '../../services/organization.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {Globals} from "../../global/globals";
-import {FormControl, FormGroup} from '@angular/forms';
-import {UserService} from '../../services/user.service';
-import {AuthService} from '../../services/auth.service';
-import {User} from '../../dtos/user';
 import {FeedbackService} from '../../services/feedback.service';
 
 @Component({
@@ -20,7 +16,7 @@ export class OrganizationFormComponent implements OnInit {
   organization: Organization;
   isUpdate: boolean;
   faChevronLeft = faChevronLeft;
-  private selectedImage: File;
+  selectedImage: File;
 
 
   constructor(private organizationService: OrganizationService,
@@ -60,6 +56,7 @@ export class OrganizationFormComponent implements OnInit {
     this.organizationService.postOrganization(this.organization)
       .subscribe(organization => {
         this.organization = organization;
+        this.uploadImage();
         console.log('Organization ' + organization.name + ' created successfully.');
         this.router.navigate(["/organization/" + this.organization.id]);
       });
@@ -69,6 +66,7 @@ export class OrganizationFormComponent implements OnInit {
     this.organizationService.putOrganization(this.organization)
       .subscribe(organization => {
           this.organization = organization;
+          this.uploadImage();
           console.log('Organization ' + organization.name + ' updated successfully.');
           this.router.navigate(["/organization/" + this.organization.id]);
         },
@@ -82,6 +80,7 @@ export class OrganizationFormComponent implements OnInit {
   }
 
   uploadImage() {
+    if (!this.selectedImage) return;
     this.organizationService.uploadOrganizationAvatar(this.organization.id, this.selectedImage).subscribe(resp => {
       // @ts-ignore
       this.organization.coverImageUrl = resp.url;

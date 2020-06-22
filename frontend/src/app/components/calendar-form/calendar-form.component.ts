@@ -25,7 +25,7 @@ export class CalendarFormComponent implements OnInit {
 
   organizations: Array<Organization>;
   faChevronLeft = faChevronLeft;
-  private selectedImage: File;
+  selectedImage: File;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,7 +58,9 @@ export class CalendarFormComponent implements OnInit {
   onSubmit(): void {
     if (this.validateFormData(this.calendar)) {
       if (this.isUpdate) {
-        this.calendarService.editCalendar(this.calendar).subscribe(observable => {
+        this.calendarService.editCalendar(this.calendar).subscribe((observable) => {
+          this.calendar = observable;
+          this.uploadImage();
           console.log("Updated calendar: ", observable);
         }, error => {
         }, () => {
@@ -69,12 +71,14 @@ export class CalendarFormComponent implements OnInit {
       } else {
         let createCalendar = new CreateCalendar(this.calendar.name, this.calendar.organizationIds[0]);
         this.calendarService.addCalendar(createCalendar).subscribe((createdCalendar: Calendar) => {
+          this.calendar = createdCalendar;
+          this.uploadImage();
           console.log("Created calendar: ", observable);
           this.calendar = createdCalendar;
           this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
-              console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
-              this.router.navigate([`/calendar/${this.calendar.id}`])
-            });
+            console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
+            this.router.navigate([`/calendar/${this.calendar.id}`])
+          });
         });
       }
 
@@ -124,6 +128,7 @@ export class CalendarFormComponent implements OnInit {
   }
 
   uploadImage() {
+    if (!this.selectedImage) return;
     this.organizationService.uploadOrganizationAvatar(this.calendar.id, this.selectedImage).subscribe(resp => {
       // @ts-ignore
       this.calendar.coverImageUrl = resp.url;

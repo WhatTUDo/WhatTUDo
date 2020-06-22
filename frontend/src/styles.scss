@@ -322,6 +322,8 @@ button, input[type=button] {
 input, select, textarea {
   padding: 4pt;
 
+  width: 100%;
+
   border-radius: $rounded-radius;
   border: none !important;
 
@@ -405,6 +407,7 @@ iframe {
 
   input {
     width: 100%;
+
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }

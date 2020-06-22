@@ -5,20 +5,17 @@
 </div>
 <div *ngIf="calendar" class="centered-two-third">
   <div>
-    <h2 *ngIf="isUpdate">{{isUpdate?"Update Calendar":"Create New Calendar"}}</h2>
-    <form (ngSubmit)="uploadImage()">
+    <h2 *ngIf="isUpdate">{{isUpdate ? "Update Calendar" : "Create New Calendar"}}</h2>
+    <div>
       <div class="avatar-container" *ngIf="calendar">
         <img alt="" class="avatar avatar-large" src="{{calendar.coverImageUrl}}">
       </div>
       <label for="calendar-avatar">
         Avatar
       </label>
-      <div class="input-button-combo">
         <input type="file" name="calendar-avatar" (change)="selectImage($event)"
                id="calendar-avatar" accept="{{this.globals.allowedAvatarMimeTypes.join(',')}}">
-        <button type="submit" class="no-hover-enlarge">Upload</button>
-      </div>
-    </form>
+    </div>
     <h3>Calendar Information</h3>
     <div class="form-group">
       <!--      <label for="calendar.organizationIds">Organization</label>-->

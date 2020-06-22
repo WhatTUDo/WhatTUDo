@@ -128,12 +128,13 @@ export class EventFormComponent implements OnInit {
       // submit to eventService
       if (this.isUpdate) {
         this.eventService.putEvent(this.calendarEvent).subscribe(response => {
-            this.feedbackService.displaySuccess("Updated Event!", response.toString());
             console.log("Updated event: " + response);
+            this.calendarEvent = response;
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
             this.eventService.addLabels(this.ev_id, this.selectedLabels);
-            this.router.navigate([`/event/${response.id}`])
+            this.uploadImage();
+            // this.router.navigate([`/event/${response.id}`])
           },
           err => {
             console.warn(err);
@@ -141,13 +142,16 @@ export class EventFormComponent implements OnInit {
           });
       } else {
 
-        this.eventService.postEvent(this.calendarEvent).subscribe(response => {
+        this.eventService.postEvent(this.calendarEvent).subscribe((response) => {
             console.log("Saved event: " + response);
             this.feedbackService.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
 
+            this.calendarEvent = response;
+
             this.eventService.addLabels(response.id, this.selectedLabels);
-            this.router.navigate([`/event/${response.id}`])
+            this.uploadImage();
+            // this.router.navigate([`/event/${response.id}`])
           },
           err => {
             console.warn(err);
@@ -255,6 +259,7 @@ export class EventFormComponent implements OnInit {
   }
 
   uploadImage() {
+    if (this.selectedImage === null) return;
     this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe(resp => {
       // @ts-ignore
       this.calendarEvent.coverImageUrl = resp.url;

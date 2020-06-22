@@ -4,7 +4,7 @@
 </div>
 <div>
 
-  <h2>{{isUpdate?"Edit Event":"New Event"}}</h2>
+  <h2>{{isUpdate ? "Edit Event" : "New Event"}}</h2>
   <div class="row">
     <div class="col-md-8">
       <img class="event-promo-image"
@@ -13,12 +13,9 @@
         <label for="event-promo-image-upload">
           PromoImage
         </label>
-        <div class="input-button-combo">
-          <input type="file" name="event-promo-image-upload"
-                 id="event-promo-image-upload" accept="{{this.globals.allowedPromoImageMimeTypes.join(',')}}"
-                 (change)="selectImage($event)">
-          <button type="submit" class="no-hover-enlarge">Upload</button>
-        </div>
+        <input type="file" name="event-promo-image-upload"
+               id="event-promo-image-upload" accept="{{this.globals.allowedPromoImageMimeTypes.join(',')}}"
+               (change)="selectImage($event)">
       </form>
       <h4>Event Details</h4>
       <p>Please note that fields marked with * are <b>required fields</b>. </p>
