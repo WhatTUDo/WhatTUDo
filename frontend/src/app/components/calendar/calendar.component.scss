@@ -34,6 +34,15 @@
   text-transform: uppercase;
 }
 
+.calendar-navigation-button-mobile {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 24pt;
+  width: 24pt;
+}
+
 .calendar-date-label {
   font-size: 36pt;
   font-weight: $f-bold;

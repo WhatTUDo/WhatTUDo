@@ -22,7 +22,7 @@ export class EventCommentComponent implements OnInit {
   public user: String;
   public author: string;
   public rating: number;
-  public pushedEdit: boolean;
+  public editActive: boolean;
   faThumbsUp = faThumbsUp;
   faThumbsDown = faThumbsDown;
   faUserCircle = faUserCircle;
@@ -39,16 +39,11 @@ export class EventCommentComponent implements OnInit {
         this.user = user.name;
       });
     }
-
-
   }
 
   ngOnInit(): void {
-
     this.author = this.comment.username;
-    this.pushedEdit = false;
-
-
+    this.editActive = false;
   }
 
   public vote(isUpvote: boolean) {
@@ -60,21 +55,16 @@ export class EventCommentComponent implements OnInit {
   }
 
   public changeEditCommentState() {
-    if (this.pushedEdit == false) {
-      this.pushedEdit = true;
-    } else {
-      this.pushedEdit = false;
-    }
+    this.editActive = !this.editActive;
   }
 
   public editComment(input: string) {
-    if (input.length > 0) {
-
+    if (input) {
+      this.editActive = false;
       this.comment.text = input;
-
-      this.eventService.createComment(this.comment).subscribe(comment => {
-        this.comment = comment;
-        this.pushedEdit = false;
+      this.eventService.createComment(this.comment).subscribe((comment) => {
+        const updateDateTime = new Date(comment.updateDateTime);
+        this.comment = {...comment, updateDateTime: updateDateTime} as EventComment;
       });
     }
   }

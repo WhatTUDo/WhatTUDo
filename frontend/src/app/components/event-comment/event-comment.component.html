@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div class="comment-edit" *ngIf="pushedEdit == true">
+  <div class="comment-edit" *ngIf="editActive">
     <label for="comment-textarea"></label>
     <textarea class="no-outline" id="comment-textarea" name="comment" #njf>{{comment.text}}</textarea>
     <button (click)="editComment(njf.value)" class="full-width-form-button no-hover-enlarge">Send</button>

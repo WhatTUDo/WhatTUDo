@@ -13,8 +13,12 @@
 </div>
 
 <div class="calendar-navigation mobile">
-  <fa-icon (click)="minusOneDay()" [icon]="faChevronLeft" class="clickable no-hover-enlarge">Last day</fa-icon>
-  <fa-icon (click)="addOneDay()" [icon]="faChevronRight" class="clickable no-hover-enlarge">Next day</fa-icon>
+  <div class="calendar-navigation-button-mobile">
+    <fa-icon (click)="minusOneDay()" [icon]="faChevronLeft" class="clickable no-hover-enlarge">Last day</fa-icon>
+  </div>
+  <div class="calendar-navigation-button-mobile">
+    <fa-icon (click)="addOneDay()" [icon]="faChevronRight" class="clickable no-hover-enlarge">Next day</fa-icon>
+  </div>
 </div>
 
 <div class="calendar mobile">
