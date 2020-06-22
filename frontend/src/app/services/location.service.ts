@@ -26,14 +26,17 @@ export class LocationService {
   }
 
   searchName(searchterm: string): Observable<Array<Location>> {
-    let searchParams = new HttpParams();
-    searchParams.append("search", searchterm);
-    return this.httpClient.get<Array<Location>>(this.locationBaseUri + "/searchName", {params: searchParams});
+    // let searchParams = new HttpParams();
+    // searchParams.append("search", searchterm);
+    let url = "?name=" + searchterm;
+
+    return this.httpClient.get<Array<Location>>(this.locationBaseUri + "/searchName"+url);
   }
 
   searchAddress(searchterm: string): Observable<Array<Location>> {
-    let searchParams = new HttpParams();
-    searchParams.append("search", searchterm);
-    return this.httpClient.get<Array<Location>>(this.locationBaseUri + "/searchAddress", {params: searchParams});
+    // let searchParams = new HttpParams();
+    // searchParams.append("search", searchterm);
+    let url = "?address=" + searchterm;
+    return this.httpClient.get<Array<Location>>(this.locationBaseUri + "/searchAddress"+url);
   }
 }
