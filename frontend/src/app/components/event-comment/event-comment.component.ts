@@ -1,11 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {FormControl, FormGroup} from '@angular/forms';
+
 import {EventComment} from "../../dtos/event-comment";
-import {User} from "../../dtos/user";
 import {AuthService} from '../../services/auth.service';
 
-import {faThumbsDown, faThumbsUp, faUserCircle, faReply, faClock,
-faCog, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faThumbsDown, faThumbsUp, faUserCircle, faReply, faClock,
+  faEdit, faTimesCircle
+} from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
 import {Globals} from "../../global/globals";
 
@@ -27,13 +28,13 @@ export class EventCommentComponent implements OnInit {
   faUserCircle = faUserCircle;
   faReply = faReply;
   faClock = faClock;
-  faCog = faCog;
+  faEdit = faEdit;
   faTimesCircle = faTimesCircle;
 
   constructor(private eventService: EventService,
               private authService: AuthService,
-  public globals: Globals) {
- if (this.authService.isLoggedIn()) {
+              public globals: Globals) {
+    if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user) => {
         this.user = user.name;
       });
@@ -58,7 +59,7 @@ export class EventCommentComponent implements OnInit {
     }
   }
 
- public changeEditCommentState() {
+  public changeEditCommentState() {
     if (this.pushedEdit == false) {
       this.pushedEdit = true;
     } else {
@@ -66,20 +67,27 @@ export class EventCommentComponent implements OnInit {
     }
   }
 
-  public editComment(input : string) {
-        if(input.length > 0){
+  public editComment(input: string) {
+    if (input.length > 0) {
 
-         this.comment.text = input;
+      this.comment.text = input;
 
-         this.eventService.createComment(this.comment).subscribe(comment => {
-          this.comment = comment;
-          this.pushedEdit = false;
-    });
-  }
+      this.eventService.createComment(this.comment).subscribe(comment => {
+        this.comment = comment;
+        this.pushedEdit = false;
+      });
+    }
   }
 
   getDisplayDateAndTimeStringFromDate(date: Date) {
     return this.eventService.getDisplayDateAndTimeStringFromDate(date);
   }
 
+  deleteComment(): void {
+    if (confirm(`You are deleting the selected comment. Are you sure?`)) {
+      this.eventService.deleteComment(this.comment.id).subscribe(() => {
+        this.comment = null;
+      });
+    }
+  }
 }

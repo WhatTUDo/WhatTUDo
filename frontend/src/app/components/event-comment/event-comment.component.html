@@ -1,8 +1,8 @@
-<div class="comment-item">
-
+<div class="comment-item" *ngIf="comment">
   <div class="conmment-content">
     {{comment.text}}
   </div>
+
   <div class="comment-metadata">
     <div class="comment-author">
       <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;{{comment.username}}
@@ -11,18 +11,15 @@
       <fa-icon [icon]="faClock"></fa-icon>&ensp;{{getDisplayDateAndTimeStringFromDate(comment.updateDateTime)}}
     </div>
 
-    <div *ngIf="user == author">
-      <fa-icon [icon]="faCog" (click)="changeEditCommentState()" class="clickable no-hover-enlarge"></fa-icon>
+    <div *ngIf="user === author" class="comment-buttons">
+      <fa-icon [icon]="faEdit" (click)="changeEditCommentState()" class="clickable no-hover-enlarge"></fa-icon>
+      <fa-icon [icon]="faTimesCircle" (click)="deleteComment()" class="clickable no-hover-enlarge"></fa-icon>
     </div>
+  </div>
 
-    <div *ngIf="pushedEdit == true">
-      <label for="comment-textarea">
-      </label>
-      <textarea class="no-outline" id="comment-textarea" name="comment" #njf>{{comment.text}}</textarea>
-      <button (click)="editComment(njf.value)" class="full-width-form-button no-hover-enlarge btn-lg">Send
-      </button>
-    </div>
-
-
+  <div class="comment-edit" *ngIf="pushedEdit == true">
+    <label for="comment-textarea"></label>
+    <textarea class="no-outline" id="comment-textarea" name="comment" #njf>{{comment.text}}</textarea>
+    <button (click)="editComment(njf.value)" class="full-width-form-button no-hover-enlarge">Send</button>
   </div>
 </div>
