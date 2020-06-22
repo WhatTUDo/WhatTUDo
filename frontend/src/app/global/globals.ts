@@ -4,7 +4,7 @@ import {Injectable} from '@angular/core';
   providedIn: 'root'
 })
 export class Globals {
-  readonly backendUri: string = '//192.168.0.136:8080';
+  readonly backendUri: string = 'http://localhost:8080';
   readonly openStreetMapsUri: string = 'https://nominatim.openstreetmap.org/search';
 
   readonly allowedAvatarMimeTypes: string[] = ['image/jpeg']; // 'image/png', 'image/gif', 'image/svg+xml'

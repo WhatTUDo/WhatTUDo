@@ -8,14 +8,23 @@
 <form *ngIf="editable">
   <div [class.flat-bottom]="this.searchComplete && !addressSelected" class="input-button-combo">
     <label for="addressSearch">Search Location</label>
-    <input id="addressSearch" name="addressSearch" type="search">
+    <input id="addressSearch" name="addressSearch" type="search" value="{{this.searchString}}">
     <button (click)="performSearch()" class="no-hover-enlarge">Search</button>
   </div>
 </form>
 <div *ngIf="editable">
   <div *ngIf="this.searchComplete" id="location-search-results-container">
     <div (click)="addressClicked(result)" *ngFor="let result of this.searchResults"
-         class="clickable no-hover-enlarge location-result-entry"> {{result.display_name}}</div>
+         class="clickable no-hover-enlarge location-result-entry">
+      <div *ngIf="result.id">(From DB)</div>
+      <div *ngIf="!result.id">(From API)</div>
+      <b style="font-weight: 600">
+        {{result.name}}
+      </b>
+      <p>
+        {{result.address}}
+      </p>
+    </div>
   </div>
 </div>
 <div *ngIf="this.addressSelected" class="selected-button-container">

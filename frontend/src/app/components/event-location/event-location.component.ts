@@ -4,6 +4,7 @@ import {Location} from "../../dtos/location";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {faMapMarked} from "@fortawesome/free-solid-svg-icons";
 import {LocationService} from "../../services/location.service";
+import {strict} from "assert";
 
 @Component({
   selector: 'app-event-location',
@@ -18,9 +19,11 @@ export class EventLocationComponent implements OnInit, OnChanges {
   searchComplete = false
   addressSelected = false;
   selectionComplete = false;
-  public searchResults: Array<any>;
+  public searchResults: Array<Location>;
   public selectedLocation: Location;
   public previewURL: SafeResourceUrl;
+
+  public searchString = "";
   faMapMarked = faMapMarked;
 
   constructor(private eventService: EventService,
@@ -31,6 +34,7 @@ export class EventLocationComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     if (this.location) {
       this.createPreviewURL(this.location);
+      this.searchString = this.location.name;
     } else {
       this.previewURL = null;
     }
@@ -57,19 +61,24 @@ export class EventLocationComponent implements OnInit, OnChanges {
             this.searchResults.push(result);
           }
         })
+
+        this.eventService.searchLocationInAPI(value).subscribe(results => {
+          let locationResults = this.mapAPIResultsToLocationObjects(results);
+
+          locationResults.forEach(locationResult => {
+            if (!this.searchResults.includes(locationResult)) {
+              this.searchResults.push(locationResult);
+            }
+          });
+          this.searchComplete = true;
+        });
       })
     })
-    this.eventService.searchLocationInAPI(value).subscribe(results => {
-      this.searchResults = results;
-      this.searchComplete = true;
-    });
+
   }
 
   addressClicked(result: any) {
-    let specificName = result.address.address29 ? result.address29 : result.address.road
-    let locationAddress = result.address.road + " " + result.address.postcode + " " + result.address.city;
-    let location: Location = new Location(null, specificName, locationAddress, result.address.postcode, result.lat, result.lon, []);
-    this.selectedLocation = location;
+    this.selectedLocation = this.parseLocation(result);
     console.log(location);
     this.createPreviewURL(this.selectedLocation);
     this.addressSelected = true;
@@ -89,12 +98,45 @@ export class EventLocationComponent implements OnInit, OnChanges {
       return;
     }
 
-    let upperBBoxLat: string = (previewLocation.latitude + 0.0002).toFixed(5);
-    let lowerBBoxLat: string = (previewLocation.latitude - 0.0002).toFixed(5);
-    let upperBBoxLon: string = (previewLocation.longitude + 0.0002).toFixed(5);
-    let lowerBBoxLon: string = (previewLocation.longitude - 0.0002).toFixed(5);
-    let previewString: string = "//www.openstreetmap.org/export/embed.html?bbox=" + lowerBBoxLon + "%2C" + lowerBBoxLat + "%2C" + upperBBoxLon + "%2C" + upperBBoxLat + "&amp;layer=mapnik&amp;marker=" + previewLocation.longitude.toFixed(5) + "%2C" + previewLocation.latitude.toFixed(5);
+    let upperBoundingBoxLatitude: string = (previewLocation.latitude + 0.0002).toFixed(5);
+    let lowerBoundingBoxLatitude: string = (previewLocation.latitude - 0.0002).toFixed(5);
+    let upperBoundingBoxLongitude: string = (previewLocation.longitude + 0.0002).toFixed(5);
+    let lowerBoundingBoxLongitude: string = (previewLocation.longitude - 0.0002).toFixed(5);
+    let previewString: string = "//www.openstreetmap.org/export/embed.html?bbox=" + lowerBoundingBoxLongitude + "%2C" +
+      lowerBoundingBoxLatitude + "%2C" + upperBoundingBoxLongitude + "%2C" + upperBoundingBoxLatitude +
+      "&amp;layer=mapnik&amp;marker=" + previewLocation.longitude.toFixed(5) + "%2C" +
+      previewLocation.latitude.toFixed(5);
 
     this.previewURL = this.sanitizer.bypassSecurityTrustResourceUrl(previewString)
+  }
+
+  private mapAPIResultsToLocationObjects(apiResults: Array<any>): Array<Location> {
+    let locations = Array<Location>();
+    apiResults.forEach(result => {
+      let location = this.parseLocation(result);
+      locations.push(location);
+    });
+    return locations;
+  }
+
+  private parseLocation(result): Location {
+    let specificName = this.createSpecifiNameForApiResult(result);
+    let locationAddress = result.address.road + " " + result.address.postcode + " " + result.address.city;
+    let postcode = result.address.postcode ? result.address.postcode : "no zip";
+    let location: Location = new Location(null, specificName, locationAddress, postcode, result.lat, result.lon, []);
+    return location;
+  }
+
+  private createSpecifiNameForApiResult(result): string {
+    let name = "";
+    if (result.address.office) {
+      name = result.address.office;
+    } else if (result.address.road) {
+      name = result.address.road;
+      if (result.address.house_number) {
+        name += " " + result.address.house_number;
+      }
+    }
+    return name;
   }
 }

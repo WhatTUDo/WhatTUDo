@@ -74,6 +74,10 @@ export class EventFormComponent implements OnInit {
           this.getEventLabels(id);
           this.ev_id = id;
           this.calendarEvent.coverImageUrl = globals.backendUri + this.calendarEvent.coverImageUrl;
+
+          this.locationService.getLocation(event.locationId).subscribe(location => {
+            this.location = location;
+          })
         }
       });
     } else {
@@ -87,7 +91,6 @@ export class EventFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.getAllLabels();
   }
 
@@ -258,11 +261,15 @@ export class EventFormComponent implements OnInit {
     this.selectedImage = event.target.files.item(0);
   }
 
+
+  //fixme: this is still not reliable!
   uploadImage() {
     if (this.selectedImage === null) return;
     this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe(resp => {
       // @ts-ignore
-      this.calendarEvent.coverImageUrl = resp.url;
+      if (resp.url != null) {
+        this.calendarEvent.coverImageUrl = resp.url;
+      }
     });
   }
 }
