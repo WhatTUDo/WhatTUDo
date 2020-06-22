@@ -104,6 +104,7 @@ export class EventService {
       "calendarId": event.calendarId,
       "endDateTime": event.endDateTime,
       "name": event.name,
+      "description": event.description,
       "startDateTime": event.startDateTime,
       "locationId": event.locationId
     }
