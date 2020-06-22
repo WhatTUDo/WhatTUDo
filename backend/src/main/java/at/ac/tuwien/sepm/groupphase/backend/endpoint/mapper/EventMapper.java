@@ -58,8 +58,10 @@ public abstract class EventMapper {
 
     @BeforeMapping
     protected void mapLocation(EventDto eventDto, @MappingTarget Event event){
-        Location location = locationRepository.findById(eventDto.getLocationId()).orElseThrow(() -> new NotFoundException("No Location with this ID"));
-        event.setLocation(location);
+        if(eventDto.getLocationId() != null) {
+            Location location = locationRepository.findById(eventDto.getLocationId()).orElseThrow(() -> new NotFoundException("No Location with this ID"));
+            event.setLocation(location);
+        }
     }
 
     public abstract List<EventDto> eventListToeventDtoList(List<Event> eventList);
