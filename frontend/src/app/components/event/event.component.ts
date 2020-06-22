@@ -51,6 +51,12 @@ export class EventComponent implements OnInit {
   attendanceStatus: AttendanceDto;
   newEventComment: EventComment = new EventComment(null, null, null, null, null);
 
+  statusValues = {
+    'DECLINED': 0,
+    'ATTENDING': 1,
+    'INTERESTED': 2
+  }
+
   /** color classes to add **/
   calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
 
@@ -70,11 +76,9 @@ export class EventComponent implements OnInit {
       this.authService.getUser().subscribe((user) => {
         this.user = user;
         this.attendanceStatusService.getStatus(user.id, id).subscribe((status: AttendanceDto) => {
-            console.log(status);
             this.attendanceStatus = status;
 
-            this.userParticipationStatus = status?.status;
-            console.log(this.userParticipationStatus);
+            this.userParticipationStatus = status === null ? null : this.statusValues[status.status];
           }
         );
       });
@@ -99,6 +103,7 @@ export class EventComponent implements OnInit {
     }
     this.attendanceStatusService.create(new AttendanceDto(null, this.user.name, this.id, status)).subscribe((attendance) => {
         this.attendanceStatus = attendance;
+        this.userParticipationStatus = this.statusValues[attendance.status];
         this.getParticipants();
       }
     );
