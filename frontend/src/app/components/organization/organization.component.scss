@@ -97,9 +97,40 @@
   width: 100%;
   margin-bottom: 16pt;
 
+  > .avatar {
+    box-sizing: border-box;
+
+    margin-right: 8pt;
+
+    border: 2pt solid transparent;
+
+    &.blue {
+      border-color: $blue;
+    }
+
+    &.green {
+      border-color: $green;
+    }
+
+    &.yellow {
+      border-color: $yellow;
+    }
+
+    &.orange {
+      border-color: $orange;
+    }
+
+    &.red {
+      border-color: $red;
+    }
+
+    &.violet {
+      border-color: $violet;
+    }
+  }
+
   .organization-calendar-details {
     width: 100%;
-    margin-left: 8pt;
     color: var(--text);
 
     .organization-calendar-name {

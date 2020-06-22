@@ -31,7 +31,7 @@
     </div>
     <div class="form-group">
       <label for="calendar.description">Description: </label>
-      <input [(ngModel)]="calendar.description" class="form-control " id="calendar.description"
+      <input [(ngModel)]="calendar.description" class="form-control" id="calendar.description"
              placeholder="Description">
     </div>
     <h3>Organizations</h3>
@@ -43,7 +43,7 @@
             <mat-label>Organizations</mat-label>
             <mat-select [(ngModel)]="calendar.organizationIds" [compareWith]="compare" id="organization-select"
                         multiple>
-              <mat-option *ngFor="let org of this.organizations" [(value)]="org.id">
+              <mat-option *ngFor="let org of this.organizations" [value]="org.id">
                 {{org.name}}
               </mat-option>
             </mat-select>

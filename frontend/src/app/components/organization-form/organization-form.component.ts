@@ -39,7 +39,7 @@ export class OrganizationFormComponent implements OnInit {
         this.isUpdate = true;
       });
     } else {
-      this.organization = new Organization(null, "", []);
+      this.organization = new Organization(null, "", [], null);
       this.isUpdate = false;
     }
   }

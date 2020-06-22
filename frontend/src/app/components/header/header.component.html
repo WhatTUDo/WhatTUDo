@@ -22,7 +22,7 @@
 
     <div class="avatar-action-container">
       <a *ngIf="authService.isLoggedIn()" class="nav-link clickable no-hover-enlarge" routerLink="/user">
-        <fa-icon [icon]="faCog">Manage User</fa-icon>
+        <fa-icon [icon]="faUser">Manage User</fa-icon>
       </a>
       <a (click)="authService.logoutUser()" *ngIf="authService.isLoggedIn()"
          class="nav-link clickable no-hover-enlarge"

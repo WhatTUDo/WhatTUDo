@@ -12,8 +12,8 @@
         <div class="organization-name">{{organization.name}}</div>
       </div>
     </div>
-    <div>
-      This is where a short description of the organization should go.
+    <div *ngIf="organization.description">
+      {{organization.description}}
     </div>
     <p></p>
     <div class="organization-action-container">
@@ -116,6 +116,7 @@
     <div>
       <div *ngFor="let cal of organizationCalendars"
            class="organization-calendar">
+        <img alt="" class="avatar avatar-small" src="{{globals.backendUri+cal.coverImageUrl}}" [ngClass]="getCalendarColor(cal.id)">
         <div class="organization-calendar-details clickable no-hover-enlarge"
              routerLink="/calendar/{{cal.id}}">
           <div class="organization-calendar-name">{{cal.name}}</div>

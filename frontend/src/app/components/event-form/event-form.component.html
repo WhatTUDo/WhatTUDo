@@ -7,7 +7,7 @@
   <h2>{{isUpdate?"Edit Event":"New Event"}}</h2>
   <div class="row">
     <div class="col-md-8">
-      <img class="event-promo-image mobile-full-width"
+      <img class="event-promo-image"
            src="{{calendarEvent.coverImageUrl}}">
       <form *ngIf="calendarEvent" (ngSubmit)="uploadImage()">
         <label for="event-promo-image-upload">

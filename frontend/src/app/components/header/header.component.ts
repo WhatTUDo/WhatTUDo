@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
-import {faSignInAlt, faSignOutAlt, faChevronDown, faCog} from '@fortawesome/free-solid-svg-icons';
+import {faSignInAlt, faSignOutAlt, faChevronDown, faUser} from '@fortawesome/free-solid-svg-icons';
 import {UserService} from "../../services/user.service";
 
 @Component({
@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   faSignInAlt = faSignInAlt;
   faSignOutAlt = faSignOutAlt;
   faChevronDown = faChevronDown;
-  faCog = faCog;
+  faUser = faUser;
   mobileCollapsed: boolean = true;
 
   constructor(public authService: AuthService,

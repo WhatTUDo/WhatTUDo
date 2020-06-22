@@ -38,13 +38,16 @@ export class OrganizationComponent implements OnInit {
     role: new FormControl('')
   });
 
+  /** color classes to add **/
+  calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
+
   constructor(private organizationService: OrganizationService,
               private calendarService: CalendarService,
               private userService: UserService,
               private feedbackService: FeedbackService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
-              private globals: Globals) {
+              public globals: Globals) {
     let id: number = Number(this.route.snapshot.paramMap.get('id'));
     this.loadOrganization(id);
     this.getAllEditableCalendars();
@@ -159,6 +162,9 @@ export class OrganizationComponent implements OnInit {
     },error => {
       this.feedbackService.displayError("Error", error.error.message )
     });
-
     }
+
+  getCalendarColor(calendarId: number) {
+    return this.calendarColors[calendarId % this.calendarColors.length];
+  }
 }

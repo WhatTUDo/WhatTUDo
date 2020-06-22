@@ -9,3 +9,7 @@
   flex-wrap: wrap;
   margin-bottom: 8pt;
 }
+
+label[for="organization-avatar"] {
+  display: none;
+}

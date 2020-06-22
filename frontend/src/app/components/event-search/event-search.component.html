@@ -7,7 +7,7 @@
   <h2>Search Events</h2>
   <form class="filter input-button-combo" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
     <label for="calendar.name"></label>
-    <input class="form-control" formControlName="name" id="calendar.name" placeholder="Event Name…" value=""
+    <input class="form-control" formControlName="name" id="calendar.name" value=""
            type="text">
     <button type="reset" *ngIf="searchActive" (click)="clearSearch()" class="button-red no-hover-enlarge flat-right-side">Clear
     </button>

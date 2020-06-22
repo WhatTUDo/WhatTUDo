@@ -96,17 +96,7 @@ export class OrganizationService {
     return this.httpClient.get<User[]>(`${this.organizationBaseUri}/members/${organizationId}`);
   }
 
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    // Return base64 of a 1x1px transparent gif if no organizationId is given.
-    if (!organizationId) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
-    return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-    //TODO: Implement this after backend is done.
-  }
-
   addMembership(orgaId: number, userId: number, role: string): Observable<any> {
-    // let params = new HttpParams();
-    // params = params.set('userId', String(userId))
-    //   .set('role', role);
     let url = "?userId=" + userId + "&role=" + role;
     return this.httpClient.put(this.organizationBaseUri + '/addMembership/'+orgaId+url, {});
   }
@@ -122,10 +112,6 @@ export class OrganizationService {
       });
 
     return this.httpClient.request(req);
-  }
-
-  getOrganizationAvatar(organizationId: number) {
-    return this.httpClient.get(`${this.organizationBaseUri}/${organizationId}/cover`)
   }
 
   searchOrganization(name: string) {
