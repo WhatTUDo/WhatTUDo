@@ -225,10 +225,12 @@ export class EventFormComponent implements OnInit {
   getAllEditableCalendars() {
     this.calendarService.getAllCalendars().subscribe((calendars: Calendar[]) => {
       this.editableCalendars = calendars;
-      // this.editableCalendars = calendars.filter(cal => cal.canEdit);
-      // if (this.editableCalendars) {
-      //   this.feedbackService.displayWarning('Heads up!', 'You have no permission to any calendar. Therefore, you cannot create any new events.')
-      // }
+      this.editableCalendars = calendars.filter(cal => cal.canEdit);
+      if (!this.editableCalendars.length) {
+        this.feedbackService.displayWarning('Heads up!', 'You have no permission to any calendar. Therefore, you cannot create any new events.')
+      } else {
+        if (!this.calendarEvent.calendarId) this.calendarEvent.calendarId = this.editableCalendars[0].id;
+      }
     })
   }
 
@@ -241,13 +243,9 @@ export class EventFormComponent implements OnInit {
       this.eventCollisionService.getEventCollisions(helperEvent).subscribe((collisionResponse) => {
         this.collisionResponse = collisionResponse;
         this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
-
         if (!this.conflictExists) {
-          this.feedbackService.displaySuccess("No Collisions!", "No collisions were found for this Event!");
         }
       });
-    } else {
-      this.feedbackService.displayWarning("Event Collision", "A Start and End date must be specified");
     }
   }
 

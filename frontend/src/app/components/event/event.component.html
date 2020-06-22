@@ -24,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="details-stack">
+    <div class="details-stack" *ngIf="calendarEvent">
       <h2>Details</h2>
       <div id="label-container">
         <div *ngFor="let label of labels" class="label-item">
@@ -49,22 +49,30 @@
             <div class="participation-label">Declined</div>
           </div>
         </div>
-        <div class="participation-button-container actions-one-third">
-          <button *ngIf="userParticipationStatus!==AttendanceStatusPossibilities.ATTENDING"
-                  (click)="participate(AttendanceStatusPossibilities.ATTENDING)" class="button-blue" [style.order]="1">
+        <div class="participation-button-container actions-one-third"
+             *ngIf="userParticipationStatus!==undefined && authService.isLoggedIn() && eventEndsAfterNow()">
+          <button *ngIf="userParticipationStatus !== AttendanceStatusPossibilities.ATTENDING"
+                  (click)="participate(AttendanceStatusPossibilities.ATTENDING)" class="button-blue">
             Attend
           </button>
-          <button *ngIf="userParticipationStatus!==AttendanceStatusPossibilities.INTERESTED"
-                  (click)="participate(AttendanceStatusPossibilities.INTERESTED)" class="button-yellow"
-                  [style.order]="2">
+          <button *ngIf="userParticipationStatus === AttendanceStatusPossibilities.ATTENDING"
+                  (click)="resetParticipation()">
+            Reset
+          </button>
+          <button *ngIf="userParticipationStatus !== AttendanceStatusPossibilities.INTERESTED"
+                  (click)="participate(AttendanceStatusPossibilities.INTERESTED)" class="button-yellow">
             Interested
           </button>
-          <button *ngIf="userParticipationStatus!==AttendanceStatusPossibilities.DECLINED"
-                  (click)="participate(AttendanceStatusPossibilities.DECLINED)" class="button-red" [style.order]="3">
+          <button *ngIf="userParticipationStatus === AttendanceStatusPossibilities.INTERESTED"
+                  (click)="resetParticipation()">
+            Reset
+          </button>
+          <button *ngIf="userParticipationStatus !== AttendanceStatusPossibilities.DECLINED"
+                  (click)="participate(AttendanceStatusPossibilities.DECLINED)" class="button-red">
             Decline
           </button>
-          <button *ngIf="userParticipationStatus !== null"
-                  (click)="resetParticipation()" [style.order]="userParticipationStatus?userParticipationStatus:3">
+          <button *ngIf="userParticipationStatus === AttendanceStatusPossibilities.DECLINED"
+                  (click)="resetParticipation()">
             Reset
           </button>
         </div>
