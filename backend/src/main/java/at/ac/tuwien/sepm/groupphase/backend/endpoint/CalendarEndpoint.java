@@ -182,8 +182,13 @@ public class CalendarEndpoint {
     public @ResponseBody byte[] getCoverImage(@PathVariable int id) {
         try {
             Byte[] coverImageBlob = calendarService.findById(id).getCoverImage();
-            byte[] byteArray = new byte[coverImageBlob.length];
-            for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            byte[] byteArray;
+            if (coverImageBlob != null) {
+                byteArray = new byte[coverImageBlob.length];
+                for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            } else {
+                byteArray = new byte[0];
+            }
             return byteArray;
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);

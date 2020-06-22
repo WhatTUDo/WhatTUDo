@@ -42,10 +42,8 @@ public class SimpleAttendanceService implements AttendanceService {
                 for (AttendanceStatus a : list) {
                     if (a.getEvent().getId().equals(attendanceStatus.getEvent().getId())) {
                         attendanceRepository.delete(a);
-
                     }
                 }
-
             }
             return attendanceRepository.save(attendanceStatus);
         } catch (PersistenceException e) {
