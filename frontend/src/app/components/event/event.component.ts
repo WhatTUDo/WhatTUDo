@@ -72,6 +72,7 @@ export class EventComponent implements OnInit {
         this.attendanceStatusService.getStatus(user.id, id).subscribe((status: AttendanceDto) => {
             this.attendanceStatus = status;
             if (status != null) {
+              console.info(status.status);
               this.userParticipationStatus = status.status;
             }
           }
@@ -112,7 +113,7 @@ export class EventComponent implements OnInit {
       this.newEventComment.text = input;
 
       this.eventService.createComment(this.newEventComment).subscribe((comments) => {
-        comments.updateDateTime = new Date(comments.updateDateTime)
+        comments.updateDateTime = new Date(comments.updateDateTime);
         this.comments.push(comments);
       });
     }
@@ -155,19 +156,21 @@ export class EventComponent implements OnInit {
   getParticipants() {
     this.attendanceStatusService.getUsersAttendingEvent(this.id).subscribe((users: User[]) => {
       this.participants.attending = users;
-      if (users.find(u => u.id === this.user.id)) {
-        this.userParticipationStatus = AttendanceStatusPossibilities.ATTENDING;
-      }
+
+        if (users.find(u => u.id === this.user.id)) {
+          this.userParticipationStatus = AttendanceStatusPossibilities.ATTENDING;
+        }
+
     });
     this.attendanceStatusService.getUsersInterestedInEvent(this.id).subscribe((users: User[]) => {
       this.participants.interested = users;
-      if (users.find(u => u.id === this.user.id)) {
-        this.userParticipationStatus = AttendanceStatusPossibilities.INTERESTED;
-      }
+     if (users.find(u => u.id === this.user.id)) {
+        this.userParticipationStatus = AttendanceStatusPossibilities.INTERESTED;}
+
     });
     this.attendanceStatusService.getUsersDecliningEvent(this.id).subscribe((users: User[]) => {
       this.participants.declined = users;
-      if (users.find(u => u.id === this.user.id)) {
+     if (users.find(u => u.id === this.user.id)) {
         this.userParticipationStatus = AttendanceStatusPossibilities.DECLINED;
       }
     });
