@@ -22,7 +22,7 @@
       </div>
     </div>
   </div>
-  <div>
+  <div *ngIf="attendingEvents && interestedEvents">
     <h2>My Events</h2>
     <div *ngIf="attendingEvents.length === 0 && interestedEvents.length === 0">
       You haven't marked any events that you attend or are interested.
@@ -36,7 +36,7 @@
       <app-promo-event-list [eventList]="interestedEvents"></app-promo-event-list>
     </div>
   </div>
-  <div>
+  <div *ngIf="userInOrganizations">
     <h2>My Teams</h2>
     <div *ngIf="userInOrganizations.length === 0">
       You are not part of any organization.

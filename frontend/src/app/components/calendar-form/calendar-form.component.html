@@ -5,7 +5,7 @@
 </div>
 <div *ngIf="calendar" class="centered-two-third">
   <div>
-    <h2 *ngIf="this.title">{{this.title}}</h2>
+    <h2 *ngIf="isUpdate">{{isUpdate?"Update Calendar":"Create New Calendar"}}</h2>
     <form (ngSubmit)="uploadImage()">
       <div class="avatar-container" *ngIf="calendar">
         <img alt="" class="avatar avatar-large" src="{{calendar.coverImageUrl}}">
@@ -49,14 +49,11 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <button (click)="onSubmit()"
-                class="update button-clickable always-black full-width-form-button no-hover-enlarge"
-                title="Update calendar">
-          Submit
-        </button>
       </div>
     </div>
-
-
   </div>
+
+  <button (click)="onSubmit()" class="update button-green">
+    Submit
+  </button>
 </div>

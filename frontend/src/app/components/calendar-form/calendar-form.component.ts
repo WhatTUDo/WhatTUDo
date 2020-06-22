@@ -1,11 +1,9 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {CalendarService} from '../../services/calendar.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {OrganizationService} from '../../services/organization.service';
-import {MatSelectModule} from '@angular/material/select';
-import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
 import {Calendar} from '../../dtos/calendar';
 import {Organization} from '../../dtos/organization';
 import {observable} from "rxjs";
@@ -23,8 +21,6 @@ export class CalendarFormComponent implements OnInit {
 
   calendar: Calendar;
 
-  title: String;
-
   isUpdate = true;
 
   organizations: Array<Organization>;
@@ -36,8 +32,8 @@ export class CalendarFormComponent implements OnInit {
     private calendarService: CalendarService,
     private organizationService: OrganizationService,
     private location: Location,
-    private select: MatSelectModule,
-    public globals: Globals
+    public globals: Globals,
+    public router: Router
   ) {
   }
 
@@ -49,12 +45,10 @@ export class CalendarFormComponent implements OnInit {
   getCalendar(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id != 0) {
-      this.title = "UPDATE CALENDAR";
       this.isUpdate = true;
       this.calendarService.getCalendarById(id)
         .subscribe(calendar => this.calendar = calendar);
     } else {
-      this.title = "CREATE NEW CALENDAR";
       this.isUpdate = false;
       this.calendar = new Calendar(0, null, [], []);
     }
@@ -69,10 +63,7 @@ export class CalendarFormComponent implements OnInit {
         }, error => {
         }, () => {
           this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
-            console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
-          }, error => {
-          }, () => {
-            this.goBack();
+            this.router.navigate([`/calendar/${this.calendar.id}`])
           });
         });
       } else {
@@ -82,10 +73,7 @@ export class CalendarFormComponent implements OnInit {
           this.calendar = createdCalendar;
           this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
               console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
-            }, error => {
-            },
-            () => {
-              this.goBack();
+              this.router.navigate([`/calendar/${this.calendar.id}`])
             });
         });
       }

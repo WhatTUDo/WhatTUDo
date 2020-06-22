@@ -7,7 +7,7 @@ export class CalendarBase {
   /** Change view… variables to configure: */
   /** number of rows. */
   viewBeginningAtRow = 1;
-  viewEndingAtRow = 64;
+  viewEndingAtRow = 65;
   viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
 
   /** when the start and end of the grid represents. */
