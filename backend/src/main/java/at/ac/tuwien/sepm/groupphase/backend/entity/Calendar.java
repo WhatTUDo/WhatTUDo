@@ -39,6 +39,10 @@ public class Calendar extends BaseEntity {
     @Lob
     private Byte[] coverImage;
 
+    @ToString.Exclude
+    @OneToMany(mappedBy = "calendar", orphanRemoval = true)
+    private List<Subscription> subscriptions = new ArrayList<>();
+
     public Calendar(String name, List<Organization> organizations, String description) {
         this.name = name;
         this.organizations = organizations;
