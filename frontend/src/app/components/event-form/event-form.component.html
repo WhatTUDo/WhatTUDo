@@ -9,7 +9,7 @@
     <div class="col-md-8">
       <img class="event-promo-image"
            src="{{globals.backendUri + calendarEvent.coverImageUrl}}">
-      <form *ngIf="calendarEvent">
+      <form *ngIf="calendarEvent" (ngSubmit)="uploadImage()">
         <label for="event-promo-image-upload">
           PromoImage
         </label>
