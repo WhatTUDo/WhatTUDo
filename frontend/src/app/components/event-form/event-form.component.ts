@@ -266,7 +266,7 @@ export class EventFormComponent implements OnInit {
   //fixme: this is still not reliable!
   uploadImage() {
     if (this.selectedImage === null) return;
-    this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe(resp => {
+    this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe((resp) => {
       // @ts-ignore
       if (resp.url != null) {
         // @ts-ignore

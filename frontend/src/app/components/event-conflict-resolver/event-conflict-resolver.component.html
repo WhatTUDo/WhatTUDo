@@ -7,10 +7,10 @@
   <app-promo-event-list [eventList]="getSortedCollisionEvents()"></app-promo-event-list>
   <h4>Alternative Dates</h4>
   <form (ngSubmit)="onSubmit()" class="alternative-date-picker">
-    <label *ngFor="let reducedEvent of getEventListWithSuggestedDate(); let i = index;">
-      <input type="radio" name="newEvent" [value]="i" (click)="onSelect(i)" [checked]="i === selectedDateIndex">
-      {{getEventDateAndTimeString(reducedEvent)}}
-    </label>
+    <div class="alternative-date-option" *ngFor="let reducedEvent of getEventListWithSuggestedDate(); let i = index;">
+      <input type="radio" name="newEvent" id="alt-date-{{i}}" [value]="i" (click)="onSelect(i)" [checked]="i === selectedDateIndex">
+      <label for="alt-date-{{i}}">{{getEventDateAndTimeString(reducedEvent)}}</label>
+    </div>
     <button type="submit" [disabled]="selectedDateIndex === null">Update</button>
   </form>
 </div>

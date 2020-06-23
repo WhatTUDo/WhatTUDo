@@ -319,7 +319,7 @@ button, input[type=button] {
   }
 }
 
-input, select, textarea {
+input:not([type="radio"]), select, textarea {
   padding: 4pt;
 
   width: 100%;
