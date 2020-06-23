@@ -64,8 +64,8 @@ export class CalendarFormComponent implements OnInit {
           console.log("Updated calendar: ", observable);
         }, error => {
         }, () => {
-          this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
-            this.router.navigate([`/calendar/${this.calendar.id}`])
+          this.calendarService.updateCalendar(this.calendar).subscribe(responseCalendar => {
+            // this.router.navigate([`/calendar/${this.calendar.id}`])
           });
         });
       } else {
@@ -75,9 +75,9 @@ export class CalendarFormComponent implements OnInit {
           this.uploadImage();
           console.log("Created calendar: ", observable);
           this.calendar = createdCalendar;
-          this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
+          this.calendarService.updateCalendar(this.calendar).subscribe(responseCalendar => {
             console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
-            this.router.navigate([`/calendar/${this.calendar.id}`])
+            // this.router.navigate([`/calendar/${this.calendar.id}`])
           });
         });
       }
@@ -129,7 +129,7 @@ export class CalendarFormComponent implements OnInit {
 
   uploadImage() {
     if (!this.selectedImage) return;
-    this.organizationService.uploadOrganizationAvatar(this.calendar.id, this.selectedImage).subscribe(resp => {
+    this.calendarService.uploadCalendarAvatar(this.calendar.id, this.selectedImage).subscribe(resp => {
       // @ts-ignore
       this.calendar.coverImageUrl = resp.url;
     });

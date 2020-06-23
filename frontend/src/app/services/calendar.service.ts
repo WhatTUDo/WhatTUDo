@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {CalendarEvent} from '../dtos/calendar-event';
 import {Calendar} from '../dtos/calendar';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpRequest} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {CreateCalendar} from "../dtos/CreateCalendar";
 
@@ -50,10 +50,22 @@ export class CalendarService {
     return this.httpClient.delete<Calendar>(url);
   }
 
-  updateOrganizations(calendar: Calendar): Observable<Calendar> {
+  updateCalendar(calendar: Calendar): Observable<Calendar> {
     console.log("Updating organizations: ", calendar.organizationIds)
     return this.httpClient.put<Calendar>(this.calendarBaseUri + "/organizations", calendar);
   }
 
 
+  uploadCalendarAvatar(calendarId: number, file: File) {
+    const formData: FormData = new FormData();
+
+    formData.append('imagefile', file);
+
+    const req = new HttpRequest('POST', `${this.calendarBaseUri}/${calendarId}/cover`,
+      formData, {
+        responseType: 'json'
+      });
+
+    return this.httpClient.request(req);
+  }
 }
