@@ -116,6 +116,7 @@ public class SimpleEventService implements EventService {
         try {
             Optional<Event> found = eventRepository.findById(event.getId());
             if (found.isPresent()) {
+                event.setCoverImage(found.get().getCoverImage());
                 validator.validateUpdateEvent(event);
                 Event savedEvent = eventRepository.save(event);
                 publisher.publishEvent(new EventUpdateEvent(savedEvent.getName()));
