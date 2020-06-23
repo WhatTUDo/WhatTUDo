@@ -12,6 +12,7 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.service.CommentService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
+import com.google.common.io.ByteStreams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -282,7 +284,13 @@ public class EventEndpoint {
                 byteArray = new byte[coverImageBlob.length];
                 for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
             } else {
-                byteArray = new byte[0];
+                try {
+                    InputStream stream = EventEndpoint.class.getResourceAsStream("/images/default-event-background.jpg");
+                    //noinspection UnstableApiUsage
+                    byteArray = ByteStreams.toByteArray(stream);
+                } catch (IOException e) {
+                    byteArray = new byte[0];
+                }
             }
 
             return byteArray;
