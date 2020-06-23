@@ -110,19 +110,21 @@ public interface OrganizationService {
 
     /**
      * add member/moderator to organization
-     * @param user to add to org
+     *
+     * @param user         to add to org
      * @param organization org to update user
-     * @param role role user will have in org
+     * @param role         role user will have in org
      * @throws ServiceException is thrown if something goes wrong during data processing.
      */
     Organization addMembership(ApplicationUser user, Organization organization, String role) throws ServiceException;
 
     /**
      * Sets the cover image
+     *
      * @param organization to set the cover to
-     * @param imageBlob - image blob
+     * @param imageBlob    - image blob
      * @return the changed calendar
-     * @throws ServiceException    is thrown if something goes wrong during data processing.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
      */
     Organization setCoverImage(Organization organization, byte[] imageBlob);
 }

@@ -34,6 +34,7 @@ public class SimpleLabelService implements LabelService {
     private final EventRepository eventRepository;
     private final Validator validator;
 
+
     @Override
     public Collection<Label> getAll()  {
 

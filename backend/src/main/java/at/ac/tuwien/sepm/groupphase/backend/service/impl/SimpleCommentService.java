@@ -48,9 +48,10 @@ public class SimpleCommentService implements CommentService {
         }
     }
 
+
+
     @Override
     public Comment findById(int id) {
-
         try {
             Optional<Comment> found = commentRepository.findById(id);
             if (found.isPresent()) {
@@ -83,7 +84,7 @@ public class SimpleCommentService implements CommentService {
             Event event = toDelete.getEvent();
 
             try {
-             //   event.getComments().remove(toDelete);
+                //   event.getComments().remove(toDelete);
                 eventRepository.save(event);
 
                 commentRepository.delete(toDelete);
@@ -107,7 +108,7 @@ public class SimpleCommentService implements CommentService {
             Comment result = comment;
 
             Event toSetComment = comment.getEvent();
-           // toSetComment.getComments().add(result);
+            // toSetComment.getComments().add(result);
 
             result = commentRepository.save(result);
 

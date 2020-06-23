@@ -10,17 +10,16 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
     /**
      * Gets all users
      *
-     * @return all users
+     * @return list of all users
      * @throws ServiceException is thrown if something goes wrong during data processing.
      */
-    List<ApplicationUser> getAllUsers();
+    List<ApplicationUser> getAllUsers() throws ServiceException;
 
     /**
      * Save new user into db.
@@ -55,21 +54,38 @@ public interface UserService extends UserDetailsService {
      */
     ApplicationUser changeUserPassword(String email, String currentPassword, String newPassword) throws ServiceException, ValidationException, NotFoundException;
 
+    //TODO:
+
+    /**
+     * @param user
+     * @param organization
+     * @param organizationRole
+     * @return
+     */
     ApplicationUser updateRoleInOrga(ApplicationUser user, Organization organization, OrganizationRole organizationRole);
 
+    //TODO:
+
+    /**
+     * @param user
+     * @param organization
+     * @return
+     */
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 
     /**
      * find user by id.
+     *
      * @param id of user that is being searched.
      * @return found user
      * @throws NotFoundException is thrown when user is not found.
-     * @throws ServiceException is thrown if something goes wrong during data processing.
+     * @throws ServiceException  is thrown if something goes wrong during data processing.
      */
     ApplicationUser findUserById(Integer id) throws NotFoundException, ServiceException;
 
     /**
      * Search user by name
+     *
      * @param name of user who user is looking for
      * @return found user
      * @throws ServiceException is thrown if something goes wrong during data processing.
@@ -78,6 +94,7 @@ public interface UserService extends UserDetailsService {
 
     /**
      * Get list of organization that user has a membership at.
+     *
      * @param userId id of user.
      * @return list of organizations where user has a membership
      * @throws ServiceException is thrown if something goes wrong during data processing.
