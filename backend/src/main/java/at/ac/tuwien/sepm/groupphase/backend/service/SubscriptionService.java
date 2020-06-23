@@ -64,6 +64,7 @@ public interface SubscriptionService {
      */
     List<Subscription> getSubscriptionsForCalendar(Calendar calendar) throws ServiceException;
 
+
     /**
      * Returns a List of ApplicationUser Entities who are subscribed to a given Calendar Entity.
      *

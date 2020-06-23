@@ -68,12 +68,12 @@ export class CalendarListComponent implements OnInit {
             return (cal.canEdit || cal.canDelete) && !this.subscribedCalendars.find(sc => sc.id === cal.id);
           }
         );
+        this.otherCalendars = calendars.filter(
+          cal => {
+            return !(cal.canEdit || cal.canDelete) && !this.subscribedCalendars.find(sc => sc.id === cal.id);
+          }
+        )
       })
-      this.otherCalendars = calendars.filter(
-        cal => {
-          return !(cal.canEdit || cal.canDelete) && !this.subscribedCalendars.find(sc => sc.id === cal.id);
-        }
-      )
     }).finally(() => {
       this.loading = false;
     });
@@ -237,20 +237,20 @@ export class CalendarListComponent implements OnInit {
 
   copyPersonalUrlToClipboard() {
     this.iCalService.getUserIcalToken().subscribe(icalToken => {
-      const icalUrl = this.globals.backendUri + "ical/user?token=" + icalToken;
+      const icalUrl = this.globals.backendUri + "/ical/user?token=" + icalToken;
       this.copyMessage(icalUrl)
       this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
     })
   }
 
   copyCalendarUrlToClipboard(calendarId: number) {
-    const icalUrl = this.globals.backendUri + "ical/calendar/" + calendarId;
+    const icalUrl = this.globals.backendUri + "/ical/calendar/" + calendarId;
     this.copyMessage(icalUrl)
     this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
   }
 
   copyAllCalendarsUrlToClipboard() {
-    const icalUrl = this.globals.backendUri + "ical/";
+    const icalUrl = this.globals.backendUri + "/ical/";
     this.copyMessage(icalUrl)
     this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
   }

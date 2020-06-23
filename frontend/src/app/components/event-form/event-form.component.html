@@ -13,7 +13,7 @@
         <label for="event-promo-image-upload">
           PromoImage
         </label>
-        <input type="file" name="event-promo-image-upload"
+        <input  (click)="imageChange()" type="file" name="event-promo-image-upload"
                id="event-promo-image-upload" accept="{{this.globals.allowedPromoImageMimeTypes.join(',')}}"
                (change)="selectImage($event)">
       </form>

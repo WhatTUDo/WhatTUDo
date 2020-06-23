@@ -11,7 +11,7 @@ import java.util.List;
 public interface LocationService {
 
     /**
-     * Find all labels in db.
+     * Find all locations in db.
      *
      * @return all locations
      * @throws ServiceException will be thrown if something goes wrong during data processing.
@@ -24,11 +24,11 @@ public interface LocationService {
      * @param id of the location entry.
      * @return the location entry
      * @throws ServiceException  if something goes wrong during data processing.
-     * @throws NotFoundException if no event with this id is saved in database
+     * @throws NotFoundException if no location with this id is saved in database
      */
-    Location findById(int id);
+    Location findById(int id) throws ServiceException, NotFoundException;
 
-     /**
+    /**
      * Save a new location into the db.
      *
      * @param location to saved
@@ -43,11 +43,11 @@ public interface LocationService {
      *
      * @param location to be updated into database with the new values.
      * @return the updated location entry.
-     * @throws NotFoundException   if no event with this id is saved in db
+     * @throws NotFoundException   if no location with this id is saved in db
      * @throws ServiceException    if something goes wrong during data processing.
      * @throws ValidationException is thrown when the given Location does not pass validation.
      */
-   Location update(Location location) throws ServiceException,ValidationException,NotFoundException;
+    Location update(Location location) throws ServiceException, ValidationException, NotFoundException;
 
     /**
      * Delete a single location from the db.
@@ -55,7 +55,7 @@ public interface LocationService {
      * @param id of the location to be deleted.
      * @throws ServiceException if something goes wrong during data processing.
      */
-    void delete(Integer id);
+    void delete(Integer id) throws ServiceException;
 
 
     /**

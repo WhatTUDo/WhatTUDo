@@ -28,7 +28,8 @@
     </div>
     <div class="form-group">
       <label for="calendar.description">Description: </label>
-      <input [(ngModel)]="calendar.description" class="form-control" id="calendar.description"
+      <input [(ngModel)]="calendar.description" [ngModelOptions]="{standalone: true}" class="form-control"
+             id="calendar.description"
              placeholder="Description">
     </div>
     <h3>Organizations</h3>

@@ -15,8 +15,14 @@ h3 {
   flex-wrap: wrap;
   padding: 0 8pt;
 
-  label {
-    display: block;
+  .alternative-date-option {
+    display: flex;
     width: 100%;
+    flex-wrap: nowrap;
+    align-items: baseline;
+
+    input[type="radio"] {
+      margin-right: 4pt;
+    }
   }
 }

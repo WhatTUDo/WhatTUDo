@@ -30,6 +30,8 @@ export class EventFormComponent implements OnInit {
   isUpdate: Boolean = false;
   showFeedback: Boolean = false;
 
+  imagechange: boolean = false;
+
   pickerConfig: any = {
     showSeconds: 0,
     stepHour: 1,
@@ -139,7 +141,8 @@ export class EventFormComponent implements OnInit {
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
             this.eventService.addLabels(this.ev_id, this.selectedLabels);
-            this.uploadImage();
+            if(this.imagechange){ this.uploadImage();}
+
             // this.router.navigate([`/event/${response.id}`])
           },
           err => {
@@ -156,7 +159,7 @@ export class EventFormComponent implements OnInit {
             this.calendarEvent = response;
 
             this.eventService.addLabels(response.id, this.selectedLabels);
-            this.uploadImage();
+            if(this.imagechange){ this.uploadImage();}
             // this.router.navigate([`/event/${response.id}`])
           },
           err => {
@@ -214,6 +217,10 @@ export class EventFormComponent implements OnInit {
     return true;
   }
 
+  imageChange(){
+    this.imagechange = true;
+  }
+
   saveLocationToEvent(location: Location) {
     if (location) {
       this.locationService.saveLocation(location).subscribe((location) => {
@@ -266,11 +273,12 @@ export class EventFormComponent implements OnInit {
   //fixme: this is still not reliable!
   uploadImage() {
     if (this.selectedImage === null) return;
-    this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe(resp => {
+    this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe((resp) => {
       // @ts-ignore
-      if (resp.url != null) {
+      if (resp?.url != null) {
         // @ts-ignore
         this.calendarEvent.coverImageUrl = resp.url;
+        console.log(this.calendarEvent.coverImageUrl);
       }
     });
   }

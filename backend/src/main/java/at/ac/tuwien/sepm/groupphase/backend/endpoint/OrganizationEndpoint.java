@@ -147,7 +147,8 @@ public class OrganizationEndpoint {
     }
 
     @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
-    // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
+    // We can use the ID instead of the DTO
+    // TODO: Check if other organization allow it (maybe invite system?)
     @PutMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -165,7 +166,8 @@ public class OrganizationEndpoint {
     }
 
     @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
-    // We can use the ID instead of the DTO TODO: Check if other organization allow it (maybe invite system?)
+    // We can use the ID instead of the DTO
+    // TODO: Check if other organization allow it (maybe invite system?)
     @DeleteMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
