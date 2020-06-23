@@ -30,6 +30,8 @@ export class EventFormComponent implements OnInit {
   isUpdate: Boolean = false;
   showFeedback: Boolean = false;
 
+  imagechange: boolean = false;
+
   pickerConfig: any = {
     showSeconds: 0,
     stepHour: 1,
@@ -139,7 +141,8 @@ export class EventFormComponent implements OnInit {
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
             this.eventService.addLabels(this.ev_id, this.selectedLabels);
-            this.uploadImage();
+            if(this.imagechange){ this.uploadImage();}
+
             // this.router.navigate([`/event/${response.id}`])
           },
           err => {
@@ -156,7 +159,7 @@ export class EventFormComponent implements OnInit {
             this.calendarEvent = response;
 
             this.eventService.addLabels(response.id, this.selectedLabels);
-            this.uploadImage();
+            if(this.imagechange){ this.uploadImage();}
             // this.router.navigate([`/event/${response.id}`])
           },
           err => {
@@ -212,6 +215,10 @@ export class EventFormComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  imageChange(){
+    this.imagechange = true;
   }
 
   saveLocationToEvent(location: Location) {
@@ -271,6 +278,7 @@ export class EventFormComponent implements OnInit {
       if (resp?.url != null) {
         // @ts-ignore
         this.calendarEvent.coverImageUrl = resp.url;
+        console.log(this.calendarEvent.coverImageUrl);
       }
     });
   }
