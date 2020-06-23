@@ -73,11 +73,14 @@ export class EventFormComponent implements OnInit {
           this.isUpdate = true;
           this.getEventLabels(id);
           this.ev_id = id;
-          this.calendarEvent.coverImageUrl = globals.backendUri + this.calendarEvent.coverImageUrl;
 
-          this.locationService.getLocation(event.locationId).subscribe(location => {
-            this.location = location;
-          })
+          if (event.locationId) {
+            this.locationService.getLocation(event.locationId).subscribe(location => {
+              this.location = location;
+            })
+          } else {
+            this.location = new Location(null, null, null, null, null, null);
+          }
         }
       });
     } else {
