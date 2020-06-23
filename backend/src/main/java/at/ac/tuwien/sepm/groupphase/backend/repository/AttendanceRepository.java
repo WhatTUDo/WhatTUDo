@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface AttendanceRepository extends JpaRepository<AttendanceStatus, Integer> {
+
     /**
      * Find all event that user will be attending/declining or is interested  in.
      *
@@ -25,6 +26,5 @@ public interface AttendanceRepository extends JpaRepository<AttendanceStatus, In
      * @return list of all statuses that contain event.
      */
     List<AttendanceStatus> getByEvent(Event event);
-
 
 }

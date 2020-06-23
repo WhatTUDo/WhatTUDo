@@ -73,7 +73,7 @@ public class SimpleEventService implements EventService {
         }
     }
 
-    //FIXME: add NotFoundException wenn leer zurückkommt?
+    //TODO: add NotFoundException wenn leer zurückkommt?
     @Override
     public List<Event> findByName(String name) {
         try {

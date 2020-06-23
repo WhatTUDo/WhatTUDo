@@ -68,11 +68,11 @@ public interface CalendarService {
     List<Calendar> findByName(String name) throws ServiceException;
 
     /**
-     * TODO: Updates a Calendar with the given Organization Entities. Also updates the Calendar data for Organization items.
+     * Updates a Calendar with the given Organization Entities. Also updates the Calendar data for Organization items.
      *
-     * @param calendar
-     * @param organizations
-     * @return
+     * @param calendar      calendar to be updated with new organizations
+     * @param organizations List of organizations the calendar is managed by.
+     * @return the updated calendar-entity
      * @throws ServiceException    is thrown if something goes wrong during data processing.
      * @throws ValidationException is thrown if the Calendar Entity does not pass validation.
      * @throws NotFoundException   is thrown if the Calendar Entity Id is not found in Database.
@@ -81,10 +81,11 @@ public interface CalendarService {
 
     /**
      * Sets the cover image
-     * @param calendar to set the cover to
+     *
+     * @param calendar  to set the cover to
      * @param imageBlob - image blob
      * @return the changed calendar
-     * @throws ServiceException    is thrown if something goes wrong during data processing.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
      */
     Calendar setCoverImage(Calendar calendar, byte[] imageBlob);
 }

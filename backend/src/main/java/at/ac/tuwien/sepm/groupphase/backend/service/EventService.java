@@ -1,10 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
-import org.hibernate.criterion.Example;
 
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
@@ -121,8 +118,8 @@ public interface EventService {
     /**
      * Returns a List of Events belonging to a Calendar with the given Id.
      *
-     * @param id
-     * @return List of Events
+     * @param id id of the calendar
+     * @return List of all Events in the calendar
      * @throws ServiceException will be thrown if something goes wrong during data processing.
      */
     List<Event> getByCalendarId(Integer id) throws ServiceException;

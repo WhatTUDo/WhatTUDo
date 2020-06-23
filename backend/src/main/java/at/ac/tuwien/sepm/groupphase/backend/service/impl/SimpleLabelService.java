@@ -38,13 +38,13 @@ public class SimpleLabelService implements LabelService {
     private final EventRepository eventRepository;
     private final Validator validator;
 
-    //FIXME: catch persistance throw service
+    //TODO: catch persistance throw service
     @Override
     public Collection<Label> getAll() {
         return labelRepository.findAll();
     }
 
-    //FIXME: catch persistance throw service
+    //TODO: catch persistance throw service
     @Override
     public Label findById(int id) {
         Optional<Label> found = labelRepository.findById(id);

@@ -39,20 +39,20 @@ public class SimpleCommentService implements CommentService {
     private final UserRepository userRepository;
     private final Validator validator;
 
-    //FIXME: catch persistance throw service
+    //TODO: FIXME: catch persistance throw service
     @Override
     public Collection<Comment> getAll() {
         return commentRepository.findAll();
     }
 
-    //FIXME: catch persistance throw service
+    //TODO: FIXME: catch persistance throw service
     @Override
     public Comment findById(int id) {
         Optional<Comment> found = commentRepository.findById(id);
         if (found.isPresent()) {
             Comment comment = found.get();
 
-            //TODO  publisher.publishEvent(new EventFindComment(organization.getName())); ???
+            //TODO:  publisher.publishEvent(new EventFindComment(organization.getName())); ???
             return comment;
         } else {
             throw new NotFoundException("No comment found with id " + id);
@@ -75,7 +75,7 @@ public class SimpleCommentService implements CommentService {
             Event event = toDelete.getEvent();
 
             try {
-             //   event.getComments().remove(toDelete);
+                //   event.getComments().remove(toDelete);
                 eventRepository.save(event);
 
                 commentRepository.delete(toDelete);
@@ -99,7 +99,7 @@ public class SimpleCommentService implements CommentService {
             Comment result = comment;
 
             Event toSetComment = comment.getEvent();
-           // toSetComment.getComments().add(result);
+            // toSetComment.getComments().add(result);
 
             result = commentRepository.save(result);
 
