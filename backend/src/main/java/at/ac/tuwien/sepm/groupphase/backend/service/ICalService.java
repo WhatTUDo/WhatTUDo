@@ -5,30 +5,24 @@ import biweekly.ICalendar;
 import org.hibernate.service.spi.ServiceException;
 
 public interface ICalService {
-
-    //TODO:
-
     /**
-     * @return
-     * @throws ServiceException
+     * Gets all existing calendars as iCal condensed into one calendar
+     * @return ICalendar representation
+     * @throws ServiceException if the connection to the database fails
      */
     ICalendar getAllCalendars() throws ServiceException;
 
-    //TODO:
-
     /**
-     * @param id
-     * @return
-     * @throws ServiceException
+     * Gets a calendar as iCal
+     * @return ICalendar representation
+     * @throws ServiceException if the connection to the database fails
      */
     ICalendar getCalendar(Integer id) throws ServiceException;
 
-    //TODO:
-
     /**
-     * @param user
-     * @return
-     * @throws ServiceException
+     * Gets all calendars for an user as iCal condensed into one calendar
+     * @return ICalendar representation
+     * @throws ServiceException if the connection to the database fails
      */
     ICalendar getCalendarsForUser(ApplicationUser user) throws ServiceException;
 }
