@@ -96,7 +96,7 @@ export class CalendarComponent extends CalendarBase implements OnInit {
   }
 
   copyCalendarUrlToClipboard(calendarId: number) {
-    const icalUrl = this.globals.backendUri + "ical/calendar/" + calendarId;
+    const icalUrl = this.globals.backendUri + "/ical/calendar/" + calendarId;
     this.copyMessage(icalUrl)
     this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
   }
