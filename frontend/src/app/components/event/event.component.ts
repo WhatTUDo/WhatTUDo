@@ -27,7 +27,6 @@ import {LocationService} from "../../services/location.service";
 })
 export class EventComponent implements OnInit {
 
-
   id: number;
   user: User = null;
   userParticipationStatus: AttendanceStatusPossibilities = undefined;
@@ -77,6 +76,7 @@ export class EventComponent implements OnInit {
         this.user = user;
         this.attendanceStatusService.getStatus(user.id, id).subscribe((status: AttendanceDto) => {
             this.attendanceStatus = status;
+
             this.userParticipationStatus = status === null ? null : this.statusValues[status.status];
           }
         );
@@ -117,7 +117,7 @@ export class EventComponent implements OnInit {
       this.newEventComment.text = input;
 
       this.eventService.createComment(this.newEventComment).subscribe((comments) => {
-        comments.updateDateTime = new Date(comments.updateDateTime)
+        comments.updateDateTime = new Date(comments.updateDateTime);
         this.comments.push(comments);
       });
     }
@@ -163,6 +163,7 @@ export class EventComponent implements OnInit {
   getParticipants() {
     this.attendanceStatusService.getUsersAttendingEvent(this.id).subscribe((users: User[]) => {
       this.participants.attending = users;
+
     });
     this.attendanceStatusService.getUsersInterestedInEvent(this.id).subscribe((users: User[]) => {
       this.participants.interested = users;

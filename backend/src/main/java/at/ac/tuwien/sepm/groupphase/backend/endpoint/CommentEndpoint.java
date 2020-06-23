@@ -51,7 +51,7 @@ public class CommentEndpoint {
         }
     }
 
-    //@PreAuthorize("hasRole('MOD')")
+    @PreAuthorize("hasPermission(#id, 'COMMENT', 'MOD')")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")
