@@ -158,7 +158,7 @@ public class LocationEndpointTest {
         LocationDto returnedLocation1 = endpoint.create(locationDto1);
         LocationDto returnedLocation2 = endpoint.create(locationDto2);
 
-        List<LocationDto> foundLocation = endpoint.searchLocationNames("Test");
+        List<LocationDto> foundLocation = endpoint.searchLocationNames("Test N");
         assert (foundLocation.size() > 0);
         assertEquals(locationDto1.getName(), foundLocation.get(0).getName());
 
