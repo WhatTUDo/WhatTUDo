@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.ICalService;
 import at.ac.tuwien.sepm.groupphase.backend.service.SubscriptionService;
+import at.ac.tuwien.sepm.groupphase.backend.util.ICalMapper;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
 import biweekly.io.TimezoneAssignment;
@@ -29,12 +30,13 @@ import java.util.stream.Collectors;
 public class SimpleICalService implements ICalService {
     private final CalendarService calendarService;
     private final SubscriptionService subscriptionService;
+    private final ICalMapper iCalMapper;
 
     @Override
     @Transactional
     public ICalendar getAllCalendars() throws ServiceException {
         List<Calendar> calendars = calendarService.findAll();
-        return toCalendar("WhatTUDo", flatMapEvents(calendars));
+        return iCalMapper.mapCalendar("WhatTUDo", iCalMapper.flatMapEvents(calendars));
     }
 
     @Override
@@ -42,44 +44,15 @@ public class SimpleICalService implements ICalService {
     public ICalendar getCalendar(Integer id) throws ServiceException {
         Calendar calendar = calendarService.findById(id);
         List<VEvent> events = calendar.getEvents().stream()
-            .map(this::mapEvent)
+            .map(iCalMapper::mapEvent)
             .collect(Collectors.toList());
-        return toCalendar(calendar.getName(), events);
+        return iCalMapper.mapCalendar(calendar.getName(), events);
     }
 
     @Override
     @Transactional
     public ICalendar getCalendarsForUser(ApplicationUser user) throws ServiceException {
         List<Calendar> calendars = subscriptionService.getSubsribedCalendarsForUser(user);
-        return toCalendar("WhatTUDo " + user.getName(), flatMapEvents(calendars));
-    }
-
-    @Transactional
-    ICalendar toCalendar(String name, List<VEvent> events) {
-        ICalendar iCalendar = new ICalendar();
-        TimezoneInfo tzinfo = new TimezoneInfo();
-        tzinfo.setDefaultTimezone(TimezoneAssignment.download(TimeZone.getDefault(), true));
-        iCalendar.setTimezoneInfo(tzinfo);
-        iCalendar.setProductId("WhatTUDo");
-        iCalendar.setName(name);
-        events.forEach(iCalendar::addEvent);
-        return iCalendar;
-    }
-
-    @Transactional
-    VEvent mapEvent(Event event) {
-        VEvent vEvent = new VEvent();
-        vEvent.setUid(event.getId().toString());
-        vEvent.setSummary(event.getName());
-        vEvent.setDateStart(Date.from(event.getStartDateTime().atZone(ZoneId.systemDefault()).toInstant()));
-        vEvent.setDateEnd(Date.from(event.getEndDateTime().atZone(ZoneId.systemDefault()).toInstant()));
-        return vEvent;
-    }
-
-    @Transactional
-    List<VEvent> flatMapEvents(List<Calendar> calendars) {
-        return calendars.stream()
-            .flatMap(calendar -> calendar.getEvents().stream().map(this::mapEvent))
-            .collect(Collectors.toList());
+        return iCalMapper.mapCalendar("WhatTUDo " + user.getName(), iCalMapper.flatMapEvents(calendars));
     }
 }
