@@ -1,12 +1,8 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
-import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.event.EventDeleteEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
@@ -38,22 +34,29 @@ public class SimpleLabelService implements LabelService {
     private final EventRepository eventRepository;
     private final Validator validator;
 
-    //FIXME: catch persistance throw service
     @Override
-    public Collection<Label> getAll() {
+    public Collection<Label> getAll()  {
+
+        try {
+
         return labelRepository.findAll();
+    } catch (PersistenceException e) {
+        throw new ServiceException(e.getMessage());
+    }
     }
 
-    //FIXME: catch persistance throw service
     @Override
     public Label findById(int id) {
-        Optional<Label> found = labelRepository.findById(id);
-        if (found.isPresent()) {
-            Label label = found.get();
-            //TODO  publisher.publishEvent(new EventFindEvent(organization.getName()));
-            return label;
-        } else {
-            throw new NotFoundException("No label found with id " + id);
+        try {
+            Optional<Label> found = labelRepository.findById(id);
+            if (found.isPresent()) {
+                Label label = found.get();
+                return label;
+            } else {
+                throw new NotFoundException("No label found with id " + id);
+            }
+        }catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
     }
 
@@ -67,7 +70,6 @@ public class SimpleLabelService implements LabelService {
             } else {
                 throw new ValidationException("Id is not defined");
             }
-            //   publisher.publishLabel(new EventDeleteLabel(this.findById(id).getName())); sth like this?
 
             Label toDelete = this.findById(id);
             List<Event> elist = toDelete.getEvents();
@@ -101,8 +103,6 @@ public class SimpleLabelService implements LabelService {
         try {
             Label result = labelRepository.save(label);
 
-
-            //   publisher.publishEvent(new EventCreateLabel(label.getName())); ???
             return result;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -122,7 +122,6 @@ public class SimpleLabelService implements LabelService {
             toUpdate.setEvents(this.findById(label.getId()).getEvents());
 
 
-            //    publisher.publishEvent(new EventUpdateLabel(label.getName()));
             return labelRepository.save(toUpdate);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);

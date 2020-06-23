@@ -2,10 +2,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Comment;
-import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.event.EventDeleteEvent;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CommentRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
@@ -39,25 +37,35 @@ public class SimpleCommentService implements CommentService {
     private final UserRepository userRepository;
     private final Validator validator;
 
-    //FIXME: catch persistance throw service
+
+
     @Override
     public Collection<Comment> getAll() {
-        return commentRepository.findAll();
-    }
-
-    //FIXME: catch persistance throw service
-    @Override
-    public Comment findById(int id) {
-        Optional<Comment> found = commentRepository.findById(id);
-        if (found.isPresent()) {
-            Comment comment = found.get();
-
-            //TODO  publisher.publishEvent(new EventFindComment(organization.getName())); ???
-            return comment;
-        } else {
-            throw new NotFoundException("No comment found with id " + id);
+        try {
+            return commentRepository.findAll();
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
         }
     }
+
+    @Override
+    public Comment findById(int id) {
+
+        try {
+            Optional<Comment> found = commentRepository.findById(id);
+            if (found.isPresent()) {
+                Comment comment = found.get();
+
+                return comment;
+            } else {
+                throw new NotFoundException("No comment found with id " + id);
+            }
+        }
+        catch (PersistenceException e) {
+                throw new ServiceException(e.getMessage());
+            }
+        }
+
 
 
     @Transactional
