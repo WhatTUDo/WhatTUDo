@@ -14,6 +14,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import com.google.common.io.ByteStreams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -187,7 +189,13 @@ public class CalendarEndpoint {
                 byteArray = new byte[coverImageBlob.length];
                 for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
             } else {
-                byteArray = new byte[0];
+                try {
+                    InputStream stream = CalendarEndpoint.class.getResourceAsStream("/images/default-calendar-background.jpg");
+                    //noinspection UnstableApiUsage
+                    byteArray = ByteStreams.toByteArray(stream);
+                } catch (IOException e) {
+                    byteArray = new byte[0];
+                }
             }
             return byteArray;
         } catch (ServiceException e) {
