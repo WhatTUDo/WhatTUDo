@@ -21,9 +21,15 @@
 
 .grid-one-sixth {
   display: grid;
-  height: 100%;
   grid-template-columns: repeat(6, 1fr);
   grid-template-rows: 16pt 36pt 1fr;
+
+  height: $mobile-object-full-height;
+
+  @media (screen and min-width: $mobile-breakpoint) {
+    min-height: $mobile-object-full-height;
+    height: $desktop-object-full-height;
+  }
 }
 
 .week-day-label {
@@ -86,8 +92,9 @@ $swim-land-border: 2pt dotted transparentize($gray, 0.5);
 
   @media (screen and min-width: $mobile-breakpoint) {
     min-height: $mobile-object-full-height;
-    height: $desktop-object-full-height;
+    height: 100%
   }
+
 
   &.weekend-lane-container {
     display: flex;
