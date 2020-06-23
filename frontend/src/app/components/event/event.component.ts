@@ -27,7 +27,6 @@ import {LocationService} from "../../services/location.service";
 })
 export class EventComponent implements OnInit {
 
-
   id: number;
   user: User = null;
   userParticipationStatus: AttendanceStatusPossibilities = undefined;

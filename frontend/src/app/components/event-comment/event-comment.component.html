@@ -11,9 +11,10 @@
       <fa-icon [icon]="faClock"></fa-icon>&ensp;{{getDisplayDateAndTimeStringFromDate(comment.updateDateTime)}}
     </div>
 
-    <div *ngIf="user === author" class="comment-buttons">
-      <fa-icon [icon]="faEdit" (click)="changeEditCommentState()" class="clickable no-hover-enlarge"></fa-icon>
-      <fa-icon [icon]="faTimesCircle" (click)="deleteComment()" class="clickable no-hover-enlarge"></fa-icon>
+    {{this.canEdit}}
+    <div class="comment-buttons">
+      <fa-icon [icon]="faEdit" *ngIf="this.user === this.author" (click)="changeEditCommentState()" class="clickable no-hover-enlarge"></fa-icon>
+      <fa-icon [icon]="faTimesCircle" *ngIf="this.canEdit" (click)="deleteComment()" class="clickable no-hover-enlarge"></fa-icon>
     </div>
   </div>
 
