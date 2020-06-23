@@ -237,20 +237,20 @@ export class CalendarListComponent implements OnInit {
 
   copyPersonalUrlToClipboard() {
     this.iCalService.getUserIcalToken().subscribe(icalToken => {
-      const icalUrl = this.globals.backendUri + "/ical/user?token=" + icalToken;
+      const icalUrl = this.globals.backendUri + "/ical/user.ics?token=" + icalToken;
       this.copyMessage(icalUrl)
       this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
     })
   }
 
   copyCalendarUrlToClipboard(calendarId: number) {
-    const icalUrl = this.globals.backendUri + "/ical/calendar/" + calendarId;
+    const icalUrl = this.globals.backendUri + "/ical/" + calendarId + "/calendar.ics";
     this.copyMessage(icalUrl)
     this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
   }
 
   copyAllCalendarsUrlToClipboard() {
-    const icalUrl = this.globals.backendUri + "/ical/";
+    const icalUrl = this.globals.backendUri + "/ical/all-calendars.ics";
     this.copyMessage(icalUrl)
     this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
   }

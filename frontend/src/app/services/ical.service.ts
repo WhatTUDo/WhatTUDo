@@ -7,7 +7,7 @@ import {Globals} from '../global/globals';
   providedIn: 'root'
 })
 export class ICalService {
-  private iCalBaseUri: string = this.globals.backendUri + 'ical';
+  private iCalBaseUri: string = this.globals.backendUri + '/ical';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }

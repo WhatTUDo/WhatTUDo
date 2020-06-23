@@ -32,7 +32,7 @@ public class ICalEndpoint {
     private final JwtTokenizer jwtTokenizer;
 
     @PreAuthorize("permitAll()")
-    @GetMapping(value = "/", produces = "text/calendar")
+    @GetMapping(value = "/all-calendars.ics", produces = "text/calendar")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Get all calendars")
@@ -61,7 +61,7 @@ public class ICalEndpoint {
     }
 
     @PreAuthorize("permitAll()") // This endpoint does not use our normal authenticator, because the token will be passed in the URL instead
-    @GetMapping(value = "/user", produces = "text/calendar")
+    @GetMapping(value = "/user.ics", produces = "text/calendar")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Get calendars for user")
@@ -78,7 +78,7 @@ public class ICalEndpoint {
     }
 
     @PreAuthorize("permitAll()")
-    @GetMapping(value = "/calendar/{id}", produces = "text/calendar")
+    @GetMapping(value = "/{id}/calendar.ics", produces = "text/calendar")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Get single calendar")
