@@ -7,6 +7,7 @@ import {AuthService} from '../../services/auth.service';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {FeedbackService} from '../../services/feedback.service';
 import {ChangeUserPasswordDto} from '../../dtos/ChangeUserPasswordDto';
+import {AuthRequest} from '../../dtos/auth-request';
 
 @Component({
   selector: 'app-user-form',
@@ -70,8 +71,9 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
       }
       this.userService.putUser(this.user.name,newuser).subscribe((user: any) => {
         this.user = user;
-        this.feedbackService.displaySuccess('Successfully updated', 'Successfully updated');
-
+        this.feedbackService.displaySuccess('Successfully updated', 'Successfully updated. Please Log in again!');
+        this.authService.logoutUser();
+        this.router.navigate(['/']);
       }, err => {
         console.warn(err);
         this.feedbackService.displayError('Error', err.error.message);
@@ -84,7 +86,9 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
       console.log(this.user.name);
       this.userService.changePwd(new ChangeUserPasswordDto(this.user.name, this.user.email, this.changePwdForm.controls.currentPassword.value, this.changePwdForm.controls.newPassword.value)).subscribe((user: User) => {
         this.user = user;
-        this.feedbackService.displaySuccess('Password changed', 'Password changed');
+        this.feedbackService.displaySuccess('Password changed', 'Password changed. Please log in again!');
+        this.authService.logoutUser();
+        this.router.navigate(['/']);
 
       }, err => {
         console.warn(err);
