@@ -7,6 +7,7 @@ import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCale
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarRemoveEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationEditEvent;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotAllowedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
@@ -188,6 +189,11 @@ public class SimpleOrganizationService implements OrganizationService {
         try {
             OrganizationMembership organizationMembership = new OrganizationMembership(organization, user, OrganizationRole.valueOf(role));
             Set<OrganizationMembership> organizationMemberships = new HashSet<>(user.getMemberships());
+            for (OrganizationMembership membership: organizationMemberships) {
+                if(membership.getOrganization().getId().equals(organization.getId())){
+                    throw new NotAllowedException("User already has a role in the organization.");
+                }
+            }
             organizationMemberships.add(organizationMembership);
             user.setMemberships(organizationMemberships);
             organizationMemberships = organization.getMemberships();
