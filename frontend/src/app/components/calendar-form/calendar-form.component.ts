@@ -1,15 +1,15 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {CalendarService} from '../../services/calendar.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {OrganizationService} from '../../services/organization.service';
-import {MatSelectModule} from '@angular/material/select';
-import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
 import {Calendar} from '../../dtos/calendar';
 import {Organization} from '../../dtos/organization';
 import {observable} from "rxjs";
 import {CreateCalendar} from "../../dtos/CreateCalendar";
+import {Globals} from "../../global/globals";
+import {FeedbackService} from "../../services/feedback.service";
 
 @Component({
   selector: 'app-calendar-form',
@@ -22,19 +22,21 @@ export class CalendarFormComponent implements OnInit {
 
   calendar: Calendar;
 
-  title: String;
-
   isUpdate = true;
+  orgsSelect: string;
 
   organizations: Array<Organization>;
   faChevronLeft = faChevronLeft;
+  selectedImage: File;
 
   constructor(
     private route: ActivatedRoute,
     private calendarService: CalendarService,
     private organizationService: OrganizationService,
     private location: Location,
-    private select: MatSelectModule
+    public globals: Globals,
+    private feedbackService: FeedbackService,
+    public router: Router
   ) {
   }
 
@@ -46,13 +48,13 @@ export class CalendarFormComponent implements OnInit {
   getCalendar(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id != 0) {
-      this.title = "UPDATE CALENDAR";
       this.isUpdate = true;
+      this.orgsSelect = "You can select one or more Organizations in which you are a Moderator.";
       this.calendarService.getCalendarById(id)
         .subscribe(calendar => this.calendar = calendar);
     } else {
-      this.title = "CREATE NEW CALENDAR";
       this.isUpdate = false;
+      this.orgsSelect = "You can select one Organization in which you are a Moderator. Afterwards you can add more by editing the calendar.";
       this.calendar = new Calendar(0, null, [], []);
     }
 
@@ -61,32 +63,33 @@ export class CalendarFormComponent implements OnInit {
   onSubmit(): void {
     if (this.validateFormData(this.calendar)) {
       if (this.isUpdate) {
-        this.calendarService.editCalendar(this.calendar).subscribe(observable => {
+        this.calendarService.editCalendar(this.calendar).subscribe((observable) => {
+          this.calendar = observable;
+          this.uploadImage();
           console.log("Updated calendar: ", observable);
         }, error => {
         }, () => {
-          this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
-            console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
-          }, error => {
-          }, () => {
-            this.goBack();
+          this.calendarService.updateCalendar(this.calendar).subscribe(responseCalendar => {
+            this.feedbackService.displaySuccess("Edits Saved", "You updated this Calendar!");
+            window.location.replace("/calendar-list");
           });
         });
       } else {
         let createCalendar = new CreateCalendar(this.calendar.name, this.calendar.organizationIds[0]);
         this.calendarService.addCalendar(createCalendar).subscribe((createdCalendar: Calendar) => {
+          this.calendar = createdCalendar;
+          this.uploadImage();
           console.log("Created calendar: ", observable);
           this.calendar = createdCalendar;
-          this.calendarService.updateOrganizations(this.calendar).subscribe(responseCalendar => {
-              console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
-            }, error => {
-            },
-            () => {
-              this.goBack();
-            });
+          this.calendarService.updateCalendar(this.calendar).subscribe(responseCalendar => {
+            this.feedbackService.displaySuccess("Saved Calendar", "You saved this Calendar!");
+            console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
+            // this.router.navigate([`/calendar/${this.calendar.id}`])
+            window.location.replace("/calendar-list");
+
+          });
         });
       }
-
     }
   }
 
@@ -126,6 +129,18 @@ export class CalendarFormComponent implements OnInit {
   private compare(id1: number, id2: number): boolean {
     console.log("compared" + id1 + " with " + id2);
     return id1 && id2 ? id1 === id2 : false;
+  }
+
+  selectImage(event) {
+    this.selectedImage = event.target.files.item(0);
+  }
+
+  uploadImage() {
+    if (!this.selectedImage) return;
+    this.calendarService.uploadCalendarAvatar(this.calendar.id, this.selectedImage).subscribe(resp => {
+      // @ts-ignore
+      this.calendar.coverImageUrl = resp.url;
+    });
   }
 
 }

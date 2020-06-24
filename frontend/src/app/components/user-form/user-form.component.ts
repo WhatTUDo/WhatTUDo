@@ -7,6 +7,7 @@ import {AuthService} from '../../services/auth.service';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {FeedbackService} from '../../services/feedback.service';
 import {ChangeUserPasswordDto} from '../../dtos/ChangeUserPasswordDto';
+import {AuthRequest} from '../../dtos/auth-request';
 
 @Component({
   selector: 'app-user-form',
@@ -59,18 +60,20 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
   }
 
   public update() {
+    let newuser : User = new User(this.user.id, "", "");
     if (this.updateForm.valid) {
       if (this.updateForm.controls.username) {
         if(this.updateForm.controls.username.value != ""){
-        this.user.name = this.updateForm.controls.username.value;}
+        newuser.name = this.updateForm.controls.username.value;}
       } else if (this.updateForm.controls.email) {
         if(this.updateForm.controls.email.value != ""){
-          this.user.email = this.updateForm.controls.email.value;}
+          newuser.email = this.updateForm.controls.email.value;}
       }
-      this.userService.putUser(this.user).subscribe((user: any) => {
+      this.userService.putUser(this.user.name,newuser).subscribe((user: any) => {
         this.user = user;
-        this.feedbackService.displaySuccess('Successfully updated', 'Successfully updated');
-
+        this.feedbackService.displaySuccess('Successfully updated', 'Successfully updated. Please Log in again!');
+        this.authService.logoutUser();
+        this.router.navigate(['/']);
       }, err => {
         console.warn(err);
         this.feedbackService.displayError('Error', err.error.message);
@@ -83,7 +86,9 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
       console.log(this.user.name);
       this.userService.changePwd(new ChangeUserPasswordDto(this.user.name, this.user.email, this.changePwdForm.controls.currentPassword.value, this.changePwdForm.controls.newPassword.value)).subscribe((user: User) => {
         this.user = user;
-        this.feedbackService.displaySuccess('Password changed', 'Password changed');
+        this.feedbackService.displaySuccess('Password changed', 'Password changed. Please log in again!');
+        this.authService.logoutUser();
+        this.router.navigate(['/']);
 
       }, err => {
         console.warn(err);

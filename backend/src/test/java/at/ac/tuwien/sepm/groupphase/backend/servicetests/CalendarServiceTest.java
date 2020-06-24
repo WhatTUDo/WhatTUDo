@@ -48,6 +48,16 @@ public class CalendarServiceTest {
     }
 
     @Test
+    public void saveNewCalendar_withDescription_returnsCalendar() {
+
+        Calendar calendar = new Calendar("save", Collections.singletonList(createOrga()), "Description");
+        Calendar saved = calendarService.save(calendar);
+        assertEquals("save", saved.getName());
+        assertEquals(calendar.getOrganizations(), saved.getOrganizations());
+        assertEquals("Description", saved.getDescription());
+    }
+
+    @Test
     public void findByIdAndName_returnsCreatedCalendar() {
         Calendar calendar = calendarService.save(new Calendar("find", Collections.singletonList(createOrga())));
         assertEquals(calendar.getName(), calendarService.findById(calendar.getId()).getName());

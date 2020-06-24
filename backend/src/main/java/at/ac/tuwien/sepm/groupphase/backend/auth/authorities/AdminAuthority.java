@@ -10,6 +10,6 @@ public class AdminAuthority implements GrantedAuthority {
 
     @Override
     public String getAuthority() {
-        return "SYSADMIN";
+        return "ROLE_SYSADMIN";
     }
 }

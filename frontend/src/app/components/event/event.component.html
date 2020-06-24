@@ -1,6 +1,6 @@
 <div *ngIf="calendarEvent">
   <div class="contextual-control">
-    <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+    <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
       [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
     <span>Event: {{calendarEvent.name}}</span>
   </div>
@@ -8,14 +8,15 @@
     <div>
       <div class="title-icon-button-combo">
         <h2>Event</h2>
-        <div class="icon-button clickable no-hover-enlarge no-shadow">
-          <fa-icon *ngIf="calendarEvent.canEdit" [icon]="faCog" class="clickable no-hover-enlarge no-shadow"
+        <div class="icon-button clickable no-hover-enlarge">
+          <fa-icon *ngIf="calendarEvent.canEdit" [icon]="faCog" class="clickable no-hover-enlarge"
                    routerLink="/form/event/{{id}}">
             Edit
           </fa-icon>
         </div>
       </div>
-      <div class="event-promo-container" [style.background-image]="'url('+getEventPromoImageLink(id)+')'">
+      <div class="event-promo-container mobile-full-width"
+           [style.background-image]="'url('+globals.backendUri+calendarEvent.coverImageUrl+')'">
         <div class="event-promo-details">
           <div class="event-time">{{getEventDateAndTimeString()}}</div>
           <div class="event-name">{{calendarEvent.name}}</div>
@@ -23,7 +24,7 @@
         </div>
       </div>
     </div>
-    <div class="details-stack">
+    <div class="details-stack" *ngIf="calendarEvent">
       <h2>Details</h2>
       <div id="label-container">
         <div *ngFor="let label of labels" class="label-item">
@@ -31,65 +32,91 @@
         </div>
       </div>
       <div>
-
-        <div class="participation-status grid-one-third also-on-mobile no-gap">
-          <div class="participation-status-item">
+        <div class="participation-status actions-one-third">
+          <div class="participation-status-item"
+               [style.color]="userParticipationStatus===AttendanceStatusPossibilities.ATTENDING?'var(--accent)':undefined">
             <div class="participation-count">{{participants.attending.length}}</div>
             <div class="participation-label">Attending</div>
           </div>
-          <div class="participation-status-item">
+          <div class="participation-status-item"
+               [style.color]="userParticipationStatus===AttendanceStatusPossibilities.INTERESTED?'var(--accent)':undefined">
             <div class="participation-count">{{participants.interested.length}}</div>
             <div class="participation-label">Interested</div>
           </div>
-          <div class="participation-status-item">
+          <div class="participation-status-item"
+               [style.color]="userParticipationStatus===AttendanceStatusPossibilities.DECLINED?'var(--accent)':undefined">
             <div class="participation-count">{{participants.declined.length}}</div>
             <div class="participation-label">Declined</div>
           </div>
         </div>
-        <div class="participation-button-container grid-one-third also-on-mobile no-gap">
-          <button (click)="participate(1)" class="button-blue btn-lg">Attend</button>
-          <button (click)="participate(2)" class="button-yellow btn-lg">Interested</button>
-          <button (click)="participate(0)" class="button-red btn-lg">Decline</button>
+        <div class="participation-button-container actions-one-third"
+             *ngIf="userParticipationStatus!==undefined && authService.isLoggedIn() && eventEndsAfterNow()">
+          <button *ngIf="userParticipationStatus !== AttendanceStatusPossibilities.ATTENDING"
+                  (click)="participate(AttendanceStatusPossibilities.ATTENDING)" class="button-blue">
+            Attend
+          </button>
+          <button *ngIf="userParticipationStatus === AttendanceStatusPossibilities.ATTENDING"
+                  (click)="resetParticipation()">
+            Reset
+          </button>
+          <button *ngIf="userParticipationStatus !== AttendanceStatusPossibilities.INTERESTED"
+                  (click)="participate(AttendanceStatusPossibilities.INTERESTED)" class="button-yellow">
+            Interested
+          </button>
+          <button *ngIf="userParticipationStatus === AttendanceStatusPossibilities.INTERESTED"
+                  (click)="resetParticipation()">
+            Reset
+          </button>
+          <button *ngIf="userParticipationStatus !== AttendanceStatusPossibilities.DECLINED"
+                  (click)="participate(AttendanceStatusPossibilities.DECLINED)" class="button-red">
+            Decline
+          </button>
+          <button *ngIf="userParticipationStatus === AttendanceStatusPossibilities.DECLINED"
+                  (click)="resetParticipation()">
+            Reset
+          </button>
         </div>
       </div>
-      <div class="calendar-info">
-        <div class="calendar-name clickable no-hover-enlarge no-shadow" routerLink="/calendar/{{calendar.id}}">
-          <fa-icon [icon]="faCalendar"></fa-icon>
-          {{calendar.name}}
+      <div class="calendar-info" *ngIf="calendar">
+        <div class="calendar-title clickable no-hover-enlarge" routerLink="/calendar/{{calendar.id}}">
+          <img alt="" class="avatar avatar-medium" src="{{globals.backendUri+calendar.coverImageUrl}}"
+               [ngClass]="getCalendarColor(calendar.id)">
+          <div class="calendar-name">
+            {{calendar.name}}
+          </div>
         </div>
+        <div class="calendar-description">{{calendar.description}}</div>
         <div class="calendar-organizations">
-          <div class="organization-info clickable no-hover-enlarge no-shadow" *ngFor="let org of calendarOrganizations"
+          <div class="organization-info clickable no-hover-enlarge" *ngFor="let org of calendarOrganizations"
                routerLink="/organization/{{org.id}}">
-            <img alt="" class="avatar avatar-medium" src="{{getOrganizationAvatarLink(org.id, 256)}}">
+            <img alt="" class="avatar avatar-small" src="{{globals.backendUri+org.coverImageUrl}}">
             <div class="organization-details">
               <div class="organization-name">{{org.name}}</div>
-              <div>This is where a short description of the organization should go.</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="event-location">
-        <div class="event-location-map-container">
-          <iframe id="open-street-map-iframe"
-                  src="//www.openstreetmap.org/export/embed.html?bbox=16.36812955141068%2C48.19411795494773%2C16.371696889400486%2C48.19578432955719&amp;layer=mapnik"></iframe>
-        </div>
-        <small><a href="https://www.openstreetmap.org/#map=19/48.19495/16.36991">View Larger Map</a></small>
+      <div class="event-location" *ngIf="location">
+        <app-event-location [location]="location" [editable]="false"></app-event-location>
       </div>
     </div>
     <div>
       <h2>Comments</h2>
-      <div *ngFor="let comment of calendarEvent.comments" class="comment-div">
-        <app-event-comment [comment]="comment"></app-event-comment>
+      <div *ngFor="let comment of comments" class="comment-div">
+        <app-event-comment [comment]="comment" [canEdit]=this.calendarEvent.canEdit></app-event-comment>
       </div>
-      <div id="comment-area">
+
+
+      <div *ngIf="user != null" id="comment-area">
         <label for="comment-textarea">
-          Comments are disabled in the current version.
         </label>
-        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"
-                  disabled="disabled"></textarea>
-        <button (click)="addComment()" class="full-width-form-button no-hover-enlarge btn-lg" disabled="disabled">Send
+        <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…" #njf
+        ></textarea>
+        <button (click)="addComment(njf.value); njf.value=''" class="full-width-form-button no-hover-enlarge">Send
         </button>
       </div>
+
+
     </div>
 
   </div>

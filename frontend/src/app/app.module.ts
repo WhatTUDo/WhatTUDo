@@ -44,6 +44,9 @@ import {UserRegistrationComponent} from './components/user-registration/user-reg
 import {OverlayModule} from "@angular/cdk/overlay";
 import {ExplanationComponent} from './components/explanation/explanation.component';
 import {EventConflictResolverComponent} from './components/event-conflict-resolver/event-conflict-resolver.component';
+import {AdminDashboardComponent} from './components/admin-dashboard/admin-dashboard.component';
+import {MatRadioModule} from "@angular/material/radio";
+import { EventSearchComponent } from './components/event-search/event-search.component';
 
 
 @NgModule({
@@ -71,7 +74,9 @@ import {EventConflictResolverComponent} from './components/event-conflict-resolv
     PromoEventListComponent,
     ExplanationComponent,
     UserRegistrationComponent,
-    EventConflictResolverComponent
+    EventConflictResolverComponent,
+    AdminDashboardComponent,
+    EventSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -91,7 +96,8 @@ import {EventConflictResolverComponent} from './components/event-conflict-resolv
     NgxMatDatetimePickerModule,
     NgxMatNativeDateModule,
     MatTableModule,
-    OverlayModule
+    OverlayModule,
+    MatRadioModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]

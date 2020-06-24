@@ -66,17 +66,32 @@ public class EventCollisionTest {
         this.organization = organizationRepository.save(new Organization("BesterTestnameEver"));
     }
 
+    @Test
+    public void createEvent_CheckForCollisions_shouldReturnEmptyList() {
+        ApplicationUser user = userRepository.save(new ApplicationUser("Dorian", "grazie@gmx.com", "pwdsuperstrong"));
+        Calendar calendar = calendarRepository.save(new Calendar("Katzenkalenderreleases", Collections.singletonList(organization)));
+        Event event = new Event("Adventskatzenkalender", LocalDateTime.of(2030, 1, 1, 15, 30), LocalDateTime.of(2030, 1, 1, 16, 0), calendar);
+        AttendanceStatus attendance = new AttendanceStatus(user, event, AttendanceStatusPossibilities.ATTENDING);
+        List<Label> labels = new ArrayList<>();
+        List<AttendanceStatus> attendanceStatuses = new ArrayList<>();
+        attendanceStatuses.add(attendance);
+        labels.add(new Label(1, "Bla", null));
+        event.setLabels(labels);
+
+        List<EventCollision> eventCollisions = eventCollisionService.getEventCollisions(event, 3, 12L);
+        assertEquals(0, eventCollisions.size());
+    }
 
     @Test
     public void saveEvents_createEventWithCollidingDates_CheckForCollisions_ShouldReturnCollisionList() {
         Calendar calendar = calendarRepository.save(new Calendar("Katzenkalenderreleases", Collections.singletonList(organization)));
         ApplicationUser user = userRepository.save(new ApplicationUser("Dorian", "grazie@gmx.com", "pwdsuperstrong"));
 
-        Event event1 = eventRepository.save(new Event("Adventskatzenkalender", LocalDateTime.of(2030, 1, 1, 15, 30), LocalDateTime.of(2030, 1, 1, 16, 0), calendar));
-        Event eventToTest = eventRepository.save(new Event("Adventskatzenkalender2", LocalDateTime.of(2030, 1, 1, 15, 30), LocalDateTime.of(2030, 1, 1, 16, 0), calendar));
+        Event event1 = eventRepository.save(new Event("Adventskatzenkalender", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
+        Event eventToTest = eventRepository.save(new Event("Adventskatzenkalender2", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
         List<Label> labels = new ArrayList<>();
         AttendanceStatus attendance = new AttendanceStatus(user, event1, AttendanceStatusPossibilities.ATTENDING);
-        AttendanceStatus attendance2 = new AttendanceStatus(user, eventToTest, AttendanceStatusPossibilities.ATTENDING);
+        new AttendanceStatus(user, eventToTest, AttendanceStatusPossibilities.ATTENDING);
         List<AttendanceStatus> attendanceStatuses = new ArrayList<>();
         attendanceStatuses.add(attendance);
         event1.setAttendanceStatuses(attendanceStatuses);
@@ -95,7 +110,7 @@ public class EventCollisionTest {
     @Test
     public void saveEvents_createEventWithCollidingLabels_CheckForCollisions_ShouldReturnCollisionList() {
         Calendar calendar = calendarRepository.save(new Calendar("Katzenkalenderreleases", Collections.singletonList(organization)));
-        ApplicationUser user = userRepository.save(new ApplicationUser("Dorian", "grazie@gmx.com", "pwdsuperstrong"));
+        userRepository.save(new ApplicationUser("Dorian", "grazie@gmx.com", "pwdsuperstrong"));
         Event event1 = new Event("Adventskatzenkalender", LocalDateTime.of(2021, 1, 1, 12, 30), LocalDateTime.of(2021, 1, 1, 14, 0), calendar);
         Event eventToTest = new Event("Adventskatzenkalender2", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
 
@@ -124,11 +139,11 @@ public class EventCollisionTest {
     @Test
     public void getListOfRecommendations() {
         Calendar calendar = calendarRepository.save(new Calendar("Calendar 1", Collections.singletonList(organization)));
-        Event event1 = eventRepository.save(new Event("Adventskatzenkalender", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
-        Event eventNextDay = eventRepository.save(new Event("Event 3", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 2, 16, 0), calendar));
-        Event eventNextHour = eventRepository.save(new Event("Event 4", LocalDateTime.of(2021, 1, 1, 16, 0), LocalDateTime.of(2021, 1, 1, 17, 30), calendar));
-        Event eventNextDay1 = eventRepository.save(new Event("Event 5", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 15, 35), calendar));
-        Event eventNext2Weeks = eventRepository.save(new Event("Event 6", LocalDateTime.of(2021, 1, 15, 15, 30), LocalDateTime.of(2021, 1, 15, 15, 35), calendar));
+        eventRepository.save(new Event("Adventskatzenkalender", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
+        eventRepository.save(new Event("Event 3", LocalDateTime.of(2021, 1, 2, 15, 30), LocalDateTime.of(2021, 1, 2, 16, 0), calendar));
+        eventRepository.save(new Event("Event 4", LocalDateTime.of(2021, 1, 1, 16, 0), LocalDateTime.of(2021, 1, 1, 17, 30), calendar));
+        eventRepository.save(new Event("Event 5", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 15, 35), calendar));
+        eventRepository.save(new Event("Event 6", LocalDateTime.of(2021, 1, 15, 15, 30), LocalDateTime.of(2021, 1, 15, 15, 35), calendar));
         Event eventToTest = new Event("Adventskatzenkalender2", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar);
         List<LocalDateTime[]> rec = eventCollisionService.getAlternativeDateSuggestions(eventToTest, 2);
 //        for (LocalDateTime[] l: rec) {

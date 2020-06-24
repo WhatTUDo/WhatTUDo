@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -29,7 +30,6 @@ public abstract class OrganizationMapper {
     @Autowired
     protected PermissionEvaluator permissionEvaluator;
 
-    public abstract OrganizationDto organizationToOrganizationDto(Organization organization);
 
     @BeforeMapping
     public void mapCalendars(Organization organization, @MappingTarget OrganizationDto organizationDto) {
@@ -42,17 +42,23 @@ public abstract class OrganizationMapper {
     @BeforeMapping
     protected void mapPermissions(Organization organization, @MappingTarget OrganizationDto organizationDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        organizationDto.setCanEdit(permissionEvaluator.hasPermission(authentication, organization, "MOD"));
-        organizationDto.setCanDelete(permissionEvaluator.hasPermission(authentication, organization, "MOD"));
+        organizationDto.setCanEdit(permissionEvaluator.hasPermission(authentication, organization, "ADMIN"));
+        organizationDto.setCanDelete(permissionEvaluator.hasPermission(authentication, organization, "ADMIN"));
+        organizationDto.setCanCreateCalendar(permissionEvaluator.hasPermission(authentication, organization, "MOD"));
     }
 
-    public abstract Organization organizationDtoToOrganization(OrganizationDto organizationDto);
+    public abstract OrganizationDto organizationToOrganizationDto(Organization organization);
 
 
     @BeforeMapping
     public void mapCalendars(OrganizationDto organizationDto, @MappingTarget Organization organization) {
         organization.setCalendars(calendarRepository.findAllById(organizationDto.getCalendarIds()));
     }
+
+    public abstract Organization organizationDtoToOrganization(OrganizationDto organizationDto);
+
+
+
     /*CalendarService calendarService;
 
     @Autowired
@@ -80,5 +86,6 @@ public abstract class OrganizationMapper {
         return new OrganizationDto(organization.getId(), organization.getName(), calendarIds);
     }*/
 
+    public abstract List<OrganizationDto> organizationListToorganizationDtoList(List<Organization> organizationList);
 
 }

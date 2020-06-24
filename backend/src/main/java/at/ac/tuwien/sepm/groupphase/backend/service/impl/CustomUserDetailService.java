@@ -17,19 +17,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Service
@@ -50,7 +47,12 @@ public class CustomUserDetailService implements UserService {
         return userRepository.findByName(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
-    @Override // TODO: Move encoding to mapper?
+    @Override
+    public List<ApplicationUser> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
     public ApplicationUser saveNewUser(ApplicationUser user) throws ServiceException, ValidationException {
         try {
             validator.validateNewUser(user);
@@ -136,19 +138,34 @@ public class CustomUserDetailService implements UserService {
     }
 
     @Override
+    @Transactional
     public ApplicationUser removeFromOrga(ApplicationUser user, Organization organization) {
         try {
             Organization dbOrga = organizationRepository.findById(organization.getId()).orElseThrow(() -> new IllegalArgumentException("Organization does not exist"));
             ApplicationUser dbUser = userRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("User does not exist"));
 
-            dbOrga.getMemberships().removeIf(it -> it.getUser().equals(dbUser));
-            dbUser.getMemberships().removeIf(it -> it.getOrganization().equals(dbOrga));
+            dbOrga.getMemberships().removeIf(it -> it.getUser().getName().equals(dbUser.getName()));
+            dbUser.getMemberships().removeIf(it -> it.getOrganization().getId().equals(dbOrga.getId()));
 
-            organizationRepository.save(dbOrga);
             ApplicationUser savedUser = userRepository.save(dbUser);
+            organizationRepository.save(dbOrga);
             publisher.publishEvent(new UserRoleRemoveEvent(savedUser.getUsername(), dbOrga));
             return savedUser;
         } catch (PersistenceException | IllegalArgumentException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    public ApplicationUser findUserById(Integer id) throws NotFoundException, ServiceException {
+        try {
+            Optional<ApplicationUser> found = userRepository.findById(id);
+            if(!found.isPresent()){
+                throw new NotFoundException("Could not find any user with id"+id);
+            }
+
+            return found.get();
+        }catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
         }
     }
@@ -184,12 +201,15 @@ public class CustomUserDetailService implements UserService {
 
     }
 
+
+
     @Transactional
     @Override
-    public List<Event> getRecommendedEvents(Integer userId) {
+    public Set<Event> getRecommendedEvents(Integer userId) {
 
         try {
-            List<Event> recommendedEvents = new ArrayList<>();
+            ArrayList<Integer> ids = new ArrayList<>();
+            Set<Event> recommendedEvents = new HashSet<>();
             List<Event> events = attendanceService.getEventUserIsAttending(userId);
             events.addAll(attendanceService.getEventUserIsInterested(userId));
             Collection<Label> allLabels = labelService.getAll();
@@ -200,12 +220,11 @@ public class CustomUserDetailService implements UserService {
             }
             int[] labels = new int[maxLabelId + 1];
             events.forEach(event -> {
-                Integer count = 0;
                 List<Label> eventLabels = event.getLabels();
                 eventLabels.forEach(label -> labels[label.getId()]++);
             });
 
-            for (int i = 1; i < labels.length; i++) {
+            for (int i = 0; i < labels.length; i++) {
                 int maxAt = 0;
                 for (int j = 0; j < labels.length; j++) {
                     maxAt = labels[j] > labels[maxAt] ? j : maxAt;
@@ -214,13 +233,17 @@ public class CustomUserDetailService implements UserService {
                 if (labels[maxAt] != 0) {
                     List<Event> possibleEvents = labelService.findById(maxAt).getEvents();
                     Optional<Event> possibleEvent = possibleEvents.stream().filter(e -> e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))).findAny();
-                    possibleEvent.ifPresent(recommendedEvents::add);
+                    if (possibleEvent.isPresent() && !ids.contains(possibleEvent.get().getId())) {
+                        recommendedEvents.add(possibleEvent.get());
+                        ids.add(possibleEvent.get().getId());
+                    }
+                    labels[maxAt] = 0;
                     if (recommendedEvents.size() >= 4) return recommendedEvents;
                 }
             }
             for (int i = 0; i < 4 - recommendedEvents.size(); i++) {
                 Optional<Event> randomEvent = eventService.findForDates(LocalDateTime.now(), LocalDateTime.now().plusDays(30)).stream().findAny();
-                if (randomEvent.isPresent() && !recommendedEvents.contains(randomEvent.get())) {
+                if (randomEvent.isPresent() && !ids.contains(randomEvent.get().getId())) {
                     recommendedEvents.add(randomEvent.get());
                 } else {
                     return recommendedEvents;

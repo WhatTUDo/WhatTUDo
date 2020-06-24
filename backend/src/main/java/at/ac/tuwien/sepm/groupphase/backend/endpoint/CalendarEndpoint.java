@@ -3,6 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarCreateDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CalendarDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.TestCalendarMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
@@ -13,6 +14,7 @@ import at.ac.tuwien.sepm.groupphase.backend.service.CalendarService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
+import com.google.common.io.ByteStreams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +23,15 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 
 @Slf4j
@@ -36,7 +39,7 @@ import java.util.Set;
 @RequestMapping(value = CalendarEndpoint.BASE_URL)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CalendarEndpoint {
-    static final String BASE_URL = "/calendars";
+    public static final String BASE_URL = "/calendars";
     private final CalendarService calendarService;
     private final EventService eventService;
     private final OrganizationService organizationService;
@@ -50,7 +53,7 @@ public class CalendarEndpoint {
         try {
             return calendarMapper.calendarToCalendarDto(calendarService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -61,7 +64,7 @@ public class CalendarEndpoint {
         try {
             return calendarMapper.calendarsToCalendarDtos(calendarService.findAll());
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
+            return Collections.emptyList();
         }
     }
 
@@ -98,6 +101,7 @@ public class CalendarEndpoint {
         }
 
     }
+
 
 
     @PreAuthorize("hasPermission(#dto, 'MOD')")
@@ -166,6 +170,49 @@ public class CalendarEndpoint {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get cover image", authorizations = {@Authorization(value = "apiKey")})
+    public @ResponseBody byte[] getCoverImage(@PathVariable int id) {
+        try {
+            Byte[] coverImageBlob = calendarService.findById(id).getCoverImage();
+            byte[] byteArray;
+            if (coverImageBlob != null) {
+                byteArray = new byte[coverImageBlob.length];
+                for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            } else {
+                try {
+                    InputStream stream = CalendarEndpoint.class.getResourceAsStream("/images/default-calendar-background.jpg");
+                    //noinspection UnstableApiUsage
+                    byteArray = ByteStreams.toByteArray(stream);
+                } catch (IOException e) {
+                    byteArray = new byte[0];
+                }
+            }
+            return byteArray;
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("hasPermission(#id, 'CAL', 'MOD')")
+    @CrossOrigin
+    @PostMapping("/{id}/cover")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Set cover image", authorizations = {@Authorization(value = "apiKey")})
+    public CalendarDto setCoverImage(@PathVariable int id, @RequestParam("imagefile") MultipartFile file) {
+        try {
+            Calendar calendar = calendarService.setCoverImage(calendarService.findById(id), file.getBytes());
+            return calendarMapper.calendarToCalendarDto(calendar);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, e.getMessage(), e);
         }
     }
 }

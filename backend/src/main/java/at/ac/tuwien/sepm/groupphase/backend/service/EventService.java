@@ -1,10 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.service;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
-import org.hibernate.criterion.Example;
 
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import org.hibernate.service.spi.ServiceException;
@@ -20,11 +17,11 @@ public interface EventService {
     /**
      * Deletes a single event from the db.
      *
-     * @param event event to be deleted from db
+     * @param id of event to be deleted from db
      * @throws ServiceException    is thrown if something goes wrong during data processing.
      * @throws ValidationException is thrown if the Event Entity does not pass validation.
      */
-    void delete(Event event) throws ServiceException, ValidationException;
+    void delete(Integer id) throws ServiceException, ValidationException;
 
     /**
      * Save a new event into the database.
@@ -84,9 +81,9 @@ public interface EventService {
      * @param event  - to add the labels to
      * @param labels to be added to this event
      * @return the updated event
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
      */
-    Event addLabels(Event event, Collection<Label> labels);
+    Event addLabels(Event event, Collection<Label> labels) throws ServiceException;
 
     /**
      * Remove labels from an event.
@@ -94,9 +91,9 @@ public interface EventService {
      * @param event  - to remove the labels from
      * @param labels to be removed from this event
      * @return the updated event
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
      */
-    Event removeLabels(Event event, Collection<Label> labels);
+    Event removeLabels(Event event, Collection<Label> labels) throws ServiceException;
 
     /**
      * Update labels from an event. Set those as the events labels
@@ -104,11 +101,36 @@ public interface EventService {
      * @param event  - to set the labels to
      * @param labels to be set for this event
      * @return the updated event
-     * @throws org.hibernate.service.spi.ServiceException will be thrown if something goes wrong during data processing.
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
      */
-    Event updateLabels(Event event, Collection<Label> labels);
+    Event updateLabels(Event event, Collection<Label> labels) throws ServiceException;
 
+    /**
+     * Performs a text search and returns all Events that match the search term.
+     *
+     * @param searchterm: String for which the search is performed.
+     * @return List of Events whose Name or Description properties contain the searchterm String.
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
+     */
+    List<Event> findNameOrDescriptionBySearchTerm(String searchterm) throws ServiceException;
+
+
+    /**
+     * Returns a List of Events belonging to a Calendar with the given Id.
+     *
+     * @param id id of the calendar
+     * @return List of all Events in the calendar
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
+     */
     List<Event> getByCalendarId(Integer id) throws ServiceException;
 
-
+    /**
+     * Sets the cover image of this event
+     *
+     * @param event     to set the image to
+     * @param imageBlob as byte array
+     * @return the updated event
+     * @throws ServiceException will be thrown if something goes wrong during data processing.
+     */
+    Event setCoverImage(Event event, byte[] imageBlob) throws ServiceException;
 }

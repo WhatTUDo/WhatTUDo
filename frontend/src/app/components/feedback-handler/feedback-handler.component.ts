@@ -33,35 +33,37 @@ export class FeedbackHandlerComponent implements OnInit {
 
   static header: String;
   static message: String;
+  static technicalInformation: String;
   static state: State;
   static isVisible: Boolean;
-  static dismissAfter = 5_000;
+  static dismissAfter = 2_500;
   faTimes = faTimes;
 
   constructor() {
   }
 
-  static displaySuccess(header, message) {
-    this.displayMessage(header, message, State.Success);
+  static displaySuccess(header, message, technicalInformation: string = null) {
+    this.displayMessage(header, message, State.Success, technicalInformation);
   }
 
-  static displayWarning(header, message) {
-    this.displayMessage(header, message, State.Warning);
+  static displayWarning(header, message, technicalInformation: string = null) {
+    this.displayMessage(header, message, State.Warning, technicalInformation);
   }
 
-  static displayError(header, message) {
-    this.displayMessage(header, message, State.Error)
+  static displayError(header, message, technicalInformation: string = null) {
+    this.displayMessage(header, message, State.Error, technicalInformation);
   }
 
   static displayServerError(error) {
-    this.displayError(`Server Error (${error.status})`, error.message);
+    this.displayError(`Server Error`, error.message, error.status);
   }
 
-  private static displayMessage(header: String, message: String, state: State = State.Neutral) {
+  private static displayMessage(header: string, message: string, state: State = State.Neutral, technicalInformation: string = null) {
     this.isVisible = true;
     this.message = message;
     this.header = header;
     this.state = state;
+    this.technicalInformation = technicalInformation;
 
     setTimeout(_ => {
       this.onDismiss();
@@ -87,7 +89,15 @@ export class FeedbackHandlerComponent implements OnInit {
     return FeedbackHandlerComponent.message;
   }
 
-  static onDismiss() {
+  getTechnicalInformation() {
+    return FeedbackHandlerComponent.technicalInformation;
+  }
+
+  onDismiss() {
+    FeedbackHandlerComponent.onDismiss();
+  }
+
+  public static onDismiss() {
     FeedbackHandlerComponent.isVisible = !FeedbackHandlerComponent.isVisible;
   }
 }

@@ -1,7 +1,7 @@
 @import "../../../var.scss";
 
-form {
-  margin: 16pt 0;
+.filter {
+  margin-bottom: 16pt;
 }
 
 .calendar {
@@ -12,6 +12,38 @@ form {
   width: 100%;
   margin-bottom: 16pt;
 
+  > .avatar {
+    box-sizing: border-box;
+
+    margin-right: 8pt;
+
+    border: 3pt solid transparent;
+
+    &.blue {
+      border-color: $blue;
+    }
+
+    &.green {
+      border-color: $green;
+    }
+
+    &.yellow {
+      border-color: $yellow;
+    }
+
+    &.orange {
+      border-color: $orange;
+    }
+
+    &.red {
+      border-color: $red;
+    }
+
+    &.violet {
+      border-color: $violet;
+    }
+  }
+
   .calendar-details {
     width: 100%;
     color: var(--text);
@@ -20,17 +52,24 @@ form {
       font-weight: $f-bold;
       font-size: 24pt;
     }
-  }
 
-  .organization-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 4pt;
-
-    > .avatar {
-      margin-right: 4pt;
+    .calendar-description {
+      margin: 2pt 0 4pt;
+      color: var(--secondary);
     }
+
   }
+
+    .organization-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4pt;
+
+      > .avatar {
+        margin-right: 4pt;
+      }
+    }
+
 
   .calendar-buttons {
     margin-left: auto;
@@ -43,4 +82,8 @@ form {
       margin-left: 4pt;
     }
   }
+}
+
+.subscribed {
+  color: var(--accent);
 }

@@ -36,25 +36,26 @@
   justify-content: flex-start;
   align-items: center;
 
-  button {
-    margin-right: 8pt;
-  }
+  margin-left: auto;
 
-  .icon-button {
-    width: 24pt;
-    height: 24pt;
-  }
-
-  .response-button {
-    margin-left: 12pt;
-  }
-
-  .rating-percentage {
-    text-align: right;
-    margin-right: 10px;
+  fa-icon {
+    margin-right: 4pt;
   }
 }
 
+.comment-edit {
+  display: flex;
+  flex-wrap: wrap;
 
+  background-color: var(--overlay);
 
+  textarea {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  * {
+    width: 100%;
+  }
+}
 

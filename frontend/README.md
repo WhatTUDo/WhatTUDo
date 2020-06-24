@@ -1,4 +1,4 @@
-# SEPM Group Phase
+# WhatTUDo
 
 ## First Steps
 

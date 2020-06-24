@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {AuthRequest} from "../dtos/auth-request";
 import {Observable} from "rxjs";
 import {CalendarEvent} from "../dtos/calendar-event";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams, HttpRequest} from "@angular/common/http";
 import {Globals} from "../global/globals";
 import {EventComment} from "../dtos/event-comment";
 import {Label} from "../dtos/label";
@@ -13,16 +13,35 @@ import {Label} from "../dtos/label";
 
 export class EventService {
 
-  private eventBaseUri: string = this.globals.backendUri + 'events';
-  private labelBaseUri: string = this.globals.backendUri + 'labels';
+  private eventBaseUri: string = this.globals.backendUri + '/events';
+  private labelBaseUri: string = this.globals.backendUri + '/labels';
+  private commentBaseUri: string = this.globals.backendUri + '/comments';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
 
-  deleteEvent(event: CalendarEvent) {
+  deleteEvent(eventId: number) {
     console.log("Delete Event", CalendarEvent);
-    return this.httpClient.delete(this.eventBaseUri + '/' + event);
+    return this.httpClient.delete(this.eventBaseUri + '/' + eventId);
   }
+
+
+  deleteComment(commentId: number) {
+    console.log("Delete Comment", EventComment);
+    return this.httpClient.delete(this.commentBaseUri + '/' + commentId);
+  }
+
+
+  createComment(eventComment : EventComment) {
+    console.log("Create Comment", EventComment);
+   return this.httpClient.post<EventComment>(this.commentBaseUri + '/', eventComment);
+   }
+
+
+  editComment(eventComment : EventComment) {
+    console.log("Edit Comment", eventComment);
+   return this.httpClient.put<EventComment>(this.commentBaseUri + '/', eventComment);
+   }
 
   getEventsByCalendarId(id: number): Observable<Array<CalendarEvent>> {
     console.log("Load Multiple Events by Calendar id");
@@ -31,15 +50,18 @@ export class EventService {
 
 
   getAllLabels(): Observable<Label[]> {
-
     console.log('Get all labels');
     return this.httpClient.get<Array<Label>>(this.labelBaseUri);
   }
 
   getEventLabels(id: number): Observable<Label[]> {
-
     console.log('Get event labels');
     return this.httpClient.get<Array<Label>>(this.eventBaseUri + '/' + id + '/' + 'labels');
+  }
+
+  getEventComments(id: number): Observable<EventComment[]> {
+    console.log('Get event comments');
+    return this.httpClient.get<EventComment[]>(this.eventBaseUri + '/' + id + '/' + 'comments');
   }
 
   addLabels(id: number, labelselect: Array<Label>) {
@@ -50,7 +72,6 @@ export class EventService {
       .subscribe(response => {
         console.log(response);
       });
-
 
   }
 
@@ -70,43 +91,42 @@ export class EventService {
   getEvent(id: number): Observable<CalendarEvent> {
     console.log("Load Event with ID", id);
     return this.httpClient.get<CalendarEvent>(this.eventBaseUri + '/' + id);
-    // return null;
   }
 
   /**
    * Posts event to Server --> New Event
    * @param event
    */
-  postEvent(event: CalendarEvent): Observable<any> {
+  postEvent(event: CalendarEvent): Observable<CalendarEvent> {
     console.log("Post Event to Server", CalendarEvent);
-    //TODO: Implement POST call
     let reducedElement = {
       "calendarId": event.calendarId,
       "endDateTime": event.endDateTime,
       "name": event.name,
+      "description": event.description,
       "startDateTime": event.startDateTime,
-      "location": event.location
+      "locationId": event.locationId
     }
-
-    return this.httpClient.post(this.eventBaseUri, reducedElement);
+    return this.httpClient.post<CalendarEvent>(this.eventBaseUri, reducedElement);
   }
 
   /**
    * Put event to Server --> Update Event
    * @param event
    */
-  putEvent(event: CalendarEvent): Observable<any> {
+  putEvent(event: CalendarEvent): Observable<CalendarEvent> {
     console.log("Put Event to Server", CalendarEvent);
     let reducedElement = {
       "id": event.id,
       "calendarId": event.calendarId,
       "endDateTime": event.endDateTime,
       "name": event.name,
+      "description": event.description,
       "startDateTime": event.startDateTime,
-      "location": event.location
+      "locationId": event.locationId
     }
 
-    return this.httpClient.put(this.eventBaseUri, reducedElement);
+    return this.httpClient.put<CalendarEvent>(this.eventBaseUri, reducedElement);
   }
 
   /**
@@ -184,10 +204,35 @@ export class EventService {
     return string
   }
 
-  getEventPromoImageLink(eventId: number) {
-    // Return base64 of a 1x1px transparent gif if no organizationId is given.
-    if (!eventId) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
-    return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-    //TODO: Implement this after backend is done.
+  public getDisplayDateAndTimeStringFromDate(date: Date) {
+    return date.toLocaleTimeString(this.globals.dateLocale, {
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
+    }).replace(":00", "")
+  }
+
+  uploadEventCover(eventId: number, file: File) {
+    const formData: FormData = new FormData();
+
+    formData.append('imagefile', file);
+
+    const req = new HttpRequest('POST', `${this.eventBaseUri}/${eventId}/cover`,
+      formData, {
+        responseType: 'json'
+      });
+
+    return this.httpClient.request(req);
+  }
+
+  getEventCover(eventId: number) {
+    return this.httpClient.get(`${this.eventBaseUri}/${eventId}/cover`)
+  }
+
+  searchEvent(name: string) {
+    let params = new HttpParams();
+    params = params.set('name', name);
+    return this.httpClient.get<CalendarEvent[]>(`${this.eventBaseUri}/search`, {params: params});
   }
 }

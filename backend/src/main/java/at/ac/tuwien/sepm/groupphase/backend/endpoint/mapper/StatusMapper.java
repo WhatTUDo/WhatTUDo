@@ -8,13 +8,11 @@ import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
-import org.aspectj.weaver.ast.Not;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -46,7 +44,7 @@ public abstract class StatusMapper {
     }
 
     @BeforeMapping
-    protected void mapStatus(StatusDto statusDto, @MappingTarget AttendanceStatus attendanceStatus) {
+    protected void mapStatus(@MappingTarget AttendanceStatus attendanceStatus) {
         attendanceStatus.setLastModified(LocalDateTime.now());
     }
 

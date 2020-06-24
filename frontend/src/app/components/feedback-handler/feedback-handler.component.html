@@ -1,4 +1,4 @@
-<div [@makeVisible]="getVisibility() ? 'visible' : 'invisible'" class="feedback-container {{getState()}}"
+<div [@makeVisible]="getVisibility() ? 'visible' : 'invisible'" class="feedback-container {{getVisibility() ? 'visible' : 'invisible'}} {{getState()}}"
      id="feedback-container">
   <div class="feedback-inner">
     <div (click)="onDismiss()" class="float-right dismissButton">
@@ -7,8 +7,12 @@
     <p class="feedback-headline">
       {{getHeader()}}
     </p>
-    <p class="feedback-text">
+    <p class="feedback-text" *ngIf="getMessage()">
       {{getMessage()}}
     </p>
+    <details *ngIf="getTechnicalInformation()">
+      <summary>Technical Details</summary>
+      <div>{{getTechnicalInformation()}}</div>
+    </details>
   </div>
 </div>

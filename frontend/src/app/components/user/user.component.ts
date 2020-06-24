@@ -6,6 +6,9 @@ import {Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 import {Organization} from "../../dtos/organization";
 import {OrganizationService} from "../../services/organization.service";
+import {CalendarEvent} from '../../dtos/calendar-event';
+import {AttendanceStatusService} from '../../services/attendance-status.service';
+import {Globals} from "../../global/globals";
 
 @Component({
   selector: 'app-user',
@@ -19,11 +22,15 @@ export class UserComponent implements OnInit {
   userInOrganizations: Organization[];
   faChevronLeft = faChevronLeft;
   faSignOutAlt = faSignOutAlt;
+  attendingEvents: CalendarEvent[];
+  interestedEvents: CalendarEvent[];
 
   constructor(private authService: AuthService,
               private userService: UserService,
               private organizationService: OrganizationService,
-              private router: Router) {
+              private attendanceStatusService: AttendanceStatusService,
+              private router: Router,
+              public globals: Globals) {
     if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user: User) => {
           if (!user) {
@@ -33,6 +40,12 @@ export class UserComponent implements OnInit {
           this.userService.getUserOrganization(user.id).subscribe((organization: Organization[]) => {
             this.userInOrganizations = organization;
           })
+        this.attendanceStatusService.getEventsUserIsAttending(user.id).subscribe((events) => {
+          this.attendingEvents = events;
+        });
+        this.attendanceStatusService.getEventsUserIsInterestedIn(user.id).subscribe((events) => {
+          this.interestedEvents = events;
+        });
         }
       );
     } else {
@@ -41,6 +54,7 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
   signOut(): void {
@@ -57,9 +71,5 @@ export class UserComponent implements OnInit {
       this.userService.removeFromOrganization(this.user.id, organizationId).subscribe((user) => {
       })
     }
-  }
-
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    return this.organizationService.getOrganizationAvatarLink(organizationId, size);
   }
 }

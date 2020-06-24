@@ -1,11 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.repository;
-
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -38,5 +34,13 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
      * @return list of all event entries that contain nameString.
      */
     List<Event> findAllByNameContains(String nameString);
+
+    /**
+     * Searches for a partial match in Name, ignoring the case.
+     *
+     * @param name search term.
+     * @return List of event that match.
+     */
+    List<Event> findByNameContainingIgnoreCase(String name);
 
 }

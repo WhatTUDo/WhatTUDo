@@ -1,53 +1,88 @@
 <div class="contextual-control">
-  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
-  <span *ngIf="organization">Team: {{organization.name}}</span>
+  <span *ngIf="organization">Organization: {{organization.name}}</span>
 </div>
 <div *ngIf="organization" class="grid-one-third">
   <div>
-    <h2>This Team</h2>
+    <h2>This Organization</h2>
     <div class="organization-info">
-      <img alt="" class="avatar avatar-medium" src="{{getOrganizationAvatarLink(organization.id, 256)}}">
+      <img alt="" class="avatar avatar-large" src="{{organization.coverImageUrl}}">
       <div class="organization-details">
         <div class="organization-name">{{organization.name}}</div>
       </div>
     </div>
-    <div>
-      This is where a short description of the organization should go.
+    <div class="organization-description" *ngIf="organization.description">
+      {{organization.description}}
     </div>
     <p></p>
     <div class="organization-action-container">
       <a routerLink="/form/organization/{{organization.id}}">
-        <div *ngIf="organization.canEdit" class="organization-action clickable no-hover-enlarge no-shadow">
-          Edit team
+        <div *ngIf="organization.canEdit" class="organization-action clickable no-hover-enlarge">
+          Edit organization
         </div>
       </a>
       <div *ngIf="organization.canDelete" (click)="deleteOrganization(organization.id)"
-           class="organization-action dangerous clickable no-hover-enlarge no-shadow">
-        Dissolve team
+           class="organization-action dangerous clickable no-hover-enlarge">
+        Dissolve organization
       </div>
     </div>
   </div>
   <div>
     <div class="title-icon-button-combo">
       <h2>People</h2>
-      <div class="icon-button clickable no-hover-enlarge no-shadow">
-        <fa-icon *ngIf="false" [icon]="faPlus"></fa-icon>
+      <div *ngIf="organization.canEdit"
+           (click)="userAddExpanded = !userAddExpanded"
+           class="icon-button clickable no-hover-enlarge">
+        <fa-icon *ngIf="!userAddExpanded" [icon]="faPlus"></fa-icon>
+        <fa-icon *ngIf="userAddExpanded" [icon]="faTimes"></fa-icon>
       </div>
     </div>
-
+    <div *ngIf="organization.canEdit && userAddExpanded" class="add-user-section">
+      <form (ngSubmit)="addMembership()" [formGroup]="addMemberForm">
+      <div class="form-group">
+        <label class="control-label" for="username">Username</label>
+        <div>
+          <input class="form-control" formControlName="username" id="username" type="text" autocomplete="off">
+          <div *ngIf="addMemberForm.controls.username.errors" class="jasmine-errored">
+            <small *ngIf="addMemberForm.controls.username.errors.pattern"
+                   class="form-text text-warning">Please enter a username!
+            </small>
+          </div>
+        </div>
+      </div>
+        <div class="form-group">
+          <label class="control-label" for="role">Role</label>
+          <div class="input-button-combo">
+            <select #selectedRole [ngModel]="selectRole(selectedRole.value)" class="form-control"
+                  formControlName="role"  id="role">
+              <option *ngFor="let role of roles"
+                      value="{{role}}">{{role}}</option>
+            </select>
+            <div *ngIf="addMemberForm.controls.role.errors" class="jasmine-errored">
+              <small *ngIf="addMemberForm.controls.role.errors.pattern"
+                     class="form-text text-warning">Please enter a role!
+              </small>
+            </div>
+            <button (click)="onSubmitAddMember()"
+                    class="button-solid no-hover-enlarge">Submit
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
     <div class="organization-member-list">
       <div *ngFor="let member of organizationMembers" class="organization-member">
-        <img alt="" class="avatar avatar-small" src="{{getGravatarLink(member.email, 256)}}">
+        <img alt="" class="avatar avatar-medium" src="{{getGravatarLink(member.email, 256)}}">
         <div class="organization-member-details">
           <div class="organization-member-name">{{member.name}}</div>
           <!--          <div class="organization-member-role">{{member.role}}</div>-->
         </div>
         <div class="organization-member-buttons">
-          <div class="clickable no-hover-enlarge no-shadow organization-manage-member-button">
-            <fa-icon *ngIf="organization.canEdit" [icon]="faCog"></fa-icon>
+          <div class="clickable no-hover-enlarge organization-manage-member-button">
+            <fa-icon *ngIf="organization.canEdit && false" [icon]="faCog"></fa-icon>
           </div>
-          <div class="clickable no-hover-enlarge no-shadow organization-kick-member-button">
+          <div class="clickable no-hover-enlarge organization-kick-member-button">
             <fa-icon (click)="removeFromOrg(member.id, organization.id)" *ngIf="organization.canEdit"
                      [icon]="faTimesCircle"></fa-icon>
           </div>
@@ -60,7 +95,7 @@
       <h2>Calendars</h2>
       <div *ngIf="organization.canEdit"
            (click)="calendarAddExpanded = !calendarAddExpanded"
-           class="icon-button clickable no-hover-enlarge no-shadow">
+           class="icon-button clickable no-hover-enlarge">
         <fa-icon *ngIf="!calendarAddExpanded" [icon]="faPlus"></fa-icon>
         <fa-icon *ngIf="calendarAddExpanded" [icon]="faTimes"></fa-icon>
       </div>
@@ -74,20 +109,21 @@
                   value="{{cal.id}}">{{cal.name}}</option>
         </select>
         <button (click)="onSubmitAddCalendar(pickedCalendarId)" [disabled]="!pickedCalendarId"
-                class="button-solid no-hover-enlarge">Submit
+                class="no-hover-enlarge">Submit
         </button>
       </div>
     </div>
     <div>
       <div *ngFor="let cal of organizationCalendars"
            class="organization-calendar">
-        <div class="organization-calendar-details clickable no-hover-enlarge no-shadow"
+        <img alt="" class="avatar avatar-small" src="{{globals.backendUri+cal.coverImageUrl}}" [ngClass]="getCalendarColor(cal.id)">
+        <div class="organization-calendar-details clickable no-hover-enlarge"
              routerLink="/calendar/{{cal.id}}">
           <div class="organization-calendar-name">{{cal.name}}</div>
         </div>
         <div class="organization-calendar-buttons">
           <fa-icon *ngIf="organization.canEdit" (click)="removeCalendar(cal.id)" [icon]="faTimesCircle"
-                   class="clickable no-hover-enlarge no-shadow">
+                   class="clickable no-hover-enlarge">
             Remove Calendar
           </fa-icon>
         </div>

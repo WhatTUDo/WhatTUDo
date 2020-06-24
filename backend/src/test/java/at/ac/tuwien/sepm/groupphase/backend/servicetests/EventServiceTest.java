@@ -1,6 +1,5 @@
 package at.ac.tuwien.sepm.groupphase.backend.servicetests;
 
-import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
@@ -10,21 +9,17 @@ import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
-import org.hibernate.service.spi.ServiceException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Optional;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,6 +55,19 @@ public class EventServiceTest {
     }
 
     @Test
+    public void save_withDescription_shouldReturn_sameEvent() {
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 1", Collections.singletonList(new Organization()),"Description"));
+        Event eventEntity = new Event("Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
+        Event gottenEvent = service.save(new Event("Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
+
+        assertEquals(eventEntity.getName(), gottenEvent.getName());
+        assertEquals(eventEntity.getEndDateTime(), gottenEvent.getEndDateTime());
+        assertEquals(eventEntity.getStartDateTime(), gottenEvent.getStartDateTime());
+        assertEquals(eventEntity.getCalendar(), gottenEvent.getCalendar());
+        assertEquals(eventEntity.getDescription(),gottenEvent.getDescription());
+    }
+
+    @Test
     public void save_thenRead_shouldReturn_sameEvent() {
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 2", Collections.singletonList(new Organization())));
         Event eventEntity = new Event("Test Name", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
@@ -87,10 +95,7 @@ public class EventServiceTest {
 
     @Test
     public void delete_nonSavedEvent_IdNotGenerated_throwsValidationException() {
-        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 4", Collections.singletonList(new Organization())));
-
-        Event notSavedEvent = new Event("Non Existent", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
-        assertThrows(ValidationException.class, () -> service.delete(notSavedEvent));
+        assertThrows(ValidationException.class, () -> service.delete(0));
     }
 
     @Test
@@ -99,18 +104,30 @@ public class EventServiceTest {
 
         Event eventEntity = new Event("Delete Event Test", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar);
         Event event = service.save(eventEntity);
-        service.delete(event);
+        service.delete(event.getId());
         assertThrows(NotFoundException.class, () -> service.findById(event.getId()));
     }
 
 
     @Test
-    public void deleteEvent_withIdDoesNotExist_throwsNothing() {
+    public void deleteEvent() {
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 6", Collections.singletonList(new Organization())));
 
         Event eventEntity = eventRepository.save(new Event("Delete Event Test", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
 
-        service.delete(eventEntity);
+        service.delete(eventEntity.getId());
+    }
+
+    @Test
+    public void search_Event_returnsEventList() {
+        Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 1", Collections.singletonList(new Organization())));
+        service.save(new Event("Findme 1", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
+        service.save(new Event("Findme 2", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
+
+        List<Event> foundEvents = service.findNameOrDescriptionBySearchTerm("find");
+
+        assertNotEquals(0, foundEvents.size());
+
     }
 
 

@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Organization} from '../dtos/organization';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams, HttpRequest} from '@angular/common/http';
 import {Globals} from '../global/globals';
-import {User} from "../dtos/user";
+import {User} from '../dtos/user';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ import {User} from "../dtos/user";
 
 export class OrganizationService {
 
-  private organizationBaseUri: string = this.globals.backendUri + 'organizations';
+  private organizationBaseUri: string = this.globals.backendUri + '/organizations';
 
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
@@ -22,14 +22,9 @@ export class OrganizationService {
    */
   postOrganization(organization: Organization): Observable<any> {
 
+    organization.id = 0;
     console.log('Post Organization to Server', organization);
-    let reducedElement = {
-      'id': null,
-      'name': organization.name,
-      'calendarIds': organization.calendarIds
-    };
-
-    return this.httpClient.post(this.organizationBaseUri, reducedElement);
+    return this.httpClient.post(this.organizationBaseUri, organization);
   }
 
   getAll(): Observable<Organization[]> {
@@ -58,8 +53,8 @@ export class OrganizationService {
    * @param id
    */
   deleteOrganization(id: number): Observable<number> {
-    console.log("Delete Organization with ID ", id);
-    return this.httpClient.delete<number>(this.organizationBaseUri + "/" + id);
+    console.log('Delete Organization with ID ', id);
+    return this.httpClient.delete<number>(this.organizationBaseUri + '/' + id);
   }
 
   /**
@@ -84,7 +79,7 @@ export class OrganizationService {
     params = params.set('id', String(calendarId));
     return this.httpClient.delete(this.organizationBaseUri + `/${organizationId}/calendars`, {
       params: params
-    })
+    });
   }
 
   /**
@@ -96,10 +91,27 @@ export class OrganizationService {
     return this.httpClient.get<User[]>(`${this.organizationBaseUri}/members/${organizationId}`);
   }
 
-  getOrganizationAvatarLink(organizationId: number, size: number) {
-    // Return base64 of a 1x1px transparent gif if no organizationId is given.
-    if (!organizationId) return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==";
-    return "data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
-    //TODO: Implement this after backend is done.
+  addMembership(orgaId: number, userId: number, role: string): Observable<any> {
+    let url = "?userId=" + userId + "&role=" + role;
+    return this.httpClient.put(this.organizationBaseUri + '/addMembership/'+orgaId+url, {});
+  }
+
+  uploadOrganizationAvatar(organizationId: number, file: File) {
+    const formData: FormData = new FormData();
+
+    formData.append('imagefile', file);
+
+    const req = new HttpRequest('POST', `${this.organizationBaseUri}/${organizationId}/cover`,
+      formData, {
+        responseType: 'json'
+      });
+
+    return this.httpClient.request(req);
+  }
+
+  searchOrganization(name: string) {
+    let params = new HttpParams();
+    params = params.set('name', name);
+    return this.httpClient.get<Organization[]>(`${this.organizationBaseUri}/search`, {params: params});
   }
 }

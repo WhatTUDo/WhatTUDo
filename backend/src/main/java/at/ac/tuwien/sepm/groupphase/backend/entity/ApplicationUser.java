@@ -5,6 +5,7 @@ import at.ac.tuwien.sepm.groupphase.backend.auth.authorities.AdminAuthority;
 import at.ac.tuwien.sepm.groupphase.backend.auth.CustomUserDetails;
 import at.ac.tuwien.sepm.groupphase.backend.auth.authorities.MemberAuthority;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -31,16 +32,27 @@ public class ApplicationUser extends BaseEntity implements CustomUserDetails {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval = true)
     // Eager necessary because of getAuthorities()
     private Set<OrganizationMembership> memberships = new HashSet<>();
 
     @Column(name = "is_sysadmin")
     private boolean isSysAdmin = false;
 
+   /** @ToString.Exclude
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>(); **/
+
+   @ToString.Exclude
+   @Cascade(org.hibernate.annotations.CascadeType.ALL)
+   @OneToMany(mappedBy = "user")
+   private List<Comment> comments = new ArrayList<>();
+
     @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<AttendanceStatus> attendanceStatuses;
+
 
     /**
      * Infers the User Roles (authorities) from the admin status and the memberships

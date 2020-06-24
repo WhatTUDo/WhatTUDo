@@ -4,6 +4,7 @@ package at.ac.tuwien.sepm.groupphase.backend.servicetests;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.IncomingUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LoggedInUserDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
+import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
@@ -23,10 +24,7 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,6 +54,9 @@ public class UserServiceTest {
     @Autowired
     AttendanceService attendanceService;
 
+    @Autowired
+    OrganizationRepository organizationRepository;
+
     @Test
     public void when_savedUser_findAllUsers_shouldReturnListContainingUser() {
         userService.saveNewUser(new ApplicationUser("TestUser", "testy@test.com", "hunter2"));
@@ -66,11 +67,22 @@ public class UserServiceTest {
     @Test
     public void when_savedUser_findAllUsers_shouldReturnCorrectUserDetails() {
         userService.saveNewUser(new ApplicationUser("TestUser 1", "testy1@test.com", "hunter2"));
-        ApplicationUser user = (ApplicationUser) userService.loadUserByUsername("TestUser");
+        ApplicationUser user = (ApplicationUser) userService.getUserByName("TestUser");
         assert (user.getId() != null && user.getId() != 0);
-
     }
 
+
+
+    @Test
+    public void findUserById_shouldReturnCorrectUser(){
+        ApplicationUser user = userService.saveNewUser(new ApplicationUser("Save user", "testy1@test.com", "hunter2"));
+        assert (userService.findUserById(user.getId()).getName().equals(user.getName()));
+    }
+
+    @Test
+    public void findUserById_nonExistentId_shouldThrowNotFound(){
+        assertThrows(NotFoundException.class, ()->userService.findUserById(0));
+    }
     @Test
     public void updateUser() {
 
@@ -97,6 +109,39 @@ public class UserServiceTest {
 
     }
 
+    @Test
+    public void removeUserFromOrganization(){
+        Organization organization = organizationRepository.save(new Organization("Memmbers"));
+        ApplicationUser user = userService.saveNewUser(new ApplicationUser("remove member", "testy@test.com", "hunter2"));
+        Set<OrganizationMembership> organizationMemberships = new HashSet<>();
+        organizationMemberships.add(new OrganizationMembership(organization, user, OrganizationRole.MOD));
+        organization.setMemberships(organizationMemberships);
+        user.setMemberships(organizationMemberships);
+        user = userRepository.save(user);
+        organization = organizationRepository.save(organization);
+
+        assert(!user.getMemberships().isEmpty());
+
+        user = userService.removeFromOrga(user, organization);
+
+        assert (user.getMemberships().isEmpty());
+
+    }
+
+    @Test
+    public void getUserOrganization(){
+        Organization organization = organizationRepository.save(new Organization("Get Users test"));
+        ApplicationUser user = userService.saveNewUser(new ApplicationUser("member", "testy@test.com", "hunter2"));
+        Set<OrganizationMembership> organizationMemberships = new HashSet<>();
+        organizationMemberships.add(new OrganizationMembership(organization, user, OrganizationRole.MOD));
+        organization.setMemberships(organizationMemberships);
+        user.setMemberships(organizationMemberships);
+        user = userRepository.save(user);
+        organization = organizationRepository.save(organization);
+
+        assert (!userService.getUserOrganizations(user.getId()).isEmpty());
+        assertEquals(organization.getName(),userService.getUserOrganizations(user.getId()).get(0).getName());
+    }
 
     @Test
     @Transactional
@@ -141,7 +186,7 @@ public class UserServiceTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
+        Set<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
         assert (recommendedEvent.size() > 0);
         assert (recommendedEvent.contains(event3));
@@ -188,9 +233,10 @@ public class UserServiceTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
+        Set<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
         assert (recommendedEvent.size() > 0);
     }
+
 
 }

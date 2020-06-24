@@ -91,6 +91,15 @@ public interface OrganizationService {
     List<Organization> findByName(String name) throws ServiceException;
 
     /**
+     * Searches Organization Name properties for the given string. Ignores case.
+     *
+     * @param name Term for which search is performed.
+     * @return List of Organizations whose name contains the search term.
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    List<Organization> searchForName(String name) throws ServiceException;
+
+    /**
      * Find members of organization with id id.
      *
      * @param id id of organization whose members are returned
@@ -99,4 +108,23 @@ public interface OrganizationService {
      */
     List<ApplicationUser> getMembers(Integer id) throws ServiceException;
 
+    /**
+     * add member/moderator to organization
+     *
+     * @param user         to add to org
+     * @param organization org to update user
+     * @param role         role user will have in org
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    Organization addMembership(ApplicationUser user, Organization organization, String role) throws ServiceException;
+
+    /**
+     * Sets the cover image
+     *
+     * @param organization to set the cover to
+     * @param imageBlob    - image blob
+     * @return the changed calendar
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    Organization setCoverImage(Organization organization, byte[] imageBlob);
 }

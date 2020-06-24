@@ -70,13 +70,12 @@ public class SimpleCalendarService implements CalendarService {
     @Override
     public List<Calendar> findByName(String name) throws ServiceException {
         try {
-            return calendarRepository.findAllByNameContains(name);
+            return calendarRepository.findAllByNameContainingIgnoreCase(name);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         }
     }
 
-    //FIXME: return calendarRepository.findAll
     @Override
     public List<Calendar> findAll() {
         try {
@@ -122,9 +121,8 @@ public class SimpleCalendarService implements CalendarService {
             }
 
             Calendar toDelete = this.findById(id);
-            List<Event> events = toDelete.getEvents();
 
-            /**  for (Event e: events
+            /*  for (Event e: events
              ) {
 
              eventService.delete(e);
@@ -143,7 +141,7 @@ public class SimpleCalendarService implements CalendarService {
 
                 for (Event e : toDelete.getEvents()) {
 
-                    eventService.delete(e);
+                    eventService.delete(e.getId());
                 }
 
                 List<Event> empty = new ArrayList<Event>();
@@ -205,6 +203,19 @@ public class SimpleCalendarService implements CalendarService {
             throw new NotFoundException(e.getMessage());
         } catch (ValidationException e) {
             throw new ValidationException(e.getMessage());
+        }
+    }
+
+
+    @Override
+    public Calendar setCoverImage(Calendar calendar, byte[] imageBlob) {
+        try {
+            Byte[] byteArray = new Byte[imageBlob.length];
+            for (int i = 0; i < imageBlob.length; i++) byteArray[i] = imageBlob[i];
+            calendar.setCoverImage(byteArray);
+            return calendarRepository.save(calendar);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
         }
     }
 }

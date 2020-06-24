@@ -1,11 +1,21 @@
 <div class="contextual-control">
-  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
+  <span id="back-button"><a class="clickable no-hover-enlarge" href="/"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
   <span *ngIf="calendar">Calendar: {{calendar.name}}</span>
 </div>
 <div *ngIf="calendar" class="centered-two-third">
   <div>
-    <h2 *ngIf="this.title">{{this.title}}</h2>
+    <h2 *ngIf="isUpdate">{{isUpdate ? "Update Calendar" : "Create New Calendar"}}</h2>
+    <div>
+      <div class="avatar-container" *ngIf="calendar">
+        <img alt="" class="avatar avatar-large" src="{{globals.backendUri+calendar.coverImageUrl}}">
+      </div>
+      <label for="calendar-avatar">
+        Avatar
+      </label>
+        <input type="file" name="calendar-avatar" (change)="selectImage($event)"
+               id="calendar-avatar" accept="{{this.globals.allowedAvatarMimeTypes.join(',')}}">
+    </div>
     <h3>Calendar Information</h3>
     <div class="form-group">
       <!--      <label for="calendar.organizationIds">Organization</label>-->
@@ -18,31 +28,30 @@
     </div>
     <div class="form-group">
       <label for="calendar.description">Description: </label>
-      <textarea class="form-control" id="calendar.description" name="calendar.description" rows="10">Description not yet implemented. </textarea>
+      <input [(ngModel)]="calendar.description" [ngModelOptions]="{standalone: true}" class="form-control"
+             id="calendar.description"
+             placeholder="Description">
     </div>
     <h3>Organizations</h3>
     <div class="organization-list">
-      <p>You can select one or more Organizations in which you are a Moderator. </p>
+      <p>{{this.orgsSelect}}</p>
       <div class="mat-form-container">
         <div class="mat-select-container">
           <mat-form-field appearance="outline" style="width: 100%;">
             <mat-label>Organizations</mat-label>
             <mat-select [(ngModel)]="calendar.organizationIds" [compareWith]="compare" id="organization-select"
                         multiple>
-              <mat-option *ngFor="let org of this.organizations" [(value)]="org.id">
+              <mat-option *ngFor="let org of this.organizations" [value]="org.id">
                 {{org.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
-        <button (click)="onSubmit()"
-                class="update button-clickable always-black full-width-form-button no-hover-enlarge no-shadow"
-                title="Update calendar">
-          Submit
-        </button>
       </div>
     </div>
-
-
   </div>
+
+  <button (click)="onSubmit()" class="update button-green">
+    Submit
+  </button>
 </div>

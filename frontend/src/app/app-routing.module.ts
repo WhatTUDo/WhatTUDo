@@ -20,6 +20,8 @@ import {CalendarFormComponent} from './components/calendar-form/calendar-form.co
 import {OrganizationListComponent} from "./components/organization-list/organization-list.component";
 import {ExplanationComponent} from "./components/explanation/explanation.component";
 import {UserRegistrationComponent} from "./components/user-registration/user-registration.component";
+import {AdminDashboardComponent} from "./components/admin-dashboard/admin-dashboard.component";
+import {EventSearchComponent} from "./components/event-search/event-search.component";
 
 
 const routes: Routes = [
@@ -27,6 +29,7 @@ const routes: Routes = [
   {path: 'calendar-list', component: CalendarListComponent},
   {path: 'calendar/:id', component: CalendarComponent},
   {path: 'event/:id', component: EventComponent},
+  {path: 'event-search', component: EventSearchComponent},
   {path: 'login', component: LoginComponent},
   {path: 'message', canActivate: [AuthGuard], component: MessageComponent},
   {path: 'organization/:id', component: OrganizationComponent},
@@ -35,14 +38,15 @@ const routes: Routes = [
   {path: 'form/event/:id', component: EventFormComponent},
   {path: 'form/organization', component: OrganizationFormComponent},
   {path: 'form/organization/:id', component: OrganizationFormComponent},
-  {path: 'form/user', component: UserFormComponent}, //new user creation
-  {path: 'form/user/:id', component: UserFormComponent}, //edit existing user
+  {path: 'form/user', component: UserFormComponent},
+  // {path: 'form/user/:id', component: UserFormComponent},
   {path: 'form/calendar', component: CalendarFormComponent},
   {path: 'form/calendar/:id', component: CalendarFormComponent},
   {path: 'explanation/:pageName', component: ExplanationComponent},
 
   {path: 'user', component: UserComponent},
-  {path: 'register', component: UserRegistrationComponent}
+  {path: 'register', component: UserRegistrationComponent},
+  {path: 'admin', component: AdminDashboardComponent}
 
 
 ];

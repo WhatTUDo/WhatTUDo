@@ -1,14 +1,18 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint;
 
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.CommentDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.EventDto;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.LabelDto;
+import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.CommentMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.LabelMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.service.CommentService;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
 import at.ac.tuwien.sepm.groupphase.backend.service.LabelService;
+import com.google.common.io.ByteStreams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Authorization;
 import lombok.RequiredArgsConstructor;
@@ -20,11 +24,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,28 +45,30 @@ import java.util.stream.Collectors;
 @RequestMapping(value = EventEndpoint.BASE_URL)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EventEndpoint {
-    static final String BASE_URL = "/events";
+    public static final String BASE_URL = "/events";
     private final EventService eventService;
     private final EventMapper eventMapper;
     private final LabelService labelService;
     private final LabelMapper labelMapper;
+    private final CommentService commentService;
+    private final CommentMapper commentMapper;
 
 
-    @PreAuthorize("hasPermission(#dto, 'MEMBER')")
+    @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
     @CrossOrigin
     @Transactional
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping
+    @DeleteMapping(value = "/{id}")
     @ApiOperation(value = "Delete event", authorizations = {@Authorization(value = "apiKey")})
-    public void deleteEvent(@RequestBody EventDto dto) {
+    public void deleteEvent(@PathVariable Integer id) {
         try {
-            eventService.delete(eventMapper.eventDtoToEvent(dto));
+            eventService.delete(id);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -110,7 +120,7 @@ public class EventEndpoint {
         try {
             return eventMapper.eventToEventDto(eventService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -128,7 +138,7 @@ public class EventEndpoint {
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -226,5 +236,82 @@ public class EventEndpoint {
         }
     }
 
+    @PreAuthorize("permitAll()")
+    @Transactional
+    @GetMapping(value = "/{id}/comments")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get Comments by Event Id", authorizations = {@Authorization(value = "apiKey")})
+    public List<CommentDto> getCommentsByEventId(@PathVariable(value = "id") int id) {
+        try {
 
+            List<CommentDto> results = new ArrayList<>();
+
+            (commentService.findByEventId(id)).forEach(it -> results.add(commentMapper.commentToCommentDto(it)));
+
+            return results;
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+
+    }
+
+    @GetMapping("/search")
+    @CrossOrigin
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Search Name or Description of Events", authorizations = {@Authorization(value = "apiKey")})
+    public List<EventDto> searchNameAndDescription(@RequestParam(name = "name") String searchTerm) {
+        try {
+            return eventMapper.eventListToeventDtoList(eventService.findNameOrDescriptionBySearchTerm(searchTerm));
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (ValidationException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("permitAll()")
+    @CrossOrigin
+    @GetMapping(value = "/{id}/cover", produces = MediaType.IMAGE_JPEG_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Get Cover Image", authorizations = {@Authorization(value = "apiKey")})
+    public @ResponseBody
+    byte[] getCoverImage(@PathVariable int id) {
+        try {
+            Byte[] coverImageBlob = eventService.findById(id).getCoverImage();
+            byte[] byteArray;
+            if (coverImageBlob != null) {
+                byteArray = new byte[coverImageBlob.length];
+                for (int i = 0; i < coverImageBlob.length; i++) byteArray[i] = coverImageBlob[i];
+            } else {
+                try {
+                    InputStream stream = EventEndpoint.class.getResourceAsStream("/images/default-event-background.jpg");
+                    //noinspection UnstableApiUsage
+                    byteArray = ByteStreams.toByteArray(stream);
+                } catch (IOException e) {
+                    byteArray = new byte[0];
+                }
+            }
+
+            return byteArray;
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
+    }
+
+    @PreAuthorize("hasPermission(#id, 'EVENT', 'MOD')")
+    @CrossOrigin
+    @PostMapping("/{id}/cover")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation(value = "Set Cover Image", authorizations = {@Authorization(value = "apiKey")})
+    public EventDto setCoverImage(@PathVariable int id, @RequestParam("imagefile") MultipartFile file) {
+        try {
+            Event event = eventService.setCoverImage(eventService.findById(id), file.getBytes());
+            return eventMapper.eventToEventDto(event);
+        } catch (ServiceException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, e.getMessage(), e);
+        }
+    }
 }

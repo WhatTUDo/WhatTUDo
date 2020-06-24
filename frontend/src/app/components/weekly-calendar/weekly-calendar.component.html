@@ -1,4 +1,4 @@
-<div class="heading" id="weekly-cal-heading">
+<div class="heading clickable no-hover-enlarge" id="weekly-cal-heading" (click)="resetOffset()">
   <span id="weekly-cal-month">
     {{this.offset ? displayingWeek[3].toLocaleString(dateLocale, {month: 'long'}) : currentMonth}}
   </span>
@@ -8,24 +8,30 @@
   </span>
 </div>
 
-<div (click)="minusOneWeek()" class="calendar-navigation desktop">
+<div (click)="minusOneWeek()" class="calendar-navigation desktop clickable no-hover-enlarge">
   <fa-icon [icon]="faChevronUp">Last week</fa-icon>
 </div>
 
 <div class="calendar-navigation mobile">
-  <fa-icon (click)="minusOneDay()" [icon]="faChevronLeft">Last day</fa-icon>
-  <fa-icon (click)="addOneDay()" [icon]="faChevronRight">Next day</fa-icon>
+  <div class="calendar-navigation-button-mobile">
+    <fa-icon (click)="minusOneDay()" [icon]="faChevronLeft" class="clickable no-hover-enlarge">Last day</fa-icon>
+  </div>
+  <div class="calendar-navigation-button-mobile">
+    <fa-icon (click)="addOneDay()" [icon]="faChevronRight" class="clickable no-hover-enlarge">Next day</fa-icon>
+  </div>
 </div>
 
 <div class="calendar mobile">
-  <div class="week-day-label">{{displayingDate.toLocaleDateString(dateLocale, {weekday: 'short'})}}</div>
-  <div [ngClass]="{'today': isToday(displayingDate)}" class="calendar-date-label">
-    {{displayingDate.toLocaleDateString(dateLocale, {month: 'short', day: 'numeric'})}}
+  <div id="mobile-cal-heading" class="clickable no-hover-enlarge" (click)="resetOffset()">
+    <div class="week-day-label">{{displayingDate.toLocaleDateString(dateLocale, {weekday: 'short'})}}</div>
+    <div [ngClass]="{'today': isToday(displayingDate)}" class="calendar-date-label">
+      {{displayingDate.toLocaleDateString(dateLocale, {month: 'short', day: 'numeric'})}}
+    </div>
   </div>
 
   <div class="calendar-day-swim-lane">
     <div *ngFor="let event of this.eventsOfTheWeek.get(displayingDate.toISOString())"
-         [style.grid-row]="getDisplayRows(event, displayingDate)"
+         [style.grid-row]="getDisplayRows(event, displayingDate)" [ngClass]="getCalendarColor(event)"
          class="calendar-event" routerLink="/event/{{event.id}}">
       <div *ngIf="event != null" class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
       <div *ngIf="event != null" class="calendar-event-name">{{event.name}}</div>
@@ -52,7 +58,7 @@
   </div>
 
   <div *ngFor="let date of this.displayingWeek.slice(0,5)" class="calendar-day-swim-lane">
-    <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())"
+    <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())" [ngClass]="getCalendarColor(event)"
          [style.grid-row]="getDisplayRows(event, date)"
          class="calendar-event" routerLink="/event/{{event.id}}">
       <div
@@ -63,6 +69,7 @@
   <div class="calendar-day-swim-lane weekend-lane-container">
     <div class="weekend-sat">
       <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[5].toISOString())"
+           [ngClass]="getCalendarColor(event)"
            [style.grid-row]="getDisplayRows(event, displayingWeek[5])"
            class="calendar-event " routerLink="/event/{{event.id}}">
         <div
@@ -72,6 +79,7 @@
     </div>
     <div class="weekend-sun">
       <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[6].toISOString())"
+           [ngClass]="getCalendarColor(event)"
            [style.grid-row]="getDisplayRows(event, displayingWeek[6])"
            class="calendar-event weekend-sun" routerLink="/event/{{event.id}}">
         <div
@@ -82,6 +90,8 @@
   </div>
 </div>
 
-<div (click)="addOneWeek()" class="calendar-navigation desktop">
+<div (click)="addOneWeek()" class="calendar-navigation desktop clickable no-hover-enlarge">
   <fa-icon [icon]="faChevronDown">Next week</fa-icon>
 </div>
+
+

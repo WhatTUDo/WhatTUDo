@@ -5,13 +5,16 @@ import {Location} from "../../dtos/location";
 import {EventService} from "../../services/event.service";
 import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {faChevronLeft, faCheckCircle} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {FeedbackService} from "../../services/feedback.service";
 import {CollisionResponse} from "../../dtos/collision-response";
 import {EventCollisionService} from "../../services/event-collision.service";
 import {Label} from '../../dtos/label';
+import {Globals} from "../../global/globals";
+import {LocationService} from "../../services/location.service";
+
 
 @Component({
   selector: 'app-event-form',
@@ -27,14 +30,15 @@ export class EventFormComponent implements OnInit {
   isUpdate: Boolean = false;
   showFeedback: Boolean = false;
 
+  imagechange: boolean = false;
+
   pickerConfig: any = {
     showSeconds: 0,
     stepHour: 1,
     stepMinute: 5
   }
 
-  event: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null, null, null, null);
-  title: String = "NEW EVENT"
+  calendarEvent: CalendarEvent = new CalendarEvent(null, null, null, null, null, null, null, null, null, null, null);
 
   conflictExists: boolean = false;
 
@@ -51,22 +55,35 @@ export class EventFormComponent implements OnInit {
   faCircle = faCircle;
   faCheckCircle = faCheckCircle;
   collisionResponse: CollisionResponse;
+  private selectedImage: File;
+  location: Location;
+  displayNoConflictMessage: boolean = false;
 
   constructor(
     private eventService: EventService,
     private eventCollisionService: EventCollisionService,
     private calendarService: CalendarService,
     private feedbackService: FeedbackService,
-    private route: ActivatedRoute) {
+    private locationService: LocationService,
+    public globals: Globals,
+    private route: ActivatedRoute,
+    private router: Router) {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id) {
       this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
         if (event) {
-          this.event = event;
+          this.calendarEvent = event;
           this.isUpdate = true;
-          this.title = "UPDATE EVENT";
           this.getEventLabels(id);
           this.ev_id = id;
+
+          if (event.locationId) {
+            this.locationService.getLocation(event.locationId).subscribe(location => {
+              this.location = location;
+            })
+          } else {
+            this.location = new Location(null, null, null, null, null, null);
+          }
         }
       });
     } else {
@@ -74,13 +91,12 @@ export class EventFormComponent implements OnInit {
     }
     const calendarId = +this.route.snapshot.queryParamMap?.get('calendarId');
     if (calendarId) {
-      this.event.calendarId = calendarId;
+      this.calendarEvent.calendarId = calendarId;
     }
     this.getAllEditableCalendars()
   }
 
   ngOnInit(): void {
-
     this.getAllLabels();
   }
 
@@ -115,16 +131,20 @@ export class EventFormComponent implements OnInit {
   }
 
   onSubmit() {
-    let validationIsPassed = this.validateFormInput(this.event);
+    let validationIsPassed = this.validateFormInput(this.calendarEvent);
+    console.log(JSON.stringify(this.calendarEvent));
     if (validationIsPassed) {
       // submit to eventService
       if (this.isUpdate) {
-        this.eventService.putEvent(this.event).subscribe(response => {
-            this.feedbackService.displaySuccess("Updated Event!", response.toString());
+        this.eventService.putEvent(this.calendarEvent).subscribe(response => {
             console.log("Updated event: " + response);
+            this.calendarEvent = response;
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
             this.eventService.addLabels(this.ev_id, this.selectedLabels);
+            if(this.imagechange){ this.uploadImage();}
+
+            window.location.replace("/event/" + response.id);
           },
           err => {
             console.warn(err);
@@ -132,18 +152,33 @@ export class EventFormComponent implements OnInit {
           });
       } else {
 
-        this.eventService.postEvent(this.event).subscribe(response => {
+        this.eventService.postEvent(this.calendarEvent).subscribe((response) => {
             console.log("Saved event: " + response);
             this.feedbackService.displaySuccess("Saved Event", "You saved a new Event!");
             console.log(response);
 
+            this.calendarEvent = response;
+
             this.eventService.addLabels(response.id, this.selectedLabels);
+            if(this.imagechange){ this.uploadImage();}
+            window.location.replace("/event/" + response.id);
           },
           err => {
             console.warn(err);
             this.feedbackService.displayError("Error", err.error.message);
           });
       }
+    }
+  }
+
+  deleteEvent() {
+    if (confirm(`You are deleting "${this.calendarEvent.name}". Are you sure?`)) {
+      this.eventService.deleteEvent(this.calendarEvent.id).subscribe(() => {
+        this.feedbackService.displaySuccess("Successfully deleted", "Event " + this.calendarEvent.name + " is deleted");
+      }, err => {
+        console.warn(err);
+        this.feedbackService.displayError("Error", err.error.message);
+      });
     }
   }
 
@@ -163,7 +198,7 @@ export class EventFormComponent implements OnInit {
     if (!event.endDateTime) {
       errors.push(new Error("An end date and time must be specified!"));
     }
-    if (!this.event.location) {
+    if (!this.location) {
       errors.push(new Error("A location must be specified!"));
     }
     if (!event.calendarId) {
@@ -183,46 +218,63 @@ export class EventFormComponent implements OnInit {
     return true;
   }
 
-  saveLocationToEvent(location: Location) {
-    this.event.location = location;
-    if (this.event.location) {
-      console.log("Saved location with name: ", this.event.location.name);
-    }
+  imageChange(){
+    this.imagechange = true;
+  }
 
+  saveLocationToEvent(location: Location) {
+    if (location) {
+      this.locationService.saveLocation(location).subscribe((location) => {
+        this.location = location;
+        this.calendarEvent.locationId = location.id;
+      })
+    } else {
+      this.location = null;
+    }
   }
 
   getAllEditableCalendars() {
     this.calendarService.getAllCalendars().subscribe((calendars: Calendar[]) => {
       this.editableCalendars = calendars;
-      // this.editableCalendars = calendars.filter(cal => cal.canEdit);
-      // if (this.editableCalendars) {
-      //   this.feedbackService.displayWarning('Heads up!', 'You have no permission to any calendar. Therefore, you cannot create any new events.')
-      // }
+      this.editableCalendars = calendars.filter(cal => cal.canCreateEvents);
+      if (!this.editableCalendars.length) {
+        this.feedbackService.displayWarning('Heads up!', 'You have no permission to any calendar. Therefore, you cannot create any new events.')
+      } else {
+        if (!this.calendarEvent.calendarId) this.calendarEvent.calendarId = this.editableCalendars[0].id;
+      }
     })
   }
 
 
   getEventConflicts() {
-    if (this.event.startDateTime && this.event.endDateTime) {
-      let helperEvent = this.event;
-      helperEvent.name = this.event.name ? this.event.name : "";
-      helperEvent.description = this.event.description ? this.event.description : "";
+    if (this.calendarEvent.startDateTime && this.calendarEvent.endDateTime) {
+      this.displayNoConflictMessage = false;
+      let helperEvent = this.calendarEvent;
+      helperEvent.name = this.calendarEvent.name ? this.calendarEvent.name : "";
+      helperEvent.description = this.calendarEvent.description ? this.calendarEvent.description : "";
       this.eventCollisionService.getEventCollisions(helperEvent).subscribe((collisionResponse) => {
         this.collisionResponse = collisionResponse;
         this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
-
         if (!this.conflictExists) {
-          this.feedbackService.displaySuccess("No Collisions!", "No collisions were found for this Event!");
+          this.displayNoConflictMessage = true;
         }
       });
-    } else {
-      this.feedbackService.displayWarning("Event Collision", "A Start and End date must be specified")!
     }
   }
 
   updateFromConflictResolver(dates: Date[]) {
-    this.event.startDateTime = dates[0];
-    this.event.endDateTime = dates[1];
+    this.calendarEvent.startDateTime = new Date(dates[0]);
+    this.calendarEvent.endDateTime = new Date(dates[1]);
     this.conflictExists = false;
+  }
+
+  selectImage(event) {
+    this.selectedImage = event.target.files.item(0);
+  }
+
+  uploadImage() {
+    if (this.selectedImage === null) return;
+    this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe((resp) => {
+    });
   }
 }

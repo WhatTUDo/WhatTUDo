@@ -3,13 +3,12 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarAddEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarRemoveEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCreateEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationEditEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.organization.*;
+import at.ac.tuwien.sepm.groupphase.backend.exception.NotAllowedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.OrganizationRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.OrganizationService;
 import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +30,7 @@ public class SimpleOrganizationService implements OrganizationService {
     private final ApplicationEventPublisher publisher;
     private final OrganizationRepository organizationRepository;
     private final CalendarRepository calendarRepository;
+    private final UserRepository userRepository;
     private final Validator validator;
 
 
@@ -78,6 +78,7 @@ public class SimpleOrganizationService implements OrganizationService {
             if (found.isPresent()) {
                 Organization orgInDataBase = found.get();
                 orgInDataBase.setName(organization.getName());
+                orgInDataBase.setDescription(organization.getDescription());
                 orgInDataBase.setCalendars(organization.getCalendars());
                 Organization savedOrga = organizationRepository.save(orgInDataBase);
                 publisher.publishEvent(new OrganizationEditEvent(savedOrga.getName()));
@@ -94,10 +95,13 @@ public class SimpleOrganizationService implements OrganizationService {
     @Override
     public Integer delete(Integer organisationID) throws ServiceException, NotFoundException {
         try {
-            Organization organizationToDelete = this.findById(organisationID);
-            List<Calendar> calendarsToRemove = organizationToDelete.getCalendars();
-            this.removeCalendars(organizationToDelete, calendarsToRemove);
-            organizationRepository.delete(organizationToDelete);
+            if(organizationRepository.findById(organisationID).isPresent()){
+                Organization a = organizationRepository.findById(organisationID).get();
+                this.removeCalendars(a, a.getCalendars());
+                publisher.publishEvent(new OrganizationDeleteEvent(a.getName()));
+                organizationRepository.delete(a);
+          }
+
             return organisationID;
         } catch (NotFoundException e) {
             throw new NotFoundException(e.getMessage(), e);
@@ -133,6 +137,14 @@ public class SimpleOrganizationService implements OrganizationService {
         }
     }
 
+    @Override
+    public List<Organization> searchForName(String name) throws ServiceException {
+        try {
+            return organizationRepository.findByNameContainingIgnoreCase(name);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
 
     public Organization removeCalendars(Organization organization, Collection<Calendar> calendars) {
         try {
@@ -169,6 +181,43 @@ public class SimpleOrganizationService implements OrganizationService {
             return members;
         } catch (PersistenceException | IllegalArgumentException e) {
             throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    @Override
+    public Organization addMembership(ApplicationUser user, Organization organization, String role) throws ServiceException {
+        try {
+            OrganizationMembership organizationMembership = new OrganizationMembership(organization, user, OrganizationRole.valueOf(role));
+            Set<OrganizationMembership> organizationMemberships = new HashSet<>(user.getMemberships());
+            for (OrganizationMembership membership: organizationMemberships) {
+                if(membership.getOrganization().getId().equals(organization.getId())){
+                    throw new NotAllowedException("User already has a role in the organization.");
+                }
+            }
+            organizationMemberships.add(organizationMembership);
+            user.setMemberships(organizationMemberships);
+            organizationMemberships = organization.getMemberships();
+            organizationMemberships.add(organizationMembership);
+            organization.setMemberships(organizationMemberships);
+            userRepository.save(user);
+            return  organizationRepository.save(organization);
+
+        }catch (PersistenceException | IllegalArgumentException e){
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+
+    @Override
+    public Organization setCoverImage(Organization organization, byte[] imageBlob) {
+        try {
+            Byte[] byteArray = new Byte[imageBlob.length];
+            for (int i = 0; i < imageBlob.length; i++) byteArray[i] = imageBlob[i];
+            organization.setCoverImage(byteArray);
+            return organizationRepository.save(organization);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
         }
     }
 }

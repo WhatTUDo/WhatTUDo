@@ -10,6 +10,7 @@
     padding: 2pt 8pt;
     border-radius: $rounded-radius;
     margin-right: 8pt;
+    font-size: 16pt;
 
     fa-icon {
       font-size: 0.75em;
@@ -22,8 +23,15 @@
   align-items: flex-end;
 
   background-color: var(--shadow);
+  background-size: cover;
+  background-repeat: no-repeat;
 
-  height: 40em;
+  height: $mobile-object-full-height;
+
+  @media (screen and min-width: $mobile-breakpoint) {
+    min-height: $mobile-object-full-height;
+    height: $desktop-object-full-height;
+  }
 
   border-radius: $rounded-radius;
 
@@ -51,22 +59,22 @@
 
 .details-stack {
   > *:not(h2) {
-    margin-bottom: 32pt;
+    margin-bottom: 16pt;
   }
 }
+
+.actions-one-third {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
 
 .participation-button-container {
   text-align: center;
   width: 100%;
 
   button {
-    margin: 0 8pt;
-  }
-
-  @media (screen and min-width: $mobile-breakpoint) {
-    button {
-      margin: 0 16pt;
-    }
+    margin: 0 4pt;
   }
 }
 
@@ -98,11 +106,56 @@
   border-radius: $rounded-radius;
   background-color: var(--shadow);
 
-  .calendar-name {
+  .calendar-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8pt 0;
+
+    > .avatar {
+      box-sizing: border-box;
+
+      margin-right: 8pt;
+
+      border: 3pt solid transparent;
+
+      &.blue {
+        border-color: $blue;
+      }
+
+      &.green {
+        border-color: $green;
+      }
+
+      &.yellow {
+        border-color: $yellow;
+      }
+
+      &.orange {
+        border-color: $orange;
+      }
+
+      &.red {
+        border-color: $red;
+      }
+
+      &.violet {
+        border-color: $violet;
+      }
+    }
+
+    .calendar-name {
+      font-weight: $f-bold;
+      font-size: 24pt;
+    }
+  }
+
+
+  .calendar-description {
+    margin-bottom: 4pt;
+    padding: 0 16pt;
     text-align: center;
-    padding: 8pt 0 4pt;
-    font-weight: $f-bold;
-    font-size: 24pt;
   }
 
   .organization-info {
@@ -120,6 +173,8 @@
     .organization-details {
       text-align: right;
       justify-self: flex-end;
+
+      width: 100%;
 
       .organization-name {
         font-weight: $f-bold;

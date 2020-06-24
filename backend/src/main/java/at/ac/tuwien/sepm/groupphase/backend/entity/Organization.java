@@ -1,6 +1,9 @@
 package at.ac.tuwien.sepm.groupphase.backend.entity;
 
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -11,7 +14,6 @@ import java.util.Set;
 @Entity
 @Table
 @Data
-@NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Organization extends BaseEntity {
@@ -20,18 +22,33 @@ public class Organization extends BaseEntity {
     private String name;
 
     @ToString.Exclude
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinTable(
         name = "organization_calendar",
         joinColumns = @JoinColumn(name = "organization_id"),
         inverseJoinColumns = @JoinColumn(name = "calendar_id")
     )
-
-    private List<Calendar> calendars = new ArrayList<>(); //FIXME: Use *Set*. Currently returning duplicates.
+    private List<Calendar> calendars = new ArrayList<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE})
+    @Fetch(FetchMode.SELECT)
+    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<OrganizationMembership> memberships = new HashSet<>();
+
+    @ToString.Exclude
+    @Lob
+    private Byte[] coverImage;
+
+    @Nullable
+    private String description;
+
+    public Organization() {
+    }
+
+    public Organization(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }
 

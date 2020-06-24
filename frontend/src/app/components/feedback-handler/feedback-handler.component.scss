@@ -1,31 +1,41 @@
 @import "../../../var.scss";
 
-.feedback-container {
-  background-color: #90ee90;
-  z-index: 100;
+:host {
+  position: fixed;
+  bottom: 0;
+
+  width: 100%;
 
   @media screen and (min-width: $mobile-breakpoint) {
+    bottom: 0;
+
+  }
+}
+
+.feedback-container {
+  background-color: $green;
+  z-index: 100;
+  padding: 4pt;
+
+  @media screen and (min-width: $mobile-breakpoint) {
+    margin: 16pt;
     border-radius: $rounded-radius;
   }
 }
 
 .feedback-neutral {
-  border: 1px solid grey;
   background-color: $gray
 }
 
 .feedback-success {
-  border: 1px solid green;
   background-color: $green
 }
 
 .feedback-warning {
-  border: 1px solid #7b7b05;
   background-color: $yellow
 }
 
 .feedback-error {
-  border: 1px solid darkred;
   background-color: $red;
 }
 

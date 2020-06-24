@@ -1,13 +1,11 @@
 package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
-import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
-import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
+import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventDeleteEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventUpdateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
+import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
 import at.ac.tuwien.sepm.groupphase.backend.service.EventService;
@@ -34,29 +32,34 @@ public class SimpleEventService implements EventService {
     private final ApplicationEventPublisher publisher;
     private final EventRepository eventRepository;
     private final LabelRepository labelRepository;
+    private final AttendanceRepository attendanceRepository;
     private final Validator validator;
 
 
     @Transactional
     @Override
-    public void delete(Event event) {
+    public void delete(Integer id) {
         try {
-            if (event.getId() != null) {
-                Event toDelete = this.findById(event.getId());
-                if (toDelete.getLabels() != null && toDelete.getLabels().size() > 0)
-                    removeLabels(toDelete, toDelete.getLabels());
-            } else {
-                throw new ValidationException("Id is not defined");
+            if (id <= 0) {
+                throw new ValidationException("Id is not valid");
             }
-
-            eventRepository.delete(event);
-            publisher.publishEvent(new EventDeleteEvent(event.getName()));
+            Event toDelete = this.findById(id);
+            if (toDelete.getLabels() != null && toDelete.getLabels().size() > 0) {
+                removeLabels(toDelete, toDelete.getLabels());
+            }
+            if (toDelete.getAttendanceStatuses() != null && !toDelete.getAttendanceStatuses().isEmpty()) {
+                attendanceRepository.deleteAll(toDelete.getAttendanceStatuses());
+            }
+            eventRepository.deleteById(id);
+            publisher.publishEvent(new EventDeleteEvent(toDelete.getName()));
         } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
             throw new ValidationException(e.getMessage());
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
         }
     }
+
+
 
     @Override
     public Event save(Event event) {
@@ -70,7 +73,7 @@ public class SimpleEventService implements EventService {
         }
     }
 
-    //FIXME: add NotFoundException wenn leer zurückkommt?
+
     @Override
     public List<Event> findByName(String name) {
         try {
@@ -79,6 +82,7 @@ public class SimpleEventService implements EventService {
             throw new ServiceException(e.getMessage());
         }
     }
+
 
     @Override
     public Event findById(int id) {
@@ -112,6 +116,7 @@ public class SimpleEventService implements EventService {
         try {
             Optional<Event> found = eventRepository.findById(event.getId());
             if (found.isPresent()) {
+                event.setCoverImage(found.get().getCoverImage());
                 validator.validateUpdateEvent(event);
                 Event savedEvent = eventRepository.save(event);
                 publisher.publishEvent(new EventUpdateEvent(savedEvent.getName()));
@@ -194,6 +199,7 @@ public class SimpleEventService implements EventService {
     }
 
 
+    @Override
     public List<Event> getByCalendarId(Integer id) throws ServiceException {
         try {
             return eventRepository.findByCalendarId(id);
@@ -202,4 +208,27 @@ public class SimpleEventService implements EventService {
         }
     }
 
+    @Override
+    @Transactional
+    public List<Event> findNameOrDescriptionBySearchTerm(String searchterm) throws ServiceException, ValidationException {
+        try {
+            return eventRepository.findByNameContainingIgnoreCase(searchterm);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        } catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Event setCoverImage(Event event, byte[] imageBlob) {
+        try {
+            Byte[] byteArray = new Byte[imageBlob.length];
+            for (int i = 0; i < imageBlob.length; i++) byteArray[i] = imageBlob[i];
+            event.setCoverImage(byteArray);
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
 }

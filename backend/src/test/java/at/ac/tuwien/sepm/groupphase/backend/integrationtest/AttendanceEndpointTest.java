@@ -6,6 +6,7 @@ import at.ac.tuwien.sepm.groupphase.backend.endpoint.dto.StatusDto;
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
+import at.ac.tuwien.sepm.groupphase.backend.repository.LocationRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,13 +47,17 @@ public class AttendanceEndpointTest {
     @Autowired
     CalendarRepository calendarRepository;
 
+    @Autowired
+    LocationRepository locationRepository;
+
 
     @WithMockUser(username = "testUser")
     @Test
     public void createAttendance_returnsCorrectAttendanceStatus_returnsCorrectUsers_returnsCorrectEvents() {
         Organization orga = new Organization("Test Organization");
         Calendar calendar = calendarRepository.save(new Calendar("Calendar test", Collections.singletonList(orga)));
-        Event event = eventRepository.save(new Event("Attend Event", LocalDateTime.of(2021, 8, 8, 15, 0), LocalDateTime.of(2021, 8, 8, 17, 0), calendar));
+        Location location = locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
+        Event event = eventRepository.save(new Event("Attend Event", LocalDateTime.of(2021, 8, 8, 15, 0), LocalDateTime.of(2021, 8, 8, 17, 0), calendar, location));
         ApplicationUser applicationUser = userRepository.save(new ApplicationUser("testUser", "testUser@testing.test", "testtest"));
 
         StatusDto statusDto = new StatusDto(applicationUser.getUsername(), event.getId(), AttendanceStatusPossibilities.ATTENDING);
@@ -77,5 +82,31 @@ public class AttendanceEndpointTest {
         assertEquals(Collections.emptyList(), attendanceEndpoint.getUsersInterestedInEvent(event.getId()));
 
 
+    }
+    @WithMockUser(username = "testUser 1")
+    @Test
+    public void deleteStatus(){
+        Organization orga = new Organization("Test Organization");
+        Calendar calendar = calendarRepository.save(new Calendar("Calendar test 1", Collections.singletonList(orga)));
+        Event event = eventRepository.save(new Event("Attend Event 1", LocalDateTime.of(2021, 8, 8, 15, 0), LocalDateTime.of(2021, 8, 8, 17, 0), calendar));
+        ApplicationUser applicationUser = userRepository.save(new ApplicationUser("testUser 1", "testUser1@testing.test", "testtest"));
+        StatusDto statusDto = new StatusDto(applicationUser.getUsername(), event.getId(), AttendanceStatusPossibilities.ATTENDING);
+
+        statusDto=  attendanceEndpoint.create(statusDto);
+
+        attendanceEndpoint.deleteStatus(statusDto.getId());
+
+        assertEquals(null, attendanceEndpoint.getStatus(applicationUser.getId(), event.getId()));
+    }
+    @WithMockUser(username = "testUser 3")
+    @Test
+    public void getStatus() {
+        Organization orga = new Organization("Test Organization");
+        Calendar calendar = calendarRepository.save(new Calendar("Calendar test 3", Collections.singletonList(orga)));
+        Event event = eventRepository.save(new Event("Attend Event 3", LocalDateTime.of(2021, 8, 8, 15, 0), LocalDateTime.of(2021, 8, 8, 17, 0), calendar));
+        ApplicationUser applicationUser = userRepository.save(new ApplicationUser("testUser 3", "testUser3@testing.test", "testtest"));
+        StatusDto statusDto = new StatusDto(applicationUser.getUsername(), event.getId(), AttendanceStatusPossibilities.ATTENDING);
+        statusDto = attendanceEndpoint.create(statusDto);
+        assertEquals(AttendanceStatusPossibilities.ATTENDING, attendanceEndpoint.getStatus(applicationUser.getId(), event.getId()).getStatus());
     }
 }

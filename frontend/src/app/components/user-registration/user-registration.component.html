@@ -1,5 +1,5 @@
 <div class="contextual-control">
-  <span class="clickable no-hover-enlarge no-shadow" id="back-button" onclick="history.back()"><fa-icon
+  <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
   <span>New User{{user.name ? ": " + user.name : ''}}</span>
 </div>
@@ -7,7 +7,7 @@
   <h2>New User</h2>
   <div>
     <div class="avatar-container">
-      <img alt="" class="avatar avatar-medium" src="{{gravatarLink}}">
+      <img alt="" class="avatar avatar-large" src="{{gravatarLink}}">
     </div>
     <div class="avatar-description">You can change your profile picture using <a
       href="https://en.gravatar.com" target="_blank">Gravatar</a>.
@@ -41,7 +41,7 @@
       <div class="form-group">
         <label class="control-label" for="password">Password</label>
         <div>
-          <input #passwordField="ngModel" [(ngModel)]="user.password" autocomplete="new-password" class="form-control"
+          <input #passwordField="ngModel" [(ngModel)]="password" autocomplete="new-password" class="form-control"
                  id="password" minlength="8" name="password" passwordrules="minlength: 8;"
                  required type="password">
           <div [hidden]="passwordField.valid || passwordField.pristine" class="jasmine-errored">

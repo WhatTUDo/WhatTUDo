@@ -10,9 +10,17 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 public interface UserService extends UserDetailsService {
+
+    /**
+     * Gets all users
+     *
+     * @return list of all users
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
+    List<ApplicationUser> getAllUsers() throws ServiceException;
 
     /**
      * Save new user into db.
@@ -47,13 +55,47 @@ public interface UserService extends UserDetailsService {
      */
     ApplicationUser changeUserPassword(String email, String currentPassword, String newPassword) throws ServiceException, ValidationException, NotFoundException;
 
+    /**
+     * @param user             User for which Role should be updated.
+     * @param organization
+     * @param organizationRole Role to be Updated
+     * @return User with updated role.
+     */
     ApplicationUser updateRoleInOrga(ApplicationUser user, Organization organization, OrganizationRole organizationRole);
 
+    /**
+     * @param user User to be removed.
+     * @param organization
+     * @return User object.
+     */
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 
+    /**
+     * find user by id.
+     *
+     * @param id of user that is being searched.
+     * @return found user
+     * @throws NotFoundException is thrown when user is not found.
+     * @throws ServiceException  is thrown if something goes wrong during data processing.
+     */
+    ApplicationUser findUserById(Integer id) throws NotFoundException, ServiceException;
 
+    /**
+     * Search user by name
+     *
+     * @param name of user who user is looking for
+     * @return found user
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
     ApplicationUser getUserByName(String name) throws ServiceException;
 
+    /**
+     * Get list of organization that user has a membership at.
+     *
+     * @param userId id of user.
+     * @return list of organizations where user has a membership
+     * @throws ServiceException is thrown if something goes wrong during data processing.
+     */
     List<Organization> getUserOrganizations(Integer userId) throws ServiceException;
 
     /**
@@ -64,5 +106,5 @@ public interface UserService extends UserDetailsService {
      * @return List of 4 recommended Events if a recommendation can be made, otherwise a List of recommended/random events
      * @throws ServiceException is thrown if something goes wrong during data processing.
      */
-    List<Event> getRecommendedEvents(Integer userId) throws ServiceException;
+    Set<Event> getRecommendedEvents(Integer userId) throws ServiceException;
 }

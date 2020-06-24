@@ -5,22 +5,42 @@
 }
 
 nav {
-  height: 100%;
+  font-size: 24pt;
+}
 
-  a {
-    font-size: 2rem;
+.brand-box {
+  background-color: var(--text);
+  color: var(--background);
+  font-size: 24pt;
+  font-weight: $f-bold;
+  padding: 4pt 8pt;
+}
+
+.collapse-button {
+  @media screen and (min-width: $mobile-breakpoint) {
+    display: none;
   }
 }
 
-.sign-in-avatar {
+.avatar-action-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
 
-  background-color: var(--text);
+  @media screen and (min-width: $mobile-breakpoint) {
+    justify-content: right;
+  }
 
-  fa-icon {
-    color: var(--background);
-    font-size: 16pt;
+  .sign-in-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--text);
+
+    fa-icon {
+      color: var(--background);
+      font-size: 16pt;
+    }
   }
 }

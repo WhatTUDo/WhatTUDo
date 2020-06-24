@@ -1,38 +1,58 @@
 <div class="contextual-control">
-  <span id="back-button"><a class="clickable no-hover-enlarge no-shadow" href="/"><fa-icon
+  <span id="back-button"><a class="clickable no-hover-enlarge" href="/"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
   <span *ngIf="user">User: {{user.name}}</span>
 </div>
-<div *ngIf="user" class="centered-one-third">
+<div *ngIf="user" class="grid-one-third">
   <div>
     <h2>You</h2>
     <div class="user-info">
-      <img alt="" class="avatar avatar-medium" src="{{getGravatarLink(user.email, 256)}}">
+      <img alt="" class="avatar avatar-large" src="{{getGravatarLink(user.email, 256)}}">
       <div class="user-details">
         <div class="name">{{user.name}}</div>
         <div class="email">{{user.email}}</div>
       </div>
     </div>
+    <div class="user-action-container">
+      <div class="user-action clickable primary-action no-hover-enlarge">
+        <a class="nav-link" routerLink="/form/user/" routerLinkActive="active">Edit</a>
+      </div>
+      <div (click)="signOut()" class="user-action clickable no-hover-enlarge">
+        Sign out
+      </div>
+    </div>
+  </div>
+  <div *ngIf="attendingEvents && interestedEvents">
+    <h2>My Events</h2>
+    <div *ngIf="attendingEvents.length === 0 && interestedEvents.length === 0">
+      You haven't marked any events that you attend or are interested.
+    </div>
+    <div *ngIf="attendingEvents.length > 0">
+      <h3>Attending</h3>
+      <app-promo-event-list [eventList]="attendingEvents"></app-promo-event-list>
+    </div>
+    <div *ngIf="interestedEvents.length > 0">
+      <h3>Interested</h3>
+      <app-promo-event-list [eventList]="interestedEvents"></app-promo-event-list>
+    </div>
+  </div>
+  <div *ngIf="userInOrganizations">
+    <h2>My Organizations</h2>
+    <div *ngIf="userInOrganizations.length === 0">
+      You are not part of any organization.
+    </div>
     <div class="user-organization-list">
       <div *ngFor="let org of userInOrganizations" class="user-organization">
-        <img alt="" class="avatar avatar-small clickable no-hover-enlarge no-shadow"
-             src="{{getOrganizationAvatarLink(org.id, 256)}}" routerLink="/organization/{{org.id}}">
-        <div class="user-organization-details clickable no-hover-enlarge no-shadow"
+        <img alt="" class="avatar avatar-medium clickable no-hover-enlarge"
+             src="{{globals.backendUri+org.coverImageUrl}}" routerLink="/organization/{{org.id}}">
+        <div class="user-organization-details clickable no-hover-enlarge"
              routerLink="/organization/{{org.id}}">
           <div class="user-organization-name">{{org.name}}</div>
           <!--          <div class="user-organization-role">{{org.role}}</div>-->
         </div>
-        <div class="clickable no-hover-enlarge no-shadow user-exit-organization-button">
+        <div class="clickable no-hover-enlarge user-exit-organization-button">
           <fa-icon (click)="removeSelfFromOrg(org.id)" [icon]="faSignOutAlt"></fa-icon>
         </div>
-      </div>
-    </div>
-    <div class="user-action-container">
-      <div class="user-action clickable primary-action no-hover-enlarge no-shadow">
-        <a class="nav-link" routerLink="/form/user/{{user.id}}" routerLinkActive="active">Edit</a>
-      </div>
-      <div (click)="signOut()" class="user-action clickable no-hover-enlarge no-shadow">
-        Sign out
       </div>
     </div>
   </div>
