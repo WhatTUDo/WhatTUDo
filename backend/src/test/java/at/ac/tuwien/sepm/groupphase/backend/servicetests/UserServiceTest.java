@@ -186,7 +186,7 @@ public class UserServiceTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
+        Set<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
         assert (recommendedEvent.size() > 0);
         assert (recommendedEvent.contains(event3));
@@ -233,7 +233,7 @@ public class UserServiceTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        List<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
+        Set<Event> recommendedEvent = userService.getRecommendedEvents(user.getId());
         assert (recommendedEvent != null);
         assert (recommendedEvent.size() > 0);
     }

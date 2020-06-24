@@ -10,6 +10,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService extends UserDetailsService {
 
@@ -109,5 +110,5 @@ public interface UserService extends UserDetailsService {
      * @return List of 4 recommended Events if a recommendation can be made, otherwise a List of recommended/random events
      * @throws ServiceException is thrown if something goes wrong during data processing.
      */
-    List<Event> getRecommendedEvents(Integer userId) throws ServiceException;
+    Set<Event> getRecommendedEvents(Integer userId) throws ServiceException;
 }

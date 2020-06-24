@@ -34,9 +34,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.annotation.security.PermitAll;
 import java.security.Principal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -202,11 +200,11 @@ public class UserEndpoint {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = "/recommendedEvents/{id}")
     @ApiOperation(value = "Get recommended Events")
-    public List<EventDto> getRecommendedEvents(@PathVariable(value = "id") Integer id) {
+    public Set<EventDto> getRecommendedEvents(@PathVariable(value = "id") Integer id) {
         log.info("get recommended event for user");
 
         try {
-            List<Event> recommendedEvent = userService.getRecommendedEvents(id);
+            Set<Event> recommendedEvent = userService.getRecommendedEvents(id);
             if (recommendedEvent.size() < 4) {
                 ArrayList<Integer> ids = new ArrayList<>();
                 for (Event e : recommendedEvent
@@ -222,7 +220,7 @@ public class UserEndpoint {
                     if (event.isPresent() && !ids.contains(event.get().getId())) recommendedEvent.add(event.get());
                 }
             }
-            List<EventDto> eventDtos = new ArrayList<>();
+            Set<EventDto> eventDtos = new HashSet<>();
             recommendedEvent.forEach(event -> eventDtos.add(eventMapper.eventToEventDto(event)));
             return eventDtos;
         } catch (ServiceException e) {

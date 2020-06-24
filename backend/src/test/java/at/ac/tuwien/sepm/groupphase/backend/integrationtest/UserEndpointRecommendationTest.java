@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -118,10 +119,8 @@ public class UserEndpointRecommendationTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        List<EventDto> recommendedEvent = userEndpoint.getRecommendedEvents(user.getId());
-        assert (recommendedEvent != null);
+        List<EventDto> recommendedEvent = new ArrayList<>(userEndpoint.getRecommendedEvents(user.getId()));
         assert (recommendedEvent.size() > 0);
-        assertEquals(recommendedEvent.get(0).getId(), event3.getId());
 
     }
 
@@ -167,7 +166,7 @@ public class UserEndpointRecommendationTest {
         AttendanceStatus attend1 = attendanceRepository.save(new AttendanceStatus(user, event1, AttendanceStatusPossibilities.INTERESTED));
         AttendanceStatus attend2 = attendanceRepository.save(new AttendanceStatus(user, event2, AttendanceStatusPossibilities.ATTENDING));
 
-        List<EventDto> recommendedEvent = userEndpoint.getRecommendedEvents(user.getId());
+        Set<EventDto> recommendedEvent = userEndpoint.getRecommendedEvents(user.getId());
         assertNotNull(recommendedEvent);
         assert (recommendedEvent.size() > 0);
 

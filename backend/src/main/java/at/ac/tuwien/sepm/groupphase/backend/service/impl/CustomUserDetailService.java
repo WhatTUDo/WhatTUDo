@@ -17,19 +17,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 @Service
@@ -208,11 +205,11 @@ public class CustomUserDetailService implements UserService {
 
     @Transactional
     @Override
-    public List<Event> getRecommendedEvents(Integer userId) {
+    public Set<Event> getRecommendedEvents(Integer userId) {
 
         try {
             ArrayList<Integer> ids = new ArrayList<>();
-            List<Event> recommendedEvents = new ArrayList<>();
+            Set<Event> recommendedEvents = new HashSet<>();
             List<Event> events = attendanceService.getEventUserIsAttending(userId);
             events.addAll(attendanceService.getEventUserIsInterested(userId));
             Collection<Label> allLabels = labelService.getAll();
