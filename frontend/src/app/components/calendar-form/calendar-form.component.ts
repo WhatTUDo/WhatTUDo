@@ -23,6 +23,7 @@ export class CalendarFormComponent implements OnInit {
   calendar: Calendar;
 
   isUpdate = true;
+  orgsSelect: string;
 
   organizations: Array<Organization>;
   faChevronLeft = faChevronLeft;
@@ -48,10 +49,12 @@ export class CalendarFormComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id != 0) {
       this.isUpdate = true;
+      this.orgsSelect = "You can select one or more Organizations in which you are a Moderator.";
       this.calendarService.getCalendarById(id)
         .subscribe(calendar => this.calendar = calendar);
     } else {
       this.isUpdate = false;
+      this.orgsSelect = "You can select one Organization in which you are a Moderator. Afterwards you can add more by editing the calendar.";
       this.calendar = new Calendar(0, null, [], []);
     }
 
