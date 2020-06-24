@@ -86,7 +86,7 @@ VALUES (1, '2020-06-24 23:00:00', 'Bararbend der FS Architektur', '2020-06-24 16
         CURRENT_TIMESTAMP()),
        (3, '2020-06-22 11:30:00', 'Gemeinsames Frühstück mit den Fachschaften', '2020-06-22 09:00:00', 7,
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (4, '2020-06-26 18:00:00', 'Feier zum 150. Gründungstag', '2020-06-26 12:00:00', 4, CURRENT_TIMESTAMP(),
+       (4, '2020-06-26 18:00:00', 'Fachschaft-Rally', '2020-06-26 12:00:00', 4, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
        (5, '2020-06-27 21:00:00', 'Seminar zum ES-Tut', '2020-06-27 19:30:00', 3, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
