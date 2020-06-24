@@ -3,10 +3,7 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarAddEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCalendarRemoveEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationCreateEvent;
-import at.ac.tuwien.sepm.groupphase.backend.events.organization.OrganizationEditEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.organization.*;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotAllowedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
@@ -100,8 +97,9 @@ public class SimpleOrganizationService implements OrganizationService {
         try {
             if(organizationRepository.findById(organisationID).isPresent()){
                 Organization a = organizationRepository.findById(organisationID).get();
-                this.removeCalendars(a,a.getCalendars());
-            organizationRepository.delete(a);
+                this.removeCalendars(a, a.getCalendars());
+                publisher.publishEvent(new OrganizationDeleteEvent(a.getName()));
+                organizationRepository.delete(a);
           }
 
             return organisationID;

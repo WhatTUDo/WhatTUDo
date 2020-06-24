@@ -2,6 +2,9 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.*;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventUpdateEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.location.LocationCreateEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.location.LocationDeleteEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.location.LocationUpdateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotAllowedException;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.AttendanceRepository;
@@ -56,6 +59,7 @@ public class SimpleLocationService implements LocationService {
         try {
             validator.validateLocation(location);
             Optional<Location> found = locationRepository.findByAddressAndZip(location.getAddress(), location.getZip());
+            publisher.publishEvent(new LocationCreateEvent(location.getName()));
             return found.orElseGet(() -> locationRepository.save(location));
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
@@ -68,7 +72,7 @@ public class SimpleLocationService implements LocationService {
             Optional<Location> found = locationRepository.findById(location.getId());
             if (found.isPresent()) {
                 validator.validateLocation(location);
-                //TODO: publisher.publishEvent(new EventUpdateEvent(savedEvent.getName()));
+                publisher.publishEvent(new LocationUpdateEvent(location.getName()));
                 return locationRepository.save(location);
             } else {
                 throw new NotFoundException("No location found with id " + location.getId());
@@ -93,6 +97,7 @@ public class SimpleLocationService implements LocationService {
                 toDelete.getEvents().removeAll(elist);
                 List<Event> empty = new ArrayList<>();
                 toDelete.setEvents(empty);
+                publisher.publishEvent(new LocationDeleteEvent(toDelete.getName()));
                 locationRepository.delete(toDelete);
             } catch (PersistenceException e) {
                 throw new ServiceException(e.getMessage(), e);

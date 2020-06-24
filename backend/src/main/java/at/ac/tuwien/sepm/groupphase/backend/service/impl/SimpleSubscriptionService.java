@@ -3,6 +3,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 import at.ac.tuwien.sepm.groupphase.backend.entity.ApplicationUser;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Subscription;
+import at.ac.tuwien.sepm.groupphase.backend.events.subscription.SubscriptionCreateEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.subscription.SubscriptionDeleteEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.CalendarRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
@@ -29,10 +32,12 @@ public class SimpleSubscriptionService implements SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final CalendarRepository calendarRepository;
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher publisher;
 
     @Override
     public Subscription create(Subscription subscription) throws ServiceException, NotFoundException {
         try {
+            publisher.publishEvent(new SubscriptionCreateEvent(subscription.getId().toString()));
             return subscriptionRepository.save(subscription);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
@@ -45,6 +50,7 @@ public class SimpleSubscriptionService implements SubscriptionService {
     public Subscription delete(Subscription subscription) throws ServiceException, NotFoundException {
         try {
             getById(subscription.getId());
+            publisher.publishEvent(new SubscriptionDeleteEvent(subscription.getId().toString()));
             subscriptionRepository.delete(subscription);
             return subscription;
         } catch (PersistenceException e) {
