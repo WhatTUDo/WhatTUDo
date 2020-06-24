@@ -5,7 +5,7 @@
 <div class="centered-two-third">
   <div class="title-icon-button-combo">
     <h2>Calendars</h2>
-    <div class="icon-button clickable no-hover-enlarge">
+    <div *ngIf="authService.isLoggedIn()" class="icon-button clickable no-hover-enlarge">
       <fa-icon [icon]="faPlus" routerLink="/form/calendar"></fa-icon>
     </div>
   </div>
