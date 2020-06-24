@@ -133,6 +133,9 @@ export class OrganizationComponent implements OnInit {
   deleteOrganization(id: number) {
     if (confirm(`You are deleting organization "${this.organization.name}". Are you sure?`)) {
       this.organizationService.deleteOrganization(id).subscribe(organization => {
+        alert("Deleted Organization with id: " + id);
+        history.back();
+
       })
     }
   }

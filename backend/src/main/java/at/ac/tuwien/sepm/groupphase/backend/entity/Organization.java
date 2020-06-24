@@ -22,7 +22,7 @@ public class Organization extends BaseEntity {
     private String name;
 
     @ToString.Exclude
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinTable(
         name = "organization_calendar",
         joinColumns = @JoinColumn(name = "organization_id"),
@@ -33,7 +33,7 @@ public class Organization extends BaseEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Fetch(FetchMode.SELECT)
-    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<OrganizationMembership> memberships = new HashSet<>();
 
     @ToString.Exclude
