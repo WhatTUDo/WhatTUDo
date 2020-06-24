@@ -112,7 +112,7 @@
         </label>
         <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…" #njf
         ></textarea>
-        <button (click)="addComment(njf.value); comment-textarea.setValue('Leave a comment…')" class="full-width-form-button no-hover-enlarge">Send
+        <button (click)="addComment(njf.value); njf.value=''" class="full-width-form-button no-hover-enlarge">Send
         </button>
       </div>
 
