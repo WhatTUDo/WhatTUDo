@@ -21,6 +21,6 @@
   <div class="comment-edit" *ngIf="editActive">
     <label for="comment-textarea"></label>
     <textarea class="no-outline" id="comment-textarea" name="comment" #njf>{{comment.text}}</textarea>
-    <button (click)="editComment(njf.value)" class="full-width-form-button no-hover-enlarge">Send</button>
+    <button (click)="editComment(njf.value); comment.reset()" class="full-width-form-button no-hover-enlarge">Send</button>
   </div>
 </div>
