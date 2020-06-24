@@ -112,13 +112,22 @@
       <p>The application will deliver smart recommendations as you complete the event entry. <a
         routerLink="/explanation/eventcollision">Learn More. </a>
       </p>
-      <button (click)="getEventConflicts()">Check For Conflicts</button>
+      <button class="get-conflict-button" (click)="getEventConflicts()">Check For Conflicts</button>
       <div class="suggestions-container">
-        <div class="suggestion-item" *ngIf="conflictExists">
+        <div class="suggestion-item yellow" *ngIf="conflictExists">
           <app-event-conflict-resolver
             [event]="calendarEvent" [collisionResponse]="collisionResponse"
             (change)="updateFromConflictResolver($event)">
           </app-event-conflict-resolver>
+        </div>
+        <div class="suggestion-item green" *ngIf="!conflictExists && displayNoConflictMessage">
+          <div class="suggestion-container">
+            <div class="heading-icon">
+              <fa-icon [icon]="faCheckCircle">All Good!</fa-icon>
+            </div>
+
+            <h3>No collision found.</h3>
+          </div>
         </div>
       </div>
     </div>
