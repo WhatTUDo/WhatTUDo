@@ -36,8 +36,8 @@ public class ICalMapper {
         vEvent.setSummary(event.getName());
         if (event.getLocation() != null) vEvent.setLocation(event.getLocation().getName());
         if (event.getDescription() != null) vEvent.setDescription(event.getDescription());
-        vEvent.setDateStart(Date.from(event.getStartDateTime().atZone(ZoneId.systemDefault()).toInstant()));
-        vEvent.setDateEnd(Date.from(event.getEndDateTime().atZone(ZoneId.systemDefault()).toInstant()));
+        vEvent.setDateStart(Date.from(event.getStartDateTime().atZone(ZoneId.of("UTC")).toInstant()));
+        vEvent.setDateEnd(Date.from(event.getEndDateTime().atZone(ZoneId.of("UTC")).toInstant()));
         return vEvent;
     }
 

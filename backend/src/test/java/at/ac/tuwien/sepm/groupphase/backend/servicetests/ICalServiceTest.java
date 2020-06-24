@@ -76,8 +76,8 @@ public class ICalServiceTest {
         assertAll(
             () -> assertEquals(3, events.size()),
             () -> assertEquals(calendar1.getEvents().get(0).getName(), events.get(0).getSummary().getValue()),
-            () -> assertEquals(calendar1.getEvents().get(0).getStartDateTime().atZone(ZoneId.systemDefault()).toInstant(), events.get(0).getDateStart().getValue().toInstant()),
-            () -> assertEquals(calendar1.getEvents().get(0).getEndDateTime().atZone(ZoneId.systemDefault()).toInstant(), events.get(0).getDateEnd().getValue().toInstant()),
+            () -> assertEquals(calendar1.getEvents().get(0).getStartDateTime().atZone(ZoneId.of("UTC")).toInstant(), events.get(0).getDateStart().getValue().toInstant()),
+            () -> assertEquals(calendar1.getEvents().get(0).getEndDateTime().atZone(ZoneId.of("UTC")).toInstant(), events.get(0).getDateEnd().getValue().toInstant()),
             () -> assertEquals(calendar1.getEvents().get(0).getLocation().getName(), events.get(0).getLocation().getValue()),
             () -> assertEquals(calendar1.getEvents().get(0).getDescription(), events.get(0).getDescription().getValue())
         );
