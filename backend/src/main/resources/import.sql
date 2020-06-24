@@ -1,41 +1,39 @@
-INSERT INTO ORGANIZATION (ID, NAME, CREATED_AT, UPDATED_AT)
-VALUES (1, 'Fachschaft Architektur', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (2, 'Fachschaft Bau- und Umweltingenieurwesen', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (3, 'Fachschaft Doktorat', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (4, 'Fachschaft Elektrotechnik', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (5, 'Fachschaft Informatik', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (6, 'Fachschaft Lehramt', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (7, 'Fachschaft Maschinenbau und Verfahrenstechnik', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (8, 'Fachschaft Raumplanung', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (9, 'Fachschaft Technische Chemie', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (10, 'Fachschaft Technische Mathematik', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (11, 'Fachschaft Technische Physik', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (12, 'Fachschaft Geodäsie und Geoinformation', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+INSERT INTO ORGANIZATION (ID, NAME, DESCRIPTION, CREATED_AT, UPDATED_AT)
+VALUES (1, 'Fachschaft Architektur', 'Die fachschaft::architektur sind Studierende mit den unterschiedlichsten Interessen, die sich zur Aufgabe gestellt haben, alle Architekturstudierenden gegenüber Lehrenden der Architektur und allen anderen zu vertreten.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (2, 'Fachschaft Bau- und Umweltingenieurwesen', 'Die Fachschaft Bau- und Umweltingenieurwesen (.biz) ist der Treffpunkt aller Bau- und Umweltingenieurstudierenden.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (3, 'Fachschaft Doktorat', 'We are the representation of interests of doctoral candidates at TU Wien. We act in self-governing bodies at the university. We support and advise you in your matters of studies and research. Aside from this we offer workshops and a social programme.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (4, 'Fachschaft Elektrotechnik', 'Die Fachschaft Elektrotechnik (kurz: FET), ist die offizielle Vertretung aller Studierenden auf der Fakultät für Elektrotechnik und Informationstechnik.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (5, 'Fachschaft Informatik', 'Die Fachschaft Informatik ist die Interessensvertretung der Informatikstudierenden an der Technischen Universität.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (6, 'Fachschaft Lehramt', 'Wir, die Fachschaft Lehramt, sind eine Gruppe ehrenamtlicher Studierender, die es sich zur Aufgabe gemacht haben, sich um die Anliegen und Probleme der Lehramtsstudierenden an der TU Wien zu kümmern.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (7, 'Fachschaft Maschinenbau und Verfahrenstechnik', 'In der Fachschaft arbeiten Studierende der Bachelor – und Masterstudien Maschinenbau, Wirtschaftsingenieurwesen – Maschinenbau, Verfahrenstechnik und Materialwissenschaften ehrenamtlich zusammen.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (8, 'Fachschaft Raumplanung', 'Die Fachschaft Raumplanung ist das Kommunikationszentrum für Raumplanungsstudierende. Hier findest du engagierte Studierende, mit denen du Interessen und Erfahrungen austauschen kannst.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (9, 'Fachschaft Technische Chemie', 'Die Fachschaft ist deine Interessensvertretung und die erste Anlaufstelle für Probleme im Studium Technische Chemie.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (10, 'Fachschaft Technische Mathematik', 'Die Fachschaft Technische Mathematik ist eine Gruppe von Personen, die sich für das Wohl der Mathematik-Studierenden an der TU Wien einsetzt und es als ihre Aufgabe sieht, die Studienvertretung Technische Mathematik bei ihren Tätigkeiten zu unterstützen.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (11, 'Fachschaft Technische Physik', 'fstph.at', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (12, 'Fachschaft Geodäsie und Geoinformation', 'Die Fachschaft Vermessung und Geoinformation ist eine Studentenvertretung, die in dieser Form auf anderen Universitäten, gar auf anderen Fakultäten schwer zu finden ist.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 
-INSERT INTO CALENDAR (ID, NAME, CREATED_AT, UPDATED_AT)
-VALUES (1, 'Events', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (2, 'Party', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (3, 'Tutorien', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (4, 'Festln', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (5, 'Vorträge', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (6, 'Journaldienst', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (7, 'Essen', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (8, 'Party', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (9, 'Treffen', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+INSERT INTO CALENDAR (ID, NAME, DESCRIPTION, CREATED_AT, UPDATED_AT)
+VALUES (1, 'Events', 'Events der fs::arch', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (2, 'Party', '#BYOB 🎉', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (3, 'Tutorien', 'E-Tuts von FSCH', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (4, 'Festln', 'Feier der FET. Nur für ÖH-Mitglieder.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (5, 'Vorträge', 'Vortragsreihe "Wie genießt man Schwechater richtig?"', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (6, 'Inskriptionsberatung', 'Angebot verschiedener Fachschaften sorgen für eine reibungslose Inskription.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (7, 'Essen', 'Gratis-Essen-Kalender von Herrn Michi Sabo', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (8, 'Treffen', 'Meet and greets with your profs.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 
 INSERT INTO ORGANIZATION_CALENDAR (ORGANIZATION_ID, CALENDAR_ID)
 VALUES (1, 1),
        (2, 2),
-       (2, 3),
-       (3, 4),
+       (9, 3),
+       (4, 4),
        (3, 5),
        (4, 6),
        (4, 7),
        (4, 8),
        (5, 7),
-       (5, 9),
        (8, 1),
        (9, 5),
        (10, 6),
@@ -44,23 +42,21 @@ VALUES (1, 1),
 INSERT INTO USER (ID, EMAIL, IS_SYSADMIN, NAME, PASSWORD, CREATED_AT, UPDATED_AT)
 VALUES (1, 'dillon@demo.whattudo.at', false, 'Dillon Dingle', '$2a$10$ua4K4vhX75mvmEWkHhckeuXfwf0/R7IbeJ1SyOCA0f1OkkC6dJ7Sa',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (2, 'alexis@demo.whattudo.at', false, 'Alexis Ault', '$2a$10$Obqcl.ckGwkVQzOFevPQVuiFIkEGtcrpB.rT68xKrMeJH5Wpjwek.',
+       (2, 'troy@demo.whattudo.at', false, 'Troy Tipping', '$2a$10$lv8iS4LRtwu64rvoxSi9VexKb81nW1RHWYqrtjjI4mJ/XF6CkRqWW',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (3, 'troy@demo.whattudo.at', false, 'Troy Tipping', '$2a$10$lv8iS4LRtwu64rvoxSi9VexKb81nW1RHWYqrtjjI4mJ/XF6CkRqWW',
+       (3, 'tess@demo.whattudo.at', false, 'Tess Tenney', '$2a$10$kukXfWJY7i9lpaDbj5FtXuXWnr2QXBGOOjj4FwPHzi3ZhXBZbnA.K',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (4, 'tess@demo.whattudo.at', false, 'Tess Tenney', '$2a$10$kukXfWJY7i9lpaDbj5FtXuXWnr2QXBGOOjj4FwPHzi3ZhXBZbnA.K',
+       (4, 'levi@demo.whattudo.at', false, 'Levi Lenz', '$2a$10$3NmbvGh5gc7nqc1lHmX5nOiBusenJ.yakcao19xMHGgukZHrXqhKK',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (5, 'levi@demo.whattudo.at', false, 'Levi Lenz', '$2a$10$3NmbvGh5gc7nqc1lHmX5nOiBusenJ.yakcao19xMHGgukZHrXqhKK',
+       (5, 'lorenzo@demo.whattudo.at', false, 'Lorenzo Landers', '$2a$10$crKBS1KD3LvSAVnBOUeL9.CgDtT.Ce0fUgi/tlnwhYkx0C7moUzfu',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (6, 'lorenzo@demo.whattudo.at', false, 'Lorenzo Landers', '$2a$10$crKBS1KD3LvSAVnBOUeL9.CgDtT.Ce0fUgi/tlnwhYkx0C7moUzfu',
+       (6, 'hasnain@demo.whattudo.at', false, 'Hasnain Hurley', '$2a$10$wNAkyTOQZayMc6H.lKeIg.qJTo/15X2tmv44VLgGzuuQCVuDmfZvW',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (7, 'hasnain@demo.whattudo.at', false, 'Hasnain Hurley', '$2a$10$wNAkyTOQZayMc6H.lKeIg.qJTo/15X2tmv44VLgGzuuQCVuDmfZvW',
+       (7, 'barnaby@demo.whattudo.at', false, 'Barnaby Burger', '$2a$10$r1KdHV7FEYkmdeTACjHpiORwMSUX3J4xqs0gkwjzaDK3vegMtOkH.',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (8, 'barnaby@demo.whattudo.at', false, 'Barnaby Burger', '$2a$10$r1KdHV7FEYkmdeTACjHpiORwMSUX3J4xqs0gkwjzaDK3vegMtOkH.',
+       (8, 'leon@demo.whattudo.at', false, 'Leon Luke', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (9, 'leon@demo.whattudo.at', false, 'Leon Luke', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S',
-        CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (10, 'admin@demo.whattudo.at', true, 'Admin', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S',
+       (9, 'admin@demo.whattudo.at', true, 'Admin', '$2a$10$fATtjZH3NLyI0gWujkUv..ZAzF2p3to8r3BUjIGVUVOJpd6JtZK0S',
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 INSERT INTO ORGA_MEMBERSHIP (ORGANIZATION_ID, USER_ID, ROLE)
@@ -68,15 +64,11 @@ VALUES (1, 1, 'MOD'),
        (1, 2, 'MEMBER'),
        (2, 1, 'MEMBER'),
        (2, 3, 'MEMBER'),
-       (3, 4, 'MEMBER'),
        (4, 5, 'MEMBER'),
        (4, 6, 'MEMBER'),
        (4, 1, 'MEMBER'),
        (5, 7, 'MEMBER'),
-       (6, 8, 'MEMBER'),
-       (7, 9, 'MEMBER'),
-       (8, 9, 'MEMBER'),
-       (9, 9, 'MEMBER');
+       (5, 3, 'MOD');
 
 
 INSERT INTO EVENT (ID, END_DATE_TIME, NAME, START_DATE_TIME, CALENDAR_ID, CREATED_AT, UPDATED_AT)
@@ -88,7 +80,7 @@ VALUES (1, '2020-06-24 23:00:00', 'Bararbend der FS Architektur', '2020-06-24 16
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
        (4, '2020-06-26 18:00:00', 'Fachschaft-Rally', '2020-06-26 12:00:00', 4, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (5, '2020-06-27 21:00:00', 'Seminar zum ES-Tut', '2020-06-27 19:30:00', 3, CURRENT_TIMESTAMP(),
+       (5, '2020-06-27 12:00:00', 'Seminar zum ES-Tut', '2020-06-27 10:30:00', 3, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
        (6, '2020-06-23 15:00:00', 'Tutorium zum Thema Studienabschluss', '2020-06-22 14:00:00', 5, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
