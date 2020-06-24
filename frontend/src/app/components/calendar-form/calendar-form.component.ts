@@ -137,8 +137,6 @@ export class CalendarFormComponent implements OnInit {
   uploadImage() {
     if (!this.selectedImage) return;
     this.calendarService.uploadCalendarAvatar(this.calendar.id, this.selectedImage).subscribe(resp => {
-      // @ts-ignore
-      this.calendar.coverImageUrl = resp.url;
     });
   }
 
