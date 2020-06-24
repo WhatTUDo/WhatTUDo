@@ -96,7 +96,7 @@ public class CommentEndpointTest {
         //Note: Update Time can't be the same, that is okay.
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void save_thenFindById_shouldReturn_SameComment() {
         Organization orga;
@@ -128,7 +128,7 @@ public class CommentEndpointTest {
         assertEquals(findById.getEventId(), returnedComment.getEventId());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"SYSADMIN"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"SYSADMIN"})
     @Test
     @Transactional
     public void savedComment_then_getCommentsByUserId_ReturnsComment() {
@@ -164,7 +164,7 @@ public class CommentEndpointTest {
         }
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"SYSADMIN"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"SYSADMIN"})
     @Test
     @Transactional
     public void savedTwoComments_then_getAllComments_ReturnsPreviousSizePlusTwo() {

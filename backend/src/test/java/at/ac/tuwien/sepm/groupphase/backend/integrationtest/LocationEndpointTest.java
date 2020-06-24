@@ -57,7 +57,7 @@ public class LocationEndpointTest {
     LocationMapper mapper;
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void getAllLocations_shouldReturn_All() {
         List<Integer> eventIds = Collections.emptyList();
@@ -83,7 +83,7 @@ public class LocationEndpointTest {
         assertEquals(locationDto.getLongitude(), returnedLocation.getLongitude());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void save_thenRead_shouldReturn_sameLocation() {
 
@@ -101,7 +101,7 @@ public class LocationEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void save_withoutCorrectParam_shouldReturn_ResponseStatusException() {
         List<Integer> eventIds = Collections.emptyList();
@@ -113,7 +113,7 @@ public class LocationEndpointTest {
     }
 
     @Transactional
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void delete_savedEvent_findByIdReturnsResponseException() {
         List<Integer> eventIds = Collections.emptyList();
@@ -125,7 +125,7 @@ public class LocationEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void updateEntityValues_shouldReturn_correctChanges() {
         List<Integer> eventIds = Collections.emptyList();
@@ -149,7 +149,7 @@ public class LocationEndpointTest {
 
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void findByName_shouldReturn_correctLocation() {
         List<Integer> eventIds = Collections.emptyList();
@@ -166,7 +166,7 @@ public class LocationEndpointTest {
         assert (nonFound.size() == 0);
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void findByAddress_shouldReturn_correctLocation() {
         List<Integer> eventIds = Collections.emptyList();

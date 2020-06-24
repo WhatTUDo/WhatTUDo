@@ -109,7 +109,7 @@ public class EventEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void save_thenRead_shouldReturn_sameEvent() {
         Organization orga;
@@ -140,7 +140,7 @@ public class EventEndpointTest {
 
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void save_withoutCorrectParam_shouldReturn_ResponseStatusException() {
         Organization orga;
@@ -158,7 +158,7 @@ public class EventEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void get_validID_shouldReturn_EventWithSpecifiedID() {
         Organization orga;
@@ -180,7 +180,7 @@ public class EventEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void get_multipleEvents_WithValidStartEndDates_shouldReturn_listOfEventDtos() {
         Organization orga;
@@ -202,7 +202,7 @@ public class EventEndpointTest {
         assertNotEquals(0, eventDtos.size());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void delete_nonSavedEvent_IdNotGenerated_throwsNotFound() {
         Organization orga;
@@ -217,7 +217,7 @@ public class EventEndpointTest {
         assertThrows(NotFoundException.class, () -> endpoint.deleteEvent(0));
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void delete_savedEvent_findBYIdReturnsResponseException() {
         Organization orga;
@@ -234,7 +234,7 @@ public class EventEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.getById(returnedEvent.getId()));
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void updateEntityValues_shouldReturn_correctChanges() {
         Organization orga;
@@ -266,7 +266,7 @@ public class EventEndpointTest {
         assertEquals(finalEvent.getCalendarId(), eventDtoChanges.getCalendarId());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void updateEntityStartDateBefore2020_throwsResponseException() {
 //        Organization orga = organizationRepository.save(new Organization("Test Organization7"));
@@ -293,7 +293,7 @@ public class EventEndpointTest {
 
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void updateEntityStartDateBeforeEndDate_throwsResponseException() {
         Organization orga;
@@ -318,7 +318,7 @@ public class EventEndpointTest {
 
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void updateLabelsOfEvent_returnsEventWithNewLabels_RemoveLabel_findLabelsByIdIsEmpty() {
@@ -344,7 +344,7 @@ public class EventEndpointTest {
 
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void updateLabelsOfEvent_findLabelsById_returnsLabel() {
@@ -363,7 +363,7 @@ public class EventEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void getEventByCalendarId_returnsEvent() {
         Organization orga = new Organization("Test Organization");
@@ -387,7 +387,7 @@ public class EventEndpointTest {
         }
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void searchForEvents_whenNoEventsAreSaved_shouldReturnEmptyList() {
         List<EventDto> eventDtos = endpoint.searchNameAndDescription("find");
@@ -395,7 +395,7 @@ public class EventEndpointTest {
         assertEquals(0, eventDtos.size());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void searchForEvents_returnsListOfEvents() {
         Organization orga;
@@ -414,7 +414,7 @@ public class EventEndpointTest {
         assertNotEquals(0, eventDtos.size());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void searchForEvents_whenSearchTermMatchesNothing_shouldReturnEmptyList() {
         Organization orga;
@@ -432,7 +432,7 @@ public class EventEndpointTest {
         assertEquals(0, eventDtos.size());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void searchForEvents_whenSearchTermisNullOrEmpty_HttpStatusUnprocessableEntityIsThrown() {
         Organization orga;
@@ -452,7 +452,7 @@ public class EventEndpointTest {
         }
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void addLabelsOfEvent_returnsEventWithNewLabels() {
