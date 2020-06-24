@@ -61,7 +61,7 @@ public class LabelEndpointTest {
         assertEquals(labelDto.getName(), saved.getName());
     }
 
-    @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
+    @WithMockUser(username = "Dillon Dingle", roles = {"SYSADMIN"})
     @Test
     @Transactional
     public void deleteLabel_labelShouldBeDeleted() {
@@ -78,7 +78,7 @@ public class LabelEndpointTest {
         }
     }
 
-    @WithMockUser(username = "Person 1")
+    @WithMockUser(username = "Dillon Dingle")
     @Test
     @Transactional
     public void getAllLabels_ListOfAllLabelsShouldBeReturned() {

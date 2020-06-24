@@ -57,7 +57,7 @@ public class CalendarEndpointTest {
     LocationRepository locationRepository;
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void createCalendar_returnsCalendar() {
         Organization orga = new Organization("Test Organization");
@@ -70,7 +70,7 @@ public class CalendarEndpointTest {
         assertEquals(calendarDto.getName(), calendarSaved.getName());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void createCalendar_withDescription_returnsCalendar() {
         Organization orga = new Organization("Test Organization");
@@ -85,7 +85,7 @@ public class CalendarEndpointTest {
     }
 
     @Transactional
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void searchCalendar_byCalendarName_byEventName_returnsSavedCalendar() {
         Organization orga = new Organization("Test Organization");
@@ -106,7 +106,7 @@ public class CalendarEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void deleteCalendar_findCalendarWillReturnNotFound() {
         Organization orga = new Organization("Test Organization");
@@ -119,7 +119,7 @@ public class CalendarEndpointTest {
         assertThrows(ResponseStatusException.class, () -> calendarEndpoint.getById(calendarDto.getId()));
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void editCalendar_returnsCalendarWithUpdatedValues() {
         Organization orga = new Organization("Test Organization");
@@ -135,7 +135,7 @@ public class CalendarEndpointTest {
         assertEquals(update.getName(), calendarEndpoint.editCalendar(update).getName());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1", "MOD_2", "MEMBER_2"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1", "MOD_2", "MEMBER_2"})
     @Test
     public void updateOrganizationsForCalendar() {
         Organization orga = new Organization("Test Organization");
