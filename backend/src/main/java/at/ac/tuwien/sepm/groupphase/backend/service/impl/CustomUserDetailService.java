@@ -211,6 +211,7 @@ public class CustomUserDetailService implements UserService {
     public List<Event> getRecommendedEvents(Integer userId) {
 
         try {
+            ArrayList<Integer> ids = new ArrayList<>();
             List<Event> recommendedEvents = new ArrayList<>();
             List<Event> events = attendanceService.getEventUserIsAttending(userId);
             events.addAll(attendanceService.getEventUserIsInterested(userId));
@@ -235,14 +236,17 @@ public class CustomUserDetailService implements UserService {
                 if (labels[maxAt] != 0) {
                     List<Event> possibleEvents = labelService.findById(maxAt).getEvents();
                     Optional<Event> possibleEvent = possibleEvents.stream().filter(e -> e.getStartDateTime().isAfter(LocalDateTime.now()) && !attendanceService.getUsersByEvent(e).contains(userRepository.getOne(userId))).findAny();
-                    if(possibleEvent.isPresent() && !recommendedEvents.contains(possibleEvent.get())) recommendedEvents.add(possibleEvent.get());
+                    if (possibleEvent.isPresent() && !ids.contains(possibleEvent.get().getId())) {
+                        recommendedEvents.add(possibleEvent.get());
+                        ids.add(possibleEvent.get().getId());
+                    }
                     labels[maxAt] = 0;
                     if (recommendedEvents.size() >= 4) return recommendedEvents;
                 }
             }
             for (int i = 0; i < 4 - recommendedEvents.size(); i++) {
                 Optional<Event> randomEvent = eventService.findForDates(LocalDateTime.now(), LocalDateTime.now().plusDays(30)).stream().findAny();
-                if (randomEvent.isPresent() && !recommendedEvents.contains(randomEvent.get())) {
+                if (randomEvent.isPresent() && !ids.contains(randomEvent.get().getId())) {
                     recommendedEvents.add(randomEvent.get());
                 } else {
                     return recommendedEvents;

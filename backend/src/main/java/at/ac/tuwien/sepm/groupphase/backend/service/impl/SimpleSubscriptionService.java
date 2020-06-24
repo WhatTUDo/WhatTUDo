@@ -37,8 +37,9 @@ public class SimpleSubscriptionService implements SubscriptionService {
     @Override
     public Subscription create(Subscription subscription) throws ServiceException, NotFoundException {
         try {
+            Subscription sub = subscriptionRepository.save(subscription);
             publisher.publishEvent(new SubscriptionCreateEvent(subscription.getId().toString()));
-            return subscriptionRepository.save(subscription);
+            return sub;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage());
         } catch (InvalidDataAccessApiUsageException e) {
