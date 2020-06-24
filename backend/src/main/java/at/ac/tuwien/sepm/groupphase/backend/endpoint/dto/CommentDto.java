@@ -17,6 +17,6 @@ public class CommentDto extends BaseDto {
     private String username;
     private Integer eventId;
 
-    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime updateDateTime;
 }
