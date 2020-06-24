@@ -44,6 +44,7 @@ export class AdminDashboardComponent implements OnInit {
   deleteLabel(id: number) {
     if (confirm(`You are deleting label "${this.labels.find(l => l.id === id).name}". Are you sure?`)) {
       this.labelService.deleteLabel(id).subscribe(_ => {
+        this.labels = this.labels.filter(l => l.id !== id);
       });
     }
   }
