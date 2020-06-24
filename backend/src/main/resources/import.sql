@@ -36,12 +36,10 @@ VALUES (1, 1),
        (4, 8),
        (5, 7),
        (5, 9),
-       (6, 10),
-       (6, 11),
-       (6, 12),
-       (7, 13),
        (8, 1),
-       (9, 5);
+       (9, 5),
+       (10, 6),
+       (12, 6);
 
 INSERT INTO USER (ID, EMAIL, IS_SYSADMIN, NAME, PASSWORD, CREATED_AT, UPDATED_AT)
 VALUES (1, 'dillon@demo.whattudo.at', false, 'Dillon Dingle', '$2a$10$ua4K4vhX75mvmEWkHhckeuXfwf0/R7IbeJ1SyOCA0f1OkkC6dJ7Sa',
