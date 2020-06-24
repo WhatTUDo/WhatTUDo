@@ -111,7 +111,7 @@
     align-items: center;
     justify-content: center;
 
-    padding: 4pt 0;
+    padding: 8pt 0;
 
     > .avatar {
       box-sizing: border-box;
@@ -149,6 +149,13 @@
       font-weight: $f-bold;
       font-size: 24pt;
     }
+  }
+
+
+  .calendar-description {
+    margin-bottom: 4pt;
+    padding: 0 8pt;
+    text-align: center;
   }
 
   .organization-info {

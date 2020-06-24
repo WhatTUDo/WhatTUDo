@@ -7,6 +7,7 @@ import {User} from "../../dtos/user";
 import {ActivatedRoute} from "@angular/router";
 import {Globals} from "../../global/globals";
 import {FormControl, FormGroup} from "@angular/forms";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-organization-list',
@@ -33,6 +34,7 @@ export class OrganizationListComponent implements OnInit {
   constructor(
     private organizationService: OrganizationService,
     private userService: UserService,
+    private authService: AuthService,
     private globals: Globals
   ) {
   }

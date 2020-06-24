@@ -85,6 +85,7 @@
             {{calendar.name}}
           </div>
         </div>
+        <div class="calendar-description">{{calendar.description}}</div>
         <div class="calendar-organizations">
           <div class="organization-info clickable no-hover-enlarge" *ngFor="let org of calendarOrganizations"
                routerLink="/organization/{{org.id}}">

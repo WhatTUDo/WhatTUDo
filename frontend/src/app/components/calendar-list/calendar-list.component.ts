@@ -109,7 +109,9 @@ export class CalendarListComponent implements OnInit {
       .concat(this.managedCalendars).concat(this.subscribedCalendars)
       .find(c => c.id === id).name}". Are you sure?`)) {
       this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
-        this.getAllCalendars();
+        this.subscribedCalendars = this.subscribedCalendars.filter(c => c.id !== id);
+        this.managedCalendars = this.managedCalendars.filter(c => c.id !== id);
+        this.otherCalendars = this.otherCalendars.filter(c => c.id !== id);
       });
     }
   }
@@ -255,7 +257,7 @@ export class CalendarListComponent implements OnInit {
     this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
   }
 
-  copyMessage(val: string){
+  copyMessage(val: string) {
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';

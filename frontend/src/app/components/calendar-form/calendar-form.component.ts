@@ -9,6 +9,7 @@ import {Organization} from '../../dtos/organization';
 import {observable} from "rxjs";
 import {CreateCalendar} from "../../dtos/CreateCalendar";
 import {Globals} from "../../global/globals";
+import {FeedbackService} from "../../services/feedback.service";
 
 @Component({
   selector: 'app-calendar-form',
@@ -33,6 +34,7 @@ export class CalendarFormComponent implements OnInit {
     private organizationService: OrganizationService,
     private location: Location,
     public globals: Globals,
+    private feedbackService: FeedbackService,
     public router: Router
   ) {
   }
@@ -65,6 +67,7 @@ export class CalendarFormComponent implements OnInit {
         }, error => {
         }, () => {
           this.calendarService.updateCalendar(this.calendar).subscribe(responseCalendar => {
+            this.feedbackService.displaySuccess("Edits Saved", "You updated this Calendar!");
             // this.router.navigate([`/calendar/${this.calendar.id}`])
           });
         });
@@ -76,6 +79,7 @@ export class CalendarFormComponent implements OnInit {
           console.log("Created calendar: ", observable);
           this.calendar = createdCalendar;
           this.calendarService.updateCalendar(this.calendar).subscribe(responseCalendar => {
+            this.feedbackService.displaySuccess("Saved Calendar", "You saved this Calendar!");
             console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
             // this.router.navigate([`/calendar/${this.calendar.id}`])
           });
