@@ -235,7 +235,7 @@ export class EventFormComponent implements OnInit {
   getAllEditableCalendars() {
     this.calendarService.getAllCalendars().subscribe((calendars: Calendar[]) => {
       this.editableCalendars = calendars;
-      this.editableCalendars = calendars.filter(cal => cal.canEdit);
+      this.editableCalendars = calendars.filter(cal => cal.canCreateEvents);
       if (!this.editableCalendars.length) {
         this.feedbackService.displayWarning('Heads up!', 'You have no permission to any calendar. Therefore, you cannot create any new events.')
       } else {

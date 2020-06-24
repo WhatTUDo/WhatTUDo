@@ -6,8 +6,9 @@ export class Calendar {
     public organizationIds: number[],
     public description?: string,
     public coverImageUrl?: string,
-    public canEdit?: Boolean,
-    public canDelete?: Boolean
+    public canCreateEvents?: boolean,
+    public canEdit?: boolean,
+    public canDelete?: boolean
   ) {
   }
 }
