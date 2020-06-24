@@ -129,7 +129,7 @@ public class UserEndpoint {
     @DeleteMapping("/{id}/roles")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
-    @ApiOperation("update user")
+    @ApiOperation("remove User from Organization with orgaId")
     public LoggedInUserDto removeFromOrga(@PathVariable Integer id, @RequestParam Integer orgaId) {
         try {
             return userMapper.applicationUserToUserDto(userService.removeFromOrga(
