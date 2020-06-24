@@ -80,7 +80,7 @@
         </div>
         <div class="organization-member-buttons">
           <div class="clickable no-hover-enlarge organization-manage-member-button">
-            <fa-icon *ngIf="organization.canEdit" [icon]="faCog"></fa-icon>
+            <fa-icon *ngIf="organization.canEdit && false" [icon]="faCog"></fa-icon>
           </div>
           <div class="clickable no-hover-enlarge organization-kick-member-button">
             <fa-icon (click)="removeFromOrg(member.id, organization.id)" *ngIf="organization.canEdit"

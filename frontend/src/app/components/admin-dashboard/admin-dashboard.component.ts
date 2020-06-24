@@ -49,7 +49,7 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   onSubmit() {
-    this.labelService.createLabel(name).subscribe((label) => {
+    this.labelService.createLabel(this.newLabelName).subscribe((label) => {
       this.labels.push(label);
     });
   }

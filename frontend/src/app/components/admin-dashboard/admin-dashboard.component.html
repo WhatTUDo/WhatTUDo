@@ -4,7 +4,7 @@
   <span>Admin Dashboard</span>
 </div>
 <div class="grid-one-third">
-  <div>
+  <div *ngIf="false">
     <h2>Users</h2>
     <div class="user-list">
       <div *ngFor="let user of users" class="user">
@@ -36,9 +36,10 @@
         <fa-icon *ngIf="addLabelExpanded" [icon]="faTimes"></fa-icon>
       </div>
     </div>
-    <form (keyup.enter)="onSubmit()" class="form input-button-combo add-label-section" *ngIf="addLabelExpanded">
+    <form (ngSubmit)="onSubmit()" (keyup.enter)="onSubmit()" class="form input-button-combo add-label-section" *ngIf="addLabelExpanded">
       <label for="label.name"></label>
-      <input class="form-control" [(ngModel)]="newLabelName" id="label.name" placeholder="New Label" type="text">
+      <input class="form-control" [(ngModel)]="newLabelName" [ngModelOptions]="{standalone: true}" id="label.name"
+             placeholder="New Label" type="text">
       <button class="no-hover-enlarge" type="submit">Create</button>
     </form>
     <div>
@@ -47,7 +48,7 @@
           {{label.name}}
         </div>
         <div class="label-buttons">
-          <fa-icon *ngIf="label.canEdit" [icon]="faCog" class="clickable no-hover-enlarge"
+          <fa-icon *ngIf="label.canEdit && false" [icon]="faCog" class="clickable no-hover-enlarge"
                    routerLink="/form/label/{{label.id}}">
             Edit Label
           </fa-icon>
