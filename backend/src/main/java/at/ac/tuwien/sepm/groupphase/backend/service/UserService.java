@@ -55,22 +55,18 @@ public interface UserService extends UserDetailsService {
      */
     ApplicationUser changeUserPassword(String email, String currentPassword, String newPassword) throws ServiceException, ValidationException, NotFoundException;
 
-    //TODO:
-
     /**
-     * @param user
+     * @param user             User for which Role should be updated.
      * @param organization
-     * @param organizationRole
-     * @return
+     * @param organizationRole Role to be Updated
+     * @return User with updated role.
      */
     ApplicationUser updateRoleInOrga(ApplicationUser user, Organization organization, OrganizationRole organizationRole);
 
-    //TODO:
-
     /**
-     * @param user
+     * @param user User to be removed.
      * @param organization
-     * @return
+     * @return User object.
      */
     ApplicationUser removeFromOrga(ApplicationUser user, Organization organization);
 

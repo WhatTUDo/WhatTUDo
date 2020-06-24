@@ -86,10 +86,10 @@ public class Validator {
         }
         if (currentPassword == null) {
             exceptions.add(new ValidationException("Current password cannot be null"));
-        }// TODO: Add password validation
+        }
         if (newPassword == null) {
             exceptions.add(new ValidationException("Current password cannot be null"));
-        } // TODO: Add password validation
+        }
 
         if (!exceptions.isEmpty()) {
             String summary = createExceptionSummaryString(exceptions);

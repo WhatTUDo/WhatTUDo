@@ -104,8 +104,6 @@ public class OrganizationServiceTest {
 
         organizationService.delete(organization.getId());
 
-        //TODO: Revisit this once the connection between Calendar and Organization is properly realized. Not yet testable.
-
         assertThrows(NotFoundException.class, () -> organizationService.findById(organization.getId()));
 
     }

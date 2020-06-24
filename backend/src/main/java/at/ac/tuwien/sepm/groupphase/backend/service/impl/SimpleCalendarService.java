@@ -76,7 +76,6 @@ public class SimpleCalendarService implements CalendarService {
         }
     }
 
-    //TODO: return calendarRepository.findAll
     @Override
     public List<Calendar> findAll() {
         try {

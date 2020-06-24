@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
-//TODO: replace this class with a correct ApplicationUser JPARepository implementation
 @Repository
 public class OldUserRepository {
 

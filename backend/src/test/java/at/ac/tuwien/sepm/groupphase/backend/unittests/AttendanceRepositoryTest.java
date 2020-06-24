@@ -39,7 +39,6 @@ public class AttendanceRepositoryTest {
         Calendar calendar = calendarRepository.save(new Calendar("LeseEvents", Collections.singletonList(organization)));
         Event event = eventRepository.save(new Event("Große Lesenacht", LocalDateTime.of(2021, 1, 1, 15, 30), LocalDateTime.of(2021, 1, 1, 16, 0), calendar));
         assertThrows(InvalidDataAccessApiUsageException.class, () -> attendanceRepository.save(null));
-        //FIXME:  assertThrows(NullPointerException.class, () -> attendanceRepository.save(new AttendanceStatus(null,null,null)));
         AttendanceStatus attendance = new AttendanceStatus(user, event, AttendanceStatusPossibilities.ATTENDING);
     }
 

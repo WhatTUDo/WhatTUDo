@@ -104,7 +104,7 @@ export class OrganizationComponent implements OnInit {
   getAllEditableCalendars() {
     this.calendarService.getAllCalendars().subscribe((calendars: Calendar[]) => {
       this.editableCalendars = calendars;
-    }) //FIXME: Make me to fetch only editable calendars.
+    })
   }
 
   /**
