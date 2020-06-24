@@ -46,7 +46,7 @@ public class CommentEndpoint {
         }
     }
 
-    @RolesAllowed({"MOD","SYSADMIN"})
+    @RolesAllowed({"MOD","MEMBER", "SYSADMIN"})
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")
