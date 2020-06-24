@@ -48,8 +48,8 @@ public class ICalMapperUnitTest {
     @Transactional
     public void time_working() {
         assertAll(
-            () -> assertEquals(event.getStartDateTime().atZone(ZoneId.systemDefault()).toInstant(), vEvent.getDateStart().getValue().toInstant()),
-            () -> assertEquals(event.getEndDateTime().atZone(ZoneId.systemDefault()).toInstant(), vEvent.getDateEnd().getValue().toInstant())
+            () -> assertEquals(event.getStartDateTime().atZone(ZoneId.of("UTC")).toInstant(), vEvent.getDateStart().getValue().toInstant()),
+            () -> assertEquals(event.getEndDateTime().atZone(ZoneId.of("UTC")).toInstant(), vEvent.getDateEnd().getValue().toInstant())
         );
     }
 
