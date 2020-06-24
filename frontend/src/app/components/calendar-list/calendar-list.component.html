@@ -27,10 +27,10 @@
     </form>
     <div *ngIf="searchActive">
       <div *ngFor="let cal of this.calendarSearchResult">
-        <div class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+        <div class="calendar">
           <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-medium"
                src="{{globals.backendUri+cal.coverImageUrl}}">
-          <div class="calendar-details">
+          <div class="calendar-details clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
             <div>
               <div class="calendar-name">{{cal.name}}</div>
               <div class="calendar-description">{{cal.description}}</div>
@@ -75,10 +75,10 @@
       </div>
       <div *ngIf="subscribedCalendars.length===0">You have no subscribed calenders yet.</div>
       <div *ngFor="let cal of this.subscribedCalendars" class="calendar clickable no-hover-enlarge">
-        <div class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+        <div class="calendar">
           <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-medium"
                src="{{globals.backendUri+cal.coverImageUrl}}">
-          <div class="calendar-details">
+          <div class="calendar-details clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
             <div>
               <div class="calendar-name">{{cal.name}}</div>
               <div class="calendar-description">{{cal.description}}</div>
@@ -115,10 +115,10 @@
     <div *ngIf="authService.isLoggedIn() && managedCalendars.length!==0 && !searchActive">
       <h3>Calendars Managed by me</h3>
       <div *ngFor="let cal of this.managedCalendars">
-        <div class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+        <div class="calendar">
           <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-medium"
                src="{{globals.backendUri+cal.coverImageUrl}}">
-          <div class="calendar-details">
+          <div class="calendar-details clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
             <div>
               <div class="calendar-name">{{cal.name}}</div>
               <div class="calendar-description">{{cal.description}}</div>
@@ -159,10 +159,10 @@
         </div>
       </div>
       <div *ngFor="let cal of otherCalendars">
-        <div class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+        <div class="calendar">
           <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-medium"
                src="{{globals.backendUri+cal.coverImageUrl}}">
-          <div class="calendar-details">
+          <div class="calendar-details clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
             <div class="clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
               <div class="calendar-name">{{cal.name}}</div>
               <div class="calendar-description">{{cal.description}}</div>
