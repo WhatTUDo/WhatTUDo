@@ -98,10 +98,12 @@ public class SimpleOrganizationService implements OrganizationService {
     @Override
     public Integer delete(Integer organisationID) throws ServiceException, NotFoundException {
         try {
-            Organization organizationToDelete = this.findById(organisationID);
-            List<Calendar> calendarsToRemove = organizationToDelete.getCalendars();
-            this.removeCalendars(organizationToDelete, calendarsToRemove);
-            organizationRepository.delete(organizationToDelete);
+            if(organizationRepository.findById(organisationID).isPresent()){
+                Organization a = organizationRepository.findById(organisationID).get();
+                this.removeCalendars(a,a.getCalendars());
+            organizationRepository.delete(a);
+          }
+
             return organisationID;
         } catch (NotFoundException e) {
             throw new NotFoundException(e.getMessage(), e);

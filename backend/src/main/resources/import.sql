@@ -70,22 +70,29 @@ VALUES (1, 1, 'MOD'),
        (5, 7, 'MEMBER'),
        (5, 3, 'MOD');
 
+INSERT INTO LOCATION (ID, NAME, ADDRESS, ZIP, LATITUDE, LONGITUDE, CREATED_AT, UPDATED_AT)
+VALUES (1, 'FS Winf', 'Favoritenstraße 9-11', '1040', 48.195190, 16.369630, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (2, 'Resselpark', 'Resselpark 1', '1040', 48.199478, 16.369150, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (3, 'FS Inf', 'Treitlstraße 3', '1040', 48.198860, 16.367411, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (4, 'Freihaus', 'Wiedner Hauptstraße 8-10', '1040', 48.198860, 16.367410, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (5, 'EI 7', 'Gußhausstraße 25', '1040', 48.196750, 16.370490, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (6, 'AudiMax', 'Getreidemarkt 9', '1060', 48.201229, 16.363539, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
-INSERT INTO EVENT (ID, END_DATE_TIME, NAME, START_DATE_TIME, CALENDAR_ID, CREATED_AT, UPDATED_AT)
-VALUES (1, '2020-06-24 23:00:00', 'Bararbend der FS Architektur', '2020-06-24 16:00:00', 1, CURRENT_TIMESTAMP(),
+INSERT INTO EVENT (ID, END_DATE_TIME, NAME, START_DATE_TIME, LOCATION_ID, CALENDAR_ID, CREATED_AT, UPDATED_AT)
+VALUES (1, '2020-06-24 23:00:00', 'Bararbend der FS Architektur', '2020-06-24 16:00:00', 2, 1, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (2, '2020-06-26 14:00:00', 'Online-Beratung', '2020-06-26 10:00:00', 6, CURRENT_TIMESTAMP(),
+       (2, '2020-06-26 14:00:00', 'Online-Beratung', '2020-06-26 10:00:00', null, 6, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (3, '2020-06-22 11:30:00', 'Gemeinsames Frühstück mit den Fachschaften', '2020-06-22 09:00:00', 7,
+       (3, '2020-06-22 11:30:00', 'Gemeinsames Frühstück mit den Fachschaften', '2020-06-22 09:00:00', 3, 7,
         CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (4, '2020-06-26 18:00:00', 'Fachschaft-Rally', '2020-06-26 12:00:00', 4, CURRENT_TIMESTAMP(),
+       (4, '2020-06-26 18:00:00', 'Fachschaft-Rally', '2020-06-26 12:00:00', 5, 4, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (5, '2020-06-27 12:00:00', 'Seminar zum ES-Tut', '2020-06-27 10:30:00', 3, CURRENT_TIMESTAMP(),
+       (5, '2020-06-27 12:00:00', 'Seminar zum ES-Tut', '2020-06-27 10:30:00', 4, 3, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (6, '2020-06-23 15:00:00', 'Tutorium zum Thema Studienabschluss', '2020-06-22 14:00:00', 5, CURRENT_TIMESTAMP(),
+       (6, '2020-06-23 15:00:00', 'Tutorium zum Thema Studienabschluss', '2020-06-22 14:00:00', 4, 5, CURRENT_TIMESTAMP(),
         CURRENT_TIMESTAMP()),
-       (7, '2020-07-01 15:00:00', 'Bolder-Tut', '2020-07-01 14:00:00', 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (8, '2020-07-02 15:00:00', 'Semesterabschlussfeier', '2020-07-02 14:00:00', 8, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
+       (7, '2020-07-01 15:00:00', 'Bolder-Tut', '2020-07-01 14:00:00', 1, 3, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (8, '2020-07-02 15:00:00', 'Semesterabschlussfeier', '2020-07-02 14:00:00', 6, 8, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 
 INSERT INTO LABEL (ID, NAME, CREATED_AT, UPDATED_AT)
@@ -104,4 +111,3 @@ VALUES (1, '2020-06-15 11:30:00', '2020-06-15 13:30:00', 'War toll! Lots of fun 
        (2, '2020-06-15 15:30:00', '2020-06-15 17:30:00', 'Das Event war schon?!', 1, 2),
        (3, '2020-06-15 15:30:00', '2020-06-15 17:30:00', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
        1,1);
-
