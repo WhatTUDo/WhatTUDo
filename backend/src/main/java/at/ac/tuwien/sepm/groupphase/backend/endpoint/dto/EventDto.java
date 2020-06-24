@@ -1,6 +1,7 @@
 package at.ac.tuwien.sepm.groupphase.backend.endpoint.dto;
 
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.EventEndpoint;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -13,8 +14,13 @@ import java.time.LocalDateTime;
 public class EventDto extends PermissionDto {
     private Integer id;
     private String name;
+
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime startDateTime;
+
+    @JsonFormat(pattern="yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime endDateTime;
+    
     private Integer calendarId;
     private Integer locationId;
     private String description;
