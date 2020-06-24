@@ -61,11 +61,11 @@ public class ICalEndpoint {
     }
 
     @PreAuthorize("permitAll()") // This endpoint does not use our normal authenticator, because the token will be passed in the URL instead
-    @GetMapping(value = "/user.ics", produces = "text/calendar")
+    @GetMapping(value = "/{token}/user.ics", produces = "text/calendar")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Get calendars for user")
-    public void getCalendar(@RequestParam("token") String token, OutputStream out) {
+    public void getCalendar(@PathVariable String token, OutputStream out) {
         try {
             String username = jwtTokenizer.getUsernameForIcal(token);
             ApplicationUser user = userService.getUserByName(username);
