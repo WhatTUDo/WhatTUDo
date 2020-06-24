@@ -73,13 +73,13 @@ public class UserEndpointRecommendationTest {
         txstatus.setRollbackOnly();
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void getRecommendedEvents_shouldReturn_correctEvent() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        ApplicationUser user = userService.getUserByName("Person 1");
+        ApplicationUser user = userService.getUserByName("Dillon Dingle");
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(orga)));
         Location location = new Location("Test Location", "Test Adress", "Zip", 0, 0);
         List<Label> labels1 = new ArrayList<>();
@@ -125,13 +125,13 @@ public class UserEndpointRecommendationTest {
 
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     @Transactional
     public void ifNoRecommendableEvents_getRecommendedEvents_shouldReturn_anyEvent() {
         Organization orga = new Organization("Test Organization");
         orga.setId(1);
-        ApplicationUser user = userService.getUserByName("Person 1");
+        ApplicationUser user = userService.getUserByName("Dillon Dingle");
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 3", Collections.singletonList(orga)));
         List<Label> labels1 = new ArrayList<>();
         List<Label> labels2 = new ArrayList<>();

@@ -1,30 +1,30 @@
 <div class="contextual-control">
   <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
     [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
-  <span *ngIf="organization">Team: {{organization.name}}</span>
+  <span *ngIf="organization">Organization: {{organization.name}}</span>
 </div>
 <div *ngIf="organization" class="grid-one-third">
   <div>
-    <h2>This Team</h2>
+    <h2>This Organization</h2>
     <div class="organization-info">
       <img alt="" class="avatar avatar-large" src="{{organization.coverImageUrl}}">
       <div class="organization-details">
         <div class="organization-name">{{organization.name}}</div>
       </div>
     </div>
-    <div *ngIf="organization.description">
+    <div class="organization-description" *ngIf="organization.description">
       {{organization.description}}
     </div>
     <p></p>
     <div class="organization-action-container">
       <a routerLink="/form/organization/{{organization.id}}">
         <div *ngIf="organization.canEdit" class="organization-action clickable no-hover-enlarge">
-          Edit team
+          Edit organization
         </div>
       </a>
       <div *ngIf="organization.canDelete" (click)="deleteOrganization(organization.id)"
            class="organization-action dangerous clickable no-hover-enlarge">
-        Dissolve team
+        Dissolve organization
       </div>
     </div>
   </div>

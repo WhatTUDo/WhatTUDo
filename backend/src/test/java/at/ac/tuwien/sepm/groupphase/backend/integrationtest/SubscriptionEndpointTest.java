@@ -51,7 +51,7 @@ public class SubscriptionEndpointTest {
 
     public SubscriptionDto createMockDtoWithData() {
         organization = organizationRepository.save(new Organization("TestOrg"));
-        ApplicationUser user = userRepository.findByName("Person 1").get();
+        ApplicationUser user = userRepository.findByName("Dillon Dingle").get();
         List<Organization> organizations = new ArrayList<>();
         organizations.add(organization);
         Calendar calendar = new Calendar("Test Calendar", organizations);
@@ -66,7 +66,7 @@ public class SubscriptionEndpointTest {
         organizationRepository.delete(organization);
     }
 
-    @WithMockUser(username = "Person 1")
+    @WithMockUser(username = "Dillon Dingle")
     @Test
     @Transactional
     public void createSubscription_shouldReturnSubscription() {
@@ -79,21 +79,21 @@ public class SubscriptionEndpointTest {
         clean();
     }
 
-    @WithMockUser(username = "Person 1")
+    @WithMockUser(username = "Dillon Dingle")
     @Test
     public void createSubscription_thenDeleteSubscription_thenCallGetAllForUser_shouldReturnEmptyList() {
         SubscriptionDto saved = subscriptionEndpoint.create(createMockDtoWithData());
         SubscriptionDto deleted = subscriptionEndpoint.delete(saved.id);
 
         assertNotNull(deleted);
-        ApplicationUser user = userRepository.findByName("Person 1").get();
+        ApplicationUser user = userRepository.findByName("Dillon Dingle").get();
         List<SubscriptionDto> subscriptionDtos = subscriptionEndpoint.getSubscriptionsForuser(user.getId());
 
         assert (!subscriptionDtos.contains(deleted));
         clean();
     }
 
-    @WithMockUser(username = "Person 1")
+    @WithMockUser(username = "Dillon Dingle")
     @Test
     public void getSubscriptionsForUser_shouldReturnSubscriptionListForUser() {
         SubscriptionDto saved = subscriptionEndpoint.create(createMockDtoWithData());
@@ -107,7 +107,7 @@ public class SubscriptionEndpointTest {
         clean();
     }
 
-    @WithMockUser(username = "Person 1")
+    @WithMockUser(username = "Dillon Dingle")
     @Test
     public void getSubscriptionsForCalendar_shouldReturnSubscriptionListForCalendar() {
         SubscriptionDto saved = subscriptionEndpoint.create(createMockDtoWithData());

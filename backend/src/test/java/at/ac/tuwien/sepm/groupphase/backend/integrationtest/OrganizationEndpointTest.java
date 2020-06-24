@@ -48,7 +48,7 @@ public class OrganizationEndpointTest {
     @Autowired
     UserService userService;
 
-    @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
+    @WithMockUser(username = "Dillon Dingle", roles = {"SYSADMIN"})
     @Test
     public void createNewOrganisation_shouldReturnNewOrganization() {
         OrganizationDto organizationDto = new OrganizationDto(0, "test", new ArrayList<>());
@@ -58,7 +58,7 @@ public class OrganizationEndpointTest {
         assertEquals(organizationDto.getName(), createdDto.getName());
     }
 
-    @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
+    @WithMockUser(username = "Dillon Dingle", roles = {"SYSADMIN"})
     @Test
     public void createNewOrganisation_withDescription_shouldReturnNewOrganization() {
         OrganizationDto organizationDto = new OrganizationDto(0, "test with Description", new ArrayList<>(), "Description");
@@ -69,7 +69,7 @@ public class OrganizationEndpointTest {
         assertEquals(organizationDto.getDescription(), createdDto.getDescription());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void getAllOrganisations_shouldReturnListOfOrganizations() {
         Organization organization = (new Organization("Test Organization"));
@@ -79,7 +79,7 @@ public class OrganizationEndpointTest {
         assertNotEquals(0, organizationDtos.size());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void getSingleOrganization_shouldReturnThisOrganization() {
         Integer id = 1;
@@ -91,7 +91,7 @@ public class OrganizationEndpointTest {
         assertEquals(organization.getId(), organizationDto.getId());
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_1", "MEMBER_1"})
     @Test
     public void getSingleOrganizaion_ifNonExistantIdIsSupplied_NotFoundHttpCodeIsReturned() {
         Integer id = 1;
@@ -109,7 +109,7 @@ public class OrganizationEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1",   authorities = {"ADMIN_1","MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle",   authorities = {"ADMIN_1","MOD_1", "MEMBER_1"})
     @Test
     public void save_thenEdit_shouldReturn_newOrganization() {
         Organization organization = (new Organization("Test Organization 1"));
@@ -122,7 +122,7 @@ public class OrganizationEndpointTest {
     }
 
 
-    @WithMockUser(username = "Person 1",   authorities = {"ADMIN_1","MOD_1", "MEMBER_1"})
+    @WithMockUser(username = "Dillon Dingle",   authorities = {"ADMIN_1","MOD_1", "MEMBER_1"})
     @Test
     public void edit_withoutName_shouldThrow_ResponseStatusException() {
         Organization organization = (new Organization("Test Organization 1"));
@@ -132,25 +132,25 @@ public class OrganizationEndpointTest {
         assertThrows(ResponseStatusException.class, () -> endpoint.editOrganization(organizationDto));
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_0", "MEMBER_0"})
     @Test
     public void deleteOrganizationThatDoesNotExist_throwResponseStatusException() {
         assertThrows(ResponseStatusException.class, () -> endpoint.getOrgaById(0));
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_0", "MEMBER_0"})
     @Test
     public void addCalendarsToOrgWithUnknownId_throwsNotFound() {
         assertThrows(NotFoundException.class, () -> endpoint.addCalToOrga(0, Collections.singletonList(0)));
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_0", "MEMBER_0"})
     @Test
     public void removeCalendarsOfUnknownOrganization_throwsNotFound() {
         assertThrows(NotFoundException.class, () -> endpoint.removeCalFromOrga(0, Collections.singletonList(0)));
     }
 
-    @WithMockUser(username = "Person 1", roles = {"SYSADMIN"})
+    @WithMockUser(username = "Dillon Dingle", roles = {"SYSADMIN"})
     @Test
     public void getOrganizationMembers() {
         OrganizationDto organizationDto = new OrganizationDto(0, "get members", new ArrayList<>());
@@ -164,7 +164,7 @@ public class OrganizationEndpointTest {
 
     }
 
-    @WithMockUser(username = "Person 1", authorities = {"MOD_0", "MEMBER_0"})
+    @WithMockUser(username = "Dillon Dingle", authorities = {"MOD_0", "MEMBER_0"})
     @Test
     public void addMemberToNonExistentOrg_throwsNotFound() {
         assertThrows(NotFoundException.class, () -> endpoint.addMembership(0, 0, "MOD"));
