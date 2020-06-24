@@ -40,12 +40,12 @@ public class SimpleEventCollisionService implements EventCollisionService {
             List<Event> events = this.eventService.findForDates(start, end); // get all Dates with a possible overlap.
 
             for (Event collidingEvent : events) {
-                //if (!collidingEvent.getId().equals(event)) {
+                if (!collidingEvent.getId().equals(event.getId())) {
                     Integer score = this.getCollisionScore(event, collidingEvent);
                     if (score >= scoreThreshold) {
                         eventCollisions.add(new EventCollision(collidingEvent, score, "Found a collision!"));
                     }
-               // }
+               }
 
             }
             return eventCollisions;
