@@ -15,7 +15,7 @@ VALUES (1, 'Fachschaft Architektur', 'Die fachschaft::architektur sind Studieren
 
 INSERT INTO CALENDAR (ID, NAME, DESCRIPTION, CREATED_AT, UPDATED_AT)
 VALUES (1, 'Events', 'Events der fs::arch', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (2, 'Party', '#BYOB 🎉', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (2, 'Party', '#BYOB', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
        (3, 'Tutorien', 'E-Tuts von FSCH', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
        (4, 'Festln', 'Feier der FET. Nur für ÖH-Mitglieder.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
        (5, 'Vorträge', 'Vortragsreihe "Wie genießt man Schwechater richtig?"', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
