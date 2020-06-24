@@ -192,7 +192,7 @@ public class EventEndpointTest {
         Location location = locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
 
         EventDto eventDto = new EventDto(10, "Test Name10", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId(), location.getId());
-        EventDto returnedEvent = endpoint.post(eventDto);
+        endpoint.post(eventDto);
 
         LocalDateTime start = LocalDateTime.of(2020, 1, 1, 0, 0);
         LocalDateTime end = LocalDateTime.of(2020, 1, 8, 0, 0);
@@ -213,7 +213,7 @@ public class EventEndpointTest {
         calendar.setId(1);
         Location location = locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
 
-        EventDto notSavedEvent = new EventDto(null, "Non Existent", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId(), location.getId());
+        new EventDto(null, "Non Existent", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId(), location.getId());
         assertThrows(NotFoundException.class, () -> endpoint.deleteEvent(0));
     }
 
@@ -407,7 +407,7 @@ public class EventEndpointTest {
         Location location = locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
 
         EventDto eventDto = new EventDto(10, "FindMe", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId(), location.getId());
-        EventDto returnedEvent = endpoint.post(eventDto);
+        endpoint.post(eventDto);
 
         List<EventDto> eventDtos = endpoint.searchNameAndDescription("find");
 
@@ -426,7 +426,7 @@ public class EventEndpointTest {
         Location location = locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
 
         EventDto eventDto = new EventDto(10, "FindMe", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId(), location.getId());
-        EventDto returnedEvent = endpoint.post(eventDto);
+        endpoint.post(eventDto);
         List<EventDto> eventDtos = endpoint.searchNameAndDescription("nothing will be found");
 
         assertEquals(0, eventDtos.size());
@@ -444,9 +444,9 @@ public class EventEndpointTest {
         Location location = locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
 
         EventDto eventDto = new EventDto(10, "FindMe", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar.getId(), location.getId());
-        EventDto returnedEvent = endpoint.post(eventDto);
+        endpoint.post(eventDto);
         try {
-            List<EventDto> eventDtos = endpoint.searchNameAndDescription("");
+            endpoint.searchNameAndDescription("");
         } catch (ResponseStatusException e) {
             assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, e.getStatus());
         }

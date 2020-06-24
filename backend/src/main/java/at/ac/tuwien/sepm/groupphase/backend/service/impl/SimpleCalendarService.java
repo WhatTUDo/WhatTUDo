@@ -121,9 +121,8 @@ public class SimpleCalendarService implements CalendarService {
             }
 
             Calendar toDelete = this.findById(id);
-            List<Event> events = toDelete.getEvents();
 
-            /**  for (Event e: events
+            /*  for (Event e: events
              ) {
 
              eventService.delete(e);

@@ -66,14 +66,4 @@ public abstract class TestCalendarMapper {
 
     }
 
-    public List<CalendarDto> calendarsToCalendarDtos(List<Calendar> calendars) {
-
-        List<CalendarDto> calendarFinal = new ArrayList<CalendarDto>();
-        for (Calendar c : calendars) {
-            calendarFinal.add(calendarToCalendarDto(c));
-        }
-
-
-        return calendarFinal;
-    }
 }

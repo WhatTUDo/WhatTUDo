@@ -56,12 +56,6 @@ public class CommentEndpointTest {
     @Autowired
     CommentMapper commentMapper;
 
-    @Mock
-    CalendarRepository calendarRepository;
-
-
-    @Mock
-    EventRepository eventRepository;
 
     @Autowired
     LocationRepository locationRepository;
@@ -84,7 +78,7 @@ public class CommentEndpointTest {
 
         IncomingUserDto userDto = new IncomingUserDto(0, "Test", "testy@test.com", "hunter2");
 
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
+        userEndpoint.createNewUser(userDto);
 
         CommentDto commentDto = new CommentDto(null, "Test Text", "Test", 1, LocalDateTime.of(2020, 1, 1, 15, 30));
 
@@ -114,7 +108,7 @@ public class CommentEndpointTest {
 
         IncomingUserDto userDto = new IncomingUserDto(0, "TestID", "testy@test.com", "hunter2");
 
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
+        userEndpoint.createNewUser(userDto);
 
         CommentDto commentDto = new CommentDto(null, "Test Text for get ID", "TestID", 1, LocalDateTime.of(2020, 1, 1, 15, 30));
 
@@ -183,7 +177,7 @@ public class CommentEndpointTest {
         eventDto.setId(1);
 
         IncomingUserDto userDto = new IncomingUserDto(0, "TestFindAll", "testy@test.com", "hunter2");
-        LoggedInUserDto savedUserDto = userEndpoint.createNewUser(userDto);
+        userEndpoint.createNewUser(userDto);
 
         Collection<CommentDto> returnedComments = commentEndpoint.getAllComments();
 

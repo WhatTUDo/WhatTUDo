@@ -107,7 +107,7 @@ public class SimpleCommentService implements CommentService {
 
             Comment result = comment;
 
-            Event toSetComment = comment.getEvent();
+            comment.getEvent();
             // toSetComment.getComments().add(result);
 
             result = commentRepository.save(result);
