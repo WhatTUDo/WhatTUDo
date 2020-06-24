@@ -52,7 +52,7 @@ public class CustomUserDetailService implements UserService {
         return userRepository.findAll();
     }
 
-    @Override // TODO: Move encoding to mapper?
+    @Override
     public ApplicationUser saveNewUser(ApplicationUser user) throws ServiceException, ValidationException {
         try {
             validator.validateNewUser(user);

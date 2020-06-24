@@ -87,7 +87,6 @@ input:not([matInput]):not(.input-button-combo input), select, textarea {
         input {
           position: relative;
 
-          //  //FIXME: Use EventEmitter to make this work and not just static.
           //  ~ app-datetime-picker {
           //    display: none;
           //  }

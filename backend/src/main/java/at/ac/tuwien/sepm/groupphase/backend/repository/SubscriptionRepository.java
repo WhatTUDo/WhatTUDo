@@ -11,19 +11,19 @@ import java.util.List;
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, Integer> {
 
-    //TODO:
-
     /**
+     * returns Subscriptions for User
+     *
      * @param user
-     * @return
+     * @return Subscriptions for User
      */
     List<Subscription> getByUser(ApplicationUser user);
 
-    //TODO:
 
     /**
+     * returns Subscriptions for Calendar
      * @param calendar
-     * @return
+     * @return Subscriptions for Calendar
      */
     List<Subscription> getByCalendar(Calendar calendar);
 }

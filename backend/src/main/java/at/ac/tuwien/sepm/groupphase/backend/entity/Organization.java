@@ -28,7 +28,7 @@ public class Organization extends BaseEntity {
         joinColumns = @JoinColumn(name = "organization_id"),
         inverseJoinColumns = @JoinColumn(name = "calendar_id")
     )
-    private List<Calendar> calendars = new ArrayList<>(); //FIXME: Use *Set*. Currently returning duplicates.
+    private List<Calendar> calendars = new ArrayList<>();
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

@@ -62,7 +62,7 @@ public class OrganizationEndpoint {
             organizationMapper.mapCalendars(dto, organizationEntity);
             return organizationMapper.organizationToOrganizationDto(organizationService.update(organizationEntity));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.OK, e.getMessage(), e); //FIXME return empty array?
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (ValidationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         } catch (ServiceException e) {
@@ -149,7 +149,6 @@ public class OrganizationEndpoint {
 
     @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
     // We can use the ID instead of the DTO
-    // TODO: Check if other organization allow it (maybe invite system?)
     @PutMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
@@ -168,7 +167,6 @@ public class OrganizationEndpoint {
 
     @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
     // We can use the ID instead of the DTO
-    // TODO: Check if other organization allow it (maybe invite system?)
     @DeleteMapping(value = "/{id}/calendars")
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
