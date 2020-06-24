@@ -37,7 +37,7 @@
             </div>
             <div>
               <div *ngFor="let orgId of cal.organizationIds">
-                <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
+                <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-hover-enlarge" routerLink="/organization/{{orgId}}">
                   <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
                   <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
                 </div>
@@ -85,7 +85,7 @@
             </div>
             <div>
               <div *ngFor="let orgId of cal.organizationIds">
-                <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
+                <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-hover-enlarge" routerLink="/organization/{{orgId}}">
                   <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
                   <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
                 </div>
@@ -125,7 +125,7 @@
             </div>
             <div>
               <div *ngFor="let orgId of cal.organizationIds">
-                <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
+                <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-hover-enlarge" routerLink="/organization/{{orgId}}">
                   <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
                   <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
                 </div>
@@ -169,7 +169,7 @@
             </div>
             <div>
               <div *ngFor="let orgId of cal.organizationIds">
-                <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
+                <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-hover-enlarge" routerLink="/organization/{{orgId}}">
                   <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
                   <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
                 </div>
