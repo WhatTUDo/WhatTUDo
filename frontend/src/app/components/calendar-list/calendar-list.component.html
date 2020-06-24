@@ -26,23 +26,26 @@
       <button type="submit" class="no-hover-enlarge">Filter</button>
     </form>
     <div *ngIf="searchActive">
-      <div *ngFor="let cal of this.calendarSearchResult" class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
-        <img alt="" class="avatar avatar-medium" src="{{globals.backendUri+cal.coverImageUrl}}"
-             [ngClass]="getCalendarColor(cal.id)">
-        <div class="calendar-details">
-          <div>
-            <div class="calendar-name">{{cal.name}}</div>
-            <div class="calendar-description">{{cal.description}}</div>
-          </div>
-          <div>
-            <div *ngFor="let orgId of cal.organizationIds">
-              <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
-                <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
-                <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+      <div *ngFor="let cal of this.calendarSearchResult">
+        <div class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+          <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-medium"
+               src="{{globals.backendUri+cal.coverImageUrl}}">
+          <div class="calendar-details">
+            <div>
+              <div class="calendar-name">{{cal.name}}</div>
+              <div class="calendar-description">{{cal.description}}</div>
+            </div>
+            <div>
+              <div *ngFor="let orgId of cal.organizationIds">
+                <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
+                  <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
+                  <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <div class="calendar-buttons">
           <fa-icon (click)="onClickUnsubscribe(cal.id)" *ngIf="authService.isLoggedIn() && isSubscribed(cal.id)"
                    [icon]="faBookmark"
@@ -71,23 +74,26 @@
         </div>
       </div>
       <div *ngIf="subscribedCalendars.length===0">You have no subscribed calenders yet.</div>
-      <div *ngFor="let cal of this.subscribedCalendars" class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
-        <img alt="" class="avatar avatar-medium" src="{{globals.backendUri+cal.coverImageUrl}}"
-             [ngClass]="getCalendarColor(cal.id)">
-        <div class="calendar-details">
-          <div>
-            <div class="calendar-name">{{cal.name}}</div>
-            <div class="calendar-description">{{cal.description}}</div>
-          </div>
-          <div>
-            <div *ngFor="let orgId of cal.organizationIds">
-              <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
-                <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
-                <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+      <div *ngFor="let cal of this.subscribedCalendars" class="calendar clickable no-hover-enlarge">
+        <div class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+          <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-medium"
+               src="{{globals.backendUri+cal.coverImageUrl}}">
+          <div class="calendar-details">
+            <div>
+              <div class="calendar-name">{{cal.name}}</div>
+              <div class="calendar-description">{{cal.description}}</div>
+            </div>
+            <div>
+              <div *ngFor="let orgId of cal.organizationIds">
+                <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
+                  <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
+                  <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <div class="calendar-buttons">
           <div class="icon-button clickable no-hover-enlarge">
             <fa-icon [icon]="faLink" (click)="copyCalendarUrlToClipboard(cal.id)"></fa-icon>
@@ -108,23 +114,26 @@
     </div>
     <div *ngIf="authService.isLoggedIn() && managedCalendars.length!==0 && !searchActive">
       <h3>Calendars Managed by me</h3>
-      <div *ngFor="let cal of this.managedCalendars" class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
-        <img alt="" class="avatar avatar-medium" src="{{globals.backendUri+cal.coverImageUrl}}"
-             [ngClass]="getCalendarColor(cal.id)">
-        <div class="calendar-details">
-          <div>
-            <div class="calendar-name">{{cal.name}}</div>
-            <div class="calendar-description">{{cal.description}}</div>
-          </div>
-          <div>
-            <div *ngFor="let orgId of cal.organizationIds">
-              <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
-                <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
-                <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+      <div *ngFor="let cal of this.managedCalendars" class="calendar clickable no-hover-enlarge">
+        <div routerLink="/calendar/{{cal.id}}">
+          <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-medium"
+               src="{{globals.backendUri+cal.coverImageUrl}}">
+          <div class="calendar-details">
+            <div>
+              <div class="calendar-name">{{cal.name}}</div>
+              <div class="calendar-description">{{cal.description}}</div>
+            </div>
+            <div>
+              <div *ngFor="let orgId of cal.organizationIds">
+                <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
+                  <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
+                  <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <div class="calendar-buttons">
           <div class="icon-button clickable no-hover-enlarge">
             <fa-icon [icon]="faLink" (click)="copyCalendarUrlToClipboard(cal.id)"></fa-icon>
@@ -150,23 +159,26 @@
           <fa-icon [icon]="faLink" (click)="copyAllCalendarsUrlToClipboard()"></fa-icon>
         </div>
       </div>
-      <div *ngFor="let cal of otherCalendars" class="calendar clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
-        <img alt="" class="avatar avatar-medium" src="{{globals.backendUri+cal.coverImageUrl}}"
-             [ngClass]="getCalendarColor(cal.id)">
-        <div class="calendar-details">
-          <div class="clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
-            <div class="calendar-name">{{cal.name}}</div>
-            <div class="calendar-description">{{cal.description}}</div>
-          </div>
-          <div>
-            <div *ngFor="let orgId of cal.organizationIds">
-              <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
-                <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
-                <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+      <div *ngFor="let cal of otherCalendars" class="calendar clickable no-hover-enlarge">
+        <div routerLink="/calendar/{{cal.id}}">
+          <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-medium"
+               src="{{globals.backendUri+cal.coverImageUrl}}">
+          <div class="calendar-details">
+            <div class="clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+              <div class="calendar-name">{{cal.name}}</div>
+              <div class="calendar-description">{{cal.description}}</div>
+            </div>
+            <div>
+              <div *ngFor="let orgId of cal.organizationIds">
+                <div *ngIf="organizationsMap.get(orgId)" class="organization-info">
+                  <img alt="" class="avatar avatar-ultra-small" src="{{organizationsMap.get(orgId).coverImageUrl}}">
+                  <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
         <div class="calendar-buttons">
           <div class="icon-button clickable no-hover-enlarge">
             <fa-icon [icon]="faLink" (click)="copyCalendarUrlToClipboard(cal.id)"></fa-icon>
