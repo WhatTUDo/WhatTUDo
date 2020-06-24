@@ -3,6 +3,9 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Label;
+import at.ac.tuwien.sepm.groupphase.backend.events.label.LabelCreateEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.label.LabelDeleteEvent;
+import at.ac.tuwien.sepm.groupphase.backend.events.label.LabelUpdateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
 import at.ac.tuwien.sepm.groupphase.backend.repository.EventRepository;
 import at.ac.tuwien.sepm.groupphase.backend.repository.LabelRepository;
@@ -74,6 +77,7 @@ public class SimpleLabelService implements LabelService {
 
             Label toDelete = this.findById(id);
             List<Event> elist = toDelete.getEvents();
+            publisher.publishEvent(new LabelDeleteEvent(toDelete.getName()));
 
             try {
                 elist.forEach(it -> it.getLabels().remove(toDelete));
@@ -103,6 +107,7 @@ public class SimpleLabelService implements LabelService {
     public Label save(Label label) {
         try {
             Label result = labelRepository.save(label);
+            publisher.publishEvent(new LabelCreateEvent(label.getName()));
 
             return result;
         } catch (PersistenceException e) {
@@ -122,7 +127,7 @@ public class SimpleLabelService implements LabelService {
 
             toUpdate.setEvents(this.findById(label.getId()).getEvents());
 
-
+            publisher.publishEvent(new LabelUpdateEvent(label.getName()));
             return labelRepository.save(toUpdate);
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);
