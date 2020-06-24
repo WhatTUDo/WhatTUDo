@@ -263,8 +263,8 @@ export class EventFormComponent implements OnInit {
   }
 
   updateFromConflictResolver(dates: Date[]) {
-    this.calendarEvent.startDateTime = dates[0];
-    this.calendarEvent.endDateTime = dates[1];
+    this.calendarEvent.startDateTime = new Date(dates[0]);
+    this.calendarEvent.endDateTime = new Date(dates[1]);
     this.conflictExists = false;
   }
 

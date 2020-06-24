@@ -82,8 +82,6 @@ export class OrganizationFormComponent implements OnInit {
   uploadImage() {
     if (!this.selectedImage) return;
     this.organizationService.uploadOrganizationAvatar(this.organization.id, this.selectedImage).subscribe(resp => {
-      // @ts-ignore
-      this.organization.coverImageUrl = resp.url;
     });
   }
 
