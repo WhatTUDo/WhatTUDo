@@ -32,8 +32,7 @@ public class Organization extends BaseEntity {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @Fetch(FetchMode.SELECT)
-    @OneToMany(mappedBy = "organization", cascade = {CascadeType.MERGE}, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "organization", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<OrganizationMembership> memberships = new HashSet<>();
 
     @ToString.Exclude

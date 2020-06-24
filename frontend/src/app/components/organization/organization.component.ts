@@ -150,6 +150,7 @@ export class OrganizationComponent implements OnInit {
     ) {
       this.userService.removeFromOrganization(userId, organizationId).subscribe((user) => {
         this.feedbackService.displaySuccess("Success", "You successfully removed this User from this Organization");
+        location.reload()
       })
     }
   }

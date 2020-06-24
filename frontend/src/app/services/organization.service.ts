@@ -22,6 +22,7 @@ export class OrganizationService {
    */
   postOrganization(organization: Organization): Observable<any> {
 
+    organization.id = 0;
     console.log('Post Organization to Server', organization);
     return this.httpClient.post(this.organizationBaseUri, organization);
   }

@@ -147,11 +147,11 @@ public class CustomUserDetailService implements UserService {
             Organization dbOrga = organizationRepository.findById(organization.getId()).orElseThrow(() -> new IllegalArgumentException("Organization does not exist"));
             ApplicationUser dbUser = userRepository.findById(user.getId()).orElseThrow(() -> new IllegalArgumentException("User does not exist"));
 
-            dbOrga.getMemberships().removeIf(it -> it.getUser().equals(dbUser));
-            dbUser.getMemberships().removeIf(it -> it.getOrganization().equals(dbOrga));
+            dbOrga.getMemberships().removeIf(it -> it.getUser().getName().equals(dbUser.getName()));
+            dbUser.getMemberships().removeIf(it -> it.getOrganization().getId().equals(dbOrga.getId()));
 
-            organizationRepository.save(dbOrga);
             ApplicationUser savedUser = userRepository.save(dbUser);
+            organizationRepository.save(dbOrga);
             publisher.publishEvent(new UserRoleRemoveEvent(savedUser.getUsername(), dbOrga));
             return savedUser;
         } catch (PersistenceException | IllegalArgumentException e) {
