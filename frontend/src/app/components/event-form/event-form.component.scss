@@ -124,8 +124,18 @@ input:not([matInput]):not(.input-button-combo input), select, textarea {
 
   .suggestion-item {
     padding: 4pt 8pt;
-    border-left: 4pt solid $yellow;
-    background-color: transparentize($yellow, 0.85);
+    border-left: 4pt solid var(--secondary);
+    background-color: transparentize($gray, 0.85);
+
+    &.yellow {
+      border-color: $yellow;
+      background-color: transparentize($yellow, 0.85);
+    }
+
+    &.green {
+      border-color: $green;
+      background-color: transparentize($green, 0.85);
+    }
   }
 }
 
@@ -164,4 +174,20 @@ input:not([matInput]):not(.input-button-combo input), select, textarea {
   button {
     margin-right: 8pt;
   }
+}
+
+.get-conflict-button {
+  margin-bottom: 8pt;
+}
+
+.suggestion-container {
+  padding: 4pt 0;
+}
+
+.heading-icon {
+  font-size: 16pt;
+}
+
+h3 {
+  margin-top: 4pt;
 }

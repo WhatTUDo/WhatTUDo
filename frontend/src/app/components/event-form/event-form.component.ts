@@ -57,6 +57,7 @@ export class EventFormComponent implements OnInit {
   collisionResponse: CollisionResponse;
   private selectedImage: File;
   location: Location;
+  displayNoConflictMessage: boolean = false;
 
   constructor(
     private eventService: EventService,
@@ -143,7 +144,7 @@ export class EventFormComponent implements OnInit {
             this.eventService.addLabels(this.ev_id, this.selectedLabels);
             if(this.imagechange){ this.uploadImage();}
 
-            // this.router.navigate([`/event/${response.id}`])
+            this.router.navigate([`/event/${response.id}`])
           },
           err => {
             console.warn(err);
@@ -160,7 +161,7 @@ export class EventFormComponent implements OnInit {
 
             this.eventService.addLabels(response.id, this.selectedLabels);
             if(this.imagechange){ this.uploadImage();}
-            // this.router.navigate([`/event/${response.id}`])
+            this.router.navigate([`/event/${response.id}`])
           },
           err => {
             console.warn(err);
@@ -247,6 +248,7 @@ export class EventFormComponent implements OnInit {
 
   getEventConflicts() {
     if (this.calendarEvent.startDateTime && this.calendarEvent.endDateTime) {
+      this.displayNoConflictMessage = false;
       let helperEvent = this.calendarEvent;
       helperEvent.name = this.calendarEvent.name ? this.calendarEvent.name : "";
       helperEvent.description = this.calendarEvent.description ? this.calendarEvent.description : "";
@@ -254,6 +256,7 @@ export class EventFormComponent implements OnInit {
         this.collisionResponse = collisionResponse;
         this.conflictExists = this.collisionResponse.eventCollisions.length !== 0;
         if (!this.conflictExists) {
+          this.displayNoConflictMessage = true;
         }
       });
     }
