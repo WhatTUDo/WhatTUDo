@@ -239,7 +239,7 @@ export class CalendarListComponent implements OnInit {
 
   copyPersonalUrlToClipboard() {
     this.iCalService.getUserIcalToken().subscribe(icalToken => {
-      const icalUrl = this.globals.backendUri + "/ical/user.ics?token=" + icalToken;
+      const icalUrl = this.globals.backendUri + "/ical/" + icalToken + "/user.ics";
       this.copyMessage(icalUrl)
       this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
     })

@@ -71,7 +71,7 @@ export class CalendarFormComponent implements OnInit {
         }, () => {
           this.calendarService.updateCalendar(this.calendar).subscribe(responseCalendar => {
             this.feedbackService.displaySuccess("Edits Saved", "You updated this Calendar!");
-            // this.router.navigate([`/calendar/${this.calendar.id}`])
+            window.location.replace("/calendar-list");
           });
         });
       } else {
@@ -85,10 +85,11 @@ export class CalendarFormComponent implements OnInit {
             this.feedbackService.displaySuccess("Saved Calendar", "You saved this Calendar!");
             console.log("Updated Calendar Organizations:", responseCalendar.organizationIds);
             // this.router.navigate([`/calendar/${this.calendar.id}`])
+            window.location.replace("/calendar-list");
+
           });
         });
       }
-
     }
   }
 
@@ -137,6 +138,8 @@ export class CalendarFormComponent implements OnInit {
   uploadImage() {
     if (!this.selectedImage) return;
     this.calendarService.uploadCalendarAvatar(this.calendar.id, this.selectedImage).subscribe(resp => {
+      // @ts-ignore
+      this.calendar.coverImageUrl = resp.url;
     });
   }
 

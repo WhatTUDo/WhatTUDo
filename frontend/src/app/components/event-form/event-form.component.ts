@@ -144,7 +144,7 @@ export class EventFormComponent implements OnInit {
             this.eventService.addLabels(this.ev_id, this.selectedLabels);
             if(this.imagechange){ this.uploadImage();}
 
-            this.router.navigate([`/event/${response.id}`])
+            window.location.replace("/event/" + response.id);
           },
           err => {
             console.warn(err);
@@ -161,7 +161,7 @@ export class EventFormComponent implements OnInit {
 
             this.eventService.addLabels(response.id, this.selectedLabels);
             if(this.imagechange){ this.uploadImage();}
-            this.router.navigate([`/event/${response.id}`])
+            window.location.replace("/event/" + response.id);
           },
           err => {
             console.warn(err);
