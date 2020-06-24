@@ -20,6 +20,7 @@ export class EventCommentComponent implements OnInit {
   @Input() comment: EventComment;
   @Input() canEdit: boolean;
 
+
   public user: String;
   public author: string;
   public rating: number;

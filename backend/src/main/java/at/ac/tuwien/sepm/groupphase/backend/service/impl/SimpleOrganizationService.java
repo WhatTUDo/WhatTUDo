@@ -81,6 +81,7 @@ public class SimpleOrganizationService implements OrganizationService {
             if (found.isPresent()) {
                 Organization orgInDataBase = found.get();
                 orgInDataBase.setName(organization.getName());
+                orgInDataBase.setDescription(organization.getDescription());
                 orgInDataBase.setCalendars(organization.getCalendars());
                 Organization savedOrga = organizationRepository.save(orgInDataBase);
                 publisher.publishEvent(new OrganizationEditEvent(savedOrga.getName()));

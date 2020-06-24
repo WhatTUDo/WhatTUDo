@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,7 +46,7 @@ public class CommentEndpoint {
         }
     }
 
-    @PreAuthorize("hasPermission(#id, 'COMMENT', 'MOD')")
+    @RolesAllowed({"MOD","MEMBER", "SYSADMIN"})
     @CrossOrigin
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping(value = "/{id}")

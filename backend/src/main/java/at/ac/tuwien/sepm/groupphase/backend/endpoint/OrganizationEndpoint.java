@@ -60,6 +60,7 @@ public class OrganizationEndpoint {
         try {
             Organization organizationEntity = organizationService.findById(dto.getId());
             organizationEntity.setName(dto.getName());
+            organizationEntity.setDescription(dto.getDescription());
             organizationMapper.mapCalendars(dto, organizationEntity);
             return organizationMapper.organizationToOrganizationDto(organizationService.update(organizationEntity));
         } catch (NotFoundException e) {

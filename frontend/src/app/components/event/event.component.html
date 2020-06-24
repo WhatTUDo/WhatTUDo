@@ -103,7 +103,7 @@
     <div>
       <h2>Comments</h2>
       <div *ngFor="let comment of comments" class="comment-div">
-        <app-event-comment [comment]="comment" [canEdit]=this.calendarEvent.canEdit></app-event-comment>
+        <app-event-comment [comment]="comment" [canEdit]=this.calendarEvent.canEdit [eventId]=this.calendarEvent.id></app-event-comment>
       </div>
 
 
@@ -112,7 +112,7 @@
         </label>
         <textarea class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…" #njf
         ></textarea>
-        <button (click)="addComment(njf.value)" class="full-width-form-button no-hover-enlarge">Send
+        <button (click)="addComment(njf.value); njf.value=''" class="full-width-form-button no-hover-enlarge">Send
         </button>
       </div>
 

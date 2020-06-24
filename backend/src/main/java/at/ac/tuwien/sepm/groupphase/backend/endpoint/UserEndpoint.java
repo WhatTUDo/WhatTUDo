@@ -208,7 +208,7 @@ public class UserEndpoint {
         try {
             List<Event> recommendedEvent = userService.getRecommendedEvents(id);
             if (recommendedEvent.size() < 4) {
-                ArrayList ids = new ArrayList();
+                ArrayList<Integer> ids = new ArrayList<>();
                 for (Event e : recommendedEvent
                 ) {
                     ids.add(e.getId());

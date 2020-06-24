@@ -30,7 +30,6 @@ public abstract class OrganizationMapper {
     @Autowired
     protected PermissionEvaluator permissionEvaluator;
 
-    public abstract OrganizationDto organizationToOrganizationDto(Organization organization);
 
     @BeforeMapping
     public void mapCalendars(Organization organization, @MappingTarget OrganizationDto organizationDto) {
@@ -48,13 +47,18 @@ public abstract class OrganizationMapper {
         organizationDto.setCanCreateCalendar(permissionEvaluator.hasPermission(authentication, organization, "MOD"));
     }
 
-    public abstract Organization organizationDtoToOrganization(OrganizationDto organizationDto);
+    public abstract OrganizationDto organizationToOrganizationDto(Organization organization);
 
 
     @BeforeMapping
     public void mapCalendars(OrganizationDto organizationDto, @MappingTarget Organization organization) {
         organization.setCalendars(calendarRepository.findAllById(organizationDto.getCalendarIds()));
     }
+
+    public abstract Organization organizationDtoToOrganization(OrganizationDto organizationDto);
+
+
+
     /*CalendarService calendarService;
 
     @Autowired

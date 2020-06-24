@@ -26,7 +26,8 @@ export class OrganizationService {
     let reducedElement = {
       'id': null,
       'name': organization.name,
-      'calendarIds': organization.calendarIds
+      'calendarIds': organization.calendarIds,
+      'descriotion': organization.description
     };
 
     return this.httpClient.post(this.organizationBaseUri, reducedElement);
