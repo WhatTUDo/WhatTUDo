@@ -14,38 +14,35 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {httpInterceptorProviders} from './interceptors';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
-import {WeeklyCalendarComponent} from './components/weekly-calendar/weekly-calendar.component';
+import {WeeklyCalendarComponent} from './components/weekly_calendar/weekly-calendar.component';
 import {EventComponent} from './components/event/event.component';
-import {EventCommentComponent} from './components/event-comment/event-comment.component';
-import {EventFormComponent} from './components/event-form/event-form.component';
-import {EventLocationComponent} from './components/event-location/event-location.component';
+import {EventCommentComponent} from './components/event_comment/event-comment.component';
+import {EventFormComponent} from './components/event_form/event-form.component';
+import {EventLocationComponent} from './components/event_location/event-location.component';
 import {CalendarComponent} from './components/calendar/calendar.component';
-import {CalendarListComponent} from './components/calendar-list/calendar-list.component';
-import {OrganizationFormComponent} from './components/organization-form/organization-form.component';
+import {CalendarSearchComponent} from './components/calendar_search/calendar-search.component';
+import {OrganizationFormComponent} from './components/organization_form/organization-form.component';
 import {UserComponent} from './components/user/user.component';
 import {OrganizationComponent} from './components/organization/organization.component';
-import {UserFormComponent} from './components/user-form/user-form.component';
-import {CalendarFormComponent} from './components/calendar-form/calendar-form.component';
-import {OrganizationListComponent} from './components/organization-list/organization-list.component';
-import {FeedbackHandlerComponent} from './components/feedback-handler/feedback-handler.component';
+import {UserFormComponent} from './components/user_form/user-form.component';
+import {CalendarFormComponent} from './components/calendar_form/calendar-form.component';
+import {OrganizationSearchComponent} from './components/organization_search/organization-search.component';
+import {FeedbackHandlerComponent} from './components/feedback_handler/feedback-handler.component';
 import {MatSelectModule} from '@angular/material/select';
 import {MatSliderModule} from '@angular/material/slider';
 import {MatDatetimepickerModule, MatNativeDatetimeModule} from "@mat-datetimepicker/core";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatInputModule} from "@angular/material/input";
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatNativeDateModule
-} from "@angular-material-components/datetime-picker";
+import {NgxMatDatetimePickerModule, NgxMatNativeDateModule} from "@angular-material-components/datetime-picker";
 import {MatTableModule} from "@angular/material/table";
-import {PromoEventListComponent} from './components/promo-event-list/promo-event-list.component';
-import {UserRegistrationComponent} from './components/user-registration/user-registration.component';
+import {EventListComponent} from './components/event_list/event-list.component';
+import {UserRegistrationComponent} from './components/user_registration/user-registration.component';
 import {OverlayModule} from "@angular/cdk/overlay";
 import {ExplanationComponent} from './components/explanation/explanation.component';
-import {EventConflictResolverComponent} from './components/event-conflict-resolver/event-conflict-resolver.component';
-import {AdminDashboardComponent} from './components/admin-dashboard/admin-dashboard.component';
+import {EventConflictResolverComponent} from './components/event_conflict_resolver/event-conflict-resolver.component';
+import {AdminDashboardComponent} from './components/admin_dashboard/admin-dashboard.component';
 import {MatRadioModule} from "@angular/material/radio";
-import {EventSearchComponent} from './components/event-search/event-search.component';
+import {EventSearchComponent} from './components/event_search/event-search.component';
 import {CalendarDayViewComponent} from './components/calendar/calendar-day-view/calendar-day-view.component';
 
 
@@ -62,16 +59,16 @@ import {CalendarDayViewComponent} from './components/calendar/calendar-day-view/
     EventCommentComponent,
     EventFormComponent,
     EventLocationComponent,
-    CalendarListComponent,
+    CalendarSearchComponent,
     CalendarComponent,
     OrganizationFormComponent,
     UserComponent,
     CalendarFormComponent,
     OrganizationComponent,
     UserFormComponent,
-    OrganizationListComponent,
+    OrganizationSearchComponent,
     FeedbackHandlerComponent,
-    PromoEventListComponent,
+    EventListComponent,
     ExplanationComponent,
     UserRegistrationComponent,
     EventConflictResolverComponent,

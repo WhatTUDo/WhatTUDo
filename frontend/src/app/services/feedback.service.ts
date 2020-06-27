@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FeedbackHandlerComponent} from "../components/feedback-handler/feedback-handler.component";
+import {FeedbackHandlerComponent} from "../components/feedback_handler/feedback-handler.component";
 
 @Injectable({
   providedIn: 'root'

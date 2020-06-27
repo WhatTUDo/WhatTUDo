@@ -3,11 +3,11 @@ import {Calendar} from '../../dtos/calendar';
 import {ActivatedRoute} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
 import {
-  faLink,
   faChevronDown,
   faChevronLeft,
   faChevronRight,
   faChevronUp,
+  faLink,
   faPlus
 } from '@fortawesome/free-solid-svg-icons';
 import {CalendarEvent} from '../../dtos/calendar-event';
@@ -66,7 +66,6 @@ export class CalendarComponent extends CalendarBase implements OnInit {
   }
 
 
-
   /**
    * Calls Service to load Events for the week.
    * @param from: Start date of week
@@ -100,7 +99,7 @@ export class CalendarComponent extends CalendarBase implements OnInit {
     this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
   }
 
-  copyMessage(val: string){
+  copyMessage(val: string) {
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';

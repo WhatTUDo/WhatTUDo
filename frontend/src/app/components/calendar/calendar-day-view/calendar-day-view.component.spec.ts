@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CalendarDayViewComponent } from './calendar-day-view.component';
+import {CalendarDayViewComponent} from './calendar-day-view.component';
 
 describe('CalendarDayViewComponent', () => {
   let component: CalendarDayViewComponent;
@@ -8,9 +8,9 @@ describe('CalendarDayViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CalendarDayViewComponent ]
+      declarations: [CalendarDayViewComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

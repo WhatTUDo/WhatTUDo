@@ -93,7 +93,7 @@ export class OrganizationService {
 
   addMembership(orgaId: number, userId: number, role: string): Observable<any> {
     let url = "?userId=" + userId + "&role=" + role;
-    return this.httpClient.put(this.organizationBaseUri + '/addMembership/'+orgaId+url, {});
+    return this.httpClient.put(this.organizationBaseUri + '/addMembership/' + orgaId + url, {});
   }
 
   uploadOrganizationAvatar(organizationId: number, file: File) {
