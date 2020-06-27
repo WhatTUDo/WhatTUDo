@@ -121,8 +121,8 @@ public class EventServiceTest {
     @Test
     public void search_Event_returnsEventList() {
         Calendar calendar = calendarRepository.save(new Calendar("Test Calendar Service 1", Collections.singletonList(new Organization())));
-        Event savedEvent1 = service.save(new Event("Findme 1", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
-        Event savedEvent2 = service.save(new Event("Findme 2", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
+        service.save(new Event("Findme 1", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
+        service.save(new Event("Findme 2", LocalDateTime.of(2020, 1, 1, 15, 30), LocalDateTime.of(2020, 1, 1, 16, 0), calendar));
 
         List<Event> foundEvents = service.findNameOrDescriptionBySearchTerm("find");
 

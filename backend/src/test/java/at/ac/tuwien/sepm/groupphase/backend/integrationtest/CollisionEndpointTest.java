@@ -48,9 +48,9 @@ public class CollisionEndpointTest {
         Calendar calendar =  calendarRepository.save(new Calendar("Calendar test", Collections.singletonList(orga)));
         Location location =  locationRepository.save(new Location("Test Location", "Test Adress", "Zip", 0, 0));
 
-        Event event = eventRepository.save(new Event("Event colliding 1", LocalDateTime.of(2021, 8, 8, 10, 0),
+        eventRepository.save(new Event("Event colliding 1", LocalDateTime.of(2021, 8, 8, 10, 0),
             LocalDateTime.of(2021, 8, 8, 11, 0), calendar));
-        Event event1 = eventRepository.save(new Event("Event colliding 2", LocalDateTime.of(2021, 8, 8, 9, 45),
+        eventRepository.save(new Event("Event colliding 2", LocalDateTime.of(2021, 8, 8, 9, 45),
             LocalDateTime.of(2021, 8, 8, 11, 0), calendar));
 
         CollisionResponseDto eventCollisionDto = eventCollisionEndpoint.getEventCollisions(new EventDto(1, "Event saving", LocalDateTime.of(2021, 8, 8, 10, 0),

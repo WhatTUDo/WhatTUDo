@@ -139,7 +139,7 @@ public class LocationServiceTest {
     @Test
     public void findByName_shouldReturn_correctLocation() {
         Location location1 = repository.save(new Location("Alteshaus", "Haustraße 25/7/5", "1010", 1, 2));
-        Location location2 = repository.save(new Location("Neueshaus", "Haustraße 25/7/5", "1010", 1, 2));
+        repository.save(new Location("Neueshaus", "Haustraße 25/7/5", "1010", 1, 2));
         List<Location> foundLocation = service.searchForName("Alteshaus");
         assert (foundLocation.size() > 0);
         assertEquals(location1.getName(), foundLocation.get(0).getName());
@@ -151,7 +151,7 @@ public class LocationServiceTest {
     @Test
     public void findByAddress_shouldReturn_correctLocation() {
         Location location1 = repository.save(new Location("Alteshaus", "Haustraße 25/7/5", "1010", 1, 2));
-        Location location2 = repository.save(new Location("Neueshaus", "Haustraße 25/7/6", "1010", 1, 2));
+        repository.save(new Location("Neueshaus", "Haustraße 25/7/6", "1010", 1, 2));
         List<Location> foundLocation = service.searchForAddress("Haustraße 25");
         assert (foundLocation.size() > 0);
         assertEquals(location1.getName(), foundLocation.get(0).getName());

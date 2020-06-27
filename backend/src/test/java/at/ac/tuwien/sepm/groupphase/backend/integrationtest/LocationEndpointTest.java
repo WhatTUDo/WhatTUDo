@@ -155,8 +155,8 @@ public class LocationEndpointTest {
         List<Integer> eventIds = Collections.emptyList();
         LocationDto locationDto1 = new LocationDto(1, "Test Name", "Test address", "1100", 1, 1, eventIds);
         LocationDto locationDto2 = new LocationDto(2, "Nicht findbar", "Test address", "1100", 1, 1, eventIds);
-        LocationDto returnedLocation1 = endpoint.create(locationDto1);
-        LocationDto returnedLocation2 = endpoint.create(locationDto2);
+        endpoint.create(locationDto1);
+        endpoint.create(locationDto2);
 
         List<LocationDto> foundLocation = endpoint.searchLocationNames("Test N");
         assert (foundLocation.size() > 0);
@@ -172,8 +172,8 @@ public class LocationEndpointTest {
         List<Integer> eventIds = Collections.emptyList();
         LocationDto locationDto1 = new LocationDto(1, "Alteshaus", "Haustraße 25/7/5", "1100", 1, 1, eventIds);
         LocationDto locationDto2 = new LocationDto(2, "Nicht findbares Haus", "keine Adresse", "1100", 1, 1, eventIds);
-        LocationDto returnedLocation1 = endpoint.create(locationDto1);
-        LocationDto returnedLocation2 = endpoint.create(locationDto2);
+        endpoint.create(locationDto1);
+        endpoint.create(locationDto2);
 
         List<LocationDto> foundLocation = endpoint.searchLocationAddress("Haustraße");
         assert (foundLocation.size() > 0);

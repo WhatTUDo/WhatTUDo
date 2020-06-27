@@ -1,17 +1,16 @@
 INSERT INTO ORGANIZATION (ID, NAME, DESCRIPTION, CREATED_AT, UPDATED_AT)
-VALUES (1, 'Fachschaft Architektur', 'Die fachschaft::architektur sind Studierende mit den unterschiedlichsten Interessen, die sich zur Aufgabe gestellt haben, alle Architekturstudierenden gegenüber Lehrenden der Architektur und allen anderen zu vertreten.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (2, 'Fachschaft Bau- und Umweltingenieurwesen', 'Die Fachschaft Bau- und Umweltingenieurwesen (.biz) ist der Treffpunkt aller Bau- und Umweltingenieurstudierenden.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (3, 'Fachschaft Doktorat', 'We are the representation of interests of doctoral candidates at TU Wien. We act in self-governing bodies at the university. We support and advise you in your matters of studies and research. Aside from this we offer workshops and a social programme.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (4, 'Fachschaft Elektrotechnik', 'Die Fachschaft Elektrotechnik (kurz: FET), ist die offizielle Vertretung aller Studierenden auf der Fakultät für Elektrotechnik und Informationstechnik.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (5, 'Fachschaft Informatik', 'Die Fachschaft Informatik ist die Interessensvertretung der Informatikstudierenden an der Technischen Universität.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (6, 'Fachschaft Lehramt', 'Wir, die Fachschaft Lehramt, sind eine Gruppe ehrenamtlicher Studierender, die es sich zur Aufgabe gemacht haben, sich um die Anliegen und Probleme der Lehramtsstudierenden an der TU Wien zu kümmern.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (7, 'Fachschaft Maschinenbau und Verfahrenstechnik', 'In der Fachschaft arbeiten Studierende der Bachelor – und Masterstudien Maschinenbau, Wirtschaftsingenieurwesen – Maschinenbau, Verfahrenstechnik und Materialwissenschaften ehrenamtlich zusammen.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (8, 'Fachschaft Raumplanung', 'Die Fachschaft Raumplanung ist das Kommunikationszentrum für Raumplanungsstudierende. Hier findest du engagierte Studierende, mit denen du Interessen und Erfahrungen austauschen kannst.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (9, 'Fachschaft Technische Chemie', 'Die Fachschaft ist deine Interessensvertretung und die erste Anlaufstelle für Probleme im Studium Technische Chemie.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (10, 'Fachschaft Technische Mathematik', 'Die Fachschaft Technische Mathematik ist eine Gruppe von Personen, die sich für das Wohl der Mathematik-Studierenden an der TU Wien einsetzt und es als ihre Aufgabe sieht, die Studienvertretung Technische Mathematik bei ihren Tätigkeiten zu unterstützen.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (11, 'Fachschaft Technische Physik', 'fstph.at', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
-       (12, 'Fachschaft Geodäsie und Geoinformation', 'Die Fachschaft Vermessung und Geoinformation ist eine Studentenvertretung, die in dieser Form auf anderen Universitäten, gar auf anderen Fakultäten schwer zu finden ist.', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
-
+VALUES (1, 'Fachschaft Architektur', 'Fachschaft Architektur', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (2, 'Fachschaft Bau- und Umweltingenieurwesen', 'Eine FS', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (3, 'Fachschaft Doktorat', 'Beschreibung', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (4, 'Fachschaft Elektrotechnik', 'Test', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (5, 'Fachschaft Informatik', 'Hilft den INF Studierenden!', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (6, 'Fachschaft Lehramt', 'Fragen bitte per E-Mail',  CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (7, 'Fachschaft Maschinenbau und Verfahrenstechnik', 'For you', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (8, 'Fachschaft Raumplanung', 'der TU', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (9, 'Fachschaft Technische Chemie', 'Chemie ist toll!', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (10, 'Fachschaft Technische Mathematik', 'Wir sind die Zukunft', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (11, 'Fachschaft Technische Physik', 'test', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),
+       (12, 'Fachschaft Geodäsie und Geoinformation', 'GEO macht Freude', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());
 
 INSERT INTO CALENDAR (ID, NAME, DESCRIPTION, CREATED_AT, UPDATED_AT)
 VALUES (1, 'Events', 'Events der fs::arch', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP()),

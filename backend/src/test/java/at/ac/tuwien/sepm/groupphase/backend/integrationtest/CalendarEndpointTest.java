@@ -99,7 +99,7 @@ public class CalendarEndpointTest {
         assertEquals(1, found.size());
 
 
-        EventDto eventDto = eventEndpoint.post(new EventDto(1, "SearchEvent", LocalDateTime.of(2021, 2, 2, 14, 0), LocalDateTime.of(2021, 2, 2, 15, 0), calendarDto.getId(), location.getId()));
+        eventEndpoint.post(new EventDto(1, "SearchEvent", LocalDateTime.of(2021, 2, 2, 14, 0), LocalDateTime.of(2021, 2, 2, 15, 0), calendarDto.getId(), location.getId()));
         found = calendarEndpoint.searchCalendarCombo("SearchEvent");
         assertEquals(1, found.size());
 
