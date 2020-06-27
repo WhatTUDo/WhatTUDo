@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Calendar} from '../../dtos/calendar';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
 import {
   faLink,
@@ -58,7 +58,6 @@ export class CalendarComponent extends CalendarBase implements OnInit {
     });
     this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
-      this.color = this.calendarColors[this.calendar.id % this.calendarColors.length];
     });
     this.dateLocale = globals.dateLocale;
   }

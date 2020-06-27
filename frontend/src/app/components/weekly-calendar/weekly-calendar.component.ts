@@ -1,6 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CalendarEvent} from '../../dtos/calendar-event';
-import {faChevronDown, faChevronLeft, faChevronRight, faChevronUp} from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
 import {SubscriptionService} from "../../services/subscription.service";
 import {Globals} from "../../global/globals";
@@ -96,9 +95,5 @@ export class WeeklyCalendarComponent extends CalendarBase implements OnInit, OnC
     this.currentMonth = today.toLocaleString(this.globals.dateLocale, {month: 'long'});
     this.currentDate = today.getDate();
     this.currentYear = today.getFullYear();
-  }
-
-  getCalendarColor(event: CalendarEvent) {
-    return this.calendarColors[event.calendarId % this.calendarColors.length];
   }
 }

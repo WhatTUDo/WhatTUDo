@@ -1,0 +1,7 @@
+<div *ngFor="let event of events" [ngClass]="getCalendarColor(event)"
+     [style.grid-row]="getDisplayRows(event, date)"
+     class="calendar-event" routerLink="/event/{{event.id}}">
+  <div
+    class="calendar-event-time">{{isOnSameDay(event.startDateTime, date) ? this.getDisplayTimeString(event) : ''}}</div>
+  <div class="calendar-event-name">{{event.name}}</div>
+</div>

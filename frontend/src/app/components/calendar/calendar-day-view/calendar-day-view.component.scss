@@ -1,0 +1,61 @@
+@import "../../../../var.scss";
+
+:host {
+  height: $mobile-object-full-height;
+
+  @media (screen and min-width: $mobile-breakpoint) {
+    min-height: $mobile-object-full-height;
+    height: 100%
+  }
+}
+
+.calendar-event {
+  --event-color: 124, 201, 242;
+
+  &.blue {
+    --event-color: 124, 201, 242;
+  }
+
+  &.green {
+    --event-color: 126, 222, 163;
+  }
+
+  &.yellow {
+    --event-color: 250, 205, 107;
+  }
+
+  &.orange {
+    --event-color: 232, 152, 109;
+  }
+
+  &.red {
+    --event-color: 242, 133, 124;
+  }
+
+  &.violet {
+    --event-color: 173, 111, 189;
+  }
+
+  border-left: 4pt solid rgb(var(--event-color));
+  background-color: rgba(var(--event-color), 0.25);
+
+  cursor: pointer;
+
+  position: relative;
+
+  margin-left: -2pt;
+  padding: 4pt;
+  box-sizing: content-box;
+
+  .calendar-event-time {
+    color: $gray;
+    font-size: 8pt;
+    margin-bottom: 2pt;
+  }
+
+  .calendar-event-name {
+    line-height: 1;
+    text-overflow: ellipsis;
+    hyphens: auto;
+  }
+}
