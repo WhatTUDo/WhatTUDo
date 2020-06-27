@@ -8,12 +8,12 @@ import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 })
 export class ExplanationComponent implements OnInit {
 
+  faChevronLeft = faChevronLeft;
+
   constructor() {
   }
 
   ngOnInit(): void {
   }
-
-  faChevronLeft = faChevronLeft;
 
 }

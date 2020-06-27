@@ -1,5 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {faChevronLeft, faTimesCircle, faPlus, faCog, faKey, faRedoAlt, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faCog,
+  faKey,
+  faPlus,
+  faRedoAlt,
+  faTimes,
+  faTimesCircle
+} from "@fortawesome/free-solid-svg-icons";
 import {LabelService} from "../../services/label.service";
 import {Label} from "../../dtos/label";
 import {UserService} from "../../services/user.service";
@@ -81,7 +89,7 @@ export class AdminDashboardComponent implements OnInit {
   resetPassword(username: string) {
     const password = this.generatePassword();
     const changeUserPasswordDto = new ChangeUserPasswordDto(username, null, null, password);
-    this.userService.changePwd(changeUserPasswordDto).subscribe((user) => {
+    this.userService.changePwd(changeUserPasswordDto).subscribe((_) => {
       alert(`Password of "${username}" changed to: \n${password}`)
     })
   }

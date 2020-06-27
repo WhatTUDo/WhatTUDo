@@ -3,7 +3,7 @@
     <div class="promo-event-details">
       <div class="promo-event-time">{{getEventDateAndTimeString(event)}}</div>
       <div class="promo-event-name">{{event.name}}</div>
-      <div class="message" *ngIf="event.description">{{event.description}}</div>
+      <div *ngIf="event.description" class="message">{{event.description}}</div>
     </div>
 
   </div>

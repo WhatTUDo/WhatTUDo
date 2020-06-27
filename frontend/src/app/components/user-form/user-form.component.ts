@@ -7,7 +7,6 @@ import {AuthService} from '../../services/auth.service';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 import {FeedbackService} from '../../services/feedback.service';
 import {ChangeUserPasswordDto} from '../../dtos/ChangeUserPasswordDto';
-import {AuthRequest} from '../../dtos/auth-request';
 
 @Component({
   selector: 'app-user-form',
@@ -41,12 +40,6 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
         newPassword: new FormControl('', Validators.required)
       }
     );
-    const id = +this.route.snapshot.paramMap.get('id');
-    // if (id) {
-    //   this.userService.getById(id).subscribe((user: User) => {
-    //     this.user = user;
-    //   });
-    // } else {
     if (this.authService.isLoggedIn()) {
       this.authService.getUser().subscribe((user: User) => {
         this.user = user;
@@ -60,16 +53,18 @@ export class UserFormComponent implements OnInit, AfterContentChecked {
   }
 
   public update() {
-    let newuser : User = new User(this.user.id, "", "");
+    let newuser: User = new User(this.user.id, "", "");
     if (this.updateForm.valid) {
       if (this.updateForm.controls.username) {
-        if(this.updateForm.controls.username.value != ""){
-        newuser.name = this.updateForm.controls.username.value;}
+        if (this.updateForm.controls.username.value != "") {
+          newuser.name = this.updateForm.controls.username.value;
+        }
       } else if (this.updateForm.controls.email) {
-        if(this.updateForm.controls.email.value != ""){
-          newuser.email = this.updateForm.controls.email.value;}
+        if (this.updateForm.controls.email.value != "") {
+          newuser.email = this.updateForm.controls.email.value;
+        }
       }
-      this.userService.putUser(this.user.name,newuser).subscribe((user: any) => {
+      this.userService.putUser(this.user.name, newuser).subscribe((user: any) => {
         this.user = user;
         this.feedbackService.displaySuccess('Successfully updated', 'Successfully updated. Please Log in again!');
         this.authService.logoutUser();

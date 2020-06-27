@@ -1,9 +1,5 @@
 @import "../../../var.scss";
 
-.filter {
-  margin-bottom: 16pt;
-}
-
 .calendar {
   display: flex;
   flex-wrap: nowrap;
@@ -60,16 +56,15 @@
 
   }
 
-    .organization-info {
-      display: flex;
-      align-items: center;
-      margin-bottom: 4pt;
+  .organization-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4pt;
 
-      > .avatar {
-        margin-right: 4pt;
-      }
+    > .avatar {
+      margin-right: 4pt;
     }
-
+  }
 
   .calendar-buttons {
     margin-left: auto;

@@ -1,4 +1,4 @@
-<div class="comment-item" *ngIf="comment">
+<div *ngIf="comment" class="comment-item">
   <div class="conmment-content">
     {{comment.text}}
   </div>
@@ -13,14 +13,16 @@
 
 
     <div class="comment-buttons">
-      <fa-icon [icon]="faEdit" *ngIf="this.user === this.author" (click)="changeEditCommentState()" class="clickable no-hover-enlarge"></fa-icon>
-      <fa-icon [icon]="faTimesCircle" *ngIf="this.canEdit" (click)="deleteComment()" class="clickable no-hover-enlarge"></fa-icon>
+      <fa-icon (click)="changeEditCommentState()" *ngIf="this.user === this.author" [icon]="faEdit"
+               class="clickable no-hover-enlarge"></fa-icon>
+      <fa-icon (click)="deleteComment()" *ngIf="this.canEdit" [icon]="faTimesCircle"
+               class="clickable no-hover-enlarge"></fa-icon>
     </div>
   </div>
 
-  <div class="comment-edit" *ngIf="editActive">
+  <div *ngIf="editActive" class="comment-edit">
     <label for="comment-textarea"></label>
-    <textarea class="no-outline" id="comment-textarea" name="comment" #njf>{{comment.text}}</textarea>
+    <textarea #njf class="no-outline" id="comment-textarea" name="comment">{{comment.text}}</textarea>
     <button (click)="editComment(njf.value)" class="full-width-form-button no-hover-enlarge">Send</button>
   </div>
 </div>

@@ -7,15 +7,16 @@
 
 <div *ngIf="organization" class="centered-one-third">
   <h2>{{isUpdate ? "Edit" : "Create"}} Organization</h2>
-  <div class="avatar-container" *ngIf="organization">
+  <div *ngIf="organization" class="avatar-container">
     <img alt="" class="avatar avatar-large" src="{{organization.coverImageUrl}}">
   </div>
   <label for="organization-avatar">
     Avatar
   </label>
   <div class="form-group">
-    <input type="file" name="organization-avatar" (change)="selectImage($event)"
-           id="organization-avatar" accept="{{this.globals.allowedAvatarMimeTypes.join(',')}}">
+    <input (change)="selectImage($event)" accept="{{this.globals.allowedAvatarMimeTypes.join(',')}}"
+           id="organization-avatar"
+           name="organization-avatar" type="file">
   </div>
 </div>
 

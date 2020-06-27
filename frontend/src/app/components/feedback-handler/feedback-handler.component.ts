@@ -1,4 +1,4 @@
-import {Component, Injectable, Input, OnInit} from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
 import {faTimes} from "@fortawesome/free-solid-svg-icons";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 
@@ -58,6 +58,10 @@ export class FeedbackHandlerComponent implements OnInit {
     this.displayError(`Server Error`, error.message, error.status);
   }
 
+  public static onDismiss() {
+    FeedbackHandlerComponent.isVisible = !FeedbackHandlerComponent.isVisible;
+  }
+
   private static displayMessage(header: string, message: string, state: State = State.Neutral, technicalInformation: string = null) {
     this.isVisible = true;
     this.message = message;
@@ -95,10 +99,6 @@ export class FeedbackHandlerComponent implements OnInit {
 
   onDismiss() {
     FeedbackHandlerComponent.onDismiss();
-  }
-
-  public static onDismiss() {
-    FeedbackHandlerComponent.isVisible = !FeedbackHandlerComponent.isVisible;
   }
 }
 

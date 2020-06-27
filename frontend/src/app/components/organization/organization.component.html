@@ -12,7 +12,7 @@
         <div class="organization-name">{{organization.name}}</div>
       </div>
     </div>
-    <div class="organization-description" *ngIf="organization.description">
+    <div *ngIf="organization.description" class="organization-description">
       {{organization.description}}
     </div>
     <p></p>
@@ -22,7 +22,7 @@
           Edit organization
         </div>
       </a>
-      <div *ngIf="organization.canDelete" (click)="deleteOrganization(organization.id)"
+      <div (click)="deleteOrganization(organization.id)" *ngIf="organization.canDelete"
            class="organization-action dangerous clickable no-hover-enlarge">
         Dissolve organization
       </div>
@@ -31,8 +31,8 @@
   <div>
     <div class="title-icon-button-combo">
       <h2>People</h2>
-      <div *ngIf="organization.canEdit"
-           (click)="userAddExpanded = !userAddExpanded"
+      <div (click)="userAddExpanded = !userAddExpanded"
+           *ngIf="organization.canEdit"
            class="icon-button clickable no-hover-enlarge">
         <fa-icon *ngIf="!userAddExpanded" [icon]="faPlus"></fa-icon>
         <fa-icon *ngIf="userAddExpanded" [icon]="faTimes"></fa-icon>
@@ -40,22 +40,22 @@
     </div>
     <div *ngIf="organization.canEdit && userAddExpanded" class="add-user-section">
       <form (ngSubmit)="addMembership()" [formGroup]="addMemberForm">
-      <div class="form-group">
-        <label class="control-label" for="username">Username</label>
-        <div>
-          <input class="form-control" formControlName="username" id="username" type="text" autocomplete="off">
-          <div *ngIf="addMemberForm.controls.username.errors" class="jasmine-errored">
-            <small *ngIf="addMemberForm.controls.username.errors.pattern"
-                   class="form-text text-warning">Please enter a username!
-            </small>
+        <div class="form-group">
+          <label class="control-label" for="username">Username</label>
+          <div>
+            <input autocomplete="off" class="form-control" formControlName="username" id="username" type="text">
+            <div *ngIf="addMemberForm.controls.username.errors" class="jasmine-errored">
+              <small *ngIf="addMemberForm.controls.username.errors.pattern"
+                     class="form-text text-warning">Please enter a username!
+              </small>
+            </div>
           </div>
         </div>
-      </div>
         <div class="form-group">
           <label class="control-label" for="role">Role</label>
           <div class="input-button-combo">
             <select #selectedRole [ngModel]="selectRole(selectedRole.value)" class="form-control"
-                  formControlName="role"  id="role">
+                    formControlName="role" id="role">
               <option *ngFor="let role of roles"
                       value="{{role}}">{{role}}</option>
             </select>
@@ -93,8 +93,8 @@
   <div>
     <div class="title-icon-button-combo">
       <h2>Calendars</h2>
-      <div *ngIf="organization.canEdit"
-           (click)="calendarAddExpanded = !calendarAddExpanded"
+      <div (click)="calendarAddExpanded = !calendarAddExpanded"
+           *ngIf="organization.canEdit"
            class="icon-button clickable no-hover-enlarge">
         <fa-icon *ngIf="!calendarAddExpanded" [icon]="faPlus"></fa-icon>
         <fa-icon *ngIf="calendarAddExpanded" [icon]="faTimes"></fa-icon>
@@ -116,13 +116,14 @@
     <div>
       <div *ngFor="let cal of organizationCalendars"
            class="organization-calendar">
-        <img alt="" class="avatar avatar-small" src="{{globals.backendUri+cal.coverImageUrl}}" [ngClass]="getCalendarColor(cal.id)">
+        <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-small"
+             src="{{globals.backendUri+cal.coverImageUrl}}">
         <div class="organization-calendar-details clickable no-hover-enlarge"
              routerLink="/calendar/{{cal.id}}">
           <div class="organization-calendar-name">{{cal.name}}</div>
         </div>
         <div class="organization-calendar-buttons">
-          <fa-icon *ngIf="organization.canEdit" (click)="removeCalendar(cal.id)" [icon]="faTimesCircle"
+          <fa-icon (click)="removeCalendar(cal.id)" *ngIf="organization.canEdit" [icon]="faTimesCircle"
                    class="clickable no-hover-enlarge">
             Remove Calendar
           </fa-icon>

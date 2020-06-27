@@ -1,10 +1,10 @@
 import {
-  HttpInterceptor,
-  HttpHandler,
-  HttpRequest,
+  HttpErrorResponse,
   HttpEvent,
-  HttpResponse,
-  HttpErrorResponse
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse
 } from '@angular/common/http';
 import {Injectable} from "@angular/core"
 import {Observable, of} from "rxjs";

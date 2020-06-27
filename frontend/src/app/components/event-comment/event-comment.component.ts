@@ -4,8 +4,13 @@ import {EventComment} from "../../dtos/event-comment";
 import {AuthService} from '../../services/auth.service';
 
 import {
-  faThumbsDown, faThumbsUp, faUserCircle, faReply, faClock,
-  faEdit, faTimesCircle
+  faClock,
+  faEdit,
+  faReply,
+  faThumbsDown,
+  faThumbsUp,
+  faTimesCircle,
+  faUserCircle
 } from "@fortawesome/free-solid-svg-icons";
 import {EventService} from "../../services/event.service";
 import {Globals} from "../../global/globals";

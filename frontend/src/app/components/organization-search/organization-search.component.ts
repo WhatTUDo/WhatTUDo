@@ -1,34 +1,44 @@
 import {Component, OnInit} from '@angular/core';
-import {faChevronLeft} from "@fortawesome/free-solid-svg-icons";
+import {OrganizationService} from "../../services/organization.service";
+import {Organization} from "../../dtos/organization";
+import {faChevronLeft, faCog, faPlus, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {FormControl, FormGroup} from "@angular/forms";
-import {EventService} from "../../services/event.service";
-import {CalendarEvent} from "../../dtos/calendar-event";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
-  selector: 'app-event-search',
-  templateUrl: './event-search.component.html',
-  styleUrls: ['./event-search.component.scss']
+  selector: 'app-organization-search',
+  templateUrl: './organization-search.component.html',
+  styleUrls: ['./organization-search.component.scss']
 })
-export class EventSearchComponent implements OnInit {
+export class OrganizationSearchComponent implements OnInit {
 
-  faChevronLeft = faChevronLeft;
+  organizations: Organization[];
 
   searchForm = new FormGroup({
     name: new FormControl('')
   });
   searchActive: boolean = false;
-  eventSearchResult: CalendarEvent[] = [];
+  organizationSearchResult: Organization[] = [];
 
-  constructor(private eventService: EventService) {
+  faChevronLeft = faChevronLeft;
+  faCog = faCog;
+  faTimesCircle = faTimesCircle;
+  faPlus = faPlus;
+
+  constructor(
+    private organizationService: OrganizationService,
+    public authService: AuthService,
+  ) {
   }
 
   ngOnInit(): void {
+    this.getOrganizations();
   }
 
   onSubmit() {
     let formValue = this.searchForm.value;
     if (!formValue.name) {
-      this.eventSearchResult = [];
+      this.organizationSearchResult = [];
       this.searchActive = false;
       return
     }
@@ -36,13 +46,12 @@ export class EventSearchComponent implements OnInit {
     if (validationIsPassed) {
       // submit to service
       console.log("search");
-      this.eventService.searchEvent(formValue.name).subscribe((searchResult) => {
-        this.eventSearchResult = searchResult;
+      this.organizationService.searchOrganization(formValue.name).subscribe((searchResult) => {
+        this.organizationSearchResult = searchResult;
         this.searchActive = true;
       })
     }
   }
-
 
   /**
    *
@@ -62,7 +71,7 @@ export class EventSearchComponent implements OnInit {
         errorMessage += error.message + " ";
       }
       alert(errorMessage);
-      this.eventSearchResult = [];
+      this.organizationSearchResult = [];
       return false;
     }
     return true;
@@ -72,8 +81,13 @@ export class EventSearchComponent implements OnInit {
     this.searchForm = new FormGroup({
       name: new FormControl('')
     });
-    this.eventSearchResult = [];
+    this.organizationSearchResult = [];
     this.searchActive = false;
   }
 
+  private getOrganizations() {
+    this.organizationService.getAll().subscribe(organizations => {
+      this.organizations = organizations;
+    })
+  }
 }

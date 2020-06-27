@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {Calendar} from '../../dtos/calendar';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {CalendarService} from '../../services/calendar.service';
 import {
-  faLink,
   faChevronDown,
   faChevronLeft,
   faChevronRight,
   faChevronUp,
+  faLink,
   faPlus
 } from '@fortawesome/free-solid-svg-icons';
 import {CalendarEvent} from '../../dtos/calendar-event';
@@ -58,14 +58,12 @@ export class CalendarComponent extends CalendarBase implements OnInit {
     });
     this.calendarService.getCalendarById(this.id).subscribe((calendar: Calendar) => {
       this.calendar = calendar;
-      this.color = this.calendarColors[this.calendar.id % this.calendarColors.length];
     });
     this.dateLocale = globals.dateLocale;
   }
 
   ngOnInit(): void {
   }
-
 
 
   /**
@@ -101,7 +99,7 @@ export class CalendarComponent extends CalendarBase implements OnInit {
     this.feedbackService.displaySuccess("Copied the URL to the clipboard", icalUrl);
   }
 
-  copyMessage(val: string){
+  copyMessage(val: string) {
     const selBox = document.createElement('textarea');
     selBox.style.position = 'fixed';
     selBox.style.left = '0';

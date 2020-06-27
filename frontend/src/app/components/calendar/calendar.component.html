@@ -5,7 +5,7 @@
 </div>
 
 <div *ngIf="calendar" class="title-icon-button-combo desktop">
-  <h2 class="heading desktop clickable no-hover-enlarge" (click)="resetOffset()" id="weekly-cal-heading">
+  <h2 (click)="resetOffset()" class="heading desktop clickable no-hover-enlarge" id="weekly-cal-heading">
   <span id="weekly-cal-month">
     {{displayingWeek[3].toLocaleString(dateLocale, {month: 'long'})}}
   </span>
@@ -13,7 +13,7 @@
     {{displayingWeek[3].getFullYear()}}
   </span>
   </h2>
-  <h2 class="heading mobile clickable no-hover-enlarge" (click)="resetOffset()">
+  <h2 (click)="resetOffset()" class="heading mobile clickable no-hover-enlarge">
     {{calendar.name}}
   </h2>
   <div class="icon-button">
@@ -21,7 +21,7 @@
       <fa-icon [icon]="faPlus"></fa-icon>
     </div>
     <div class="clickable no-hover-enlarge">
-      <fa-icon [icon]="faLink" (click)="copyCalendarUrlToClipboard(calendar.id)"></fa-icon>
+      <fa-icon (click)="copyCalendarUrlToClipboard(calendar.id)" [icon]="faLink"></fa-icon>
     </div>
   </div>
 </div>
@@ -41,72 +41,41 @@
   </div>
 
   <div class="calendar mobile">
-    <div id="mobile-cal-heading" class="clickable no-hover-enlarge" (click)="resetOffset()">
+    <div (click)="resetOffset()" class="calendar-date-label-container clickable no-hover-enlarge"
+         id="mobile-cal-heading">
       <div class="week-day-label">{{displayingDate.toLocaleDateString(dateLocale, {weekday: 'short'})}}</div>
       <div [ngClass]="{'today': isToday(displayingDate)}" class="calendar-date-label">
         {{displayingDate.toLocaleDateString(dateLocale, {month: 'short', day: 'numeric'})}}
       </div>
     </div>
 
-    <div class="calendar-day-swim-lane">
-      <div *ngFor="let event of this.eventsOfTheWeek.get(displayingDate.toISOString())"
-           [style.grid-row]="getDisplayRows(event, displayingDate)" [ngClass]="color"
-           class="calendar-event" routerLink="/event/{{event.id}}">
-        <div *ngIf="event != null" class="calendar-event-time">{{this.getDisplayTimeString(event)}}</div>
-        <div *ngIf="event != null" class="calendar-event-name">{{event.name}}</div>
-      </div>
-    </div>
+    <app-calendar-day-view [date]="displayingDate" [events]="eventsOfTheWeek.get(displayingDate.toISOString())"
+                           class="calendar-day"></app-calendar-day-view>
   </div>
 
-  <div class="grid-one-sixth calendar desktop">
-    <div class="week-day-label"
-         *ngFor="let day of displayingWeek.slice(0,5)">{{day.toLocaleDateString(dateLocale, {weekday: 'short'})}}
+  <div class="calendar-week-grid calendar desktop">
+    <div *ngFor="let date of displayingWeek.slice(0,5)" class="calendar-date-label-container">
+      <div class="week-day-label">{{date.toLocaleDateString(dateLocale, {weekday: 'short'})}}
+      </div>
+      <div [ngClass]="{'today': isToday(date)}"
+           class="calendar-date-label">{{date.getDate()}}</div>
     </div>
-    <div class="week-day-label">
-      {{displayingWeek[5].toLocaleDateString(dateLocale, {weekday: 'short'})}}
-      /
-      {{displayingWeek[6].toLocaleDateString(dateLocale, {weekday: 'short'})}}
+    <div class="calendar-date-label-container weekend">
+      <div class="week-day-label">
+        {{displayingWeek[5].toLocaleDateString(dateLocale, {weekday: 'short'})}}
+        /
+        {{displayingWeek[6].toLocaleDateString(dateLocale, {weekday: 'short'})}}
+      </div>
+      <div class="calendar-date-label">
+        <sup [ngClass]="{'today': isToday(this.displayingWeek[5])}">{{this.displayingWeek[5].getDate()}}</sup>
+        ⁄
+        <sub [ngClass]="{'today': isToday(this.displayingWeek[6])}">{{this.displayingWeek[6].getDate()}}</sub>
+      </div>
     </div>
 
-    <div *ngFor="let date of this.displayingWeek.slice(0,5)" [ngClass]="{'today': isToday(date)}"
-         class="calendar-date-label">{{date.getDate()}}</div>
-    <div class="calendar-date-label">
-      <sup [ngClass]="{'today': isToday(this.displayingWeek[5])}">{{this.displayingWeek[5].getDate()}}</sup>
-      ⁄
-      <sub [ngClass]="{'today': isToday(this.displayingWeek[6])}">{{this.displayingWeek[6].getDate()}}</sub>
-    </div>
-
-    <div *ngFor="let date of this.displayingWeek.slice(0,5)" class="calendar-day-swim-lane">
-      <div *ngFor="let event of this.eventsOfTheWeek.get(date.toISOString())" [ngClass]="color"
-           [style.grid-row]="getDisplayRows(event, date)"
-           class="calendar-event" routerLink="/event/{{event.id}}">
-        <div
-          class="calendar-event-time">{{isOnSameDay(event.startDateTime, date) ? this.getDisplayTimeString(event) : ''}}</div>
-        <div class="calendar-event-name">{{event.name}}</div>
-      </div>
-    </div>
-    <div class="calendar-day-swim-lane weekend-lane-container">
-      <div class="weekend-sat">
-        <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[5].toISOString())"
-             [ngClass]="color"
-             [style.grid-row]="getDisplayRows(event, displayingWeek[5])"
-             class="calendar-event " routerLink="/event/{{event.id}}">
-          <div
-            class="calendar-event-time">{{isOnSameDay(event.startDateTime, displayingWeek[5]) ? this.getDisplayTimeString(event) : ''}}</div>
-          <div class="calendar-event-name">{{event.name}}</div>
-        </div>
-      </div>
-      <div class="weekend-sun">
-        <div *ngFor="let event of this.eventsOfTheWeek.get(displayingWeek[6].toISOString())"
-             [ngClass]="color"
-             [style.grid-row]="getDisplayRows(event, displayingWeek[6])"
-             class="calendar-event weekend-sun" routerLink="/event/{{event.id}}">
-          <div
-            class="calendar-event-time">{{isOnSameDay(event.startDateTime, displayingWeek[6]) ? this.getDisplayTimeString(event) : ''}}</div>
-          <div class="calendar-event-name">{{event.name}}</div>
-        </div>
-      </div>
-    </div>
+    <app-calendar-day-view *ngFor="let date of this.displayingWeek" [date]="date"
+                           [events]="eventsOfTheWeek.get(date.toISOString())"
+                           class="calendar-day"></app-calendar-day-view>
   </div>
 
   <div (click)="addOneWeek()" class="calendar-navigation desktop clickable no-hover-enlarge">

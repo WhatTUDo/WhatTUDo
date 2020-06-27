@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {PromoEventListComponent} from './promo-event-list.component';
+import {OrganizationSearchComponent} from './organization-search.component';
 
-describe('RecommendedEventsComponent', () => {
-  let component: PromoEventListComponent;
-  let fixture: ComponentFixture<PromoEventListComponent>;
+describe('OrganizationListComponent', () => {
+  let component: OrganizationSearchComponent;
+  let fixture: ComponentFixture<OrganizationSearchComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PromoEventListComponent]
+      declarations: [OrganizationSearchComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PromoEventListComponent);
+    fixture = TestBed.createComponent(OrganizationSearchComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

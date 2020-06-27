@@ -4,7 +4,6 @@ import {Location} from "../../dtos/location";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 import {faMapMarked} from "@fortawesome/free-solid-svg-icons";
 import {LocationService} from "../../services/location.service";
-import {strict} from "assert";
 
 @Component({
   selector: 'app-event-location',
@@ -29,6 +28,26 @@ export class EventLocationComponent implements OnInit, OnChanges {
   constructor(private eventService: EventService,
               private locationService: LocationService,
               private sanitizer: DomSanitizer) {
+  }
+
+  private static parseLocation(result): Location {
+    let specificName = EventLocationComponent.createSpecificNameForApiResult(result);
+    let locationAddress = result.address.road + " " + result.address.postcode + " " + result.address.city;
+    let postcode = result.address.postcode ? result.address.postcode : "no zip";
+    return new Location(null, specificName, locationAddress, postcode, result.lat, result.lon, []);
+  }
+
+  private static createSpecificNameForApiResult(result): string {
+    let name = "";
+    if (result.address.office) {
+      name = result.address.office;
+    } else if (result.address.road) {
+      name = result.address.road;
+      if (result.address.house_number) {
+        name += " " + result.address.house_number;
+      }
+    }
+    return name;
   }
 
   ngOnInit(): void {
@@ -112,30 +131,9 @@ export class EventLocationComponent implements OnInit, OnChanges {
   private mapAPIResultsToLocationObjects(apiResults: Array<any>): Array<Location> {
     let locations = Array<Location>();
     apiResults.forEach(result => {
-      let location = this.parseLocation(result);
+      let location = EventLocationComponent.parseLocation(result);
       locations.push(location);
     });
     return locations;
-  }
-
-  private parseLocation(result): Location {
-    let specificName = this.createSpecifiNameForApiResult(result);
-    let locationAddress = result.address.road + " " + result.address.postcode + " " + result.address.city;
-    let postcode = result.address.postcode ? result.address.postcode : "no zip";
-    let newLocation: Location = new Location(null, specificName, locationAddress, postcode, result.lat, result.lon, []);
-    return newLocation;
-  }
-
-  private createSpecifiNameForApiResult(result): string {
-    let name = "";
-    if (result.address.office) {
-      name = result.address.office;
-    } else if (result.address.road) {
-      name = result.address.road;
-      if (result.address.house_number) {
-        name += " " + result.address.house_number;
-      }
-    }
-    return name;
   }
 }

@@ -31,7 +31,7 @@ export class OrganizationFormComponent implements OnInit {
     if (id) {
       this.organizationService.getById(id).subscribe((organization: Organization) => {
         this.organization = organization;
-        this.organization.coverImageUrl = this.globals.backendUri+this.organization.coverImageUrl;
+        this.organization.coverImageUrl = this.globals.backendUri + this.organization.coverImageUrl;
         this.isUpdate = true;
       });
     } else {
@@ -46,13 +46,13 @@ export class OrganizationFormComponent implements OnInit {
       return;
     }
     if (this.organization.id) {
-      this.updateOrganization(name);
+      this.updateOrganization();
     } else {
-      this.createOrganization(name);
+      this.createOrganization();
     }
   }
 
-  createOrganization(name: string) {
+  createOrganization() {
     this.organizationService.postOrganization(this.organization)
       .subscribe(organization => {
         this.organization = organization;
@@ -62,7 +62,7 @@ export class OrganizationFormComponent implements OnInit {
       });
   }
 
-  updateOrganization(name: string) {
+  updateOrganization() {
     this.organizationService.putOrganization(this.organization)
       .subscribe(organization => {
           this.organization = organization;
@@ -81,7 +81,7 @@ export class OrganizationFormComponent implements OnInit {
 
   uploadImage() {
     if (!this.selectedImage) return;
-    this.organizationService.uploadOrganizationAvatar(this.organization.id, this.selectedImage).subscribe(resp => {
+    this.organizationService.uploadOrganizationAvatar(this.organization.id, this.selectedImage).subscribe(_ => {
     });
   }
 

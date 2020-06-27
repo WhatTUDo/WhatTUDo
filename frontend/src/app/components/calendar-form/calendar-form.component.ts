@@ -40,6 +40,29 @@ export class CalendarFormComponent implements OnInit {
   ) {
   }
 
+  private static validateFormData(calendar: any): boolean {
+    let errors = [];
+
+    if (calendar.name == null || calendar.name == "") {
+      errors.push("Name must not be null or empty!");
+    }
+
+    if (calendar.organizationIds == null || calendar.organizationIds == "") {
+      errors.push("Organization must be specified!");
+    }
+
+    if (errors.length > 0) {
+      let msg = "";
+      for (let error of errors) {
+        msg += error + "\n ";
+      }
+
+      alert(msg);
+      return false;
+    }
+    return true;
+  }
+
   ngOnInit(): void {
     this.getCalendar();
     this.getOrganizations();
@@ -61,15 +84,15 @@ export class CalendarFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.validateFormData(this.calendar)) {
+    if (CalendarFormComponent.validateFormData(this.calendar)) {
       if (this.isUpdate) {
         this.calendarService.editCalendar(this.calendar).subscribe((observable) => {
           this.calendar = observable;
           this.uploadImage();
           console.log("Updated calendar: ", observable);
-        }, error => {
+        }, _ => {
         }, () => {
-          this.calendarService.updateCalendar(this.calendar).subscribe(responseCalendar => {
+          this.calendarService.updateCalendar(this.calendar).subscribe(_ => {
             this.feedbackService.displaySuccess("Edits Saved", "You updated this Calendar!");
             window.location.replace("/calendar-list");
           });
@@ -103,34 +126,6 @@ export class CalendarFormComponent implements OnInit {
     });
   }
 
-  private validateFormData(calendar: any): boolean {
-    let errors = [];
-
-    if (calendar.name == null || calendar.name == "") {
-      errors.push("Name must not be null or empty!");
-    }
-
-    if (calendar.organizationIds == null || calendar.organizationIds == "") {
-      errors.push("Organization must be specified!");
-    }
-
-    if (errors.length > 0) {
-      let msg = "";
-      for (let error of errors) {
-        msg += error + "\n ";
-      }
-
-      alert(msg);
-      return false;
-    }
-    return true;
-  }
-
-  private compare(id1: number, id2: number): boolean {
-    console.log("compared" + id1 + " with " + id2);
-    return id1 && id2 ? id1 === id2 : false;
-  }
-
   selectImage(event) {
     this.selectedImage = event.target.files.item(0);
   }
@@ -141,6 +136,11 @@ export class CalendarFormComponent implements OnInit {
       // @ts-ignore
       this.calendar.coverImageUrl = resp.url;
     });
+  }
+
+  compare(id1: number, id2: number): boolean {
+    console.log("compared" + id1 + " with " + id2);
+    return id1 && id2 ? id1 === id2 : false;
   }
 
 }

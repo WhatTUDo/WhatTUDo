@@ -29,11 +29,11 @@
     </div>
     <div *ngIf="attendingEvents.length > 0">
       <h3>Attending</h3>
-      <app-promo-event-list [eventList]="attendingEvents"></app-promo-event-list>
+      <app-event-list [eventList]="attendingEvents"></app-event-list>
     </div>
     <div *ngIf="interestedEvents.length > 0">
       <h3>Interested</h3>
-      <app-promo-event-list [eventList]="interestedEvents"></app-promo-event-list>
+      <app-event-list [eventList]="interestedEvents"></app-event-list>
     </div>
   </div>
   <div *ngIf="userInOrganizations">
@@ -44,7 +44,7 @@
     <div class="user-organization-list">
       <div *ngFor="let org of userInOrganizations" class="user-organization">
         <img alt="" class="avatar avatar-medium clickable no-hover-enlarge"
-             src="{{globals.backendUri+org.coverImageUrl}}" routerLink="/organization/{{org.id}}">
+             routerLink="/organization/{{org.id}}" src="{{globals.backendUri+org.coverImageUrl}}">
         <div class="user-organization-details clickable no-hover-enlarge"
              routerLink="/organization/{{org.id}}">
           <div class="user-organization-name">{{org.name}}</div>

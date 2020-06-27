@@ -1,12 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
 import {CalendarEvent} from "../../dtos/calendar-event";
 import {Location} from "../../dtos/location";
 import {EventService} from "../../services/event.service";
 import {CalendarService} from "../../services/calendar.service";
 import {Calendar} from "../../dtos/calendar";
-import {ActivatedRoute, Router} from "@angular/router";
-import {faChevronLeft, faCheckCircle} from "@fortawesome/free-solid-svg-icons";
+import {ActivatedRoute} from "@angular/router";
+import {faCheckCircle, faChevronLeft} from "@fortawesome/free-solid-svg-icons";
 import {faCircle} from "@fortawesome/free-regular-svg-icons";
 import {FeedbackService} from "../../services/feedback.service";
 import {CollisionResponse} from "../../dtos/collision-response";
@@ -55,9 +55,9 @@ export class EventFormComponent implements OnInit {
   faCircle = faCircle;
   faCheckCircle = faCheckCircle;
   collisionResponse: CollisionResponse;
-  private selectedImage: File;
   location: Location;
   displayNoConflictMessage: boolean = false;
+  private selectedImage: File;
 
   constructor(
     private eventService: EventService,
@@ -66,8 +66,7 @@ export class EventFormComponent implements OnInit {
     private feedbackService: FeedbackService,
     private locationService: LocationService,
     public globals: Globals,
-    private route: ActivatedRoute,
-    private router: Router) {
+    private route: ActivatedRoute) {
     const id = +this.route.snapshot.paramMap.get('id');
     if (id) {
       this.eventService.getEvent(id).subscribe((event: CalendarEvent) => {
@@ -142,7 +141,9 @@ export class EventFormComponent implements OnInit {
             this.feedbackService.displaySuccess("Updated Event", "You updated the event successfully!");
             console.log(response);
             this.eventService.addLabels(this.ev_id, this.selectedLabels);
-            if(this.imagechange){ this.uploadImage();}
+            if (this.imagechange) {
+              this.uploadImage();
+            }
 
             window.location.replace("/event/" + response.id);
           },
@@ -160,7 +161,9 @@ export class EventFormComponent implements OnInit {
             this.calendarEvent = response;
 
             this.eventService.addLabels(response.id, this.selectedLabels);
-            if(this.imagechange){ this.uploadImage();}
+            if (this.imagechange) {
+              this.uploadImage();
+            }
             window.location.replace("/event/" + response.id);
           },
           err => {
@@ -218,7 +221,7 @@ export class EventFormComponent implements OnInit {
     return true;
   }
 
-  imageChange(){
+  imageChange() {
     this.imagechange = true;
   }
 
@@ -274,7 +277,7 @@ export class EventFormComponent implements OnInit {
 
   uploadImage() {
     if (this.selectedImage === null) return;
-    this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe((resp) => {
+    this.eventService.uploadEventCover(this.calendarEvent.id, this.selectedImage).subscribe((_) => {
     });
   }
 }

@@ -29,7 +29,7 @@ export class UserRegistrationComponent implements OnInit {
   }
 
   onSubmit() {
-    this.userService.postUser({...this.user, password: this.password}).subscribe((user: User) => {
+    this.userService.postUser({...this.user, password: this.password}).subscribe((_) => {
       this.router.navigate(['/user'])
     })
   }

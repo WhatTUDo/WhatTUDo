@@ -16,6 +16,7 @@ export class EventConflictResolverComponent implements OnInit {
   @Output() change: EventEmitter<Date[]> = new EventEmitter();
 
   selectedDateIndex: number = null;
+  faExclamationTriangle = faExclamationTriangle;
 
   constructor(private eventService: EventService) {
   }
@@ -41,8 +42,6 @@ export class EventConflictResolverComponent implements OnInit {
   getEventDateAndTimeString(event: CalendarEvent) {
     return this.eventService.getEventDateAndTimeString(event);
   }
-
-  faExclamationTriangle = faExclamationTriangle;
 
   onSubmit() {
     this.change.emit(this.collisionResponse.dateSuggestions[this.selectedDateIndex]);

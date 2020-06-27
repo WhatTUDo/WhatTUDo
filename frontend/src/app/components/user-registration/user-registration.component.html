@@ -13,7 +13,7 @@
       href="https://en.gravatar.com" target="_blank">Gravatar</a>.
     </div>
   </div>
-  <form #userRegistrationForm="ngForm" (ngSubmit)="onSubmit()" (keyup.enter)="onSubmit()">
+  <form #userRegistrationForm="ngForm" (keyup.enter)="onSubmit()" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label class="control-label" for="username">Username</label>
       <div>
