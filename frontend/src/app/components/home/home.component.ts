@@ -59,7 +59,7 @@ export class HomeComponent implements OnInit {
         new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
       ).subscribe((events: CalendarEvent[]) => {
         this.recommendedEvents = events.sort((a, b) => {
-          return a.id - b.id;
+          return a.id - b.id; // TODO: Make comparison based on #Attendees.
         }).slice(0, 5);
       })
     }

@@ -3,10 +3,8 @@ package at.ac.tuwien.sepm.groupphase.backend.service.impl;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.EventEndpoint;
 import at.ac.tuwien.sepm.groupphase.backend.endpoint.mapper.EventMapper;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Calendar;
-
 import at.ac.tuwien.sepm.groupphase.backend.entity.Event;
 import at.ac.tuwien.sepm.groupphase.backend.entity.Organization;
-import at.ac.tuwien.sepm.groupphase.backend.events.calendar.CalendarFindEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventCreateEvent;
 import at.ac.tuwien.sepm.groupphase.backend.events.event.EventDeleteEvent;
 import at.ac.tuwien.sepm.groupphase.backend.exception.NotFoundException;
@@ -20,7 +18,6 @@ import at.ac.tuwien.sepm.groupphase.backend.util.ValidationException;
 import at.ac.tuwien.sepm.groupphase.backend.util.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Hibernate;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -76,6 +73,7 @@ public class SimpleCalendarService implements CalendarService {
         }
     }
 
+    //TODO: return calendarRepository.findAll
     @Override
     public List<Calendar> findAll() {
         try {

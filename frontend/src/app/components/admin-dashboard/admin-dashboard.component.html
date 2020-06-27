@@ -36,7 +36,7 @@
         <fa-icon *ngIf="addLabelExpanded" [icon]="faTimes"></fa-icon>
       </div>
     </div>
-    <form (keyup.enter)="onSubmit()" (ngSubmit)="onSubmit()" *ngIf="addLabelExpanded"
+    <form (ngSubmit)="onSubmit()" *ngIf="addLabelExpanded"
           class="form input-button-combo add-label-section">
       <label for="label.name"></label>
       <input [(ngModel)]="newLabelName" [ngModelOptions]="{standalone: true}" class="form-control" id="label.name"
@@ -54,6 +54,7 @@
             Edit Label
           </fa-icon>
           <fa-icon (click)="deleteLabel(label.id)" [icon]="faTimesCircle" class="clickable no-hover-enlarge">
+            <!-- TODO: Add *ngIf="label.canDelete" back -->
             Remove Label
           </fa-icon>
         </div>

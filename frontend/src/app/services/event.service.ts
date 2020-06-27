@@ -12,6 +12,8 @@ import {Label} from "../dtos/label";
 
 export class EventService {
 
+  //fixme: Put non-event stuff to their actual services!
+
   private eventBaseUri: string = this.globals.backendUri + '/events';
   private labelBaseUri: string = this.globals.backendUri + '/labels';
   private commentBaseUri: string = this.globals.backendUri + '/comments';

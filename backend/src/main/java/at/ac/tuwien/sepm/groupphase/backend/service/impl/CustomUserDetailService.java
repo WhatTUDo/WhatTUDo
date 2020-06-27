@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.PersistenceException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.ArrayList;
 
 @Slf4j
 @Service
@@ -52,7 +51,7 @@ public class CustomUserDetailService implements UserService {
         return userRepository.findAll();
     }
 
-    @Override
+    @Override // TODO: Move encoding to mapper?
     public ApplicationUser saveNewUser(ApplicationUser user) throws ServiceException, ValidationException {
         try {
             validator.validateNewUser(user);
