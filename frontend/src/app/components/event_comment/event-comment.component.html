@@ -1,0 +1,28 @@
+<div *ngIf="comment" class="comment-item">
+  <div class="conmment-content">
+    {{comment.text}}
+  </div>
+
+  <div class="comment-metadata">
+    <div class="comment-author">
+      <fa-icon [icon]="faUserCircle">Author</fa-icon>&ensp;{{comment.username}}
+    </div>
+    <div class="comment-time">
+      <fa-icon [icon]="faClock"></fa-icon>&ensp;{{getDisplayDateAndTimeStringFromDate(comment.updateDateTime)}}
+    </div>
+
+
+    <div class="comment-buttons">
+      <fa-icon (click)="changeEditCommentState()" *ngIf="this.user === this.author" [icon]="faEdit"
+               class="clickable no-hover-enlarge"></fa-icon>
+      <fa-icon (click)="deleteComment()" *ngIf="this.canEdit" [icon]="faTimesCircle"
+               class="clickable no-hover-enlarge"></fa-icon>
+    </div>
+  </div>
+
+  <div *ngIf="editActive" class="comment-edit">
+    <label for="comment-textarea"></label>
+    <textarea #njf class="no-outline" id="comment-textarea" name="comment">{{comment.text}}</textarea>
+    <button (click)="editComment(njf.value)" class="full-width-form-button no-hover-enlarge">Send</button>
+  </div>
+</div>

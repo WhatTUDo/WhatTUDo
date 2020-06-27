@@ -22,11 +22,11 @@ export class OrganizationComponent implements OnInit {
   organizationCalendars: Calendar[] = [];
   organizationMembers: User[];
   editableCalendars: Calendar[];
-  roles : string[] = ["Moderator", "Member"];
+  roles: string[] = ["Moderator", "Member"];
   pickedCalendarId: number;
   pickedRole: string;
   calendarAddExpanded: boolean = false;
-  userAddExpanded : boolean = false;
+  userAddExpanded: boolean = false;
   faChevronLeft = faChevronLeft;
   faChevronRight = faChevronRight;
   faPlus = faPlus;
@@ -59,10 +59,12 @@ export class OrganizationComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  onSubmitAddMember(){
+
+  onSubmitAddMember() {
     this.addMembership();
     this.userAddExpanded = false;
   }
+
   onSubmitAddCalendar(calId: number) {
     this.addCalendar(calId);
     this.calendarAddExpanded = false;
@@ -86,7 +88,7 @@ export class OrganizationComponent implements OnInit {
     this.pickedCalendarId = calId;
   }
 
-  selectRole(role: string){
+  selectRole(role: string) {
     this.pickedRole = role;
   }
 
@@ -107,35 +109,15 @@ export class OrganizationComponent implements OnInit {
     })
   }
 
-  /**
-   * Loads Organization with ID from Service.
-   * @param id
-   */
-  private loadOrganization(id: number) {
-    this.organizationService.getById(id).subscribe((organization: Organization) => {
-      this.organization = organization;
-      this.organization.coverImageUrl = this.globals.backendUri+this.organization.coverImageUrl;
-      for (let calID of organization.calendarIds) {
-        this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
-          this.organizationCalendars.push(cal);
-        });
-      }
-      this.organizationService.getMembers(organization.id).subscribe((users: User[]) => {
-        this.organizationMembers = users;
-      });
-    })
-  }
-
   getGravatarLink(email, size) {
     return this.userService.getGravatarLink(email, size);
   }
 
   deleteOrganization(id: number) {
     if (confirm(`You are deleting organization "${this.organization.name}". Are you sure?`)) {
-      this.organizationService.deleteOrganization(id).subscribe(organization => {
+      this.organizationService.deleteOrganization(id).subscribe(_ => {
         alert("Deleted Organization with id: " + id);
         history.back();
-
       })
     }
   }
@@ -148,28 +130,47 @@ export class OrganizationComponent implements OnInit {
         this.organization.name
       }". Are you sure?`)
     ) {
-      this.userService.removeFromOrganization(userId, organizationId).subscribe((user) => {
+      this.userService.removeFromOrganization(userId, organizationId).subscribe((_) => {
         this.feedbackService.displaySuccess("Success", "You successfully removed this User from this Organization");
         location.reload()
       })
     }
   }
 
-  addMembership(){
-    this.userService.getUserByName(this.addMemberForm.controls.username.value).subscribe((found:User)=>{
-      this.organizationService.addMembership( this.organization.id,found.id, this.addMemberForm.controls.role.value).subscribe((orga: any) => {
+  addMembership() {
+    this.userService.getUserByName(this.addMemberForm.controls.username.value).subscribe((found: User) => {
+      this.organizationService.addMembership(this.organization.id, found.id, this.addMemberForm.controls.role.value).subscribe((orga: any) => {
           this.organization = orga;
           this.organizationMembers.push(found);
-          this.feedbackService.displaySuccess("Success", "User added as a "+this.addMemberForm.controls.role.value)
+          this.feedbackService.displaySuccess("Success", "User added as a " + this.addMemberForm.controls.role.value)
         }, error =>
-          this.feedbackService.displayError("Error", error.error.message )
+          this.feedbackService.displayError("Error", error.error.message)
       );
-    },error => {
-      this.feedbackService.displayError("Error", error.error.message )
+    }, error => {
+      this.feedbackService.displayError("Error", error.error.message)
     });
-    }
+  }
 
   getCalendarColor(calendarId: number) {
     return this.calendarColors[calendarId % this.calendarColors.length];
+  }
+
+  /**
+   * Loads Organization with ID from Service.
+   * @param id
+   */
+  private loadOrganization(id: number) {
+    this.organizationService.getById(id).subscribe((organization: Organization) => {
+      this.organization = organization;
+      this.organization.coverImageUrl = this.globals.backendUri + this.organization.coverImageUrl;
+      for (let calID of organization.calendarIds) {
+        this.calendarService.getCalendarById(calID).subscribe((cal: Calendar) => {
+          this.organizationCalendars.push(cal);
+        });
+      }
+      this.organizationService.getMembers(organization.id).subscribe((users: User[]) => {
+        this.organizationMembers = users;
+      });
+    })
   }
 }

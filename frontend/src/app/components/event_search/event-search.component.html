@@ -1,0 +1,18 @@
+<div class="contextual-control">
+  <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+</div>
+
+<div class="centered-two-third">
+  <h2>Search Events</h2>
+  <form (ngSubmit)="onSubmit()" [formGroup]="searchForm" class="filter input-button-combo">
+    <label for="calendar.name"></label>
+    <input class="form-control" formControlName="name" id="calendar.name" type="text"
+           value="">
+    <button (click)="clearSearch()" *ngIf="searchActive" class="button-red no-hover-enlarge flat-right-side"
+            type="reset">Clear
+    </button>
+    <button class="no-hover-enlarge" type="submit">Search</button>
+  </form>
+  <app-event-list *ngIf="searchActive" [eventList]="eventSearchResult"></app-event-list>
+</div>

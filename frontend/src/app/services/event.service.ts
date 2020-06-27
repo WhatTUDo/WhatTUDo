@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-import {AuthRequest} from "../dtos/auth-request";
 import {Observable} from "rxjs";
 import {CalendarEvent} from "../dtos/calendar-event";
 import {HttpClient, HttpParams, HttpRequest} from "@angular/common/http";
@@ -32,16 +31,16 @@ export class EventService {
   }
 
 
-  createComment(eventComment : EventComment) {
+  createComment(eventComment: EventComment) {
     console.log("Create Comment", EventComment);
-   return this.httpClient.post<EventComment>(this.commentBaseUri + '/', eventComment);
-   }
+    return this.httpClient.post<EventComment>(this.commentBaseUri + '/', eventComment);
+  }
 
 
-  editComment(eventComment : EventComment) {
+  editComment(eventComment: EventComment) {
     console.log("Edit Comment", eventComment);
-   return this.httpClient.put<EventComment>(this.commentBaseUri + '/', eventComment);
-   }
+    return this.httpClient.put<EventComment>(this.commentBaseUri + '/', eventComment);
+  }
 
   getEventsByCalendarId(id: number): Observable<Array<CalendarEvent>> {
     console.log("Load Multiple Events by Calendar id");
@@ -129,30 +128,6 @@ export class EventService {
     return this.httpClient.put<CalendarEvent>(this.eventBaseUri, reducedElement);
   }
 
-  /**
-   * Posts comment with Event ID to Server (Comment contains Author ID)
-   * @param comment
-   * @param eventID
-   */
-  postComment(comment: EventComment, eventID: number) {
-    console.log("Posting comment: ", comment);
-  }
-
-  postVote(isUpvote: boolean, commentID: number, userID: number) {
-
-  }
-
-
-  /**
-   * Posts Attendance to a specific event to Server
-   * @param userID
-   * @param attendanceStatus
-   * @param eventID
-   */
-  postAttendance(userID: number, attendanceStatus: number, eventID: number) {
-    console.log("Post Attendance for User: ", userID);
-  }
-
   searchLocationInAPI(searchTerm: string): Observable<any> {
     console.log("Searching Location with string: ", searchTerm);
     let searchURI = this.globals.openStreetMapsUri + '?q=' + encodeURI(searchTerm) + '&format=json&addressdetails=1';
@@ -224,10 +199,6 @@ export class EventService {
       });
 
     return this.httpClient.request(req);
-  }
-
-  getEventCover(eventId: number) {
-    return this.httpClient.get(`${this.eventBaseUri}/${eventId}/cover`)
   }
 
   searchEvent(name: string) {

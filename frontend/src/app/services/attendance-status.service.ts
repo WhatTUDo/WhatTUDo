@@ -3,7 +3,6 @@ import {Globals} from '../global/globals';
 import {HttpClient} from '@angular/common/http';
 import {AttendanceDto} from '../dtos/AttendanceDto';
 import {Observable} from 'rxjs';
-import {User} from '../dtos/user';
 
 @Injectable({
   providedIn: 'root'
@@ -32,22 +31,22 @@ export class AttendanceStatusService {
     return this.httpClient.get<any[]>(this.attendanceUri + '/getDeclined/' + id);
   }
 
-  getEventsUserIsInterestedIn(id : number) : Observable<any[]> {
-    return this.httpClient.get<any[]>(this.attendanceUri+'/userInterested/'+id);
+  getEventsUserIsInterestedIn(id: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.attendanceUri + '/userInterested/' + id);
   }
 
 
-  getEventsUserIsAttending(id : number) : Observable<any[]> {
-    return this.httpClient.get<any[]>(this.attendanceUri+'/userAttending/'+id);
+  getEventsUserIsAttending(id: number): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.attendanceUri + '/userAttending/' + id);
   }
 
-  deleteStatus(id: number){
-    return this.httpClient.delete(this.attendanceUri + '/'+id);
+  deleteStatus(id: number) {
+    return this.httpClient.delete(this.attendanceUri + '/' + id);
   }
 
   getStatus(userId: number,
-            eventId: number) : Observable<any>{
-    return this.httpClient.get<any>(this.attendanceUri+ '/getStatus/'+userId+'/'+eventId);
+            eventId: number): Observable<any> {
+    return this.httpClient.get<any>(this.attendanceUri + '/getStatus/' + userId + '/' + eventId);
   }
 
 }
