@@ -60,8 +60,8 @@ export class CalendarSearchComponent implements OnInit {
     private iCalService: ICalService,
     public authService: AuthService,
     public globals: Globals) {
-    this.getAllCalendars().then((calendars) => {
-      this.loadSubscriptions().then(_ => {
+    this.loadSubscriptions().then(_ => {
+      this.getAllCalendars().then((calendars) => {
         this.categorizeCalendars(calendars)
       })
     }).finally(() => {
@@ -72,8 +72,8 @@ export class CalendarSearchComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async getAllCalendars(): Promise<Calendar[]> {
-    return await this.calendarService.getAllCalendars().toPromise();
+  getAllCalendars(): Promise<Calendar[]> {
+    return this.calendarService.getAllCalendars().toPromise();
   }
 
   async loadSubscriptions() {
@@ -81,6 +81,8 @@ export class CalendarSearchComponent implements OnInit {
       const user = await this.authService.getUser().toPromise();
       const subscribedCalendars = await this.subscriptionService.getSubscribedCalendars(user.id).toPromise();
       this.subscribedCalendarIds = subscribedCalendars.map((cal) => cal.id);
+    } else {
+      this.subscribedCalendarIds = [];
     }
   }
 
