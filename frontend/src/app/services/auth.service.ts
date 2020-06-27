@@ -6,7 +6,6 @@ import {tap} from 'rxjs/operators';
 import * as jwt_decode from 'jwt-decode';
 import {Globals} from '../global/globals';
 import {User} from '../dtos/user';
-import {Organization} from '../dtos/organization';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +17,22 @@ export class AuthService {
   constructor(private httpClient: HttpClient, private globals: Globals) {
   }
 
+  private static setToken(authResponse: string) {
+    localStorage.setItem('authToken', authResponse);
+  }
+
+  private static getTokenExpirationDate(token: string): Date {
+
+    const decoded: any = jwt_decode(token);
+    if (decoded.exp === undefined) {
+      return null;
+    }
+
+    const date = new Date(0);
+    date.setUTCSeconds(decoded.exp);
+    return date;
+  }
+
   /**
    * Login in the user. If it was successful, a valid JWT token will be stored
    * @param authRequest User data
@@ -25,17 +40,16 @@ export class AuthService {
   loginUser(authRequest: AuthRequest): Observable<string> {
     return this.httpClient.post(this.authBaseUri, authRequest, {responseType: 'text'})
       .pipe(
-        tap((authResponse: string) => this.setToken(authResponse))
+        tap((authResponse: string) => AuthService.setToken(authResponse))
       );
   }
-
 
   /**
    * Check if a valid JWT token is saved in the localStorage
    */
   isLoggedIn() {
     // return true;
-    return !!this.getToken() && (this.getTokenExpirationDate(this.getToken()).valueOf() > new Date().valueOf());
+    return !!this.getToken() && (AuthService.getTokenExpirationDate(this.getToken()).valueOf() > new Date().valueOf());
   }
 
   logoutUser() {
@@ -66,21 +80,5 @@ export class AuthService {
   getUser(): Observable<User> | null {
     if (this.isLoggedIn()) return this.httpClient.get<User>(this.globals.backendUri + "/users/user");
     else return null;
-  }
-
-  private setToken(authResponse: string) {
-    localStorage.setItem('authToken', authResponse);
-  }
-
-  private getTokenExpirationDate(token: string): Date {
-
-    const decoded: any = jwt_decode(token);
-    if (decoded.exp === undefined) {
-      return null;
-    }
-
-    const date = new Date(0);
-    date.setUTCSeconds(decoded.exp);
-    return date;
   }
 }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../../services/auth.service';
-import {faSignInAlt, faSignOutAlt, faChevronDown, faUser} from '@fortawesome/free-solid-svg-icons';
+import {faChevronDown, faSignInAlt, faSignOutAlt, faUser} from '@fortawesome/free-solid-svg-icons';
 import {UserService} from "../../services/user.service";
 
 @Component({
@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit {
     return this.userService.getGravatarLink(email, size);
   }
 
-  toggleCollapsed(){
+  toggleCollapsed() {
     this.mobileCollapsed = !this.mobileCollapsed;
   }
 }

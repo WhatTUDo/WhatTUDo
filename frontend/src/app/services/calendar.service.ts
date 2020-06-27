@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {CalendarEvent} from '../dtos/calendar-event';
 import {Calendar} from '../dtos/calendar';
 import {HttpClient, HttpParams, HttpRequest} from '@angular/common/http';
 import {Globals} from '../global/globals';

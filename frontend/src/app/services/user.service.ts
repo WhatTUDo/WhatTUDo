@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HttpClient, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Globals} from '../global/globals';
 import {User} from "../dtos/user";
 import md5 from "md5";
@@ -42,11 +42,12 @@ export class UserService {
 
   /**
    * Puts user to Server --> Update user
+   * @param oldUsername the username that is currently in backend DB.
    * @param user updated version of user to be saved
    */
-  putUser(oldUsername: string,user: User): Observable<any> {
+  putUser(oldUsername: string, user: User): Observable<any> {
     console.log('Put user to Server', user);
-    return this.httpClient.put(this.usersBaseUri+'/'+oldUsername, user);
+    return this.httpClient.put(this.usersBaseUri + '/' + oldUsername, user);
   }
 
   /**
@@ -60,7 +61,9 @@ export class UserService {
 
   getGravatarLink(email: String, size: number) {
     if (!email) email = '';
-    if (email.endsWith('@demo.whattudo.at')) {return `https://andicui.xyz/whattudo-demo-avatars/${email.split('@')[0]}.jpg`}
+    if (email.endsWith('@demo.whattudo.at')) {
+      return `https://andicui.xyz/whattudo-demo-avatars/${email.split('@')[0]}.jpg`
+    }
     const gravatarHash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${gravatarHash}?s=${Math.trunc(size)}&d=identicon`;
   }
@@ -78,8 +81,8 @@ export class UserService {
     return this.httpClient.delete<User>(this.globals.backendUri + `/users/${userId}/roles?orgaId=${organizationId}`);
   }
 
-  getUserByName(name: string) : Observable<User>{
-    return this.httpClient.get<User>(this.usersBaseUri+'/getByName/'+name);
+  getUserByName(name: string): Observable<User> {
+    return this.httpClient.get<User>(this.usersBaseUri + '/getByName/' + name);
   }
 
   getAllUsers(): Observable<User[]> {

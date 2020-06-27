@@ -2,11 +2,11 @@
   <a class="navbar-brand ml-lg-5 clickable no-hover-enlarge" routerLink="/">
     <div class="brand-box">WhatTUDo</div>
   </a>
-  <div class="collapse-button clickable no-hover-enlarge" (click)="toggleCollapsed()">
+  <div (click)="toggleCollapsed()" class="collapse-button clickable no-hover-enlarge">
     <fa-icon [icon]="faChevronDown"></fa-icon>
   </div>
 
-  <div class="collapse navbar-collapse" [class.collapse]="mobileCollapsed">
+  <div [class.collapse]="mobileCollapsed" class="collapse navbar-collapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <a class="nav-link" routerLink="/calendar-list" routerLinkActive="active">

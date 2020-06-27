@@ -1,0 +1,19 @@
+<div [@makeVisible]="getVisibility() ? 'visible' : 'invisible'"
+     class="feedback-container {{getVisibility() ? 'visible' : 'invisible'}} {{getState()}}"
+     id="feedback-container">
+  <div class="feedback-inner">
+    <div (click)="onDismiss()" class="float-right dismissButton">
+      <fa-icon [icon]="faTimes"></fa-icon>
+    </div>
+    <p class="feedback-headline">
+      {{getHeader()}}
+    </p>
+    <p *ngIf="getMessage()" class="feedback-text">
+      {{getMessage()}}
+    </p>
+    <details *ngIf="getTechnicalInformation()">
+      <summary>Technical Details</summary>
+      <div>{{getTechnicalInformation()}}</div>
+    </details>
+  </div>
+</div>

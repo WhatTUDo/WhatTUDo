@@ -40,12 +40,12 @@ export class UserComponent implements OnInit {
           this.userService.getUserOrganization(user.id).subscribe((organization: Organization[]) => {
             this.userInOrganizations = organization;
           })
-        this.attendanceStatusService.getEventsUserIsAttending(user.id).subscribe((events) => {
-          this.attendingEvents = events;
-        });
-        this.attendanceStatusService.getEventsUserIsInterestedIn(user.id).subscribe((events) => {
-          this.interestedEvents = events;
-        });
+          this.attendanceStatusService.getEventsUserIsAttending(user.id).subscribe((events) => {
+            this.attendingEvents = events;
+          });
+          this.attendanceStatusService.getEventsUserIsInterestedIn(user.id).subscribe((events) => {
+            this.interestedEvents = events;
+          });
         }
       );
     } else {
@@ -68,7 +68,7 @@ export class UserComponent implements OnInit {
 
   removeSelfFromOrg(organizationId: number) {
     if (confirm(`You are leaving "${this.userInOrganizations.find(o => o.id === organizationId).name}". Are you sure?`)) {
-      this.userService.removeFromOrganization(this.user.id, organizationId).subscribe((user) => {
+      this.userService.removeFromOrganization(this.user.id, organizationId).subscribe((_) => {
       })
     }
   }

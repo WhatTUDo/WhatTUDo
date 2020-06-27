@@ -1,18 +1,18 @@
 <div class="grid-one-third">
-  <app-weekly-calendar class="grid-item-1-2" [subscribedOnly]="subscribedOnly"></app-weekly-calendar>
+  <app-weekly-calendar [subscribedOnly]="subscribedOnly" class="grid-item-1-2"></app-weekly-calendar>
   <div>
     <div *ngIf="!authService.isLoggedIn()">
       <h2>Upcoming Events</h2>
-      <app-promo-event-list *ngIf="recommendedEvents&&recommendedEvents.length>0"
-                            [eventList]="recommendedEvents"></app-promo-event-list>
+      <app-event-list *ngIf="recommendedEvents&&recommendedEvents.length>0"
+                      [eventList]="recommendedEvents"></app-event-list>
       <div *ngIf="!recommendedEvents||recommendedEvents.length==0">
         There isn't any event that we can recommend you right now. Log in to see better suggestions.
       </div>
     </div>
     <div *ngIf="authService.isLoggedIn()">
       <h2>Events For You</h2>
-      <app-promo-event-list *ngIf="recommendedEvents&&recommendedEvents.length>0"
-                            [eventList]="recommendedEvents"></app-promo-event-list>
+      <app-event-list *ngIf="recommendedEvents&&recommendedEvents.length>0"
+                      [eventList]="recommendedEvents"></app-event-list>
       <div *ngIf="!recommendedEvents||recommendedEvents.length==0">
         There isn't any event that we can recommend you right now. Mark more events you are interested in, so that we
         can
@@ -21,10 +21,10 @@
     </div>
     <hr>
     <div class="calendar-toolbar">
-      <div class="clickable no-hover-enlarge action" (click)="toggleSubscribedOnly()"
-           *ngIf="authService.isLoggedIn()">
-        <fa-icon [icon]="faCheckSquare" *ngIf="subscribedOnly" role="checkbox" aria-checked="false"></fa-icon>
-        <fa-icon [icon]="faSquare" *ngIf="!subscribedOnly" role="checkbox" aria-checked="true"></fa-icon>
+      <div (click)="toggleSubscribedOnly()" *ngIf="authService.isLoggedIn()"
+           class="clickable no-hover-enlarge action">
+        <fa-icon *ngIf="subscribedOnly" [icon]="faCheckSquare" aria-checked="false" role="checkbox"></fa-icon>
+        <fa-icon *ngIf="!subscribedOnly" [icon]="faSquare" aria-checked="true" role="checkbox"></fa-icon>
         <span>Show Only Subscribed Calendars</span>
       </div>
       <div class="clickable no-hover-enlarge action" routerLink="/event-search">

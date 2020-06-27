@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Globals} from "../global/globals";
 import {Location} from "../dtos/location";
 import {Observable} from "rxjs";
@@ -30,13 +30,13 @@ export class LocationService {
     // searchParams.append("search", searchterm);
     let url = "?name=" + searchterm;
 
-    return this.httpClient.get<Array<Location>>(this.locationBaseUri + "/searchName"+url);
+    return this.httpClient.get<Array<Location>>(this.locationBaseUri + "/searchName" + url);
   }
 
   searchAddress(searchterm: string): Observable<Array<Location>> {
     // let searchParams = new HttpParams();
     // searchParams.append("search", searchterm);
     let url = "?address=" + searchterm;
-    return this.httpClient.get<Array<Location>>(this.locationBaseUri + "/searchAddress"+url);
+    return this.httpClient.get<Array<Location>>(this.locationBaseUri + "/searchAddress" + url);
   }
 }

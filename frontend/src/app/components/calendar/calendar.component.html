@@ -5,7 +5,7 @@
 </div>
 
 <div *ngIf="calendar" class="title-icon-button-combo desktop">
-  <h2 class="heading desktop clickable no-hover-enlarge" (click)="resetOffset()" id="weekly-cal-heading">
+  <h2 (click)="resetOffset()" class="heading desktop clickable no-hover-enlarge" id="weekly-cal-heading">
   <span id="weekly-cal-month">
     {{displayingWeek[3].toLocaleString(dateLocale, {month: 'long'})}}
   </span>
@@ -13,7 +13,7 @@
     {{displayingWeek[3].getFullYear()}}
   </span>
   </h2>
-  <h2 class="heading mobile clickable no-hover-enlarge" (click)="resetOffset()">
+  <h2 (click)="resetOffset()" class="heading mobile clickable no-hover-enlarge">
     {{calendar.name}}
   </h2>
   <div class="icon-button">
@@ -21,7 +21,7 @@
       <fa-icon [icon]="faPlus"></fa-icon>
     </div>
     <div class="clickable no-hover-enlarge">
-      <fa-icon [icon]="faLink" (click)="copyCalendarUrlToClipboard(calendar.id)"></fa-icon>
+      <fa-icon (click)="copyCalendarUrlToClipboard(calendar.id)" [icon]="faLink"></fa-icon>
     </div>
   </div>
 </div>
@@ -41,16 +41,16 @@
   </div>
 
   <div class="calendar mobile">
-    <div id="mobile-cal-heading" class="calendar-date-label-container clickable no-hover-enlarge"
-         (click)="resetOffset()">
+    <div (click)="resetOffset()" class="calendar-date-label-container clickable no-hover-enlarge"
+         id="mobile-cal-heading">
       <div class="week-day-label">{{displayingDate.toLocaleDateString(dateLocale, {weekday: 'short'})}}</div>
       <div [ngClass]="{'today': isToday(displayingDate)}" class="calendar-date-label">
         {{displayingDate.toLocaleDateString(dateLocale, {month: 'short', day: 'numeric'})}}
       </div>
     </div>
 
-    <app-calendar-day-view class="calendar-day" [events]="eventsOfTheWeek.get(displayingDate.toISOString())"
-                           [date]="displayingDate"></app-calendar-day-view>
+    <app-calendar-day-view [date]="displayingDate" [events]="eventsOfTheWeek.get(displayingDate.toISOString())"
+                           class="calendar-day"></app-calendar-day-view>
   </div>
 
   <div class="calendar-week-grid calendar desktop">
@@ -73,9 +73,9 @@
       </div>
     </div>
 
-    <app-calendar-day-view class="calendar-day" *ngFor="let date of this.displayingWeek"
+    <app-calendar-day-view *ngFor="let date of this.displayingWeek" [date]="date"
                            [events]="eventsOfTheWeek.get(date.toISOString())"
-                           [date]="date"></app-calendar-day-view>
+                           class="calendar-day"></app-calendar-day-view>
   </div>
 
   <div (click)="addOneWeek()" class="calendar-navigation desktop clickable no-hover-enlarge">

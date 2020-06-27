@@ -129,6 +129,44 @@ export class EventComponent implements OnInit {
     });
   }
 
+  getParticipants() {
+    this.attendanceStatusService.getUsersAttendingEvent(this.id).subscribe((users: User[]) => {
+      this.participants.attending = users;
+
+    });
+    this.attendanceStatusService.getUsersInterestedInEvent(this.id).subscribe((users: User[]) => {
+      this.participants.interested = users;
+    });
+    this.attendanceStatusService.getUsersDecliningEvent(this.id).subscribe((users: User[]) => {
+      this.participants.declined = users;
+    });
+  }
+
+  resetParticipation() {
+    this.attendanceStatusService.deleteStatus(this.attendanceStatus.id).subscribe(() => {
+      this.userParticipationStatus = null;
+      this.getParticipants();
+    }, error => {
+      console.warn(error);
+      this.feedbackService.displayError("Error", error.error.message);
+    });
+  }
+
+  deleteComment(commentid: number): void {
+    if (confirm(`You are deleting the selected comment. Are you sure?`)) {
+      this.eventService.deleteComment(commentid).subscribe(() => {
+        this.getComments(this.id);
+      });
+    }
+  }
+
+  getCalendarColor(calendarId: number) {
+    return this.calendarColors[calendarId % this.calendarColors.length];
+  }
+
+  eventEndsAfterNow() {
+    return this.calendarEvent.endDateTime >= new Date(Date.now());
+  }
 
   /**
    * Loads Event with ID from Service.
@@ -159,31 +197,6 @@ export class EventComponent implements OnInit {
     });
   }
 
-
-  getParticipants() {
-    this.attendanceStatusService.getUsersAttendingEvent(this.id).subscribe((users: User[]) => {
-      this.participants.attending = users;
-
-    });
-    this.attendanceStatusService.getUsersInterestedInEvent(this.id).subscribe((users: User[]) => {
-      this.participants.interested = users;
-    });
-    this.attendanceStatusService.getUsersDecliningEvent(this.id).subscribe((users: User[]) => {
-      this.participants.declined = users;
-    });
-  }
-
-
-  resetParticipation() {
-    this.attendanceStatusService.deleteStatus(this.attendanceStatus.id).subscribe(() => {
-      this.userParticipationStatus = null;
-      this.getParticipants();
-    }, error => {
-      console.warn(error);
-      this.feedbackService.displayError("Error", error.error.message);
-    });
-  }
-
   private getComments(id: number) {
     this.eventService.getEventComments(id).subscribe((comments) => {
       this.comments = comments.map((comment) => {
@@ -191,21 +204,5 @@ export class EventComponent implements OnInit {
         return {...comment, updateDateTime: updateDateTime} as EventComment;
       });
     });
-  }
-
-  deleteComment(commentid: number): void {
-    if (confirm(`You are deleting the selected comment. Are you sure?`)) {
-      this.eventService.deleteComment(commentid).subscribe(() => {
-        this.getComments(this.id);
-      });
-    }
-  }
-
-  getCalendarColor(calendarId: number) {
-    return this.calendarColors[calendarId % this.calendarColors.length];
-  }
-
-  eventEndsAfterNow() {
-    return this.calendarEvent.endDateTime >= new Date(Date.now());
   }
 }
