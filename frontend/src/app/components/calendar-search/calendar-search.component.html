@@ -1,0 +1,55 @@
+<div class="contextual-control">
+  <span id="back-button"><a class="clickable no-hover-enlarge" href="/"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</a></span>
+</div>
+<div class="centered-two-third">
+  <div class="title-icon-button-combo">
+    <h2>Calendars</h2>
+    <div *ngIf="authService.isLoggedIn()" class="icon-button clickable no-hover-enlarge">
+      <fa-icon [icon]="faPlus" routerLink="/form/calendar"></fa-icon>
+    </div>
+  </div>
+  <div *ngIf="loading">
+    <h3>
+      <fa-icon [icon]="faCircleNotch" [spin]="true"></fa-icon>
+      Loading…
+    </h3>
+  </div>
+  <div *ngIf="!loading">
+    <form (ngSubmit)="onSubmitSearch()" [formGroup]="searchForm" class="filter input-button-combo">
+      <label for="calendar.name"></label>
+      <input class="form-control" formControlName="name" id="calendar.name" type="text"
+             value="">
+      <button (click)="clearSearch()" *ngIf="searchActive" class="button-red no-hover-enlarge flat-right-side"
+              type="reset">Clear
+      </button>
+      <button class="no-hover-enlarge" type="submit">Filter</button>
+    </form>
+    <div *ngIf="searchActive">
+      <app-calendar-list (change)="updateSubscription()" [calendars]="calendarSearchResult"></app-calendar-list>
+    </div>
+    <div *ngIf="authService.isLoggedIn() && !searchActive">
+      <div class="title-icon-button-combo">
+        <h3>My Calendars</h3>
+        <div class="icon-button clickable no-hover-enlarge">
+          <fa-icon (click)="copyPersonalUrlToClipboard()" [icon]="faLink"></fa-icon>
+        </div>
+      </div>
+      <div *ngIf="subscribedCalendars.length===0">You have no subscribed calenders yet.</div>
+      <app-calendar-list (change)="updateSubscription()" [calendars]="subscribedCalendars"></app-calendar-list>
+    </div>
+    <div *ngIf="authService.isLoggedIn() && managedCalendars.length!==0 && !searchActive">
+      <h3>Calendars Managed by me</h3>
+      <app-calendar-list (change)="updateSubscription()" [calendars]="managedCalendars"></app-calendar-list>
+    </div>
+    <div *ngIf="otherCalendars.length > 0 && !searchActive">
+      <div class="title-icon-button-combo">
+        <h3>All Calendars</h3>
+        <div class="icon-button clickable no-hover-enlarge">
+          <fa-icon (click)="copyAllCalendarsUrlToClipboard()" [icon]="faLink"></fa-icon>
+        </div>
+      </div>
+      <app-calendar-list (change)="updateSubscription()" [calendars]="otherCalendars"></app-calendar-list>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+<div *ngFor="let org of organizations" class="organization">
+  <img alt="" class="avatar avatar-medium" src="{{globals.backendUri + org.coverImageUrl}}">
+  <div class="organization-details clickable no-hover-enlarge" routerLink='/organization/{{org.id}}'>
+    <div class="organization-name">{{org.name}}</div>
+    <div class="organization-member-avatars">
+      <img *ngFor="let avatar of organizationUserAvatars.get(org.id)" alt="" class="avatar avatar-ultra-small"
+           src="{{avatar}}">
+    </div>
+  </div>
+  <div class="organization-buttons">
+    <fa-icon *ngIf="org.canEdit" [icon]="faCog" class="clickable no-hover-enlarge"
+             routerLink="/form/organization/{{org.id}}">
+      Edit Calendar
+    </fa-icon>
+    <fa-icon (click)="onClickedDelete(org.id)" *ngIf="org.canDelete" [icon]="faTimesCircle"
+             class="clickable no-hover-enlarge">
+      Remove Calendar
+    </fa-icon>
+  </div>
+</div>

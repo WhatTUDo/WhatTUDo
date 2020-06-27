@@ -17,7 +17,6 @@ import {AuthService} from "../../services/auth.service";
 import {FeedbackService} from "../../services/feedback.service";
 import {SubscriptionService} from "../../services/subscription.service";
 import {Organization} from '../../dtos/organization';
-import {SubscriptionDto} from "../../dtos/subscriptionDto";
 import {Globals} from "../../global/globals";
 import {ICalService} from "../../services/ical.service";
 
@@ -42,6 +41,7 @@ export class CalendarSearchComponent implements OnInit {
 
   loading: boolean = true;
 
+  subscribedCalendarIds: number[];
   subscribedCalendars: Calendar[] = [];
   managedCalendars: Calendar[] = [];
   otherCalendars: Calendar[] = [];
@@ -61,114 +61,46 @@ export class CalendarSearchComponent implements OnInit {
     public authService: AuthService,
     public globals: Globals) {
     this.getAllCalendars().then((calendars) => {
-      this.loadSubscriptions().then(() => {
-        this.managedCalendars = calendars.filter(
-          cal => {
-            return (cal.canEdit || cal.canDelete) && !this.subscribedCalendars.find(sc => sc.id === cal.id);
-          }
-        );
-        this.otherCalendars = calendars.filter(
-          cal => {
-            return !(cal.canEdit || cal.canDelete) && !this.subscribedCalendars.find(sc => sc.id === cal.id);
-          }
-        )
+      this.loadSubscriptions().then(_ => {
+        this.categorizeCalendars(calendars)
       })
     }).finally(() => {
       this.loading = false;
     });
-
-  }
-
-  async getAllCalendars(): Promise<Calendar[]> {
-    let calendars: Calendar[] = await this.calendarService.getAllCalendars().toPromise();
-    let organizationIdSet = new Set<number>();
-    calendars.forEach(cal => {
-      cal.organizationIds.forEach(id => organizationIdSet.add(id));
-    })
-    for (const id of organizationIdSet) {
-      let org = await this.organizationService.getById(id).toPromise();
-      org.coverImageUrl = this.globals.backendUri + org.coverImageUrl;
-      this.organizationsMap.set(id, org)
-    }
-    return calendars;
   }
 
   ngOnInit(): void {
   }
 
+  async getAllCalendars(): Promise<Calendar[]> {
+    return await this.calendarService.getAllCalendars().toPromise();
+  }
+
   async loadSubscriptions() {
     if (this.authService.isLoggedIn()) {
       const user = await this.authService.getUser().toPromise();
-      this.subscribedCalendars = await this.subscriptionService.getSubscribedCalendars(user.id).toPromise();
+      const subscribedCalendars = await this.subscriptionService.getSubscribedCalendars(user.id).toPromise();
+      this.subscribedCalendarIds = subscribedCalendars.map((cal) => cal.id);
     }
   }
 
-  delete(id: number): void {
-    if (confirm(`You are deleting calendar "${this.otherCalendars
-      .concat(this.managedCalendars).concat(this.subscribedCalendars)
-      .find(c => c.id === id).name}". Are you sure?`)) {
-      this.calendarService.deleteCalendar({id} as Calendar).subscribe(() => {
-        this.subscribedCalendars = this.subscribedCalendars.filter(c => c.id !== id);
-        this.managedCalendars = this.managedCalendars.filter(c => c.id !== id);
-        this.otherCalendars = this.otherCalendars.filter(c => c.id !== id);
-      });
-    }
+  categorizeCalendars(calendars: Calendar[]) {
+    this.subscribedCalendars = calendars.filter(cal => this.subscribedCalendarIds.find(sId => cal.id === sId));
+    this.managedCalendars = calendars.filter(
+      cal => {
+        return (cal.canEdit || cal.canDelete) && !this.subscribedCalendars.find(sc => sc.id === cal.id);
+      }
+    );
+    this.otherCalendars = calendars.filter(
+      cal => {
+        return !(cal.canEdit || cal.canDelete) && !this.subscribedCalendars.find(sc => sc.id === cal.id);
+      }
+    )
   }
 
-  //Subscription stuff
-
-  onClickSubscribe(calendarId: number) {
-    this.authService.getUser().subscribe(user => {
-      let subscription = new SubscriptionDto(0, user.name, calendarId);
-      this.subscriptionService.create(subscription).subscribe(savedSub => {
-        if (savedSub.calendarId != 0 && savedSub.userName != null) {
-          this.feedbackService.displaySuccess("Subscribed!", "You subscribed successfully to this calendar!");
-
-          let calendar = this.managedCalendars.find(cal => {
-            return cal.id === calendarId
-          });
-          this.managedCalendars = this.managedCalendars.filter(cal => {
-            return cal.id !== calendarId
-          });
-          if (!calendar) {
-            calendar = this.otherCalendars.find(cal => {
-              return cal.id === calendarId
-            });
-            this.otherCalendars = this.otherCalendars.filter(cal => {
-              return cal.id !== calendarId
-            });
-          }
-          this.subscribedCalendars.push(calendar);
-        }
-      })
-    })
-  }
-
-  onClickUnsubscribe(calendarId: number) {
-    this.authService.getUser().subscribe(user => {
-      this.subscriptionService.getSubscriptionsForUser(user.id).subscribe(subscriptions => {
-        let filteredSubscriptions = subscriptions.filter(sub => {
-          return sub.calendarId === calendarId
-        });
-        if (filteredSubscriptions.length === 1) {
-          this.subscriptionService.delete(filteredSubscriptions.pop().id).subscribe(_ => {
-            this.feedbackService.displaySuccess("Unsubscribed!", "You successfully unsubscribed from this calendar!");
-            let calendar = this.subscribedCalendars.find(cal => {
-              return cal.id === calendarId
-            });
-            if (calendar.canEdit || calendar.canDelete) {
-              this.managedCalendars.push(calendar);
-            } else {
-              this.otherCalendars.push(calendar);
-            }
-            this.subscribedCalendars = this.subscribedCalendars.filter(cal => {
-              return cal.id !== calendarId
-            });
-          })
-        } else {
-          this.feedbackService.displayError("Subscription Error!", "Could not find a unique Subscription!");
-        }
-      })
+  updateSubscription() {
+    this.loadSubscriptions().then(_ => {
+      this.categorizeCalendars(this.subscribedCalendars.concat(this.managedCalendars).concat(this.otherCalendars));
     })
   }
 
@@ -232,10 +164,6 @@ export class CalendarSearchComponent implements OnInit {
     this.searchActive = false;
   }
 
-  isSubscribed(id: number) {
-    return Boolean(this.subscribedCalendars.find(sc => sc.id === id));
-  }
-
   copyPersonalUrlToClipboard() {
     this.iCalService.getUserIcalToken().subscribe(icalToken => {
       const icalUrl = this.globals.backendUri + "/ical/" + icalToken + "/user.ics";
@@ -268,10 +196,6 @@ export class CalendarSearchComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
-  }
-
-  getCalendarColor(calendarId: number) {
-    return this.calendarColors[calendarId % this.calendarColors.length];
   }
 }
 

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {AuthRequest} from '../../dtos/auth-request';
-import {FeedbackHandlerComponent} from "../feedback_handler/feedback-handler.component";
+import {FeedbackHandlerComponent} from "../feedback-handler/feedback-handler.component";
 
 
 @Component({

@@ -1,0 +1,40 @@
+<div *ngFor="let cal of calendars">
+  <div class="calendar">
+    <img [ngClass]="getCalendarColor(cal.id)" alt="" class="avatar avatar-medium"
+         src="{{globals.backendUri+cal.coverImageUrl}}">
+    <div class="calendar-details clickable no-hover-enlarge" routerLink="/calendar/{{cal.id}}">
+      <div>
+        <div class="calendar-name">{{cal.name}}</div>
+        <div class="calendar-description">{{cal.description}}</div>
+      </div>
+      <div>
+        <div *ngFor="let orgId of cal.organizationIds">
+          <div *ngIf="organizationsMap.get(orgId)" class="organization-info clickable no-hover-enlarge"
+               routerLink="/organization/{{orgId}}">
+            <img alt="" class="avatar avatar-ultra-small"
+                 src="{{globals.backendUri+organizationsMap.get(orgId).coverImageUrl}}">
+            <div class="organization-name">{{organizationsMap.get(orgId).name}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="calendar-buttons">
+      <fa-icon (click)="onClickUnsubscribe(cal.id)" *ngIf="authService.isLoggedIn() && isSubscribed(cal.id)"
+               [icon]="faBookmark"
+               class="subscribed clickable no-hover-enlarge">Unsubscribe
+      </fa-icon>
+      <fa-icon (click)="onClickSubscribe(cal.id)" *ngIf="authService.isLoggedIn()  && !isSubscribed(cal.id)"
+               [icon]="faBookmark"
+               class="clickable no-hover-enlarge">Subscribe
+      </fa-icon>
+      <fa-icon *ngIf="cal.canEdit" [icon]="faCog" class="clickable no-hover-enlarge"
+               routerLink="/form/calendar/{{cal.id}}">
+        Edit Calendar
+      </fa-icon>
+      <fa-icon (click)="delete(cal.id)" *ngIf="cal.canEdit" [icon]="faTimesCircle"
+               class="clickable no-hover-enlarge">
+        Remove Calendar
+      </fa-icon>
+    </div>
+  </div>
+</div>

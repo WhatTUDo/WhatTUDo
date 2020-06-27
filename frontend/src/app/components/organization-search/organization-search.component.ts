@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {OrganizationService} from "../../services/organization.service";
 import {Organization} from "../../dtos/organization";
-import {faChevronLeft, faCog, faPlus, faTimes, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
-import {UserService} from "../../services/user.service";
-import {Globals} from "../../global/globals";
+import {faChevronLeft, faCog, faPlus, faTimesCircle} from "@fortawesome/free-solid-svg-icons";
 import {FormControl, FormGroup} from "@angular/forms";
 import {AuthService} from "../../services/auth.service";
 
@@ -15,7 +13,6 @@ import {AuthService} from "../../services/auth.service";
 export class OrganizationSearchComponent implements OnInit {
 
   organizations: Organization[];
-  organizationUserAvatars: Map<number, string[]> = new Map();
 
   searchForm = new FormGroup({
     name: new FormControl('')
@@ -26,32 +23,16 @@ export class OrganizationSearchComponent implements OnInit {
   faChevronLeft = faChevronLeft;
   faCog = faCog;
   faTimesCircle = faTimesCircle;
-  faTimes = faTimes;
   faPlus = faPlus;
 
   constructor(
     private organizationService: OrganizationService,
-    private userService: UserService,
     public authService: AuthService,
-    private globals: Globals
   ) {
   }
 
   ngOnInit(): void {
     this.getOrganizations();
-  }
-
-  onClickedDelete(id: number) {
-    if (confirm(`You are deleting organization "${this.organizations.find(o => o.id === id).name}". Are you sure?`)) {
-      this.organizationService.deleteOrganization(id).subscribe(deletedID => {
-        this.organizations = this.organizations.filter(elem => elem.id != deletedID);
-        alert("Deleted Organization with id: " + deletedID);
-      });
-    }
-  }
-
-  getGravatarLink(email, size) {
-    return this.userService.getGravatarLink(email, size);
   }
 
   onSubmit() {
@@ -107,14 +88,6 @@ export class OrganizationSearchComponent implements OnInit {
   private getOrganizations() {
     this.organizationService.getAll().subscribe(organizations => {
       this.organizations = organizations;
-      organizations.forEach(org => {
-        org.coverImageUrl = this.globals.backendUri + org.coverImageUrl;
-        this.organizationService.getMembers(org.id).subscribe(users => {
-          this.organizationUserAvatars.set(org.id, users.map(user => {
-            return this.getGravatarLink(user.email, 64)
-          }))
-        })
-      })
     })
   }
 }

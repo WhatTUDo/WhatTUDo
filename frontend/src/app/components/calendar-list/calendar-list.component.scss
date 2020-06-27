@@ -1,9 +1,5 @@
 @import "../../../var.scss";
 
-.filter {
-  margin-bottom: 16pt;
-}
-
 .calendar {
   display: flex;
   flex-wrap: nowrap;
@@ -69,7 +65,6 @@
       margin-right: 4pt;
     }
   }
-
 
   .calendar-buttons {
     margin-left: auto;

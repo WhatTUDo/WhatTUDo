@@ -13,21 +13,21 @@ export class CalendarDayViewComponent implements OnInit {
   @Input() events: CalendarEvent[]
   @Input() date: Date
 
-  /** Change view… variables to configure: */
-  /** number of rows. */
+  /* Change view… variables to configure: */
+  /* number of rows. */
   viewBeginningAtRow = 1;
   viewEndingAtRow = 65;
   viewRowCount = this.viewEndingAtRow - this.viewBeginningAtRow;
 
-  /** when the start and end of the grid represents. */
+  /* when the start and end of the grid represents. */
   viewBeginningAtTime = 8 * (60 * 60);
   viewEndingAtTime = 24 * (60 * 60) - 1;
   viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
 
-  /** min row count for an event so that there's place for text. */
+  /* min row count for an event so that there's place for text. */
   viewMinRows = 10;
 
-  /** color classes to add **/
+  /* color classes to add */
   calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];
 
   dateLocale: string;
