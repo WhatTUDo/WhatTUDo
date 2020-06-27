@@ -1,10 +1,21 @@
 # WhatTUDo
 
-QSE 16, SEPM SS 2020
+An interactive, cooperative calendar platform for universities and student organizations. 
+
+Originally a project for the _Software Engineering and Project Management_ course at TU Vienna, Spring 2020. 
 
 
-## Developers
+## Getting Started
 
+## Tests
+
+## Deployment
+
+## License
+
+## Developers & Acknowledgements
+
+The original developers of this project are: 
 * Yizhou "Andi" Cui
 * Luca Eichler
 * Andreas Hausberger
