@@ -34,7 +34,6 @@ import {MatDatetimepickerModule, MatNativeDatetimeModule} from "@mat-datetimepic
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatInputModule} from "@angular/material/input";
 import {
-  NgxMatDateAdapter,
   NgxMatDatetimePickerModule,
   NgxMatNativeDateModule
 } from "@angular-material-components/datetime-picker";
@@ -46,7 +45,8 @@ import {ExplanationComponent} from './components/explanation/explanation.compone
 import {EventConflictResolverComponent} from './components/event-conflict-resolver/event-conflict-resolver.component';
 import {AdminDashboardComponent} from './components/admin-dashboard/admin-dashboard.component';
 import {MatRadioModule} from "@angular/material/radio";
-import { EventSearchComponent } from './components/event-search/event-search.component';
+import {EventSearchComponent} from './components/event-search/event-search.component';
+import {CalendarDayViewComponent} from './components/calendar/calendar-day-view/calendar-day-view.component';
 
 
 @NgModule({
@@ -76,7 +76,8 @@ import { EventSearchComponent } from './components/event-search/event-search.com
     UserRegistrationComponent,
     EventConflictResolverComponent,
     AdminDashboardComponent,
-    EventSearchComponent
+    EventSearchComponent,
+    CalendarDayViewComponent
   ],
   imports: [
     BrowserModule,
