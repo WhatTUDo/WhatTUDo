@@ -61,9 +61,6 @@ export class UserService {
 
   getGravatarLink(email: String, size: number) {
     if (!email) email = '';
-    if (email.endsWith('@demo.whattudo.at')) {
-      return `https://andicui.xyz/whattudo-demo-avatars/${email.split('@')[0]}.jpg`
-    }
     const gravatarHash = md5(email.trim().toLowerCase());
     return `https://www.gravatar.com/avatar/${gravatarHash}?s=${Math.trunc(size)}&d=identicon`;
   }
