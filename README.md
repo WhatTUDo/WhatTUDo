@@ -8,7 +8,7 @@ Originally a project for the _Software Engineering and Project Management_ cours
 
 ### Backend
 
-To start the backend application with Maven, use ' ./mvnw spring-boot:run' in backend/ (or the equivalent 
+To start the backend application with Maven, use `./mvnw spring-boot:run` in backend/ (or the equivalent 
 command for your system). 
 The application will start listening on port :8080 by default. 
 
@@ -20,12 +20,12 @@ replace the existing database folder inside /backend.
 
 ### Frontend
 
-Before compiling the frontend, excecute "npm install" in frontend/. When all dependencies are installed, use 'ng-serve'
+Before compiling the frontend, excecute `npm install` in frontend/. When all dependencies are installed, use `ng serve`
 to compile and run the frontend. By default, the frontend listens on port :4200. 
 
 ## Tests
 
-To run the Test Suite located at backend/src/test/java/at/ac/tuwien/sepm/groupphase/backend, use './mvnw test' (or the 
+To run the Test Suite located at backend/src/test/java/at/ac/tuwien/sepm/groupphase/backend, use `./mvnw test` (or the 
 equivalent command for your system). Alternatively, execute them as JUNIT tests. 
 
 ## Deployment
