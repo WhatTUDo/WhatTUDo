@@ -25,7 +25,7 @@ export class CalendarDayViewComponent implements OnInit {
   viewTimespan = this.viewEndingAtTime - this.viewBeginningAtTime;
 
   /* min row count for an event so that there's place for text. */
-  viewMinRows = 10;
+  viewMinRows = 6;
 
   /* color classes to add */
   calendarColors = ["blue", "green", "yellow", "orange", "red", "violet"];

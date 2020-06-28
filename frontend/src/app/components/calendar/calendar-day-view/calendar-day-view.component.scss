@@ -10,6 +10,17 @@
 }
 
 .calendar-event {
+  border-left: 4pt solid rgb(var(--event-color));
+  background-color: rgba(var(--event-color), 0.25);
+
+  cursor: pointer;
+
+  position: relative;
+
+  margin-left: -2pt;
+  padding: 4pt;
+  box-sizing: content-box;
+
   --event-color: 124, 201, 242;
 
   &.blue {
@@ -36,18 +47,9 @@
     --event-color: 173, 111, 189;
   }
 
-  border-left: 4pt solid rgb(var(--event-color));
-  background-color: rgba(var(--event-color), 0.25);
-
-  cursor: pointer;
-
-  position: relative;
-
-  margin-left: -2pt;
-  padding: 4pt;
-  box-sizing: content-box;
 
   .calendar-event-time {
+    width: 100%;
     color: $gray;
     font-size: 8pt;
     margin-bottom: 2pt;
@@ -55,7 +57,21 @@
 
   .calendar-event-name {
     line-height: 1;
-    text-overflow: ellipsis;
     hyphens: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+
+    // No standard way to clamp the lines and prevent overflow yet.
+    // See https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-line-clamp
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    // This should be the standard, which is yet not implemented in user agents.
+    // See https://www.w3.org/TR/css-overflow-3/#propdef--webkit-line-clamp
+    //max-lines: 2;
+    //block-ellipsis: auto;
+    //continue: discard;
   }
 }
