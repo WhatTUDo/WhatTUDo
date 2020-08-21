@@ -30,7 +30,11 @@ equivalent command for your system). Alternatively, execute them as JUNIT tests.
 
 ## Deployment
 
+Dockerization is planned. 
+
 ## License
+
+The project is licensed under the MIT License. https://choosealicense.com/licenses/mit/#
 
 ## Developers & Acknowledgements
 
