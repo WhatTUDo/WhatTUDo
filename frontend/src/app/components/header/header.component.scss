@@ -1,0 +1,46 @@
+@import "../../../var.scss";
+
+* {
+  color: var(--text);
+}
+
+nav {
+  font-size: 24pt;
+}
+
+.brand-box {
+  background-color: var(--text);
+  color: var(--background);
+  font-size: 24pt;
+  font-weight: $f-bold;
+  padding: 4pt 8pt;
+}
+
+.collapse-button {
+  @media screen and (min-width: $mobile-breakpoint) {
+    display: none;
+  }
+}
+
+.avatar-action-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  @media screen and (min-width: $mobile-breakpoint) {
+    justify-content: right;
+  }
+
+  .sign-in-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: var(--text);
+
+    fa-icon {
+      color: var(--background);
+      font-size: 16pt;
+    }
+  }
+}

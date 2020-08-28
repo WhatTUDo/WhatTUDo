@@ -1,0 +1,53 @@
+@import "../../../var.scss";
+
+:host {
+  position: fixed;
+  bottom: 0;
+
+  width: 100%;
+
+  @media screen and (min-width: $mobile-breakpoint) {
+    bottom: 0;
+
+  }
+}
+
+.feedback-container {
+  background-color: $green;
+  z-index: 100;
+  padding: 4pt;
+
+  @media screen and (min-width: $mobile-breakpoint) {
+    margin: 16pt;
+    border-radius: $rounded-radius;
+  }
+}
+
+.feedback-neutral {
+  background-color: $gray
+}
+
+.feedback-success {
+  background-color: $green
+}
+
+.feedback-warning {
+  background-color: $yellow
+}
+
+.feedback-error {
+  background-color: $red;
+}
+
+.feedback-inner {
+  margin: 8pt 8pt 8pt 8pt;
+}
+
+.feedback-headline {
+  font-weight: $f-bold;
+  font-size: 24pt;
+}
+
+.feedback-text {
+  white-space: pre-line;
+}

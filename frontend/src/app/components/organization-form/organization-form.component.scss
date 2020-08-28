@@ -1,0 +1,15 @@
+.form-incorrect {
+  background-color: #f2847c73;
+  border-color: #f2847c
+}
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 8pt;
+}
+
+label[for="organization-avatar"] {
+  display: none;
+}

@@ -1,0 +1,165 @@
+@import "../../../var.scss";
+
+.organization-info {
+  display: flex;
+  align-items: center;
+
+  padding: 16pt;
+
+  margin-bottom: 16pt;
+
+  .avatar {
+    justify-self: flex-start;
+    flex-shrink: 0;
+
+    margin-right: 16pt;
+  }
+
+  .organization-details {
+    text-align: right;
+    justify-self: flex-end;
+    flex-grow: 1;
+
+    .organization-name {
+      text-align: right;
+      font-weight: $f-bold;
+      font-size: 32pt;
+    }
+  }
+}
+
+.organization-description {
+  text-align: center;
+}
+
+.organization-action-container {
+  .organization-action {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 16pt;
+    margin-top: 8pt;
+
+    &.dangerous {
+      color: $red;
+    }
+  }
+}
+
+.organization-member {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16pt;
+
+  .organization-member-details {
+    margin-left: 8pt;
+
+    .organization-member-name {
+      font-weight: $f-bold;
+      font-size: 16pt;
+    }
+
+    .organization-member-role {
+      color: var(--secondary);
+    }
+  }
+
+  .organization-member-buttons {
+    margin-left: auto;
+    display: flex;
+    flex-wrap: nowrap;
+
+    * {
+      font-size: 16pt;
+      margin-left: 4pt;
+    }
+  }
+}
+
+.calendar-list {
+
+  a {
+    color: inherit;
+  }
+
+  .calendar-list-item {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+
+    font-size: 24pt;
+
+    padding: 16pt 8pt;
+  }
+}
+
+.organization-calendar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+
+  width: 100%;
+  margin-bottom: 16pt;
+
+  > .avatar {
+    box-sizing: border-box;
+
+    margin-right: 8pt;
+
+    border: 3pt solid transparent;
+
+    &.blue {
+      border-color: $blue;
+    }
+
+    &.green {
+      border-color: $green;
+    }
+
+    &.yellow {
+      border-color: $yellow;
+    }
+
+    &.orange {
+      border-color: $orange;
+    }
+
+    &.red {
+      border-color: $red;
+    }
+
+    &.violet {
+      border-color: $violet;
+    }
+  }
+
+  .organization-calendar-details {
+    width: 100%;
+    color: var(--text);
+
+    .organization-calendar-name {
+      font-weight: $f-bold;
+      font-size: 24pt;
+    }
+  }
+
+  .organization-calendar-buttons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+
+    * {
+      font-size: 16pt;
+      margin-left: 4pt;
+    }
+  }
+}
+
+.add-calendar-selector {
+  margin-bottom: 8pt;
+
+  label {
+    display: none;
+  }
+}

@@ -1,0 +1,217 @@
+@import "../../../var.scss";
+
+#label-container {
+  display: flex;
+  margin-bottom: 12pt;
+  align-items: center;
+
+  .label-item {
+    border: 1px solid var(--text);
+    padding: 2pt 8pt;
+    border-radius: $rounded-radius;
+    margin-right: 8pt;
+    font-size: 16pt;
+
+    fa-icon {
+      font-size: 0.75em;
+    }
+  }
+}
+
+.event-promo-container {
+  display: flex;
+  align-items: flex-end;
+
+  background-color: var(--shadow);
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  height: $mobile-object-full-height;
+
+  @media (screen and min-width: $mobile-breakpoint) {
+    min-height: $mobile-object-full-height;
+    height: $desktop-object-full-height;
+  }
+
+  border-radius: $rounded-radius;
+
+  .event-promo-details {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    width: 100%;
+
+    padding: 16pt;
+    background-color: var(--overlay);
+
+    .event-time {
+    }
+
+    .event-name {
+      font-size: 36pt;
+      font-weight: $f-bold;
+    }
+
+    .event-description {
+
+    }
+  }
+}
+
+.details-stack {
+  > *:not(h2) {
+    margin-bottom: 16pt;
+  }
+}
+
+.actions-one-third {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+
+.participation-button-container {
+  text-align: center;
+  width: 100%;
+
+  button {
+    margin: 0 4pt;
+  }
+}
+
+.participation-status {
+  .participation-status-item {
+    text-align: center;
+
+    .participation-count {
+      font-size: 36pt;
+      font-weight: $f-bold;
+
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .participation-label {
+      font-size: 12pt;
+      font-weight: $f-bold;
+
+      text-align: center;
+      text-transform: uppercase;
+    }
+  }
+
+  margin-bottom: 8pt;
+}
+
+.calendar-info {
+  border-radius: $rounded-radius;
+  background-color: var(--shadow);
+
+  .calendar-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8pt 0;
+
+    > .avatar {
+      box-sizing: border-box;
+
+      margin-right: 8pt;
+
+      border: 3pt solid transparent;
+
+      &.blue {
+        border-color: $blue;
+      }
+
+      &.green {
+        border-color: $green;
+      }
+
+      &.yellow {
+        border-color: $yellow;
+      }
+
+      &.orange {
+        border-color: $orange;
+      }
+
+      &.red {
+        border-color: $red;
+      }
+
+      &.violet {
+        border-color: $violet;
+      }
+    }
+
+    .calendar-name {
+      font-weight: $f-bold;
+      font-size: 24pt;
+    }
+  }
+
+
+  .calendar-description {
+    margin-bottom: 4pt;
+    padding: 0 16pt;
+    text-align: center;
+  }
+
+  .organization-info {
+    display: flex;
+    align-items: center;
+    padding: 8pt 16pt;
+
+    .avatar {
+      justify-self: flex-start;
+      flex-shrink: 0;
+
+      margin-right: 16pt;
+    }
+
+    .organization-details {
+      text-align: right;
+      justify-self: flex-end;
+
+      width: 100%;
+
+      .organization-name {
+        font-weight: $f-bold;
+        font-size: 16pt;
+      }
+    }
+  }
+}
+
+#comment-area {
+  display: flex;
+  flex-wrap: wrap;
+
+  background-color: var(--overlay);
+
+  textarea {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  * {
+    width: 100%;
+  }
+}
+
+label[for=comment-area] {
+  display: none;
+}
+
+.event-location-map-container {
+  border-radius: $rounded-radius;
+  overflow: hidden;
+  position: relative;
+
+  height: 20em;
+
+  iframe {
+    height: 20em;
+  }
+}

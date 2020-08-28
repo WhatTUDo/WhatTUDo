@@ -1,0 +1,61 @@
+@import "../../../var.scss";
+
+* {
+  line-height: 1.2;
+}
+
+.comment-item {
+  margin-bottom: 2em;
+}
+
+.comment-metadata {
+  display: flex;
+
+  margin: 4pt 0;
+
+  div {
+    margin-right: 8pt;
+  }
+
+  .comment-author {
+    display: flex;
+
+    font-weight: $f-bold;
+
+    align-items: center;
+  }
+}
+
+.comment-content {
+  line-height: 1.2 !important;
+}
+
+
+.comment-buttons {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  margin-left: auto;
+
+  fa-icon {
+    margin-right: 4pt;
+  }
+}
+
+.comment-edit {
+  display: flex;
+  flex-wrap: wrap;
+
+  background-color: var(--overlay);
+
+  textarea {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  * {
+    width: 100%;
+  }
+}
+

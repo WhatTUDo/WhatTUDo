@@ -1,0 +1,11 @@
+<div class="promo-event-list">
+  <div *ngFor="let event of eventList" class="promo-event clickable no-hover-enlarge" routerLink="/event/{{event.id}}">
+    <div class="promo-event-details">
+      <div class="promo-event-time">{{getEventDateAndTimeString(event)}}</div>
+      <div class="promo-event-name">{{event.name}}</div>
+      <div *ngIf="event.description" class="message">{{event.description}}</div>
+    </div>
+
+    <!-- TODO: FOR A FUTURE VERSION: Expand and collapse events.-->
+  </div>
+</div>

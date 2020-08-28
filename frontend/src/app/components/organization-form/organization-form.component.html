@@ -1,0 +1,40 @@
+<div class="contextual-control">
+  <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
+    [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+  <span *ngIf="organization&&isUpdate">Edit Organization: {{organization.name}}</span>
+  <span *ngIf="organization&&!isUpdate">New Organization{{organization.name ? ": " + organization.name : ''}}</span>
+</div>
+
+<div *ngIf="organization" class="centered-one-third">
+  <h2>{{isUpdate ? "Edit" : "Create"}} Organization</h2>
+  <div *ngIf="organization" class="avatar-container">
+    <img alt="" class="avatar avatar-large" src="{{organization.coverImageUrl}}">
+  </div>
+  <label for="organization-avatar">
+    Avatar
+  </label>
+  <div class="form-group">
+    <input (change)="selectImage($event)" accept="{{this.globals.allowedAvatarMimeTypes.join(',')}}"
+           id="organization-avatar"
+           name="organization-avatar" type="file">
+  </div>
+</div>
+
+<form *ngIf="organization" class="centered-one-third">
+  <div class="form-group">
+    <label for="organization.name">
+      Name
+    </label>
+    <input #organizationName [(ngModel)]="organization.name" [ngModelOptions]="{standalone: true}"
+           class="form-control" id="organization.name" type=text>
+  </div>
+  <div class="form-group">
+    <label for="organization.description">Description</label>
+    <input [(ngModel)]="organization.description" [ngModelOptions]="{standalone: true}" class="form-control "
+           id="organization.description"
+           placeholder="Description">
+  </div>
+  <button (click)="onSubmit(organizationName.value)"
+          class="submit-button button-green">Submit
+  </button>
+</form>

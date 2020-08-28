@@ -1,0 +1,36 @@
+<div class="grid-one-third">
+  <app-weekly-calendar [subscribedOnly]="subscribedOnly" class="grid-item-1-2"></app-weekly-calendar>
+  <div>
+    <div *ngIf="!authService.isLoggedIn()">
+      <h2>Upcoming Events</h2>
+      <app-event-list *ngIf="recommendedEvents&&recommendedEvents.length>0"
+                      [eventList]="recommendedEvents"></app-event-list>
+      <div *ngIf="!recommendedEvents||recommendedEvents.length==0">
+        There isn't any event that we can recommend you right now. Log in to see better suggestions.
+      </div>
+    </div>
+    <div *ngIf="authService.isLoggedIn()">
+      <h2>Events For You</h2>
+      <app-event-list *ngIf="recommendedEvents&&recommendedEvents.length>0"
+                      [eventList]="recommendedEvents"></app-event-list>
+      <div *ngIf="!recommendedEvents||recommendedEvents.length==0">
+        There isn't any event that we can recommend you right now. Mark more events you are interested in, so that we
+        can
+        generate better suggestions.
+      </div>
+    </div>
+    <hr>
+    <div class="calendar-toolbar">
+      <div (click)="toggleSubscribedOnly()" *ngIf="authService.isLoggedIn()"
+           class="clickable no-hover-enlarge action">
+        <fa-icon *ngIf="subscribedOnly" [icon]="faCheckSquare" aria-checked="false" role="checkbox"></fa-icon>
+        <fa-icon *ngIf="!subscribedOnly" [icon]="faSquare" aria-checked="true" role="checkbox"></fa-icon>
+        <span>Show Only Subscribed Calendars</span>
+      </div>
+      <div class="clickable no-hover-enlarge action" routerLink="/event-search">
+        <fa-icon [icon]="faSearch"></fa-icon>
+        <span *ngIf="!authService.isLoggedIn()">Search Events</span>
+      </div>
+    </div>
+  </div>
+</div>

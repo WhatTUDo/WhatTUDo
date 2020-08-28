@@ -1,0 +1,127 @@
+<div *ngIf="calendarEvent">
+  <div class="contextual-control">
+    <span class="clickable no-hover-enlarge" id="back-button" onclick="history.back()"><fa-icon
+      [icon]="faChevronLeft"></fa-icon>&ensp;Back</span>
+    <span>Event: {{calendarEvent.name}}</span>
+  </div>
+  <div class="grid-one-third scroll">
+    <div>
+      <div class="title-icon-button-combo">
+        <h2>Event</h2>
+        <div class="icon-button clickable no-hover-enlarge">
+          <fa-icon *ngIf="calendarEvent.canEdit" [icon]="faCog" class="clickable no-hover-enlarge"
+                   routerLink="/form/event/{{id}}">
+            Edit
+          </fa-icon>
+        </div>
+      </div>
+      <div [style.background-image]="'url('+globals.backendUri+calendarEvent.coverImageUrl+')'"
+           class="event-promo-container mobile-full-width">
+        <div class="event-promo-details">
+          <div class="event-time">{{getEventDateAndTimeString()}}</div>
+          <div class="event-name">{{calendarEvent.name}}</div>
+          <div class="event-description">{{calendarEvent.description}}</div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="calendarEvent" class="details-stack">
+      <h2>Details</h2>
+      <div id="label-container">
+        <div *ngFor="let label of labels" class="label-item">
+          <fa-icon [icon]="faTag"></fa-icon>&ensp;{{label.name}}
+        </div>
+      </div>
+      <div>
+        <div class="participation-status actions-one-third">
+          <div
+            [style.color]="userParticipationStatus===AttendanceStatusPossibilities.ATTENDING?'var(--accent)':undefined"
+            class="participation-status-item">
+            <div class="participation-count">{{participants.attending.length}}</div>
+            <div class="participation-label">Attending</div>
+          </div>
+          <div
+            [style.color]="userParticipationStatus===AttendanceStatusPossibilities.INTERESTED?'var(--accent)':undefined"
+            class="participation-status-item">
+            <div class="participation-count">{{participants.interested.length}}</div>
+            <div class="participation-label">Interested</div>
+          </div>
+          <div
+            [style.color]="userParticipationStatus===AttendanceStatusPossibilities.DECLINED?'var(--accent)':undefined"
+            class="participation-status-item">
+            <div class="participation-count">{{participants.declined.length}}</div>
+            <div class="participation-label">Declined</div>
+          </div>
+        </div>
+        <div *ngIf="userParticipationStatus!==undefined && authService.isLoggedIn() && eventEndsAfterNow()"
+             class="participation-button-container actions-one-third">
+          <button (click)="participate(AttendanceStatusPossibilities.ATTENDING)"
+                  *ngIf="userParticipationStatus !== AttendanceStatusPossibilities.ATTENDING" class="button-blue">
+            Attend
+          </button>
+          <button (click)="resetParticipation()"
+                  *ngIf="userParticipationStatus === AttendanceStatusPossibilities.ATTENDING">
+            Reset
+          </button>
+          <button (click)="participate(AttendanceStatusPossibilities.INTERESTED)"
+                  *ngIf="userParticipationStatus !== AttendanceStatusPossibilities.INTERESTED" class="button-yellow">
+            Interested
+          </button>
+          <button (click)="resetParticipation()"
+                  *ngIf="userParticipationStatus === AttendanceStatusPossibilities.INTERESTED">
+            Reset
+          </button>
+          <button (click)="participate(AttendanceStatusPossibilities.DECLINED)"
+                  *ngIf="userParticipationStatus !== AttendanceStatusPossibilities.DECLINED" class="button-red">
+            Decline
+          </button>
+          <button (click)="resetParticipation()"
+                  *ngIf="userParticipationStatus === AttendanceStatusPossibilities.DECLINED">
+            Reset
+          </button>
+        </div>
+      </div>
+      <div *ngIf="calendar" class="calendar-info">
+        <div class="calendar-title clickable no-hover-enlarge" routerLink="/calendar/{{calendar.id}}">
+          <img [ngClass]="getCalendarColor(calendar.id)" alt="" class="avatar avatar-medium"
+               src="{{globals.backendUri+calendar.coverImageUrl}}">
+          <div class="calendar-name">
+            {{calendar.name}}
+          </div>
+        </div>
+        <div class="calendar-description">{{calendar.description}}</div>
+        <div class="calendar-organizations">
+          <div *ngFor="let org of calendarOrganizations" class="organization-info clickable no-hover-enlarge"
+               routerLink="/organization/{{org.id}}">
+            <img alt="" class="avatar avatar-small" src="{{globals.backendUri+org.coverImageUrl}}">
+            <div class="organization-details">
+              <div class="organization-name">{{org.name}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="location" class="event-location">
+        <app-event-location [editable]="false" [location]="location"></app-event-location>
+      </div>
+    </div>
+    <div>
+      <h2>Comments</h2>
+      <div *ngFor="let comment of comments" class="comment-div">
+        <app-event-comment [canEdit]=this.calendarEvent.canEdit [comment]="comment"></app-event-comment>
+      </div>
+
+
+      <div *ngIf="user != null" id="comment-area">
+        <label for="comment-textarea">
+        </label>
+        <textarea #njf class="no-outline" id="comment-textarea" name="comment" placeholder="Leave a comment…"
+        ></textarea>
+        <button (click)="addComment(njf.value); njf.value=''" class="full-width-form-button no-hover-enlarge">Send
+        </button>
+      </div>
+
+
+    </div>
+
+  </div>
+
+</div>

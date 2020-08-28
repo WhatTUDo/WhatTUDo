@@ -1,0 +1,47 @@
+<div class="centered-one-third">
+  <div>
+    <h2>Login</h2>
+
+    <form (keyup.enter)="loginUser()" (ngSubmit)="loginUser()" [formGroup]="loginForm" class="form">
+      <div class="form-group">
+        <label for="inputUsername">Username</label>
+        <input aria-describedby="usernameHelp" autocomplete="username" class="form-control" formControlName="username"
+               id="inputUsername"
+               name="username" placeholder="Enter username" type="text">
+        <div *ngIf="submitted && loginForm.controls.username.errors" class="error">
+          <small *ngIf="loginForm.controls.username.errors.required" class="form-text text-warning">
+            Your username is required!
+          </small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input autocomplete="current-password" class="form-control" formControlName="password" id="password"
+               name="password"
+               placeholder="Password" type="password">
+        <div *ngIf="submitted && loginForm.controls.password.errors" class="error">
+          <small *ngIf="loginForm.controls.password.errors.required" class="form-text text-warning">
+            Your password is required!
+          </small>
+          <small *ngIf="loginForm.controls.password.errors.minlength" class="form-text text-warning">
+            Your password must be at least 8 characters long!
+          </small>
+        </div>
+      </div>
+    </form>
+    <div class="login-buttons">
+      <button *ngIf="false" disabled type="button">
+        Reset Password
+      </button>
+      <button routerLink="/register" type="button">
+        Register
+      </button>
+      <button (click)="loginUser()" class="button-green" type="submit">
+        Login
+      </button>
+    </div>
+
+  </div>
+</div>
+

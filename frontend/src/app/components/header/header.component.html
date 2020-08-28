@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg">
+  <a class="navbar-brand ml-lg-5 clickable no-hover-enlarge" routerLink="/">
+    <div class="brand-box">WhatTUDo</div>
+  </a>
+  <div (click)="toggleCollapsed()" class="collapse-button clickable no-hover-enlarge">
+    <fa-icon [icon]="faChevronDown"></fa-icon>
+  </div>
+
+  <div [class.collapse]="mobileCollapsed" class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/calendar-list" routerLinkActive="active">
+          Calendars
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/organization-list" routerLinkActive="active">
+          Organizations
+        </a>
+      </li>
+    </ul>
+
+    <div class="avatar-action-container">
+      <a *ngIf="authService.isLoggedIn()" class="nav-link clickable no-hover-enlarge" routerLink="/user">
+        <fa-icon [icon]="faUser">Manage User</fa-icon>
+      </a>
+      <a (click)="authService.logoutUser()" *ngIf="authService.isLoggedIn()"
+         class="nav-link clickable no-hover-enlarge"
+         routerLink="/">
+        <fa-icon [icon]="faSignOutAlt">Logout</fa-icon>
+      </a>
+      <img *ngIf="authService.isLoggedIn()" alt=""
+           class="avatar avatar-medium clickable no-hover-enlarge"
+           routerLink="/user" src="{{getGravatarLink(userEmail, 128)}}">
+      <div *ngIf="!authService.isLoggedIn()"
+           class="sign-in-avatar avatar avatar-medium clickable no-hover-enlarge" routerLink="/login">
+        <fa-icon [icon]="faSignInAlt">Login</fa-icon>
+      </div>
+    </div>
+  </div>
+</nav>
