@@ -33,7 +33,6 @@ public class ApplicationUser extends BaseEntity implements CustomUserDetails {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.EAGER, orphanRemoval = true)
-    // Eager necessary because of getAuthorities()
     private Set<OrganizationMembership> memberships = new HashSet<>();
 
     @Column(name = "is_sysadmin")

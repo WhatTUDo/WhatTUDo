@@ -110,7 +110,7 @@ public class OrganizationEndpoint {
         try {
             return organizationMapper.organizationToOrganizationDto(organizationService.findById(id));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e); //Fixed: No this should return a 404!
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (ServiceException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
@@ -148,7 +148,6 @@ public class OrganizationEndpoint {
     }
 
     @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
-    // We can use the ID instead of the DTO
     // TODO: Check if other organization allow it (maybe invite system?)
     @PutMapping(value = "/{id}/calendars")
     @CrossOrigin
@@ -167,7 +166,6 @@ public class OrganizationEndpoint {
     }
 
     @PreAuthorize("hasPermission(#id, 'ORGA', 'MOD')")
-    // We can use the ID instead of the DTO
     // TODO: Check if other organization allow it (maybe invite system?)
     @DeleteMapping(value = "/{id}/calendars")
     @CrossOrigin

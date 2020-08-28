@@ -14,5 +14,4 @@ public class LoggedInUserDto extends BaseDto {
     private Integer id;
     private String name;
     private String email;
-//    private String password;
 }

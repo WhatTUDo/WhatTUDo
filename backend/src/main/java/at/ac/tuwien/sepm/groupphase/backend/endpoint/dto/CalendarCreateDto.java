@@ -7,7 +7,6 @@ import javax.validation.constraints.Null;
 import java.util.List;
 
 @Data
-//@NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class CalendarCreateDto extends BaseDto {

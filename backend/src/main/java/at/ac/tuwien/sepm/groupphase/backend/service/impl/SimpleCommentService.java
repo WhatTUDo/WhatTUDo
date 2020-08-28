@@ -78,7 +78,6 @@ public class SimpleCommentService implements CommentService {
             } else {
                 throw new ValidationException("Id is not defined");
             }
-            //   publisher.publishLabel(new EventDeleteLabel(this.findById(id).getName())); sth like this?
 
             Comment toDelete = this.findById(id);
             Event event = toDelete.getEvent();
@@ -112,7 +111,6 @@ public class SimpleCommentService implements CommentService {
 
             result = commentRepository.save(result);
 
-            //   publisher.publishEvent(new EventCreateComment(comment.getName())); ???
             return result;
         } catch (PersistenceException e) {
             throw new ServiceException(e.getMessage(), e);

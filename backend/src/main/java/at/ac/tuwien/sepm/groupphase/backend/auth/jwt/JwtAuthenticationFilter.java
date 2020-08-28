@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try {
             log.info("Attempting Authentication");
             UserLoginDto user = new ObjectMapper().readValue(request.getInputStream(), UserLoginDto.class);
-            //Compares the user with CustomUserDetailService#loadUserByUsername and check if the credentials are correct
+            //Compares the user with CustomUserDetailService#loadUserByUsername and checks if the credentials are correct
             return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 user.getUsername(),
                 user.getPassword()
