@@ -1,0 +1,236 @@
+package at.whattudo.service.impl;
+
+import at.whattudo.entity.*;
+import at.whattudo.events.event.EventCreateEvent;
+import at.whattudo.events.event.EventDeleteEvent;
+import at.whattudo.events.event.EventUpdateEvent;
+import at.whattudo.exception.NotFoundException;
+import at.whattudo.repository.AttendanceRepository;
+import at.whattudo.repository.EventRepository;
+import at.whattudo.repository.LabelRepository;
+import at.whattudo.service.EventService;
+import at.whattudo.util.ValidationException;
+import at.whattudo.entity.Event;
+import at.whattudo.entity.Label;
+import at.whattudo.util.Validator;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.service.spi.ServiceException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.*;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
+public class SimpleEventService implements EventService {
+    private final ApplicationEventPublisher publisher;
+    private final EventRepository eventRepository;
+    private final LabelRepository labelRepository;
+    private final AttendanceRepository attendanceRepository;
+    private final Validator validator;
+
+
+    @Transactional
+    @Override
+    public void delete(Integer id) {
+        try {
+            if (id <= 0) {
+                throw new ValidationException("Id is not valid");
+            }
+            Event toDelete = this.findById(id);
+            if (toDelete.getLabels() != null && toDelete.getLabels().size() > 0) {
+                removeLabels(toDelete, toDelete.getLabels());
+            }
+            if (toDelete.getAttendanceStatuses() != null && !toDelete.getAttendanceStatuses().isEmpty()) {
+                attendanceRepository.deleteAll(toDelete.getAttendanceStatuses());
+            }
+            eventRepository.deleteById(id);
+            publisher.publishEvent(new EventDeleteEvent(toDelete.getName()));
+        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
+            throw new ValidationException(e.getMessage());
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+
+
+    @Override
+    public Event save(Event event) {
+        validator.validateNewEvent(event);
+        try {
+            Event createdEvent = eventRepository.save(event);
+            publisher.publishEvent(new EventCreateEvent(createdEvent.getName()));
+            return createdEvent;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+
+    @Override
+    public List<Event> findByName(String name) {
+        try {
+            return eventRepository.findAllByNameContains(name);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+
+    @Override
+    public Event findById(int id) {
+        try {
+            Optional<Event> found = eventRepository.findById(id);
+            if (found.isPresent()) {
+                return found.get();
+            } else {
+                throw new NotFoundException("No event found with id " + id);
+            }
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public List<Event> findForDates(LocalDateTime start, LocalDateTime end) {
+        try {
+            validator.validateMultipleEventsQuery(start, end);
+            List<Event> events = new ArrayList<>();
+            events = eventRepository.findAllByStartDateTimeBetween(start, end);
+            return events;
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Event update(Event event) {
+        try {
+            Optional<Event> found = eventRepository.findById(event.getId());
+            if (found.isPresent()) {
+                event.setCoverImage(found.get().getCoverImage());
+                validator.validateUpdateEvent(event);
+                Event savedEvent = eventRepository.save(event);
+                publisher.publishEvent(new EventUpdateEvent(savedEvent.getName()));
+                return savedEvent;
+            } else {
+                throw new NotFoundException("No event found with id " + event.getId());
+            }
+        } catch (IllegalArgumentException | InvalidDataAccessApiUsageException e) {
+            throw new ValidationException(e.getMessage());
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Event addLabels(Event event, Collection<Label> labels) {
+        log.info("Adding labels {} to event {}", labels, event);
+        try {
+            labels.forEach(it -> {
+                if (!(it.getEvents().contains(event))) {
+                    it.getEvents().add(event);
+                }
+            });
+            labelRepository.saveAll(labels);
+            if (event.getLabels() != null) {
+                event.getLabels().addAll(labels);
+            } else {
+                List<Label> labelList = new ArrayList<>(labels);
+                event.setLabels(labelList);
+            }
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public Event updateLabels(Event event, Collection<Label> labels) {
+        log.info("Adding labels {} to event {}", labels, event);
+        try {
+            removeLabels(event, event.getLabels());
+            for (Label l : labels
+            ) {
+                if (!l.getEvents().contains(event)) {
+                    List<Event> events = new ArrayList<>(l.getEvents());
+                    events.add(event);
+                    l.setEvents(events);
+                }
+            }
+            //labels.forEach(it -> {if (!(it.getEvents().contains(event))){it.getEvents().add(event);}});
+            labelRepository.saveAll(labels);
+            if (event.getLabels() != null) {
+                event.getLabels().addAll(labels);
+            } else {
+                List<Label> labelList = new ArrayList<>(labels);
+                event.setLabels(labelList);
+            }
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Transactional
+    @Override
+    public Event removeLabels(Event event, Collection<Label> labels) {
+        //   log.info("Removing labels {} from event {}", labels, event);
+        try {
+            if (labels != null) {
+                labels.forEach(it -> {
+                    it.getEvents().remove(event);
+                });
+                labelRepository.saveAll(labels);
+                event.getLabels().removeAll(labels);
+            }
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+
+    @Override
+    public List<Event> getByCalendarId(Integer id) throws ServiceException {
+        try {
+            return eventRepository.findByCalendarId(id);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<Event> findNameOrDescriptionBySearchTerm(String searchterm) throws ServiceException, ValidationException {
+        try {
+            return eventRepository.findByNameContainingIgnoreCase(searchterm);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage());
+        } catch (ValidationException e) {
+            throw new ValidationException(e.getMessage());
+        }
+    }
+
+    @Override
+    public Event setCoverImage(Event event, byte[] imageBlob) {
+        try {
+            Byte[] byteArray = new Byte[imageBlob.length];
+            for (int i = 0; i < imageBlob.length; i++) byteArray[i] = imageBlob[i];
+            event.setCoverImage(byteArray);
+            return eventRepository.save(event);
+        } catch (PersistenceException e) {
+            throw new ServiceException(e.getMessage(), e);
+        }
+    }
+}
