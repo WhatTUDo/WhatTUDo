@@ -52,3 +52,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/database/
+/target/
